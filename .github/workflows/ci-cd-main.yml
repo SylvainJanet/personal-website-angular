@@ -87,12 +87,24 @@ jobs:
     - name: Show Response
       run: |
         echo ${{ steps.httpRequest.outputs.response }}
-        echo ${{ steps.httpRequest.outputs.headers }}
-        echo ${{ fromJson(steps.httpRequest.outputs.response).projectStatus }}
-        echo ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }}
-        echo ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} == 'ERROR'
-        echo ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} == ERROR
-  
+        
+    - name: Check
+      if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} != ERROR
+      with:
+        script: |
+            echo ERROR1
+    - name: Check
+      if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} != 'ERROR'
+      with:
+        script: |
+            echo ERROR2
+    - name: Check
+      if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} != 'OK'
+      uses: actions/github-script@v3
+      with:
+        script: |
+            core.setFailed('Quality gate failed')
+          
   analyse_QL:
     name: Analyze CodeQL
     runs-on: ubuntu-latest
