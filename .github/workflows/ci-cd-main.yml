@@ -97,6 +97,10 @@ jobs:
       run: 
         echo ERROR2
     - name: Check
+      if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} == "ERROR"
+      run: 
+        echo ERROR3
+    - name: Check
       if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} != 'OK'
       uses: actions/github-script@v3
       with:
