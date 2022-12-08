@@ -1,4 +1,4 @@
-name: CI-CD-main
+name: CI-CD-main-PR
 on: 
   pull_request:
     # The branches below must be a subset of the branches above
