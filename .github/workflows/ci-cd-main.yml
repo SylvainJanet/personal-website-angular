@@ -87,9 +87,7 @@ jobs:
       run: |
         echo ${{ steps.myRequest.outputs.response }}
         echo ${{ steps.myRequest.outputs.headers }}
-        echo ${{ fromJson(steps.myRequest.outputs.response).field_you_want_to_access }}
-    
-        
+  
   analyse_QL:
     name: Analyze CodeQL
     runs-on: ubuntu-latest
