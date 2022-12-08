@@ -83,6 +83,7 @@ jobs:
       with:
         url: 'https://sonarcloud.io/api/qualitygates/project_status'
         method: 'GET'
+        customHeaders : '{projectKey:SylvainJanet_personal-website-angular}'
     - name: Show Response
       run: |
         echo ${{ steps.myRequest.outputs.response }}
