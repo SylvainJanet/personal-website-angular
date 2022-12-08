@@ -1,27 +1,27 @@
-name: CD
+name: CI-CD-main
 on: 
   push:  
     branches:  
-      - main
+      - dev
+      
 jobs:  
   build:  
     runs-on: ubuntu-latest  
-  
-    steps:
+    steps:    
       - name: Checkout source code  
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Node.js  
-        uses: actions/setup-node@v1  
+        uses: actions/setup-node@v3  
         with:  
           node-version: '18.12.1'
       - name: Install dependencies  
         run: npm install
       - name: Build app  
-        run: npm run build
+        run: npm run build:staging
       - name: Inject slug/short variables  
-        uses: rlespinasse/github-slug-action@v3.x
+        uses: rlespinasse/github-slug-action@v4
       - name: Upload artifact  
-        uses: actions/upload-artifact@v2  
+        uses: actions/upload-artifact@v3  
         with:  
           name: personal-website-angular-${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}  
           path: ./dist/personal-website-angular
@@ -32,9 +32,9 @@ jobs:
   
     steps:
       - name: Inject slug/short variables  
-        uses: rlespinasse/github-slug-action@v3.x 
+        uses: rlespinasse/github-slug-action@v4 
       - name: Download artifact  
-        uses: actions/download-artifact@v2  
+        uses: actions/download-artifact@v3  
         with:  
           name: personal-website-angular-${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}  
           path: './build'
@@ -42,12 +42,10 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          username: ${{ secrets.FTP_USERNAME_DEV }}
+          password: ${{ secrets.FTP_PASSWORD_DEV }}
           local-dir: './build/'
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
-            **/.dev*
-            **/.dev*/**
