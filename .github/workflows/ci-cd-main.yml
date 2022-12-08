@@ -72,6 +72,23 @@ jobs:
             #-Dsonar.tests= # optional. For more info about Code Coverage, please refer to https://docs.sonarcloud.io/enriching/test-coverage/overview/
             # Adds more detail to both client and server-side analysis logs, activating DEBUG mode for the scanner, and adding client-side environment variables and system properties to the server-side log of analysis report processing.
             #-Dsonar.verbose= # optional, default is false
+            
+  check_analysis_sonarcloud:
+    needs: analysis_sonarcloud
+    name: Check Quality Gate SonarCloud Analysis
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy Stage
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: 'https://sonarcloud.io/api/qualitygates/project_status'
+        method: 'GET'
+    - name: Show Response
+      run: |
+        echo ${{ steps.myRequest.outputs.response }}
+        echo ${{ steps.myRequest.outputs.headers }}
+        echo ${{ fromJson(steps.myRequest.outputs.response).field_you_want_to_access }}
+    
         
   analyse_QL:
     name: Analyze CodeQL
@@ -126,7 +143,7 @@ jobs:
         category: "/language:${{matrix.language}}"
 
   build:  
-    needs: [analyse_QL, analysis_sonarcloud]
+    needs: [analyse_QL, check_analysis_sonarcloud]
     runs-on: ubuntu-latest  
     steps:    
       - name: Checkout source code  
