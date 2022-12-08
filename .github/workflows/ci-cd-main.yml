@@ -79,15 +79,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Make request
-      id: htttRequest
+      id: httpRequest
       uses: fjogeleit/http-request-action@v1
       with:
         url: 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=SylvainJanet_personal-website-angular&branch=main'
         method: 'GET'
     - name: Show Response
       run: |
-        echo ${{ steps.htttRequest.outputs.response }}
-        echo ${{ steps.htttRequest.outputs.headers }}
+        echo ${{ steps.httpRequest.outputs.response }}
+        echo ${{ steps.httpRequest.outputs.headers }}
+        echo ${{ fromJson(steps.httpRequest.outputs.response).projectStatus }}
+        echo ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }}
+        echo ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} == 'ERROR'
+        echo ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} == ERROR
   
   analyse_QL:
     name: Analyze CodeQL
