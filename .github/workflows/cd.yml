@@ -19,7 +19,7 @@ jobs:
       - name: Build app  
         run: npm run build
       - name: Inject slug/short variables  
-        uses: rlespinasse/github-slug-action@v2.x
+        uses: rlespinasse/github-slug-action@v3.x
       - name: Upload artifact  
         uses: actions/upload-artifact@v2  
         with:  
@@ -32,7 +32,7 @@ jobs:
   
     steps:
       - name: Inject slug/short variables  
-        uses: rlespinasse/github-slug-action@v2.x  
+        uses: rlespinasse/github-slug-action@v3.x 
       - name: Download artifact  
         uses: actions/download-artifact@v2  
         with:  
@@ -44,7 +44,7 @@ jobs:
           server: ftp://sylvainjanet.fr
           username: u570220458.angularapp
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: './build'
+          local-dir: './build/'
           exclude: |
             **/.git*
             **/.git*/**
