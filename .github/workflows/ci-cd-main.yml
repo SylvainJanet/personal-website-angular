@@ -90,14 +90,12 @@ jobs:
         
     - name: Check
       if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} != ERROR
-      with:
-        script: |
-            echo ERROR1
+      run: |
+        echo ERROR1
     - name: Check
       if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} != 'ERROR'
-      with:
-        script: |
-            echo ERROR2
+      run: 
+        echo ERROR2
     - name: Check
       if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} != 'OK'
       uses: actions/github-script@v3
