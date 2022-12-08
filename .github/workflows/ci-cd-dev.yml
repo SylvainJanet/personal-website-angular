@@ -8,7 +8,30 @@ permissions:
   pull-requests: read # allows SonarCloud to decorate PRs with analysis results
 
 jobs: 
+
+  test:
+    runs-on: unbuntu-latest
+    steps:
+      - name: Checkout source code  
+        uses: actions/checkout@v3
+      - name: Use Node.js  
+        uses: actions/setup-node@v3  
+        with:  
+          node-version: '18.12.1'
+      - name: Install dependencies  
+        run: npm install
+      - name: Test app  
+        run: npm run test
+      - name: Cache coverage
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ./coverage/lcov.info
+          key: code-coverage
+          
   analysis_sonarcloud:
+    needs: test
     name: SonarCloud Analysis
     runs-on: ubuntu-latest
     steps:
@@ -100,6 +123,8 @@ jobs:
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:${{matrix.language}}"
+  
+
 
   build:  
     needs: [analyse_QL, check_analysis_sonarcloud]
