@@ -81,9 +81,8 @@ jobs:
     - name: Deploy Stage
       uses: fjogeleit/http-request-action@v1
       with:
-        url: 'https://sonarcloud.io/api/qualitygates/project_status'
+        url: 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=SylvainJanet_personal-website-angular&branch=main'
         method: 'GET'
-        customHeaders : '{"projectKey":"SylvainJanet_personal-website-angular"}'
     - name: Show Response
       run: |
         echo ${{ steps.myRequest.outputs.response }}
