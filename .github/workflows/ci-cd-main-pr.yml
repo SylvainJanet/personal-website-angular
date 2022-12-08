@@ -79,7 +79,8 @@ jobs:
       id: httpRequest
       uses: fjogeleit/http-request-action@v1
       with:
-        url: 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=SylvainJanet_personal-website-angular&branch=main'
+        # url: 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=SylvainJanet_personal-website-angular&branch=main'
+        url: "${{ format('https://sonarcloud.io/api/qualitygates/project_status?projectKey=SylvainJanet_personal-website-angular&branch={0}', github.head_ref) }}"
         method: 'GET'
     - name: Show Response
       run: |
