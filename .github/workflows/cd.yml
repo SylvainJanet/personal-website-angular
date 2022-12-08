@@ -36,7 +36,7 @@ jobs:
       - name: Download artifact  
         uses: actions/download-artifact@v2  
         with:  
-          name: ng9-github-actions-netlify-${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}  
+          name: personal-website-angular-${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}  
           path: './build'
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
