@@ -89,11 +89,11 @@ jobs:
         echo ${{ steps.httpRequest.outputs.response }}
         
     - name: Check
-      if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} != ERROR
+      if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} == ERROR
       run: |
         echo ERROR1
     - name: Check
-      if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} != 'ERROR'
+      if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status }} == 'ERROR'
       run: 
         echo ERROR2
     - name: Check
