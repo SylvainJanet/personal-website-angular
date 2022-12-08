@@ -3,8 +3,6 @@ on:
   push:  
     branches:  
       - dev
-  pull_request:
-    branches: [ "dev" ]
     
 permissions:
   pull-requests: read # allows SonarCloud to decorate PRs with analysis results
