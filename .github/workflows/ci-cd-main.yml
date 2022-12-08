@@ -78,15 +78,16 @@ jobs:
     name: Check Quality Gate SonarCloud Analysis
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy Stage
+    - name: Make request
+      id: htttRequest
       uses: fjogeleit/http-request-action@v1
       with:
         url: 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=SylvainJanet_personal-website-angular&branch=main'
         method: 'GET'
     - name: Show Response
       run: |
-        echo ${{ steps.myRequest.outputs.response }}
-        echo ${{ steps.myRequest.outputs.headers }}
+        echo ${{ steps.htttRequest.outputs.response }}
+        echo ${{ steps.htttRequest.outputs.headers }}
   
   analyse_QL:
     name: Analyze CodeQL
