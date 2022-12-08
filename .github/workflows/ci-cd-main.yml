@@ -89,7 +89,7 @@ jobs:
         echo ${{ steps.httpRequest.outputs.response }}
         
     - name: Check
-      if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status != 'ERROR' }} 
+      if: ${{ fromJson(steps.httpRequest.outputs.response).projectStatus.status != 'OK' }} 
       uses: actions/github-script@v3
       with:
         script: |
