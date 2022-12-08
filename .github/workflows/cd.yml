@@ -38,3 +38,16 @@ jobs:
         with:  
           name: ng9-github-actions-netlify-${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}  
           path: './build'
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ftp://sylvainjanet.fr
+          username: u570220458.angularapp
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: './build'
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.dev*
+            **/.dev*/**
