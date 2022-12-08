@@ -1,13 +1,13 @@
-name: CD
+name: CI-CD-main
 on: 
   push:  
     branches:  
       - main
+      
 jobs:  
   build:  
     runs-on: ubuntu-latest  
-  
-    steps:
+    steps:    
       - name: Checkout source code  
         uses: actions/checkout@v3
       - name: Use Node.js  
@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies  
         run: npm install
       - name: Build app  
-        run: npm run build
+        run: npm run build:prod
       - name: Inject slug/short variables  
         uses: rlespinasse/github-slug-action@v4
       - name: Upload artifact  
