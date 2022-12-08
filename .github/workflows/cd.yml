@@ -18,3 +18,36 @@ jobs:
         run: npm install
       - name: Build app  
         run: npm run build
+      - name: Inject slug/short variables  
+        uses: rlespinasse/github-slug-action@v3.x
+      - name: Upload artifact  
+        uses: actions/upload-artifact@v2  
+        with:  
+          name: personal-website-angular-${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}  
+          path: ./dist/personal-website-angular
+          
+  deploy:  
+    needs : build
+    runs-on: ubuntu-latest  
+  
+    steps:
+      - name: Inject slug/short variables  
+        uses: rlespinasse/github-slug-action@v3.x 
+      - name: Download artifact  
+        uses: actions/download-artifact@v2  
+        with:  
+          name: personal-website-angular-${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}  
+          path: './build'
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: './build/'
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.dev*
+            **/.dev*/**
