@@ -9,7 +9,7 @@
     "build:staging": "ng build --configuration=staging",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --no-watch --no-progress",
-    "lint": "ng lint"
+    "lint": "ng lint --max-warnings 0"
   },
   "private": true,
   "dependencies": {
