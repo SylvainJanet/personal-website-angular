@@ -25,7 +25,7 @@ jobs:
       - name: Cache coverage
         uses: actions/cache@v2
         env:
-          cache-name: cache-node-modules
+          cache-name: cache-code-coverage
         with:
           path: ./coverage/lcov.info
           key: code-coverage
@@ -41,6 +41,8 @@ jobs:
       - name: Cache Primes
         id: cache-primes
         uses: actions/cache@v2
+        env:
+          cache-name: cache-code-coverage
         with:
           path: ./coverage
           key: code-coverage
