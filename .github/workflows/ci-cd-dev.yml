@@ -9,7 +9,21 @@ permissions:
   actions: write
 
 jobs: 
-
+  
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code  
+        uses: actions/checkout@v3
+      - name: Use Node.js  
+        uses: actions/setup-node@v3  
+        with:  
+          node-version: '18.12.1'
+      - name: Install dependencies  
+        run: npm install
+      - name: Test app  
+        run: npm run lint
+  
   test:
     runs-on: ubuntu-latest
     steps:
@@ -129,7 +143,7 @@ jobs:
 
 
   build:  
-    needs: [analyse_QL, check_analysis_sonarcloud]
+    needs: [analyse_QL, check_analysis_sonarcloud, lint]
     if: always()
     runs-on: ubuntu-latest  
     steps:    
