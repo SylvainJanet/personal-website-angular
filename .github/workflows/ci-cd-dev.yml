@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies  
         run: npm install
       - name: Test app  
-        run: ng test --no-watch --no-progress
+        run: npm run test
       - name: Cache coverage
         uses: actions/cache@v2
         env:
