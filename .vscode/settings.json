@@ -1,0 +1,6 @@
+{
+  "sonarlint.connectedMode.project": {
+    "connectionId": "sylvainjanet",
+    "projectKey": "SylvainJanet_personal-website-angular"
+  }
+}
