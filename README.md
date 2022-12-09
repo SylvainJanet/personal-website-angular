@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SylvainJanet_personal-website-angular&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=SylvainJanet_personal-website-angular)[![Dependency Review](https://github.com/SylvainJanet/personal-website-angular/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/SylvainJanet/personal-website-angular/actions/workflows/dependency-review.yml)[![CodeQL](https://github.com/SylvainJanet/personal-website-angular/actions/workflows/code-QL.yml/badge.svg?branch=main&event=push)](https://github.com/SylvainJanet/personal-website-angular/actions/workflows/code-QL.yml)
+
 # PersonalWebsiteAngular
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.3.
