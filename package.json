@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --configuration=development",
     "build:prod": "ng build --configuration=production",
-    "build:dev": "ng build --configuration=develoment",
+    "build:dev": "ng build --configuration=development",
     "build:staging": "ng build --configuration=staging",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test --no-watch --no-progress"
   },
   "private": true,
   "dependencies": {
