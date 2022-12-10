@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
   testMessage: 'Coucou - staging',
-  baseHref: '/app/dev/',
+  baseHref: '/',
 };
