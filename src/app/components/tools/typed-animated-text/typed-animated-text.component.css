@@ -1,0 +1,14 @@
+.blink {
+  border-right-style: solid;
+
+  opacity: 1;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-name: blink;
+  animation-timing-function: steps(2, jump-none);
+}
+@keyframes blink {
+  to {
+    opacity: 0;
+  }
+}

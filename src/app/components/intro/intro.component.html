@@ -10,8 +10,16 @@
       <div class="container">
         <h1 class="intro-title mb-4">I am Sylvain Janet</h1>
         <p class="intro-subtitle">
-          <span class="text-slider-items"
-            >FullStack Developer,Trainer,Mathematician,Musician</span
+          <app-typed-animated-text
+            class="text-slider-items"
+            textColor="white"
+            [textArray]="[
+              'FullStack Developer',
+              'Trainer',
+              'Mathematician',
+              'Musician'
+            ]"
+          ></app-typed-animated-text
           ><strong class="text-slider"></strong>
         </p>
       </div>
