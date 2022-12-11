@@ -1,0 +1,34 @@
+.example-container {
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: fit-content;
+}
+
+.example-toolbar {
+  z-index: 2;
+  position: sticky;
+  top: 0px;
+  height: 64px;
+}
+
+h1.example-app-name {
+  margin-left: 8px;
+}
+/*
+.example-sidenav-container {
+  flex: 1 0 auto;
+}
+*/
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.exemple-mat-sidenav {
+  height: 112px;
+  margin-top: 64px;
+}

@@ -143,8 +143,6 @@ jobs:
 
 
   build:  
-    needs: [analyse_QL, check_analysis_sonarcloud, lint]
-    if: always()
     runs-on: ubuntu-latest  
     steps:    
       - name: Checkout source code  
@@ -167,7 +165,6 @@ jobs:
           
   deploy:  
     needs : build
-    if: always()
     runs-on: ubuntu-latest  
   
     steps:
