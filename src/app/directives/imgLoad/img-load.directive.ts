@@ -1,4 +1,11 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { ImageService } from 'src/app/services/image/image.service';
 import { Preloaders } from 'src/app/services/preloader/preloader.service';
 
@@ -6,11 +13,18 @@ import { Preloaders } from 'src/app/services/preloader/preloader.service';
 @Directive({
   selector: '[appImgLoad]',
 })
-export class ImgLoadDirective {
+export class ImgLoadDirective implements OnChanges {
   @Input() appImgLoad: Preloaders[] = [];
 
   constructor(private el: ElementRef, private imageService: ImageService) {
-    imageService.imageLoading(el.nativeElement, this.appImgLoad);
+    // imageService.imageLoading(el.nativeElement, this.appImgLoad);
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('coucou');
+    console.log(this.appImgLoad);
+    if (changes['appImgLoad']) {
+      this.imageService.imageLoading(this.el.nativeElement, this.appImgLoad);
+    }
   }
 
   @HostListener('load')

@@ -16,7 +16,7 @@ export class ImageService {
   constructor(private preloaderService: PreloaderService) {}
 
   imageLoading(img: HTMLElement, loaders: Preloaders[]) {
-    if (!this.images.has(img) || this.images.get(img)) {
+    if ((!this.images.has(img) || this.images.get(img)) && loaders) {
       this.images.set(img, false);
       this.imagesLoading++;
       this._imagesLoading.next(this.imagesLoading);
@@ -27,7 +27,7 @@ export class ImageService {
   }
 
   imageLoadedOrError(img: HTMLElement, loaders: Preloaders[]) {
-    if (this.images.has(img) && !this.images.get(img)) {
+    if (this.images.has(img) && !this.images.get(img) && loaders) {
       this.images.set(img, true);
       this.imagesLoading--;
       this._imagesLoading.next(this.imagesLoading);

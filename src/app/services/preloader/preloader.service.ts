@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 // https://blog.slinto.sk/angular-http-preloaders-3ee7bd937ee0
 
 export enum Preloaders {
-  MAIN,
+  MAIN = 'MAIN',
 }
 
 interface LoadingInfo {
@@ -18,14 +18,12 @@ export class PreloaderService {
   info: Map<Preloaders, LoadingInfo> = new Map<Preloaders, LoadingInfo>();
 
   constructor() {
-    Object.keys(Preloaders)
-      .filter((k) => !isNaN(Number(k)))
-      .forEach((element) => {
-        this.info.set(Preloaders[element as keyof typeof Preloaders], {
-          qtyToLoad: 0,
-          isLoading: false,
-        });
+    Object.keys(Preloaders).forEach((element) => {
+      this.info.set(element as Preloaders, {
+        qtyToLoad: 0,
+        isLoading: false,
       });
+    });
     this.info.set(Preloaders.MAIN, { qtyToLoad: 0, isLoading: true });
   }
 
@@ -41,9 +39,9 @@ export class PreloaderService {
 
   loaded(loader: Preloaders, qty: number) {
     const oldQty = this.info.get(loader)?.qtyToLoad ?? 0;
-    const newQty = oldQty - qty;
+    const newQty = oldQty - qty < 0 ? 0 : oldQty - qty;
     this.info.set(loader, { isLoading: true, qtyToLoad: newQty });
-    if (newQty <= 0) {
+    if (newQty === 0) {
       this.hideLoader(loader);
     }
   }
