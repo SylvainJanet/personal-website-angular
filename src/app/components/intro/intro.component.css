@@ -1,16 +1,15 @@
 .bg-image {
   background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
 }
 .intro {
   height: 100vh;
   position: relative;
   color: #fff;
 }
-.bg-image {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-}
+
 *,
 ::after,
 ::before {
