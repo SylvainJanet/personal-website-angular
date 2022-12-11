@@ -1,8 +1,11 @@
 <div class="example-container">
   <mat-toolbar color="primary" class="example-toolbar">
     <h1 class="example-app-name">Sylvain Janet</h1>
-    <span class="example-spacer"></span
-    ><button mat-icon-button (tap)="snav.toggle()">
+    <span class="example-spacer"></span>
+    <button (tap)="testEvent()">{{ message }}</button>
+    <button (press)="testEvent()">{{ message }}</button>
+    <button (swipe)="testEvent()">{{ message }}</button>
+    <button mat-icon-button (tap)="snav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
   </mat-toolbar>

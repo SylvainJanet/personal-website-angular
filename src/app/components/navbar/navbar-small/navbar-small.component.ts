@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
   templateUrl: './navbar-small.component.html',
   styleUrls: ['./navbar-small.component.css'],
 })
-export class NavbarSmallComponent {}
+export class NavbarSmallComponent {
+  message = 'Test event';
+  testEvent() {
+    this.message =
+      this.message == 'Test event' ? 'event detected' : 'Test event';
+  }
+}
