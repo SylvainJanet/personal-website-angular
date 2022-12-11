@@ -11,17 +11,15 @@ import { Preloaders } from 'src/app/services/preloader/preloader.service';
 
 // https://dev.to/paviad/angular-wait-for-all-images-to-load-3hp1
 @Directive({
-  selector: '[appImgLoad]',
+  selector: 'img[appImgLoad]',
 })
 export class ImgLoadDirective implements OnChanges {
   @Input() appImgLoad: Preloaders[] = [];
 
   constructor(private el: ElementRef, private imageService: ImageService) {
-    // imageService.imageLoading(el.nativeElement, this.appImgLoad);
+    imageService.imageLoading(el.nativeElement, this.appImgLoad);
   }
   ngOnChanges(changes: SimpleChanges) {
-    console.log('coucou');
-    console.log(this.appImgLoad);
     if (changes['appImgLoad']) {
       this.imageService.imageLoading(this.el.nativeElement, this.appImgLoad);
     }
