@@ -4,7 +4,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { APP_BASE_HREF } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import {
   BrowserModule,
   HammerGestureConfig,
@@ -28,6 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ImgLoadDirective } from './directives/imgLoad/img-load.directive';
 import * as Hammer from 'hammerjs';
 
+@Injectable()
 class MyHammerConfig extends HammerGestureConfig {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   override overrides = <any>{
