@@ -29,10 +29,13 @@ import { ImgLoadDirective } from './directives/imgLoad/img-load.directive';
     IntroComponent,
     AboutComponent,
     FooterComponent,
+    IntroComponent,
     NavbarSmallComponent,
     NavbarBigComponent,
     BodyComponent,
     ImgLoadDirective,
+    NavbarBigComponent,
+    NavbarSmallComponent,
   ],
   imports: [
     BrowserModule,
