@@ -31,3 +31,7 @@ h1.example-app-name {
   height: fit-content;
   margin-top: 64px;
 }
+
+.mat-drawer-container {
+  position: unset !important;
+}
