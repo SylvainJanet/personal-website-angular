@@ -1,4 +1,4 @@
-<div class="example-container">
+<!-- <div class="example-container">
   <mat-toolbar color="primary" class="example-toolbar">
     <h1 class="example-app-name">Sylvain Janet</h1>
     <span class="example-spacer"></span>
@@ -31,4 +31,26 @@
 
     <mat-sidenav-content> <app-body></app-body> </mat-sidenav-content>
   </mat-sidenav-container>
-</div>
+</div> -->
+
+<mat-sidenav-container class="example-container">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    [(opened)]="opened"
+    (opened)="events.push('open!')"
+    (closed)="events.push('close!')"
+  >
+    Sidenav content
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <p>
+      <button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button>
+    </p>
+    <p>Events:</p>
+    <div class="example-events">
+      <div *ngFor="let e of events">{{ e }}</div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
