@@ -3,15 +3,26 @@
   id="home"
   class="intro route bg-image"
   style="background-image: url(assets/img/intro-bg.jpg)"
+  [style.background-attachment]="small ? 'scroll' : 'fixed'"
+  [style.top]="small ? '-64px' : ''"
+  [style.height]="small ? '100vh' : 'calc(100vh - 64px)'"
 >
   <div class="overlay-itro"></div>
   <div class="intro-content display-table">
     <div class="table-cell">
-      <div class="container">
+      <div class="container" [style.padding-bottom]="small ? '' : '64px'">
         <h1 class="intro-title mb-4">I am Sylvain Janet</h1>
         <p class="intro-subtitle">
-          <span class="text-slider-items"
-            >FullStack Developer,Trainer,Mathematician,Musician</span
+          <app-typed-animated-text
+            class="text-slider-items"
+            textColor="white"
+            [textArray]="[
+              'FullStack Developer',
+              'Trainer',
+              'Mathematician',
+              'Musician'
+            ]"
+          ></app-typed-animated-text
           ><strong class="text-slider"></strong>
         </p>
       </div>

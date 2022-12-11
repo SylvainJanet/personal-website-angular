@@ -27,6 +27,7 @@ import { BodyComponent } from './components/body/main/body.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ImgLoadDirective } from './directives/imgLoad/img-load.directive';
 import * as Hammer from 'hammerjs';
+import { TypedAnimatedTextComponent } from './components/tools/typed-animated-text/typed-animated-text.component';
 
 @Injectable()
 class MyHammerConfig extends HammerGestureConfig {
@@ -50,6 +51,7 @@ class MyHammerConfig extends HammerGestureConfig {
     ImgLoadDirective,
     NavbarBigComponent,
     NavbarSmallComponent,
+    TypedAnimatedTextComponent,
   ],
   imports: [
     BrowserModule,
