@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment';
 import {
   PreloaderService,
   Preloaders,
@@ -16,6 +17,7 @@ import {
 })
 export class AppComponent implements AfterViewInit, AfterViewChecked {
   loader = Preloaders.MAIN;
+  env = environment;
 
   constructor(
     public preloader: PreloaderService,
