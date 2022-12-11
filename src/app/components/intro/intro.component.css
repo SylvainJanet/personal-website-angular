@@ -1,5 +1,5 @@
 .bg-image {
-  background-attachment: scroll;
+  background-attachment: fixed;
 }
 .intro {
   height: 100vh;
@@ -8,8 +8,6 @@
 }
 .bg-image {
   background-repeat: no-repeat;
-  background-attachment: scroll;
-  /* background-attachment: fixed; */
   background-size: cover;
   background-position: center center;
 }
