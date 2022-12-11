@@ -27,12 +27,7 @@ h1.example-app-name {
   flex: 1 1 auto;
 }
 
-/*
 .exemple-mat-sidenav {
   height: fit-content;
-  margin-top: 64px;
+  /* margin-top: 64px; */
 }
-
-.mat-drawer-container {
-  position: unset !important;
-}*/
