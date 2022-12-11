@@ -1,4 +1,4 @@
-.example-container {
+/* .example-container {
   display: flex;
   flex-direction: column;
   top: 0;
@@ -9,7 +9,6 @@
 }
 
 .example-toolbar {
-  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
   z-index: 2;
   position: sticky;
   top: 0px;
@@ -34,4 +33,19 @@ h1.example-app-name {
 
 .mat-drawer-container {
   position: unset !important;
+} */
+
+.example-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.example-events {
+  width: 300px;
+  height: 200px;
+  overflow: auto;
+  border: 1px solid #555;
 }

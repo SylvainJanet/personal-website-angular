@@ -8,6 +8,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar-small.component.css'],
 })
 export class NavbarSmallComponent {
+  events: string[] = [];
+  opened!: boolean;
   message = 'Test event';
   testEvent() {
     this.message =
