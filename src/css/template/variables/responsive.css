@@ -1,0 +1,49 @@
+/**
+Responsive variables
+Not likely to be used directly : 
+https://bholmes.dev/blog/alternative-to-css-variable-media-queries/
+*/
+:root {
+  --bp-1: 576px;
+  --bp-2: 768px;
+  --bp-3: 992px;
+  --bp-4: 1200px;
+  --bp-5: 1400px;
+  --bp-6: 1600px;
+}
+
+@media (max-width: 575px) {
+  :root {
+    --resp-content-width: 90%;
+  }
+}
+@media (min-width: 576px) {
+  :root {
+    --resp-content-width: calc(0.9 * var(--bp-1));
+  }
+}
+@media (min-width: 768px) {
+  :root {
+    --resp-content-width: calc(0.9 * var(--bp-2));
+  }
+}
+@media (min-width: 992px) {
+  :root {
+    --resp-content-width: calc(0.9 * var(--bp-3));
+  }
+}
+@media (min-width: 1200px) {
+  :root {
+    --resp-content-width: calc(0.9 * var(--bp-4));
+  }
+}
+@media (min-width: 1400px) {
+  :root {
+    --resp-content-width: calc(0.9 * var(--bp-5));
+  }
+}
+@media (min-width: 1600px) {
+  :root {
+    --resp-content-width: 90%;
+  }
+}

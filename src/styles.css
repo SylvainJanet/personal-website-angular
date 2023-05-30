@@ -1,5 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+@import "./css/bootslike/bootslike.css";
 
+/* You can add global styles to this file, and also import other style files */
 html,
 body {
   height: 100%;
@@ -13,3 +14,9 @@ body {
 .mat-drawer-inner-container::-webkit-scrollbar {
   display: none;
 }
+
+@import "./css/globalstyle.css";
+
+/* html {
+  scroll-behavior: smooth;
+} */

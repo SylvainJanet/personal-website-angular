@@ -1,10 +1,26 @@
-<app-navbar
-  *ngIf="!env.production"
-  [ngClass]="{ hide: preloader.isLoading(loader) }"
-></app-navbar>
-
 <div *ngIf="env.production">
   <h2>Site en construction...</h2>
   <p>Merci de revenir plus tard :)</p>
 </div>
 <mat-spinner *ngIf="preloader.isLoading(loader)"></mat-spinner>
+
+<app-header
+  *ngIf="!env.production"
+  [ngClass]="{ hide: preloader.isLoading(loader) }"
+></app-header>
+<app-banner
+  *ngIf="!env.production"
+  [ngClass]="{ hide: preloader.isLoading(loader) }"
+></app-banner>
+<app-page-content
+  *ngIf="!env.production"
+  [ngClass]="{ hide: preloader.isLoading(loader) }"
+></app-page-content>
+<app-footer
+  *ngIf="!env.production"
+  [ngClass]="{ hide: preloader.isLoading(loader) }"
+></app-footer>
+<app-back-to-top
+  *ngIf="!env.production"
+  [ngClass]="{ hide: preloader.isLoading(loader) }"
+></app-back-to-top>

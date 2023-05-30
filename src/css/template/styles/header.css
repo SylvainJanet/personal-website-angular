@@ -1,0 +1,277 @@
+/**
+Header logic
+*/
+
+/**
+Setup color, size
+*/
+.header {
+  display: flex;
+  width: 100%;
+  height: var(--header-height);
+  align-items: center;
+  z-index: 1;
+}
+
+.header-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  padding-right: var(--header-container-padding);
+  padding-left: var(--header-container-padding);
+  margin-right: auto;
+  margin-left: auto;
+  /**
+  Responsive header
+  */
+  max-width: var(--resp-content-width);
+  /**
+Set up responsive design to switch between collapsed
+and extended links.
+*/
+  justify-content: var(--resp-header-container-justify);
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.dark-header,
+.dark-header * {
+  background-color: var(--dark-header-background-color);
+  color: var(--dark-header-color);
+  transition-property: background-color, color;
+  transition-duration: var(--header-color-transition-length);
+}
+
+.dark-header-content {
+  background-color: var(--dark-header-color) !important;
+  transition-property: background-color;
+  transition-duration: var(--header-color-transition-length);
+}
+
+.light-header,
+.light-header * {
+  background-color: var(--light-header-background-color);
+  color: var(--light-header-color);
+  transition-property: background-color, color;
+  transition-duration: var(--header-color-transition-length);
+}
+
+.light-header-content {
+  background-color: var(--light-header-color) !important;
+  transition-property: background-color;
+  transition-duration: var(--header-color-transition-length);
+}
+
+.light-header {
+  box-shadow: var(--light-header-shadow);
+  box-sizing: border-box;
+}
+
+/**
+Links are either forms or buttons. Set links style
+*/
+.header a {
+  text-decoration: none;
+}
+
+.header a,
+.header button {
+  margin-left: var(--header-link-button-margin);
+  margin-right: var(--header-link-button-margin);
+  height: min-content;
+}
+
+.header button {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border: none;
+}
+
+/**
+Make header not selectable
+*/
+.left-header a,
+.left-header div,
+.left-header button,
+.right-header button,
+.right-header a,
+.right-header div,
+.collapsed-header,
+.left-collapsed-header a,
+.left-collapsed-header button,
+.left-collapsed-header div {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+/** 
+Ensure cursor change on header links
+*/
+.left-header button,
+.right-header button,
+.left-collapsed-header button,
+.collapsed-header {
+  cursor: pointer;
+}
+
+/**
+Header is divided into two part when screen is big enough.
+One on the left, one on the right.
+*/
+.left-header {
+  width: var(--left-header-width);
+  /**
+Set up responsive design to switch between collapsed
+and extended links.
+*/
+  display: var(--resp-left-header-display);
+}
+.right-header {
+  width: var(--right-header-width);
+  flex-direction: row-reverse;
+  /**
+Set up responsive design to switch between collapsed
+and extended links.
+*/
+  display: var(--resp-right-header-display);
+}
+
+/**
+Header is collapsed when screen is small enough.
+*/
+.collapsed-header {
+  width: var(--collapsed-header-width);
+  height: var(--collapsed-header-height);
+  flex-flow: column;
+  justify-content: space-evenly;
+  margin-right: var(--collapsed-header-margin-right);
+  /**
+  Set up responsive design to switch between collapsed
+  and extended links.
+  */
+  display: var(--resp-collapsed-header-display);
+
+  margin-top: calc(
+    calc((var(--header-height) - var(--collapsed-header-height)) / 2)
+  );
+  padding-bottom: calc(
+    calc((var(--header-height) - var(--collapsed-header-height)) / 2)
+  );
+}
+
+.deroulant > div {
+  display: block;
+  height: var(--collapsed-header-line-height);
+}
+
+.collapsed-header-ico {
+  display: flex;
+  flex-flow: column;
+  height: var(--collapsed-header-height);
+  justify-content: space-evenly;
+}
+
+.collapsed-header-ico div {
+  width: 100%;
+  height: var(--collapsed-header-line-height);
+}
+
+/**
+Collapsed menu can be opened to show options.
+*/
+.deroulant {
+  height: 100%;
+  padding-bottom: calc(
+    calc((var(--header-height) - var(--collapsed-header-height)) / 2)
+  );
+}
+
+.collapsed-header-item {
+  display: block;
+  text-decoration: none;
+  padding: var(--collapsed-header-item-padding) 0px;
+}
+
+.sous {
+  position: absolute;
+  z-index: var(--collapsed-header-menu-zindex);
+  list-style: none;
+  padding-inline-start: 0px;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  right: 0%;
+  top: 100%;
+  width: fit-content;
+  display: none;
+  box-shadow: 0px 6px 9px 0px rgb(0 0 0 / 12%);
+  box-sizing: border-box;
+}
+
+.sous li {
+  flex: 1 1 auto;
+}
+
+.sous button {
+  cursor: pointer;
+  width: fit-content;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sous a,
+.sous button {
+  border-bottom: none;
+  text-align: right;
+}
+
+.sous a:hover,
+.sous a:active,
+.sous button:hover,
+.sous button:active {
+  border-bottom: none;
+}
+
+.deroulant:hover .sous,
+.deroulant:active .sous {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+/**
+Bars animated on hover
+*/
+.line-on-hover-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.line-on-hover-line {
+  height: var(--header-lines-on-hover-height);
+  width: 0px;
+  margin-top: var(--header-lines-on-hover-margin-top);
+  transition-property: width;
+  transition-duration: var(--header-lines-on-hover-duration);
+}
+
+.left-collapsed-header {
+  width: fit-content;
+  margin-right: auto;
+  /**
+Set up responsive design to switch between collapsed
+and extended links.
+*/
+  display: var(--resp-collapsed-header-display);
+}
