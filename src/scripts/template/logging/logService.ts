@@ -10,7 +10,6 @@ const publishersService = new LogPublisherService();
  */
 export class LogService {
   level = environment.logLevel;
-  // logWithDate = environment.logWithDate;
   logWithDate = true;
   publishers: AbstractLogPublisher[] = [];
   className = 'none specified';
