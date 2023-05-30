@@ -14,14 +14,12 @@ export class BackToTopComponent implements OnInit {
       ? scriptVar.backToTopVisibleState
       : scriptVar.backToTopInvisibleState;
 
-  constructor() {}
-
   ngOnInit() {
     this.updateBackToTop();
   }
 
   @HostListener('window:scroll', ['$event'])
-  onScroll(event: any) {
+  onScroll() {
     if (scrollY > this.trigger) {
       if (this.backToTopState == scriptVar.backToTopInvisibleState) {
         this.backToTopState = scriptVar.backToTopVisibleState;
@@ -36,9 +34,9 @@ export class BackToTopComponent implements OnInit {
     }
   }
 
-  onClick(event: any) {
-    event.preventDefault();
-    document.querySelector('html')!.scrollTo({ top: 0, behavior: 'smooth' });
+  onClick() {
+    // event.preventDefault();
+    document.querySelector('html')?.scrollTo({ top: 0, behavior: 'smooth' });
     // const initScrollY = scrollY;
     // let count = 0;
     // let steepness = 8;

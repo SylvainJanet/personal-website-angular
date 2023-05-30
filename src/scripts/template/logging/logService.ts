@@ -10,7 +10,8 @@ const publishersService = new LogPublisherService();
  */
 export class LogService {
   level = environment.logLevel;
-  logWithDate = environment.logWithDate;
+  // logWithDate = environment.logWithDate;
+  logWithDate = true;
   publishers: AbstractLogPublisher[] = [];
   className = 'none specified';
   publishersService: LogPublisherService;
@@ -26,25 +27,32 @@ export class LogService {
     return res;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   debug(msg: string, ...optionalParams: any[]) {
     this.writeToLog(msg, LogLevel.Debug, optionalParams);
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   info(msg: string, ...optionalParams: any[]) {
     this.writeToLog(msg, LogLevel.Info, optionalParams);
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   warn(msg: string, ...optionalParams: any[]) {
     this.writeToLog(msg, LogLevel.Warn, optionalParams);
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error(msg: string, ...optionalParams: any[]) {
     this.writeToLog(msg, LogLevel.Error, optionalParams);
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fatal(msg: string, ...optionalParams: any[]) {
     this.writeToLog(msg, LogLevel.Fatal, optionalParams);
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   log(msg: string, ...optionalParams: any[]) {
     this.writeToLog(msg, LogLevel.All, optionalParams);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeToLog(msg: string, level: number, params: any[]) {
     if (this.shouldLog(level)) {
       const entry = new LogEntry();
@@ -79,6 +87,7 @@ export class LogEntry {
   entryDate = new Date();
   message = '';
   level = LogLevel.Debug;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraInfo: any[] = [];
   logWithDate = true;
   className = '';
@@ -104,6 +113,7 @@ export class LogEntry {
     return ret;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formatParams(params: any[]) {
     let ret = params.join(',');
 
@@ -119,5 +129,5 @@ export class LogEntry {
   }
 }
 
-let logService = new LogService();
+const logService = new LogService();
 export { logService };

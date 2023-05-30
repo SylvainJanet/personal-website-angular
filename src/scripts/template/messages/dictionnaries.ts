@@ -10,7 +10,9 @@ import {
  * Initialises the dictionnaries, the languages, and do the
  * initial checks.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const supportedLanguages: any = { en: 'English', fr: 'French' };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dictionnaries: any = { en: englishDict, fr: frenchDict };
 
 checkSupportedLanguagesActuallySupported(supportedLanguages, dictionnaries);
@@ -24,7 +26,7 @@ for (const key in dictionnaries) {
  * @returns the dictionnary corresponding to the current language
  */
 function currentDictionnary() {
-  let language = localStorage.getItem('language');
+  const language = localStorage.getItem('language');
   if (!language || language == 'en') {
     return englishDict;
   } else {

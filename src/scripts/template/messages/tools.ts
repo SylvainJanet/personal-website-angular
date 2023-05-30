@@ -1,7 +1,7 @@
 import { supportedLanguages } from './dictionnaries';
 import { logService } from '../logging/logService';
 
-let logger = logService.withClassName('tools.js');
+const logger = logService.withClassName('tools.js');
 
 /**
  * Checks that every key in the english dictionnary is also
@@ -12,7 +12,9 @@ let logger = logService.withClassName('tools.js');
  * @param {*} dictionnaries the dictionnaries
  */
 function checkEveryMessageIsTranslatedInEveryLanguage(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   englishDict: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dictionnaries: any
 ) {
   for (const id in englishDict) {
@@ -37,7 +39,9 @@ function checkEveryMessageIsTranslatedInEveryLanguage(
  * @param {*} dictionnaries the dictionnaries
  */
 function checkSupportedLanguagesActuallySupported(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supportedLanguages: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dictionnaries: any
 ) {
   for (const key in supportedLanguages) {
@@ -60,12 +64,13 @@ function checkSupportedLanguagesActuallySupported(
  * of an element, list other possibleTypes, and recording the keys that have other
  * strategies along with said other strategy types.
  */
-let textType: any = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const textType: any = {
   // backHome: "input",
   tokiPonaHome: 'input',
 };
 
-let possibleTypes = ['input'];
+const possibleTypes = ['input'];
 
 /**
  * Checks that every value of properties of the textType object is
@@ -89,6 +94,7 @@ let possibleTypes = ['input'];
  * small mistakes that would be otherwise difficult to detect.
  * @param {*} dictionnary the dictionnary
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function checkEveryTextTypeAppears(dictionnary: any) {
   for (const key in textType) {
     if (!Object.keys(dictionnary).includes(key)) {
