@@ -28,6 +28,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ImgLoadDirective } from './directives/imgLoad/img-load.directive';
 import * as Hammer from 'hammerjs';
 import { TypedAnimatedTextComponent } from './components/tools/typed-animated-text/typed-animated-text.component';
+import { HeaderComponent } from './components/header/header.component';
+import { BackToTopComponent } from './components/back-to-top/back-to-top.component';
+import { BannerComponent } from './components/banner/banner.component';
+import { PageContentComponent } from './components/page-content/page-content.component';
 
 @Injectable()
 class MyHammerConfig extends HammerGestureConfig {
@@ -52,6 +56,10 @@ class MyHammerConfig extends HammerGestureConfig {
     NavbarBigComponent,
     NavbarSmallComponent,
     TypedAnimatedTextComponent,
+    HeaderComponent,
+    BackToTopComponent,
+    BannerComponent,
+    PageContentComponent,
   ],
   imports: [
     BrowserModule,

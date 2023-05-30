@@ -1,0 +1,6 @@
+/**
+Footer variables
+*/
+:root {
+  --footer-padding-top: calc(2 * var(--default-padding));
+}

@@ -1,0 +1,9 @@
+/**
+Back to top icon at the bottom of the display
+*/
+:root {
+  --back-to-top-size: 50px;
+  --back-to-top-right: 25px;
+  --back-to-top-bottom: 25px;
+  --back-to-top-transition-duration: 0.4s;
+}

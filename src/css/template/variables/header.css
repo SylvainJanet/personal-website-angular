@@ -1,0 +1,50 @@
+/**
+Header variables
+*/
+:root {
+  --header-height: 60px;
+  --header-container-padding: var(--default-padding);
+
+  --dark-header-color: white;
+  --dark-header-background-color: black;
+
+  --light-header-color: black;
+  --light-header-background-color: white;
+
+  --header-color-transition-length: 0.8s;
+  --light-header-shadow: 0px 6px 9px 0px rgb(0 0 0 / 6%);
+
+  --header-link-button-margin: var(--default-margin);
+
+  --left-header-width: 70%;
+  --right-header-width: 30%;
+
+  --collapsed-header-width: 25px;
+  --collapsed-header-height: 30px; /* must be in px */
+  --collapsed-header-margin-right: 7.5%;
+  --collapsed-header-line-height: 3px;
+  --collapsed-header-item-padding: var(--default-padding);
+  --collapsed-header-menu-zindex: 2;
+
+  --header-lines-on-hover-height: 2px;
+  --header-lines-on-hover-margin-top: 4px;
+  --header-lines-on-hover-duration: 0.4s;
+}
+
+@media (max-width: 575px) {
+  :root {
+    --resp-collapsed-header-display: block;
+    --resp-left-header-display: none;
+    --resp-right-header-display: none;
+    --resp-header-container-justify: right;
+  }
+}
+
+@media (min-width: 576px) {
+  :root {
+    --resp-collapsed-header-display: none;
+    --resp-left-header-display: flex;
+    --resp-right-header-display: flex;
+    --resp-header-container-justify: left;
+  }
+}
