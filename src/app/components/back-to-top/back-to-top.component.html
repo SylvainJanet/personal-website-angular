@@ -1,0 +1,23 @@
+<!-- Back to top icon -->
+<!-- <a href="#" class="back-to-top"
+  ><object
+    data="assets/img/template/arrow_top_up_icon.svg"
+    width="10"
+    height="10"
+    [ngStyle]="{ opacity: iconOpacity, pointerEvents: iconPointerEvent }"
+  >
+    Back to top icon
+  </object></a
+> -->
+<a
+  href="javascript:void(0);"
+  (click)="onClick($event)"
+  class="back-to-top"
+  [ngStyle]="{ opacity: iconOpacity, pointerEvents: iconPointerEvent }"
+>
+  <img
+    src="assets/img/template/arrow_top_up_icon.svg"
+    width="40"
+    height="40"
+    [ngStyle]="{ opacity: iconOpacity, pointerEvents: iconPointerEvent }"
+/></a>

@@ -1,0 +1,12 @@
+/**
+* Footer style
+*/
+footer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--footer-padding-top);
+}
+
+#footerLink {
+  text-decoration: none;
+}

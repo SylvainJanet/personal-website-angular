@@ -1,0 +1,8 @@
+/* https://developer.mozilla.org/fr/docs/Web/CSS/Using_CSS_custom_properties */
+
+@import "./header.css";
+@import "./footer.css";
+@import "./banner.css";
+@import "./back-to-top.css";
+@import "./responsive.css";
+@import "./other.css";

@@ -1,0 +1,80 @@
+/**
+Banner logic
+*/
+.banner-container {
+  display: flex;
+  justify-content: center;
+  font-weight: 400;
+  font-size: 2.5rem;
+  background-color: rgba(0, 0, 0, 1);
+  opacity: 00.9;
+}
+.banner {
+  background-image: var(--banner-bg-image-url);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  width: 100%;
+  margin-top: var(--header-height);
+  height: var(--banner-height);
+}
+
+.page-title-container {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.page-title {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  width: var(--banner-page-title-width);
+  flex-direction: column-reverse;
+  justify-content: space-evenly;
+}
+
+.title-container {
+  height: var(--banner-title-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.page-title > div {
+  height: max-content;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.page-title > div > h2 {
+  height: fit-content;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.page-title > div > span {
+  height: fit-content;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.page-title > h1 > div {
+  display: flex;
+  width: fit-content;
+  text-align: center;
+}
+
+#h1title {
+  width: fit-content;
+}
