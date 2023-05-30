@@ -6,6 +6,7 @@ import { scriptVar } from '../../tools/setUp';
  * location may be set if necessary to provide additionnal info to the publisher
  */
 export class AbstractLogPublisher {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   properties: any;
   constructor() {
     if (this.constructor === AbstractLogPublisher) {
@@ -29,7 +30,8 @@ export class AbstractLogPublisher {
     return name in this.properties;
   }
 
-  log(_record: any) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  log(_record: unknown) {
     throw new Error('You must implement this function');
   }
 
@@ -42,6 +44,7 @@ export class AbstractLogPublisher {
  * Log Publisher logging into the console.
  */
 export class LogConsole extends AbstractLogPublisher {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   override log(entry: { buildLogString: () => any }) {
     console.log(entry.buildLogString());
   }
@@ -67,6 +70,7 @@ export class LogLocalStroage extends AbstractLogPublisher {
    * the resulting array, and stringify the result.
    * @param {*} entry LogEntry to log
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   override log(entry: any) {
     let values = [];
 

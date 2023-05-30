@@ -10,6 +10,7 @@ import { scriptVar } from '../tools/setUp';
  */
 function decreaseOpacity(i: number, N: number, step: number) {
   setTimeout(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.getElementsByTagName('html').item(0)!.style.opacity = (
       1 -
       i / (N - 1)
@@ -28,6 +29,7 @@ function decreaseOpacity(i: number, N: number, step: number) {
  */
 function increaseOpacity(i: number, N: number, step: number) {
   setTimeout(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.getElementsByTagName('html').item(0)!.style.opacity = (
       i /
       (N - 1)
@@ -46,7 +48,7 @@ function increaseOpacity(i: number, N: number, step: number) {
  */
 function refreshTexts(language: string) {
   for (const key in dictionnaries[language]) {
-    let element = document.getElementById(key);
+    const element = document.getElementById(key);
     if (element) {
       if (!Object.keys(textType).includes(key)) {
         element.innerText = dictionnaries[language][key];
@@ -66,9 +68,9 @@ function refreshTexts(language: string) {
  */
 function refreshLanguage(doAnimate: boolean) {
   let duration = scriptVar.refreshLanguageDuration;
-  let step = scriptVar.refreshLanguageStep;
-  let pauseTime = step * 2;
-  let N = Math.ceil(duration / ((2 * step) / 1000));
+  const step = scriptVar.refreshLanguageStep;
+  const pauseTime = step * 2;
+  const N = Math.ceil(duration / ((2 * step) / 1000));
 
   if (doAnimate) {
     decreaseOpacity(0, N, step);
