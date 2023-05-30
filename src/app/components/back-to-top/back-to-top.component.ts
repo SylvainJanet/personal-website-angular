@@ -35,34 +35,7 @@ export class BackToTopComponent implements OnInit {
   }
 
   onClick() {
-    // event.preventDefault();
     document.querySelector('html')?.scrollTo({ top: 0, behavior: 'smooth' });
-    // const initScrollY = scrollY;
-    // let count = 0;
-    // let steepness = 8;
-    // var int = setInterval(function () {
-    //   console.log(count);
-    //   if (scrollY <= 10 || count > 30) {
-    //     window.scrollTo({ top: 0, behavior: 'smooth' });
-    //     clearInterval(int);
-    //   } else if (count <= 10) {
-    //     let x = initScrollY - ((count / 10) * initScrollY) / steepness;
-    //     window.scrollTo({ top: x, behavior: 'smooth' });
-    //     count += 1;
-    //   } else if (count <= 20) {
-    //     let x =
-    //       ((steepness - 1) * initScrollY) / steepness -
-    //       (((count - 10) / 10) * (steepness - 2) * initScrollY) / steepness;
-    //     window.scrollTo({ top: x, behavior: 'smooth' });
-    //     count += 1;
-    //   } else if (count <= 30) {
-    //     let x =
-    //       initScrollY / steepness -
-    //       (((count - 20) / 10) * initScrollY) / steepness;
-    //     window.scrollTo({ top: x, behavior: 'smooth' });
-    //     count += 1;
-    //   }
-    // }, 50);
     return false;
   }
 
@@ -71,9 +44,6 @@ export class BackToTopComponent implements OnInit {
    * the state set in backToTopState.
    */
   updateBackToTop() {
-    // logger.debug(scriptVar.cssBackToTopClass + ' icon state update', {
-    //   newstate: backToTopState,
-    // });
     if (this.backToTopState === scriptVar.backToTopInvisibleState) {
       this.iconOpacity = '0';
       this.iconPointerEvent = 'none';
@@ -86,7 +56,6 @@ export class BackToTopComponent implements OnInit {
 }
 
 const scriptVar = {
-  // prefixFiles: document.getElementsByName('prefixFiles')[0].content,
   refreshLanguageDuration: 0.15,
   refreshLanguageStep: 10,
   localStorageLanguage: 'language', // value should be valid lang attribut for html
