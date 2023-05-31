@@ -5,14 +5,14 @@ Header variables
   --header-height: 60px;
   --header-container-padding: var(--default-padding);
 
-  --dark-header-color: white;
-  --dark-header-background-color: black;
+  --dark-header-color: rgb(255 255 255 / 100%);
+  --dark-header-background-color: rgb(10 10 10 / 100%);
 
-  --light-header-color: black;
-  --light-header-background-color: white;
+  --light-header-color: rgb(0 0 0 / 100%);
+  --light-header-background-color: rgb(255 255 255 / 100%);
 
   --header-color-transition-length: 0.8s;
-  --light-header-shadow: 0px 6px 9px 0px rgb(0 0 0 / 6%);
+  --light-header-shadow: 0px 6px 9px 0px rgb(0 0 0 / 12%);
 
   --header-link-button-margin: var(--default-margin);
 

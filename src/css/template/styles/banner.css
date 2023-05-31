@@ -6,18 +6,18 @@ Banner logic
   justify-content: center;
   font-weight: 400;
   font-size: 2.5rem;
-  background-color: rgba(0, 0, 0, 1);
-  opacity: 00.9;
+  /* background-color: rgba(0, 0, 0, 1); */
+  /* opacity: 00.9; */
 }
 .banner {
   background-image: var(--banner-bg-image-url);
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
+  /* background-attachment: fixed;
+  background-size: cover; */
   width: 100%;
   margin-top: var(--header-height);
-  height: var(--banner-height);
+  height: calc(var(--banner-height) - var(--header-height));
 }
 
 .page-title-container {

@@ -201,7 +201,6 @@ Collapsed menu can be opened to show options.
   text-decoration: none;
   padding: var(--collapsed-header-item-padding) 0px;
 }
-
 .sous {
   position: absolute;
   z-index: var(--collapsed-header-menu-zindex);

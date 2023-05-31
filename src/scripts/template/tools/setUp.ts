@@ -12,6 +12,7 @@ const scriptVar = {
   animationTextBlinkWidth: '2px',
   animationTextBlinkClass: 'blink',
   cssBannerHeight: '--banner-height',
+  cssHeaderHeight: '--header-height',
   headerStateLight: 'light',
   headerStateDark: 'dark',
   cssHeaderDarkClass: 'dark-header',

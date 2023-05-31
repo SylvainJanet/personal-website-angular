@@ -4,7 +4,9 @@
 footer {
   display: flex;
   justify-content: center;
-  margin-top: var(--footer-padding-top);
+  margin-top: var(--footer-margin-top);
+  padding-top: var(--footer-padding-top);
+  padding-bottom: var(--footer-padding-bottom);
 }
 
 #footerLink {
