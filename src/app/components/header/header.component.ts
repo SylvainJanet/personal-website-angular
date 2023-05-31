@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
     getComputedStyle(
       document.getElementsByTagName('body').item(0) ?? new Element()
     )
-      .getPropertyValue(scriptVar.cssBannerHeight)
+      .getPropertyValue(scriptVar.cssHeaderHeight)
       .split('px')[0]
   );
 
