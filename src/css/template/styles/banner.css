@@ -6,8 +6,8 @@ Banner logic
   justify-content: center;
   font-weight: 400;
   font-size: 2.5rem;
-  background-color: rgba(0, 0, 0, 1);
-  opacity: 00.9;
+  /* background-color: rgba(0, 0, 0, 1); */
+  /* opacity: 00.9; */
 }
 .banner {
   background-image: var(--banner-bg-image-url);

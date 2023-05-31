@@ -1,18 +1,49 @@
 <div class="header sticky dark-header">
   <div class="header-container">
     <div class="left-header">
-      <div class="line-on-over-container">
-        <a class="line-on-over" href="https://sylvainjanet.fr" id="backHome"
-          >Sylvain Janet</a
-        >
-        <div class="line-on-over-line dark-header-content"></div>
-      </div>
+      <app-link-bar-on-hover
+        [textColor]="
+          headerState === 'dark'
+            ? 'var(--dark-header-color)'
+            : 'var(--light-header-color)'
+        "
+        [lineColor]="
+          headerState === 'dark'
+            ? 'var(--dark-header-color)'
+            : 'var(--light-header-color)'
+        "
+        [link]="'https://sylvainjanet.fr'"
+        [text]="'Sylvain Janet'"
+        [aStyle]="
+          'transition-property: background-color, color; transition-duration: var(--header-color-transition-length);'
+        "
+        [lineStyle]="
+          'transition-property: background-color, color, width; transition-duration: var(--header-color-transition-length), var(--header-color-transition-length), var(--header-lines-on-hover-duration);'
+        "
+      ></app-link-bar-on-hover>
     </div>
     <div class="right-header">
-      <div class="line-on-over-container">
-        <button class="line-on-over" id="buttonLanguage">English</button>
-        <div class="line-on-over-line dark-header-content"></div>
-      </div>
+      <app-button-bar-on-hover
+        [textColor]="
+          headerState === 'dark'
+            ? 'var(--dark-header-color)'
+            : 'var(--light-header-color)'
+        "
+        [lineColor]="
+          headerState === 'dark'
+            ? 'var(--dark-header-color)'
+            : 'var(--light-header-color)'
+        "
+        [text]="'English'"
+        [buttonStyle]="
+          'background-color:transparent; transition-property: background-color, color; transition-duration: var(--header-color-transition-length);'
+        "
+        [lineStyle]="
+          'transition-property: background-color, color, width; transition-duration: var(--header-color-transition-length), var(--header-color-transition-length), var(--header-lines-on-hover-duration);'
+        "
+        [action]="language"
+      >
+      </app-button-bar-on-hover>
     </div>
     <div class="collapsed-header">
       <div class="deroulant">
@@ -25,24 +56,55 @@
         </div>
         <ul class="sous">
           <li>
-            <div class="collapsed-header-item line-on-over-container">
-              <a
-                href="https://sylvainjanet.fr"
-                class="line-on-over"
-                id="subMenuBackHome"
-                >Sylvain Janet
-              </a>
-              <div class="line-on-over-line dark-header-content"></div>
-            </div>
+            <app-link-bar-on-hover
+              [textColor]="
+                headerState === 'dark'
+                  ? 'var(--dark-header-color)'
+                  : 'var(--light-header-color)'
+              "
+              [lineColor]="
+                headerState === 'dark'
+                  ? 'var(--dark-header-color)'
+                  : 'var(--light-header-color)'
+              "
+              [link]="'https://sylvainjanet.fr'"
+              [text]="'Sylvain Janet'"
+              [aStyle]="
+                'transition-property: background-color, color; transition-duration: var(--header-color-transition-length);'
+              "
+              [lineStyle]="
+                'transition-property: background-color, color, width; transition-duration: var(--header-color-transition-length), var(--header-color-transition-length), var(--header-lines-on-hover-duration);'
+              "
+              [globalStyle]="
+                'padding: var(--collapsed-header-item-padding) 0px;'
+              "
+            ></app-link-bar-on-hover>
           </li>
           <li>
-            <div
-              class="collapsed-header-item line-on-over-container"
-              style="display: flex; flex-direction: column; align-items: center"
+            <app-button-bar-on-hover
+              [textColor]="
+                headerState === 'dark'
+                  ? 'var(--dark-header-color)'
+                  : 'var(--light-header-color)'
+              "
+              [lineColor]="
+                headerState === 'dark'
+                  ? 'var(--dark-header-color)'
+                  : 'var(--light-header-color)'
+              "
+              [text]="'English'"
+              [buttonStyle]="
+                'background-color:transparent; transition-property: background-color, color; transition-duration: var(--header-color-transition-length);'
+              "
+              [lineStyle]="
+                'transition-property: background-color, color, width; transition-duration: var(--header-color-transition-length), var(--header-color-transition-length), var(--header-lines-on-hover-duration);'
+              "
+              [globalStyle]="
+                'padding: var(--collapsed-header-item-padding) 0px;'
+              "
+              [action]="language"
             >
-              <button class="line-on-over" id="subMenuLg">Anglais</button>
-              <div class="line-on-over-line dark-header-content"></div>
-            </div>
+            </app-button-bar-on-hover>
           </li>
         </ul>
       </div>

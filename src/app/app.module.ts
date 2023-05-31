@@ -32,6 +32,9 @@ import { HeaderComponent } from './components/header/header.component';
 import { BackToTopComponent } from './components/back-to-top/back-to-top.component';
 import { BannerComponent } from './components/banner/banner.component';
 import { PageContentComponent } from './components/page-content/page-content.component';
+import { LinkBarOnHoverComponent } from './components/link-bar-on-hover/link-bar-on-hover.component';
+import { ButtonBarOnHoverComponent } from './components/button-bar-on-hover/button-bar-on-hover.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @Injectable()
 class MyHammerConfig extends HammerGestureConfig {
@@ -60,6 +63,8 @@ class MyHammerConfig extends HammerGestureConfig {
     BackToTopComponent,
     BannerComponent,
     PageContentComponent,
+    LinkBarOnHoverComponent,
+    ButtonBarOnHoverComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +79,7 @@ class MyHammerConfig extends HammerGestureConfig {
     MatProgressSpinnerModule,
     HammerModule,
     BrowserModule,
+    HttpClientModule,
   ],
   providers: [
     { provide: APP_BASE_HREF, useValue: environment.baseHref },

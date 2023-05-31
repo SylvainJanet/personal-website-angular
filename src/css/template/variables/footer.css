@@ -2,5 +2,7 @@
 Footer variables
 */
 :root {
-  --footer-padding-top: calc(2 * var(--default-padding));
+  --footer-margin-top: calc(3 * var(--default-padding));
+  --footer-padding-top: calc(3 * var(--default-padding));
+  --footer-padding-bottom: calc(3 * var(--default-padding));
 }
