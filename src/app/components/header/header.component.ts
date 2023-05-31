@@ -20,17 +20,14 @@ export class HeaderComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.trigger = this.domcomputation.getActualHeight(
-      document.getElementsByClassName('banner').item(0)
-    );
-    this.headerState =
-      scrollY > this.trigger
-        ? scriptVar.headerStateLight
-        : scriptVar.headerStateDark;
-    this.updateHeader();
+    this.updateTrigger();
   }
 
   ngOnInit() {
+    this.updateTrigger();
+  }
+
+  updateTrigger() {
     this.trigger = this.domcomputation.getActualHeight(
       document.getElementsByClassName('banner').item(0)
     );
