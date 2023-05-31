@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
 
 @Component({
@@ -17,36 +18,18 @@ export class ButtonBarOnHoverComponent {
   @Input() action: (args: Event) => void;
 
   logger: LogService;
+  domcomputation: DOMComputationService;
 
-  constructor(logService: LogService) {
+  constructor(logService: LogService, domcomputation: DOMComputationService) {
     this.logger = logService.withClassName('ButtonBarOnHoverComponent');
     this.action = () => {
       this.logger.debug('No action binded');
     };
-  }
-  /**
-   * Gets the actual width of an element
-   * @param {*} element the element
-   * @returns the actual width
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getActualWidth(element: any) {
-    // https://stackoverflow.com/a/32637350
-    // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
-    // https://stackoverflow.com/a/63622682
-    // https://stackoverflow.com/a/29881817
-    const rec = element.getBoundingClientRect();
-    let width = rec.width;
-    const cs = getComputedStyle(element);
-    const paddingX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-    const borderX =
-      parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth);
-    width -= paddingX + borderX;
-    return width;
+    this.domcomputation = domcomputation;
   }
 
   lineAppears(event: Event) {
-    const width = this.getActualWidth(event.target);
+    const width = this.domcomputation.getActualWidth(event.target);
     this.lineWidth = (75 * width) / 100 + 'px';
   }
 

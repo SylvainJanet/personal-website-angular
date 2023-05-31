@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { scriptVar } from '../../../scripts/template/tools/setUp';
+import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 
 @Component({
   selector: 'app-header',
@@ -7,6 +8,9 @@ import { scriptVar } from '../../../scripts/template/tools/setUp';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  // Lookt at
+  // https://dev.to/nirazanbasnet/dont-use-100vh-for-mobile-responsive-3o97
+  // to possibly fix the trigger
   bannerHeight = document.documentElement.clientHeight;
   headerHeight = parseInt(
     getComputedStyle(
@@ -22,9 +26,17 @@ export class HeaderComponent implements OnInit {
     scrollY > this.trigger
       ? scriptVar.headerStateLight
       : scriptVar.headerStateDark;
+  domcomputation: DOMComputationService;
+
+  constructor(domcomputation: DOMComputationService) {
+    this.domcomputation = domcomputation;
+  }
 
   ngOnInit() {
     this.updateHeader();
+    this.trigger = this.domcomputation.getActualHeight(
+      document.getElementsByClassName('banner').item(0)
+    );
   }
 
   /**
