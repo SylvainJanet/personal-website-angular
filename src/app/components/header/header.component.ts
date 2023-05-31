@@ -14,28 +14,14 @@ import { DOMComputationService } from 'src/app/services/domcomputation/domcomput
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit, OnChanges {
-  // Lookt at
-  // https://dev.to/nirazanbasnet/dont-use-100vh-for-mobile-responsive-3o97
-  // to possibly fix the trigger
-  bannerHeight = document.documentElement.clientHeight;
-  headerHeight = parseInt(
-    getComputedStyle(
-      document.getElementsByTagName('body').item(0) ?? new Element()
-    )
-      .getPropertyValue(scriptVar.cssHeaderHeight)
-      .split('px')[0]
-  );
-
-  trigger = this.bannerHeight - (mobileCheck() ? 0 : this.headerHeight); // banner height - header height
-  // so that the threshold corresponds to the end of the banner
-  headerState =
-    scrollY > this.trigger
-      ? scriptVar.headerStateLight
-      : scriptVar.headerStateDark;
+  trigger: number;
+  headerState: string;
   domcomputation: DOMComputationService;
 
   constructor(domcomputation: DOMComputationService) {
     this.domcomputation = domcomputation;
+    this.trigger = 0;
+    this.headerState = '';
   }
   ngOnChanges(): void {
     this.trigger = this.domcomputation.getActualHeight(
@@ -44,10 +30,14 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.updateHeader();
     this.trigger = this.domcomputation.getActualHeight(
       document.getElementsByClassName('banner').item(0)
     );
+    this.headerState =
+      scrollY > this.trigger
+        ? scriptVar.headerStateLight
+        : scriptVar.headerStateDark;
+    this.updateHeader();
   }
 
   /**
