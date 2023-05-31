@@ -14,7 +14,8 @@ Banner logic
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size: auto;
+  background-size: cover;
+  max-width: 100%;
   width: 100%;
   margin-top: var(--header-height);
   height: var(--banner-height);
