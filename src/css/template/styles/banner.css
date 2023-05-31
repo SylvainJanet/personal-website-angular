@@ -17,7 +17,7 @@ Banner logic
   background-size: cover; */
   width: 100%;
   margin-top: var(--header-height);
-  height: var(--banner-height);
+  height: calc(var(--banner-height) - var(--header-height));
 }
 
 .page-title-container {

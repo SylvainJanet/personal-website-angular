@@ -8,8 +8,15 @@ import { scriptVar } from '../../../scripts/template/tools/setUp';
 })
 export class HeaderComponent implements OnInit {
   bannerHeight = document.documentElement.clientHeight;
+  headerHeight = parseInt(
+    getComputedStyle(
+      document.getElementsByTagName('body').item(0) ?? new Element()
+    )
+      .getPropertyValue(scriptVar.cssBannerHeight)
+      .split('px')[0]
+  );
 
-  trigger = this.bannerHeight; // banner height - header height
+  trigger = this.bannerHeight - this.headerHeight; // banner height - header height
   // so that the threshold corresponds to the end of the banner
   headerState =
     scrollY > this.trigger
