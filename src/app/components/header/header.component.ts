@@ -1,4 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { scriptVar } from '../../../scripts/template/tools/setUp';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 
@@ -7,7 +13,7 @@ import { DOMComputationService } from 'src/app/services/domcomputation/domcomput
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnChanges {
   // Lookt at
   // https://dev.to/nirazanbasnet/dont-use-100vh-for-mobile-responsive-3o97
   // to possibly fix the trigger
@@ -30,6 +36,11 @@ export class HeaderComponent implements OnInit {
 
   constructor(domcomputation: DOMComputationService) {
     this.domcomputation = domcomputation;
+  }
+  ngOnChanges(): void {
+    this.trigger = this.domcomputation.getActualHeight(
+      document.getElementsByClassName('banner').item(0)
+    );
   }
 
   ngOnInit() {
