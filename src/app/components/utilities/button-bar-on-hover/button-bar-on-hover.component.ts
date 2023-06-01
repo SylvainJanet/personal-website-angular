@@ -42,7 +42,6 @@ export class ButtonBarOnHoverComponent {
 
   doAction(event: Event) {
     this.logger.log('Do action');
-    // this.lineDisappears();
     this.action(event);
   }
 }
