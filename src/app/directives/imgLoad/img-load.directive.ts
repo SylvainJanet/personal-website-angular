@@ -7,6 +7,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { ImageService } from 'src/app/services/image/image.service';
+import { LogService } from 'src/app/services/log/log.service';
 import { Preloaders } from 'src/app/services/preloader/preloader.service';
 
 // https://dev.to/paviad/angular-wait-for-all-images-to-load-3hp1
@@ -15,26 +16,40 @@ import { Preloaders } from 'src/app/services/preloader/preloader.service';
 })
 export class ImgLoadDirective implements OnChanges {
   @Input() appImgLoad: Preloaders[] = [];
+  elementRef: ElementRef;
+  logger: LogService;
 
-  constructor(private el: ElementRef, private imageService: ImageService) {
-    imageService.imageLoading(el.nativeElement, this.appImgLoad);
+  constructor(
+    private el: ElementRef,
+    private imageService: ImageService,
+    logService: LogService
+  ) {
+    this.elementRef = el;
+    this.logger = logService.withClassName('ImgLoadDirective');
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['appImgLoad']) {
+      this.logger.log('Changes - appImgLoad');
       this.imageService.imageLoading(this.el.nativeElement, this.appImgLoad);
     }
   }
 
   @HostListener('load')
   onLoad() {
-    this.imageService.imageLoadedOrError(
-      this.el.nativeElement,
-      this.appImgLoad
-    );
+    this.logger.log('load event');
+    this.loadOrError();
   }
 
   @HostListener('error')
   onError() {
-    this.onLoad();
+    this.logger.log('error event');
+    this.loadOrError();
+  }
+
+  loadOrError() {
+    this.imageService.imageLoadedOrError(
+      this.el.nativeElement,
+      this.appImgLoad
+    );
   }
 }

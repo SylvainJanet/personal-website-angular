@@ -5,4 +5,5 @@ export const environment = {
   testMessage: 'Coucou - prod',
   baseHref: '/',
   logLevel: LogLevel.Warn,
+  compactLogDisplay: true,
 };

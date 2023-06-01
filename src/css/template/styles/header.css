@@ -242,8 +242,7 @@ Collapsed menu can be opened to show options.
   border-bottom: none;
 }
 
-.deroulant:hover .sous,
-.deroulant:active .sous {
+.deroulant:hover .sous {
   display: flex;
   flex-flow: column wrap;
 }

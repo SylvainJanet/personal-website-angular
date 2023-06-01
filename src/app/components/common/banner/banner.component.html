@@ -1,0 +1,28 @@
+<!-- Banner -->
+<div class="banner-container">
+  <!-- https://stackoverflow.com/questions/5057990/how-can-i-check-if-a-background-image-is-loaded/5058336#5058336 -->
+  <div style="display: none">
+    <img [src]="bannerSrc" [appImgLoad]="preloaders" alt="banner image" />
+  </div>
+  <div class="banner">
+    <div class="page-title-container">
+      <div class="page-title">
+        <div>
+          <h2>
+            <span style="color: white">I am Sylvain Janet</span>
+            <app-typed-animated-text
+              class="text-slider-items"
+              textColor="white"
+              [textArray]="[
+                'FullStack Developer',
+                'Trainer',
+                'Mathematician',
+                'Musician'
+              ]"
+            ></app-typed-animated-text>
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

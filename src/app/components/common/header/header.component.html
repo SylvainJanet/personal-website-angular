@@ -1,0 +1,114 @@
+<div class="header sticky dark-header">
+  <div class="header-container">
+    <div class="left-header">
+      <app-link-bar-on-hover
+        [textColor]="
+          headerState === 'dark'
+            ? 'var(--dark-header-color)'
+            : 'var(--light-header-color)'
+        "
+        [lineColor]="
+          headerState === 'dark'
+            ? 'var(--dark-header-color)'
+            : 'var(--light-header-color)'
+        "
+        [link]="'https://sylvainjanet.fr'"
+        [text]="'Sylvain Janet'"
+        [aStyle]="
+          'transition-property: background-color, color; transition-duration: var(--header-color-transition-length);'
+        "
+        [lineStyle]="
+          'transition-property: background-color, color, width; transition-duration: var(--header-color-transition-length), var(--header-color-transition-length), var(--header-lines-on-hover-duration);'
+        "
+      ></app-link-bar-on-hover>
+    </div>
+    <div class="right-header">
+      <app-button-bar-on-hover
+        [textColor]="
+          headerState === 'dark'
+            ? 'var(--dark-header-color)'
+            : 'var(--light-header-color)'
+        "
+        [lineColor]="
+          headerState === 'dark'
+            ? 'var(--dark-header-color)'
+            : 'var(--light-header-color)'
+        "
+        [text]="'English'"
+        [buttonStyle]="
+          'background-color:transparent; transition-property: background-color, color; transition-duration: var(--header-color-transition-length);'
+        "
+        [lineStyle]="
+          'transition-property: background-color, color, width; transition-duration: var(--header-color-transition-length), var(--header-color-transition-length), var(--header-lines-on-hover-duration);'
+        "
+        [action]="language"
+      >
+      </app-button-bar-on-hover>
+    </div>
+    <div class="collapsed-header">
+      <!-- https://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari -->
+      <div class="deroulant" ontouchstart="" ontouchend="">
+        <div>
+          <div class="collapsed-header-ico">
+            <div class="dark-header-content"></div>
+            <div class="dark-header-content"></div>
+            <div class="dark-header-content"></div>
+          </div>
+        </div>
+        <ul class="sous">
+          <li>
+            <app-link-bar-on-hover
+              [textColor]="
+                headerState === 'dark'
+                  ? 'var(--dark-header-color)'
+                  : 'var(--light-header-color)'
+              "
+              [lineColor]="
+                headerState === 'dark'
+                  ? 'var(--dark-header-color)'
+                  : 'var(--light-header-color)'
+              "
+              [link]="'https://sylvainjanet.fr'"
+              [text]="'Sylvain Janet'"
+              [aStyle]="
+                'transition-property: background-color, color; transition-duration: var(--header-color-transition-length);'
+              "
+              [lineStyle]="
+                'transition-property: background-color, color, width; transition-duration: var(--header-color-transition-length), var(--header-color-transition-length), var(--header-lines-on-hover-duration);'
+              "
+              [globalStyle]="
+                'padding: var(--collapsed-header-item-padding) 0px;'
+              "
+            ></app-link-bar-on-hover>
+          </li>
+          <li>
+            <app-button-bar-on-hover
+              [textColor]="
+                headerState === 'dark'
+                  ? 'var(--dark-header-color)'
+                  : 'var(--light-header-color)'
+              "
+              [lineColor]="
+                headerState === 'dark'
+                  ? 'var(--dark-header-color)'
+                  : 'var(--light-header-color)'
+              "
+              [text]="'English'"
+              [buttonStyle]="
+                'background-color:transparent; transition-property: background-color, color; transition-duration: var(--header-color-transition-length);'
+              "
+              [lineStyle]="
+                'transition-property: background-color, color, width; transition-duration: var(--header-color-transition-length), var(--header-color-transition-length), var(--header-lines-on-hover-duration);'
+              "
+              [globalStyle]="
+                'padding: var(--collapsed-header-item-padding) 0px;'
+              "
+              [action]="language"
+            >
+            </app-button-bar-on-hover>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

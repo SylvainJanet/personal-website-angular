@@ -1,0 +1,6 @@
+@import "src/css/template/styles/banner.css";
+
+:root {
+  /* with banner : 2*--default-padding, without banner : 2*--default-padding + --header-height */
+  --content-padding-top: calc(2 * var(--default-padding));
+}
