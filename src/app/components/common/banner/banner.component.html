@@ -1,5 +1,9 @@
 <!-- Banner -->
 <div class="banner-container">
+  <!-- https://stackoverflow.com/questions/5057990/how-can-i-check-if-a-background-image-is-loaded/5058336#5058336 -->
+  <div style="display: none">
+    <img [src]="bannerSrc" [appImgLoad]="preloaders" />
+  </div>
   <div class="banner">
     <div class="page-title-container">
       <div class="page-title">

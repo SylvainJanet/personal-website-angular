@@ -105,26 +105,47 @@ export class LogEntry {
   extraInfo: unknown[] = [];
   logWithDate = true;
   className = '';
+  compactDisplay = environment.compactLogDisplay;
 
   buildLogString(): string {
     let ret = '';
 
     if (this.logWithDate) {
-      ret = new Date().toLocaleString() + ' - ';
+      ret = new Date().toLocaleString() + (this.compactDisplay ? ' - ' : '');
     }
 
-    ret += 'Class: ' + this.className;
-    ret += ' - Type: ' + LogLevel[this.level];
-    ret += ' - Message: ' + this.message;
+    ret +=
+      (this.compactDisplay ? '' : '\n\t') +
+      'Class:' +
+      (this.compactDisplay ? ' ' : '\t') +
+      this.className;
+    ret +=
+      (this.compactDisplay ? ' - ' : '\n\t') +
+      'Type:' +
+      (this.compactDisplay ? ' ' : '\t') +
+      LogLevel[this.level];
+    ret +=
+      (this.compactDisplay ? ' - ' : '\n\t\t') +
+      'Message:' +
+      (this.compactDisplay ? ' ' : '\t') +
+      this.message;
     if (this.extraInfo.length) {
-      ret += ' - Extra Info: ' + this.formatParams(this.extraInfo);
+      ret +=
+        (this.compactDisplay ? ' - ' : '\n\t\t') +
+        'Extra Info:' +
+        (this.compactDisplay ? ' ' : '\t') +
+        this.formatParams(this.extraInfo);
     }
 
     return ret;
   }
 
   private formatParams(params: unknown[]): string {
-    let ret: string = params.join(',');
+    let ret: string = params.join(
+      this.compactDisplay
+        ? ','
+        : '\n--------------------------------------------------------------------------------\n\t\t\t\t\t'
+    );
 
     // Is there at least one object in the array?
     if (params.some((p) => typeof p == 'object')) {
@@ -132,7 +153,13 @@ export class LogEntry {
 
       // Build comma-delimited string
       for (const item of params) {
-        ret += JSON.stringify(item) + ',';
+        ret +=
+          JSON.stringify(item, null, this.compactDisplay ? '' : '\t\t')
+            .split('\n')
+            .join(this.compactDisplay ? '' : '\n\t\t\t\t\t') +
+          (this.compactDisplay
+            ? ','
+            : '\n--------------------------------------------------------------------------------\n\t\t\t\t\t');
       }
     }
 

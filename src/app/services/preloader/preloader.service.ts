@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LogService } from '../log/log.service';
 
 // https://blog.slinto.sk/angular-http-preloaders-3ee7bd937ee0
 
@@ -16,8 +17,10 @@ interface LoadingInfo {
 })
 export class PreloaderService {
   info: Map<Preloaders, LoadingInfo> = new Map<Preloaders, LoadingInfo>();
+  logger: LogService;
 
-  constructor() {
+  constructor(logService: LogService) {
+    this.logger = logService.withClassName('PreloaderService');
     Object.keys(Preloaders).forEach((element) => {
       this.info.set(element as Preloaders, {
         qtyToLoad: 0,
@@ -28,27 +31,34 @@ export class PreloaderService {
   }
 
   showLoader(loader: Preloaders, qtyToLoad = 0) {
+    this.logger.log('showLoader', loader, qtyToLoad);
     this.info.set(loader, { qtyToLoad, isLoading: true });
   }
 
   toLoad(loader: Preloaders, qty: number) {
+    this.logger.log('Loading stuff...', loader, qty);
     const oldQty = this.info.get(loader)?.qtyToLoad ?? 0;
     const newQty = oldQty + qty;
     this.info.set(loader, { isLoading: true, qtyToLoad: newQty });
+    this.logger.log('Now has to load', newQty);
   }
 
   loaded(loader: Preloaders, qty: number) {
+    this.logger.log('Stuff has been loaded...', loader, qty);
     const oldQty = this.info.get(loader)?.qtyToLoad ?? 0;
     const newQty = oldQty - qty < 0 ? 0 : oldQty - qty;
     this.info.set(loader, { isLoading: true, qtyToLoad: newQty });
+    this.logger.log('Still has to load', newQty);
     if (newQty === 0) {
       this.hideLoader(loader);
     }
   }
 
   hideLoader(loader: Preloaders) {
-    if (this.info.get(loader)?.qtyToLoad === 0)
+    if (this.info.get(loader)?.qtyToLoad === 0) {
+      this.logger.log('Loading finished - hide loader', loader);
       this.info.set(loader, { qtyToLoad: 0, isLoading: false });
+    }
   }
 
   isLoading(loader: Preloaders) {

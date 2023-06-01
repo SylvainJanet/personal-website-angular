@@ -1,6 +1,7 @@
 import { Preloaders, PreloaderService } from './../preloader/preloader.service';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { LogService } from '../log/log.service';
 
 // https://dev.to/paviad/angular-wait-for-all-images-to-load-3hp1
 
@@ -18,9 +19,22 @@ export class ImageService {
 
   imagesLoading$ = this._imagesLoading.asObservable();
 
-  constructor(private preloaderService: PreloaderService) {}
+  logger: LogService;
+
+  constructor(
+    private preloaderService: PreloaderService,
+    logService: LogService
+  ) {
+    this.logger = logService.withClassName('ImageService');
+  }
 
   imageLoading(img: HTMLElement, loaders: Preloaders[]) {
+    this.logger.log(
+      'Logging image',
+      img.getAttribute('src'),
+      'for loaders',
+      loaders
+    );
     for (const loader of loaders) {
       if (
         !this.images.has(img) ||
@@ -44,6 +58,12 @@ export class ImageService {
   }
 
   imageLoadedOrError(img: HTMLElement, loaders: Preloaders[]) {
+    this.logger.log(
+      'Image has been loaded',
+      img.getAttribute('src'),
+      'for loaders',
+      loaders
+    );
     for (const loader of loaders) {
       if (
         this.images.has(img) &&

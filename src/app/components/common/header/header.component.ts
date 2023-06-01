@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { scriptVar } from '../../../../scripts/template/tools/setUp';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
+import { LogService } from 'src/app/services/log/log.service';
 
 @Component({
   selector: 'app-header',
@@ -11,15 +12,18 @@ export class HeaderComponent implements OnInit {
   trigger: number;
   headerState: string;
   domcomputation: DOMComputationService;
+  logger: LogService;
 
-  constructor(domcomputation: DOMComputationService) {
+  constructor(domcomputation: DOMComputationService, logService: LogService) {
     this.domcomputation = domcomputation;
     this.trigger = 0;
     this.headerState = '';
+    this.logger = logService.withClassName('HeaderComponent');
   }
 
   @HostListener('window:resize', ['$event'])
   onResize() {
+    this.logger.log('Window resize');
     this.updateTrigger();
   }
 
@@ -28,6 +32,7 @@ export class HeaderComponent implements OnInit {
   }
 
   updateTrigger() {
+    this.logger.log('Update trigger for dark/light header');
     this.trigger = this.domcomputation.getActualHeight(
       document.getElementsByClassName('banner').item(0)
     );
@@ -45,6 +50,7 @@ export class HeaderComponent implements OnInit {
    * @param {*} newClass the new class
    */
   changeEveryClass(oldClass: string, newClass: string) {
+    this.logger.log('Change every class', oldClass, 'to', newClass);
     const els = document.querySelectorAll('.' + oldClass);
     for (let i = 0; i < els.length; i++) {
       const el = els.item(i);
@@ -58,6 +64,7 @@ export class HeaderComponent implements OnInit {
    * the state set in headerState.
    */
   updateHeader() {
+    this.logger.log('Update header');
     if (this.headerState === 'light') {
       this.changeEveryClass(
         scriptVar.cssHeaderDarkClass,
@@ -88,6 +95,7 @@ export class HeaderComponent implements OnInit {
    */
   @HostListener('window:scroll', ['$event'])
   onScroll() {
+    this.logger.log('Scroll check');
     if (scrollY > this.trigger) {
       if (this.headerState == scriptVar.headerStateDark) {
         this.headerState = scriptVar.headerStateLight;
