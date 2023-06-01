@@ -17,7 +17,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
-import { AboutComponent } from './components/about/about.component';
 import { FooterComponent } from './components/common/footer/footer.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ImgLoadDirective } from './directives/imgLoad/img-load.directive';
@@ -42,7 +41,6 @@ class MyHammerConfig extends HammerGestureConfig {
 @NgModule({
   declarations: [
     AppComponent,
-    AboutComponent,
     FooterComponent,
     ImgLoadDirective,
     TypedAnimatedTextComponent,
