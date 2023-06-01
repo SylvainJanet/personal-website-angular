@@ -17,23 +17,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
-import { IntroComponent } from './components/intro/intro.component';
 import { AboutComponent } from './components/about/about.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { NavbarBigComponent } from './components/navbar/navbar-big/navbar-big.component';
-import { NavbarComponent } from './components/navbar/main/navbar.component';
-import { NavbarSmallComponent } from './components/navbar/navbar-small/navbar-small.component';
-import { BodyComponent } from './components/body/main/body.component';
+import { FooterComponent } from './components/common/footer/footer.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ImgLoadDirective } from './directives/imgLoad/img-load.directive';
 import * as Hammer from 'hammerjs';
-import { TypedAnimatedTextComponent } from './components/tools/typed-animated-text/typed-animated-text.component';
-import { HeaderComponent } from './components/header/header.component';
-import { BackToTopComponent } from './components/back-to-top/back-to-top.component';
-import { BannerComponent } from './components/banner/banner.component';
+import { TypedAnimatedTextComponent } from './components/utilities/typed-animated-text/typed-animated-text.component';
+import { HeaderComponent } from './components/common/header/header.component';
+import { BackToTopComponent } from './components/common/back-to-top/back-to-top.component';
+import { BannerComponent } from './components/common/banner/banner.component';
 import { PageContentComponent } from './components/page-content/page-content.component';
-import { LinkBarOnHoverComponent } from './components/link-bar-on-hover/link-bar-on-hover.component';
-import { ButtonBarOnHoverComponent } from './components/button-bar-on-hover/button-bar-on-hover.component';
+import { LinkBarOnHoverComponent } from './components/utilities/link-bar-on-hover/link-bar-on-hover.component';
+import { ButtonBarOnHoverComponent } from './components/utilities/button-bar-on-hover/button-bar-on-hover.component';
 import { HttpClientModule } from '@angular/common/http';
 
 @Injectable()
@@ -47,17 +42,9 @@ class MyHammerConfig extends HammerGestureConfig {
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
-    IntroComponent,
     AboutComponent,
     FooterComponent,
-    IntroComponent,
-    NavbarSmallComponent,
-    NavbarBigComponent,
-    BodyComponent,
     ImgLoadDirective,
-    NavbarBigComponent,
-    NavbarSmallComponent,
     TypedAnimatedTextComponent,
     HeaderComponent,
     BackToTopComponent,

@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { scriptVar } from '../../../scripts/template/tools/setUp';
+import { scriptVar } from '../../../../scripts/template/tools/setUp';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 
 @Component({

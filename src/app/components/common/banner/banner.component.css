@@ -1,4 +1,4 @@
-@import "../../../css/template/styles/banner.css";
+@import "src/css/template/styles/banner.css";
 
 :root {
   /* with banner : 2*--default-padding, without banner : 2*--default-padding + --header-height */
