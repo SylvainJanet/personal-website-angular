@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    // this.logger.log('Window resize');
     this.updateTrigger();
   }
 
