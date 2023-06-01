@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.logger.log('Window resize');
     this.updateTrigger();
   }
 
@@ -36,11 +35,12 @@ export class HeaderComponent implements OnInit {
     this.trigger = this.domcomputation.getActualHeight(
       document.getElementsByClassName('banner').item(0)
     );
+    const oldHeaderState = this.headerState;
     this.headerState =
       scrollY > this.trigger
         ? scriptVar.headerStateLight
         : scriptVar.headerStateDark;
-    this.updateHeader();
+    if (oldHeaderState != this.headerState) this.updateHeader();
   }
 
   /**

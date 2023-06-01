@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LogService } from '../log/log.service';
+import { BehaviorSubject } from 'rxjs';
 
 // https://blog.slinto.sk/angular-http-preloaders-3ee7bd937ee0
 
@@ -17,6 +18,11 @@ interface LoadingInfo {
 })
 export class PreloaderService {
   info: Map<Preloaders, LoadingInfo> = new Map<Preloaders, LoadingInfo>();
+  statusLoading: Map<Preloaders, BehaviorSubject<boolean | null>> = new Map<
+    Preloaders,
+    BehaviorSubject<boolean | null>
+  >();
+  statusAnyLoading: BehaviorSubject<boolean | null>;
   logger: LogService;
 
   constructor(logService: LogService) {
@@ -26,13 +32,20 @@ export class PreloaderService {
         qtyToLoad: 0,
         isLoading: false,
       });
+      this.statusLoading.set(
+        element as Preloaders,
+        new BehaviorSubject<boolean | null>(null)
+      );
     });
+    this.statusAnyLoading = new BehaviorSubject<boolean | null>(null);
     this.info.set(Preloaders.MAIN, { qtyToLoad: 0, isLoading: true });
   }
 
   showLoader(loader: Preloaders, qtyToLoad = 0) {
     this.logger.log('showLoader', loader, qtyToLoad);
     this.info.set(loader, { qtyToLoad, isLoading: true });
+    this.statusLoading.get(loader)?.next(true);
+    this.statusAnyLoading.next(true);
   }
 
   toLoad(loader: Preloaders, qty: number) {
@@ -40,6 +53,8 @@ export class PreloaderService {
     const oldQty = this.info.get(loader)?.qtyToLoad ?? 0;
     const newQty = oldQty + qty;
     this.info.set(loader, { isLoading: true, qtyToLoad: newQty });
+    this.statusLoading.get(loader)?.next(true);
+    this.statusAnyLoading.next(true);
     this.logger.log('Now has to load', newQty);
   }
 
@@ -48,6 +63,8 @@ export class PreloaderService {
     const oldQty = this.info.get(loader)?.qtyToLoad ?? 0;
     const newQty = oldQty - qty < 0 ? 0 : oldQty - qty;
     this.info.set(loader, { isLoading: true, qtyToLoad: newQty });
+    this.statusLoading.get(loader)?.next(true);
+    this.statusAnyLoading.next(true);
     this.logger.log('Still has to load', newQty);
     if (newQty === 0) {
       this.hideLoader(loader);
@@ -58,6 +75,17 @@ export class PreloaderService {
     if (this.info.get(loader)?.qtyToLoad === 0) {
       this.logger.log('Loading finished - hide loader', loader);
       this.info.set(loader, { qtyToLoad: 0, isLoading: false });
+      this.statusLoading.get(loader)?.next(false);
+      this.statusAnyLoading.next(true);
+      let anyLoading = false;
+      Object.keys(Preloaders).forEach((element) => {
+        if (this.info.get(element as Preloaders)?.isLoading) {
+          anyLoading = true;
+        }
+      });
+      if (!anyLoading) {
+        this.statusAnyLoading.next(false);
+      }
     }
   }
 
