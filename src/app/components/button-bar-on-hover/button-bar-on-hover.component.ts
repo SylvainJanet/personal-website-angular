@@ -37,4 +37,9 @@ export class ButtonBarOnHoverComponent {
   lineDisappears() {
     this.lineWidth = '0%';
   }
+
+  doAction(event: Event) {
+    this.lineDisappears();
+    this.action(event);
+  }
 }

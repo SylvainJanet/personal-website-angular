@@ -2,6 +2,7 @@
   <a
     class="line-on-hover"
     [href]="link"
+    (click)="lineDisappears()"
     (touchstart)="lineAppears($event)"
     (mouseenter)="lineAppears($event)"
     (touchend)="lineDisappears()"
