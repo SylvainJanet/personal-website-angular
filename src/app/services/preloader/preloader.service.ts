@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LogService } from '../log/log.service';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 // https://blog.slinto.sk/angular-http-preloaders-3ee7bd937ee0
 
