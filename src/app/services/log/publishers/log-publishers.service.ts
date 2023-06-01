@@ -20,7 +20,7 @@ export class LogPublishersService {
   buildPublishers(): void {
     // Create instance of LogConsole Class
     this.publishers.push(new LogConsole());
-    this.publishers.push(new LogLocalStorage());
+    // this.publishers.push(new LogLocalStorage());
     // pour API : this.publishers.push(new LogWebApi(this.http));
   }
 }

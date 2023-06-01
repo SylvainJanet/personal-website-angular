@@ -25,10 +25,14 @@ import { TypedAnimatedTextComponent } from './components/utilities/typed-animate
 import { HeaderComponent } from './components/common/header/header.component';
 import { BackToTopComponent } from './components/common/back-to-top/back-to-top.component';
 import { BannerComponent } from './components/common/banner/banner.component';
-import { PageContentComponent } from './components/page-content/page-content.component';
+import { PageContentComponent } from './components/page-cv/page-content/page-content.component';
 import { LinkBarOnHoverComponent } from './components/utilities/link-bar-on-hover/link-bar-on-hover.component';
 import { ButtonBarOnHoverComponent } from './components/utilities/button-bar-on-hover/button-bar-on-hover.component';
 import { HttpClientModule } from '@angular/common/http';
+import { CvImgComponent } from './components/page-cv/cv-img/cv-img.component';
+import { CvContactInfoComponent } from './components/page-cv/cv-contact-info/cv-contact-info.component';
+import { CvSkillsComponent } from './components/page-cv/cv-skills/cv-skills.component';
+import { CvSkillBarComponent } from './components/page-cv/cv-skill-bar/cv-skill-bar.component';
 
 @Injectable()
 class MyHammerConfig extends HammerGestureConfig {
@@ -50,6 +54,10 @@ class MyHammerConfig extends HammerGestureConfig {
     PageContentComponent,
     LinkBarOnHoverComponent,
     ButtonBarOnHoverComponent,
+    CvImgComponent,
+    CvContactInfoComponent,
+    CvSkillsComponent,
+    CvSkillBarComponent,
   ],
   imports: [
     BrowserModule,

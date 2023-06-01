@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { Preloaders } from 'src/app/services/preloader/preloader.service';
 
 @Component({
-  selector: 'app-page-content',
-  templateUrl: './page-content.component.html',
-  styleUrls: ['./page-content.component.css'],
+  selector: 'app-cv-img',
+  templateUrl: './cv-img.component.html',
+  styleUrls: ['./cv-img.component.css'],
 })
-export class PageContentComponent {
+export class CvImgComponent {
   preloaders = [Preloaders.MAIN];
 }
