@@ -26,6 +26,7 @@ export class ButtonBarOnHoverComponent {
       this.logger.debug('No action binded');
     };
     this.domcomputation = domcomputation;
+    this.lineDisappears();
   }
 
   lineAppears(event: Event) {

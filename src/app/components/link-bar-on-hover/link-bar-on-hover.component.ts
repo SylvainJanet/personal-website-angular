@@ -18,6 +18,7 @@ export class LinkBarOnHoverComponent {
   domcomputation: DOMComputationService;
   constructor(domcomputation: DOMComputationService) {
     this.domcomputation = domcomputation;
+    this.lineDisappears();
   }
 
   lineAppears(event: Event) {
