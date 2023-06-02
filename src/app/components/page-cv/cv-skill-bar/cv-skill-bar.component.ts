@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
+import { debounce } from 'src/scripts/tools/debounce';
 
 @Component({
   selector: 'app-cv-skill-bar',
@@ -40,9 +41,9 @@ export class CvSkillBarComponent implements AfterViewInit {
   }
 
   @HostListener('window:resize', ['$event'])
+  @debounce()
   onResize() {
-    this.getElPos();
-    this.updateWidth();
+    this.updateAfterLoaded();
   }
 
   updateWidth() {
@@ -53,8 +54,7 @@ export class CvSkillBarComponent implements AfterViewInit {
     }
   }
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll() {
+  updateAfterLoaded() {
     this.preloader.statusAnyLoading.subscribe({
       next: (isAnyLoading) => {
         if (isAnyLoading != null && !isAnyLoading) {
@@ -67,17 +67,13 @@ export class CvSkillBarComponent implements AfterViewInit {
     });
   }
 
+  @HostListener('window:scroll', ['$event'])
+  @debounce()
+  onScroll() {
+    this.updateAfterLoaded();
+  }
+
   ngAfterViewInit(): void {
-    this.getElPos();
-    this.preloader.statusAnyLoading.subscribe({
-      next: (isAnyLoading) => {
-        if (isAnyLoading != null && !isAnyLoading) {
-          setTimeout(() => {
-            this.getElPos();
-            this.updateWidth();
-          });
-        }
-      },
-    });
+    this.updateAfterLoaded();
   }
 }

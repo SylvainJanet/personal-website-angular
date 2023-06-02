@@ -10,6 +10,7 @@ import { TestService } from 'src/app/services/db/test/test.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { environment } from 'src/environments/environment';
+import { debounce } from 'src/scripts/tools/debounce';
 
 @Component({
   selector: 'app-cv-about-me',
@@ -123,13 +124,17 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
+  @debounce()
   onResize() {
-    this.getElPos();
-    this.updateWidth();
+    this.updateAfterLoaded();
   }
 
   @HostListener('window:scroll', ['$event'])
+  @debounce()
   onScroll() {
+    this.updateAfterLoaded();
+  }
+  updateAfterLoaded() {
     this.preloader.statusAnyLoading.subscribe({
       next: (isAnyLoading) => {
         if (isAnyLoading != null && !isAnyLoading) {
@@ -143,16 +148,6 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.getElPos();
-    this.preloader.statusAnyLoading.subscribe({
-      next: (isAnyLoading) => {
-        if (isAnyLoading != null && !isAnyLoading) {
-          setTimeout(() => {
-            this.getElPos();
-            this.updateWidth();
-          });
-        }
-      },
-    });
+    this.updateAfterLoaded();
   }
 }
