@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { scriptVar } from '../../../../scripts/template/tools/setUp';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
+import { debounce } from 'src/scripts/tools/debounce';
 
 @Component({
   selector: 'app-header',
@@ -22,6 +23,7 @@ export class HeaderComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
+  @debounce()
   onResize() {
     this.updateTrigger();
   }
@@ -94,6 +96,7 @@ export class HeaderComponent implements OnInit {
    * value goes over, the header should be light.
    */
   @HostListener('window:scroll', ['$event'])
+  @debounce()
   onScroll() {
     if (scrollY > this.trigger) {
       if (this.headerState == scriptVar.headerStateDark) {
