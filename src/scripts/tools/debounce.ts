@@ -13,59 +13,106 @@ export function debounce(
 ): MethodDecorator {
   return (
     // eslint-disable-next-line @typescript-eslint/ban-types
-    _target: Object,
+    target: Object,
     // eslint-disable-next-line @typescript-eslint/ban-types
-    _propertyKey: string | Symbol,
-    _descriptor: PropertyDescriptor
+    propertyKey: string | Symbol,
+    descriptor: PropertyDescriptor
   ) => {
-    const original = _descriptor.value;
-    const key = `__timeout__${_propertyKey}`;
+    const original = descriptor.value;
+    const key = `__timeout__${propertyKey}`;
     const keyTimeStarted = key + '__timeStarted';
-    _descriptor[keyTimeStarted as keyof PropertyDescriptor] = false;
+    descriptor[keyTimeStarted as keyof PropertyDescriptor] = false;
 
-    _descriptor.value = function (...args: unknown[]) {
-      if (type == DebounceType.IMMEDIATE) {
-        if (!this[keyTimeStarted as keyof PropertyDescriptor])
-          original.apply(this, args);
-        this[keyTimeStarted as keyof PropertyDescriptor] = true;
-        clearTimeout(this[key as keyof PropertyDescriptor]);
-        this[key as keyof PropertyDescriptor] = setTimeout(
-          () => (this[keyTimeStarted as keyof PropertyDescriptor] = false),
-          delay
-        );
-      }
-
-      if (type == DebounceType.END) {
-        clearTimeout(this[key as keyof PropertyDescriptor]);
-        this[key as keyof PropertyDescriptor] = setTimeout(
-          () => original.apply(this, args),
-          delay
-        );
-      }
-
-      if (type == DebounceType.BOTH) {
-        if (!this[keyTimeStarted as keyof PropertyDescriptor])
-          original.apply(this, args);
-        this[keyTimeStarted as keyof PropertyDescriptor] = true;
-        clearTimeout(this[key as keyof PropertyDescriptor]);
-        this[key as keyof PropertyDescriptor] = setTimeout(() => {
-          this[keyTimeStarted as keyof PropertyDescriptor] = false;
-          original.apply(this, args);
-        }, delay);
-      }
-
-      if (type == DebounceType.PERIODIC) {
-        if (!this[keyTimeStarted as keyof PropertyDescriptor]) {
-          original.apply(this, args);
-          this[key as keyof PropertyDescriptor] = setTimeout(() => {
-            this[keyTimeStarted as keyof PropertyDescriptor] = false;
-            original.apply(this, args);
-          }, delay);
-        }
-        this[keyTimeStarted as keyof PropertyDescriptor] = true;
+    descriptor.value = function (...args: unknown[]) {
+      switch (type) {
+        case DebounceType.IMMEDIATE:
+          immediate(this, key, keyTimeStarted, original, delay, args);
+          break;
+        case DebounceType.END:
+          end(this, key, keyTimeStarted, original, delay, args);
+          break;
+        case DebounceType.BOTH:
+          both(this, key, keyTimeStarted, original, delay, args);
+          break;
+        case DebounceType.PERIODIC:
+          periodic(this, key, keyTimeStarted, original, delay, args);
+          break;
       }
     };
 
-    return _descriptor;
+    return descriptor;
   };
+}
+
+function immediate(
+  descriptor: PropertyDescriptor,
+  key: string,
+  keyTimeStarted: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  original: any,
+  delay: number,
+  args: unknown[]
+) {
+  if (!descriptor[keyTimeStarted as keyof PropertyDescriptor])
+    original.apply(descriptor, args);
+  descriptor[keyTimeStarted as keyof PropertyDescriptor] = true;
+  clearTimeout(descriptor[key as keyof PropertyDescriptor]);
+  descriptor[key as keyof PropertyDescriptor] = setTimeout(
+    () => (descriptor[keyTimeStarted as keyof PropertyDescriptor] = false),
+    delay
+  );
+}
+
+function end(
+  descriptor: PropertyDescriptor,
+  key: string,
+  _keyTimeStarted: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  original: any,
+  delay: number,
+  args: unknown[]
+) {
+  clearTimeout(descriptor[key as keyof PropertyDescriptor]);
+  descriptor[key as keyof PropertyDescriptor] = setTimeout(
+    () => original.apply(descriptor, args),
+    delay
+  );
+}
+
+function both(
+  descriptor: PropertyDescriptor,
+  key: string,
+  keyTimeStarted: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  original: any,
+  delay: number,
+  args: unknown[]
+) {
+  if (!descriptor[keyTimeStarted as keyof PropertyDescriptor])
+    original.apply(descriptor, args);
+  descriptor[keyTimeStarted as keyof PropertyDescriptor] = true;
+  clearTimeout(descriptor[key as keyof PropertyDescriptor]);
+  descriptor[key as keyof PropertyDescriptor] = setTimeout(() => {
+    descriptor[keyTimeStarted as keyof PropertyDescriptor] = false;
+    original.apply(descriptor, args);
+  }, delay);
+}
+
+function periodic(
+  descriptor: PropertyDescriptor,
+  key: string,
+  keyTimeStarted: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  original: any,
+  delay: number,
+  args: unknown[]
+) {
+  if (!descriptor[keyTimeStarted as keyof PropertyDescriptor]) {
+    original.apply(descriptor, args);
+    descriptor[key as keyof PropertyDescriptor] = setTimeout(() => {
+      descriptor[keyTimeStarted as keyof PropertyDescriptor] = false;
+      original.apply(descriptor, args);
+    }, delay);
+  }
+  descriptor[keyTimeStarted as keyof PropertyDescriptor] = true;
 }
