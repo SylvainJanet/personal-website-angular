@@ -44,11 +44,13 @@
       >mon cv</a
     >
   </p>
-  <p>
-    Test back : <span id="testDblocal"></span> -
-    <span id="testDbrealPorthttps"></span> -
-    <span id="testDbrealhttps"></span>
-    <span id="testDbrealdevPorthttps"></span> -
-    <span id="testDbrealdevhttps"></span>
-  </p>
+  <div *ngIf="!env.production">
+    Test back :
+    <p>{{ message }}</p>
+    <p>testDblocal {{ testDblocal }}</p>
+    <p>testDbrealPorthttps {{ testDbrealPorthttps }}</p>
+    <p>testDbrealhttps {{ testDbrealhttps }}</p>
+    <p>testDbrealdevPorthttps {{ testDbrealdevPorthttps }}</p>
+    <p>testDbrealdevhttps {{ testDbrealdevhttps }}</p>
+  </div>
 </div>
