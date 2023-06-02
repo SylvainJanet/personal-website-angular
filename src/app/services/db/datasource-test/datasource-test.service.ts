@@ -11,6 +11,8 @@ export class DatasourceTestService {
   constructor(private http: HttpClient) {}
 
   get(path: string): Observable<string> {
-    return this.http.get<string>(`${DatasourceTestService.URL}${path}`);
+    return this.http.get(`${DatasourceTestService.URL}${path}`, {
+      responseType: 'text',
+    });
   }
 }
