@@ -7,6 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { TestService } from 'src/app/services/db/test/test.service';
+import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { environment } from 'src/environments/environment';
 
@@ -24,19 +25,23 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
   env = environment;
   message = '';
   testDblocal = '';
+  testDbtestlocal = '';
   testDbrealPorthttps = '';
   testDbrealhttps = '';
   testDbrealdevPorthttps = '';
   testDbrealdevhttps = '';
+  logger: LogService;
 
   constructor(
     preloaderService: PreloaderService,
     elRef: ElementRef,
     private testService: TestService,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    logService: LogService
   ) {
     this.element = elRef;
     this.preloader = preloaderService;
+    this.logger = logService.withClassName('CvAboutMeComponent');
   }
 
   ngOnInit(): void {
@@ -45,49 +50,86 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
       next: (m) => (this.message = m),
     });
 
-    this.httpClient.get('http://localhost:8080/hello').subscribe({
-      next: () => (this.testDblocal = 'Local backend OK'),
-      error: () => (this.testDblocal = 'Local backend not accessed'),
-    });
+    this.httpClient
+      .get('http://localhost:8080/hello', {
+        responseType: 'text',
+      })
+      .subscribe({
+        next: () => (this.testDblocal = 'Local backend OK'),
+        error: (e) => {
+          this.testDblocal = 'Local backend not accessed';
+          this.logger.error('Erreur', e);
+        },
+      });
 
     this.httpClient
-      .get('https://server.sylvainjanet.fr:8443/test/hello')
+      .get('http://localhost:8080/hello', {
+        responseType: 'text',
+      })
+      .subscribe({
+        next: () => (this.testDbtestlocal = 'Local backend test OK'),
+        error: (e) => {
+          this.testDbtestlocal = 'Local backend test not accessed';
+          this.logger.error('Erreur', e);
+        },
+      });
+
+    this.httpClient
+      .get('https://server.sylvainjanet.fr:8443/test/hello', {
+        responseType: 'text',
+      })
       .subscribe({
         next: () =>
           (this.testDbrealPorthttps =
             'Real backend with adress and port OK - https'),
-        error: () =>
-          (this.testDbrealPorthttps =
-            'Real backend not accessed with adress and port - https'),
+        error: (e) => {
+          this.testDbrealPorthttps =
+            'Real backend not accessed with adress and port - https';
+          this.logger.error('Erreur', e);
+        },
       });
 
-    this.httpClient.get('https://server.sylvainjanet.fr/test/hello').subscribe({
-      next: () =>
-        (this.testDbrealhttps = 'Real backend with adress OK - https'),
-      error: () =>
-        (this.testDbrealhttps =
-          'Real backend not accessed with adress - https'),
-    });
+    this.httpClient
+      .get('https://server.sylvainjanet.fr/test/hello', {
+        responseType: 'text',
+      })
+      .subscribe({
+        next: () =>
+          (this.testDbrealhttps = 'Real backend with adress OK - https'),
+        error: (e) => {
+          this.testDbrealhttps =
+            'Real backend not accessed with adress - https';
+          this.logger.error('Erreur', e);
+        },
+      });
 
     this.httpClient
-      .get('https://server.sylvainjanet.fr:8443/test-dev/hello')
+      .get('https://server.sylvainjanet.fr:8443/test-dev/hello', {
+        responseType: 'text',
+      })
       .subscribe({
         next: () =>
           (this.testDbrealdevPorthttps =
             'Real dev backend with adress and port OK - https'),
-        error: () =>
-          (this.testDbrealdevPorthttps =
-            'Real dev backend not accessed with adress and port - https'),
+        error: (e) => {
+          this.testDbrealdevPorthttps =
+            'Real dev backend not accessed with adress and port - https';
+          this.logger.error('Erreur', e);
+        },
       });
 
     this.httpClient
-      .get('https://server.sylvainjanet.fr/test-dev/hello')
+      .get('https://server.sylvainjanet.fr/test-dev/hello', {
+        responseType: 'text',
+      })
       .subscribe({
         next: () =>
           (this.testDbrealdevhttps = 'Real dev backend with adress OK - https'),
-        error: () =>
-          (this.testDbrealdevhttps =
-            'Real dev backend not accessed with adress - https'),
+        error: (e) => {
+          this.testDbrealdevhttps =
+            'Real dev backend not accessed with adress - https';
+          this.logger.error('Erreur', e);
+        },
       });
   }
 
