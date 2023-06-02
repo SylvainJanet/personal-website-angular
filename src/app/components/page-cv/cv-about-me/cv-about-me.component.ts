@@ -26,9 +26,7 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
   message = '';
   testDblocal = '';
   testDbtestlocal = '';
-  testDbrealPorthttps = '';
   testDbrealhttps = '';
-  testDbrealdevPorthttps = '';
   testDbrealdevhttps = '';
   logger: LogService;
 
@@ -75,21 +73,6 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
       });
 
     this.httpClient
-      .get('https://server.sylvainjanet.fr:8443/test/hello', {
-        responseType: 'text',
-      })
-      .subscribe({
-        next: () =>
-          (this.testDbrealPorthttps =
-            'Real backend with adress and port OK - https'),
-        error: (e) => {
-          this.testDbrealPorthttps =
-            'Real backend not accessed with adress and port - https';
-          this.logger.error('Erreur', e);
-        },
-      });
-
-    this.httpClient
       .get('https://server.sylvainjanet.fr/test/hello', {
         responseType: 'text',
       })
@@ -99,21 +82,6 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
         error: (e) => {
           this.testDbrealhttps =
             'Real backend not accessed with adress - https';
-          this.logger.error('Erreur', e);
-        },
-      });
-
-    this.httpClient
-      .get('https://server.sylvainjanet.fr:8443/test-dev/hello', {
-        responseType: 'text',
-      })
-      .subscribe({
-        next: () =>
-          (this.testDbrealdevPorthttps =
-            'Real dev backend with adress and port OK - https'),
-        error: (e) => {
-          this.testDbrealdevPorthttps =
-            'Real dev backend not accessed with adress and port - https';
           this.logger.error('Erreur', e);
         },
       });
