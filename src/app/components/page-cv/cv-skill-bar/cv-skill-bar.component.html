@@ -1,7 +1,12 @@
-<div class="skill-name">
-  <div>{{ skillName }}</div>
-  <div class="pull-right">{{ percent }}%</div>
-</div>
-<div class="progress">
-  <div class="progress-bar" [style.width]="width"></div>
+<div class="skill-bar-component">
+  <div class="skill-name-container">
+    <div class="skill-name">
+      <div>{{ skillName }}</div>
+      <div class="pull-right">{{ percent }}%</div>
+    </div>
+  </div>
+
+  <div class="progress">
+    <div class="progress-bar" [style.width]="width"></div>
+  </div>
 </div>

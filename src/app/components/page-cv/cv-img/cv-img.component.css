@@ -5,6 +5,7 @@
   height: 100%;
   width: 100%;
   object-fit: contain;
+  border-radius: 0.5rem;
 }
 
 .about-img {
@@ -13,4 +14,15 @@
   height: 100%;
   width: 100%;
   justify-content: center;
+}
+
+:host {
+  padding-top: var(--default-padding);
+  padding-bottom: var(--default-padding);
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  display: block;
 }

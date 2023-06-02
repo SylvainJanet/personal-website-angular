@@ -24,5 +24,23 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: var(--default-padding);
+}
+
+.skill-bar-component {
+  display: block;
+  margin-top: calc(var(--default-padding) / 2);
+  margin-bottom: calc(var(--default-padding) / 2);
+  box-sizing: border-box;
+}
+
+.skill-name-container {
+  display: block;
+  margin-top: calc(var(--default-padding) / 2);
+  margin-bottom: calc(var(--default-padding) / 2);
+  box-sizing: border-box;
+}
+
+:host {
+  display: block;
+  overflow: hidden;
 }
