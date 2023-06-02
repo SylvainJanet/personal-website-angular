@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LogEntry } from '../log.service';
+import { environment } from 'src/environments/environment';
 
 export abstract class LogPublisher {
   location = '';
@@ -23,12 +24,21 @@ export class LogConsole extends LogPublisher {
 }
 
 export class LogLocalStorage extends LogPublisher {
+  maxSize;
   constructor() {
     // Must call `super()`from derived classes
     super();
 
     // Set location
     this.location = 'logging';
+    this.maxSize = environment.production ? 100 : 1000;
+  }
+
+  pushOrShift(values: LogEntry[], entry: LogEntry) {
+    if (values.length > this.maxSize) {
+      values.shift();
+    }
+    values.push(entry);
   }
 
   // Append log entry to local storage
@@ -43,7 +53,7 @@ export class LogLocalStorage extends LogPublisher {
         : [];
 
       // Add new log entry to array
-      values.push(entry);
+      this.pushOrShift(values, entry);
 
       // Store array into local storage
       localStorage.setItem(this.location, JSON.stringify(values, null, '\n'));

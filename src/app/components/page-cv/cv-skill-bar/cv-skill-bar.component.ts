@@ -60,7 +60,6 @@ export class CvSkillBarComponent implements AfterViewInit {
     this.preloader.statusAnyLoading.subscribe({
       next: (isAnyLoading) => {
         if (isAnyLoading != null && !isAnyLoading) {
-          this.logger.log('Page is loaded : progress bar width can be changed');
           setTimeout(() => {
             this.getElPos();
             this.updateWidth();
@@ -71,12 +70,11 @@ export class CvSkillBarComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.logger.log('Waiting for page to finish loading');
+    this.logger.debug('Waiting for page to finish loading');
     this.getElPos();
     this.preloader.statusAnyLoading.subscribe({
       next: (isAnyLoading) => {
         if (isAnyLoading != null && !isAnyLoading) {
-          this.logger.log('Page is loaded : progress bar width can be changed');
           setTimeout(() => {
             this.getElPos();
             this.updateWidth();

@@ -30,18 +30,18 @@ export class ButtonBarOnHoverComponent {
   }
 
   lineAppears(event: Event) {
-    this.logger.log('Line appears');
+    this.logger.debug('Line appears');
     const width = this.domcomputation.getActualWidth(event.target);
     this.lineWidth = (75 * width) / 100 + 'px';
   }
 
   lineDisappears() {
-    this.logger.log('Line disappears');
+    this.logger.debug('Line disappears');
     this.lineWidth = '0%';
   }
 
   doAction(event: Event) {
-    this.logger.log('Do action');
+    this.logger.debug('Do action');
     this.action(event);
   }
 }

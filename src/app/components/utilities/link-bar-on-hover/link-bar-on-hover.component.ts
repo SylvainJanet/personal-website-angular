@@ -26,13 +26,13 @@ export class LinkBarOnHoverComponent {
   }
 
   lineAppears(event: Event) {
-    this.logger.log('Line appears');
+    this.logger.debug('Line appears');
     const width = this.domcomputation.getActualWidth(event.target);
     this.lineWidth = (75 * width) / 100 + 'px';
   }
 
   lineDisappears() {
-    this.logger.log('Line disappears');
+    this.logger.debug('Line disappears');
     this.lineWidth = '0%';
   }
 }

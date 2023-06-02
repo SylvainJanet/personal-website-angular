@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
   }
 
   updateTrigger() {
-    this.logger.log('Update trigger for dark/light header');
+    this.logger.debug('Update trigger for dark/light header');
     this.trigger = this.domcomputation.getActualHeight(
       document.getElementsByClassName('banner').item(0)
     );
@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit {
    * @param {*} newClass the new class
    */
   changeEveryClass(oldClass: string, newClass: string) {
-    this.logger.log('Change every class', oldClass, 'to', newClass);
+    this.logger.debug('Change every class', oldClass, 'to', newClass);
     const els = document.querySelectorAll('.' + oldClass);
     for (let i = 0; i < els.length; i++) {
       const el = els.item(i);
@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit {
    * the state set in headerState.
    */
   updateHeader() {
-    this.logger.log('Update header');
+    this.logger.debug('Update header');
     if (this.headerState === 'light') {
       this.changeEveryClass(
         scriptVar.cssHeaderDarkClass,
@@ -95,15 +95,16 @@ export class HeaderComponent implements OnInit {
    */
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    this.logger.log('Scroll check');
     if (scrollY > this.trigger) {
       if (this.headerState == scriptVar.headerStateDark) {
+        this.logger.debug('Scroll check');
         this.headerState = scriptVar.headerStateLight;
         this.updateHeader();
       }
     }
     if (scrollY <= this.trigger) {
       if (this.headerState == scriptVar.headerStateLight) {
+        this.logger.debug('Scroll check');
         this.headerState = scriptVar.headerStateDark;
         this.updateHeader();
       }

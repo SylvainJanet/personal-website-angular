@@ -29,7 +29,7 @@ export class ImageService {
   }
 
   imageLoading(img: HTMLElement, loaders: Preloaders[]) {
-    this.logger.log(
+    this.logger.debug(
       'Logging image',
       img.getAttribute('src'),
       'for loaders',
@@ -58,7 +58,7 @@ export class ImageService {
   }
 
   imageLoadedOrError(img: HTMLElement, loaders: Preloaders[]) {
-    this.logger.log(
+    this.logger.debug(
       'Image has been loaded',
       img.getAttribute('src'),
       'for loaders',
