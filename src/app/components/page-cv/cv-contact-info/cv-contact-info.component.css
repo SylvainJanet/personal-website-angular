@@ -32,7 +32,7 @@
   text-align: left;
 }
 
-@media (min-width: 420px) {
+@media (min-width: 350px) {
   .info {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 75%;
