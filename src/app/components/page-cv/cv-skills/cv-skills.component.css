@@ -23,10 +23,9 @@
 .title-s {
   font-weight: 700;
   text-align: left;
-}
-
-.skill-mf {
-  overflow: hidden;
+  margin-top: var(--default-padding);
+  margin-bottom: var(--default-padding);
+  display: block;
 }
 
 :host {
@@ -38,4 +37,5 @@
   height: 100%;
   width: 100%;
   display: block;
+  overflow: hidden;
 }

@@ -1,0 +1,42 @@
+:host {
+  padding-top: var(--default-padding);
+  padding-bottom: var(--default-padding);
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
+.title-bar {
+  display: block;
+  width: 0;
+  transition: width 1.6s ease;
+  height: calc(var(--header-lines-on-hover-height) * 2);
+  background-color: blue;
+}
+
+.title {
+  width: fit-content;
+  margin-right: 0;
+  padding-top: calc(var(--default-padding) / 2);
+  padding-bottom: calc(var(--default-padding) / 2);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.title-and-bar {
+  display: flex;
+  flex-direction: row;
+  margin-top: calc(var(--default-padding) / 2);
+  margin-bottom: calc(var(--default-padding) / 2);
+}
+
+.lead {
+  text-align: left;
+
+  padding-top: calc(var(--default-padding));
+  padding-bottom: calc(var(--default-padding));
+  margin-top: 0;
+  margin-bottom: 0;
+}

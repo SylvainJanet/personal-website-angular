@@ -3,54 +3,50 @@ import {
   Component,
   ElementRef,
   HostListener,
-  Input,
 } from '@angular/core';
-import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 
 @Component({
-  selector: 'app-cv-skill-bar',
-  templateUrl: './cv-skill-bar.component.html',
-  styleUrls: ['./cv-skill-bar.component.css'],
+  selector: 'app-cv-about-me',
+  templateUrl: './cv-about-me.component.html',
+  styleUrls: ['./cv-about-me.component.css'],
 })
-export class CvSkillBarComponent implements AfterViewInit {
-  @Input() skillName = 'SKILL';
-  @Input() percent = 50;
+export class CvAboutMeComponent implements AfterViewInit {
   width = '0';
-  preloader: PreloaderService;
-  element: ElementRef;
   posElementMin = 0;
   posElementMax = 0;
+  preloader: PreloaderService;
+  element: ElementRef;
 
-  constructor(
-    preloaderService: PreloaderService,
-    logService: LogService,
-    elRef: ElementRef
-  ) {
+  constructor(preloaderService: PreloaderService, elRef: ElementRef) {
     this.element = elRef;
     this.preloader = preloaderService;
   }
 
   getElPos() {
-    const posViewPort = this.element.nativeElement.getBoundingClientRect().y;
+    const posViewPort =
+      this.element.nativeElement.firstElementChild.firstElementChild.firstElementChild.getBoundingClientRect()
+        .y +
+      this.element.nativeElement.firstElementChild.firstElementChild.firstElementChild.firstElementChild.getBoundingClientRect()
+        .height;
     const viewPortOffset = scrollY;
     const viewPortHeight = window.innerHeight;
     this.posElementMax = posViewPort + viewPortOffset;
     this.posElementMin = this.posElementMax - viewPortHeight;
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.getElPos();
-    this.updateWidth();
-  }
-
   updateWidth() {
     if (scrollY < this.posElementMin || scrollY > this.posElementMax) {
       this.width = '0';
     } else {
-      this.width = this.percent + '%';
+      this.width = '75%';
     }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.getElPos();
+    this.updateWidth();
   }
 
   @HostListener('window:scroll', ['$event'])

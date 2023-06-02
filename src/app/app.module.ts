@@ -33,6 +33,7 @@ import { CvImgComponent } from './components/page-cv/cv-img/cv-img.component';
 import { CvContactInfoComponent } from './components/page-cv/cv-contact-info/cv-contact-info.component';
 import { CvSkillsComponent } from './components/page-cv/cv-skills/cv-skills.component';
 import { CvSkillBarComponent } from './components/page-cv/cv-skill-bar/cv-skill-bar.component';
+import { CvAboutMeComponent } from './components/page-cv/cv-about-me/cv-about-me.component';
 
 @Injectable()
 class MyHammerConfig extends HammerGestureConfig {
@@ -58,6 +59,7 @@ class MyHammerConfig extends HammerGestureConfig {
     CvContactInfoComponent,
     CvSkillsComponent,
     CvSkillBarComponent,
+    CvAboutMeComponent,
   ],
   imports: [
     BrowserModule,
