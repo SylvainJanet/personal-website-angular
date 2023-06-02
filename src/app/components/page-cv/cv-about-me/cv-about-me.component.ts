@@ -53,7 +53,7 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
         responseType: 'text',
       })
       .subscribe({
-        next: () => (this.testDblocal = 'Local backend OK'),
+        next: (m) => (this.testDblocal = 'Local backend OK - ' + m),
         error: (e) => {
           this.testDblocal = 'Local backend not accessed';
           this.logger.error('Erreur', e);
@@ -65,7 +65,7 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
         responseType: 'text',
       })
       .subscribe({
-        next: () => (this.testDbtestlocal = 'Local backend test OK'),
+        next: (m) => (this.testDbtestlocal = 'Local backend test OK - ' + m),
         error: (e) => {
           this.testDbtestlocal = 'Local backend test not accessed';
           this.logger.error('Erreur', e);
@@ -77,8 +77,8 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
         responseType: 'text',
       })
       .subscribe({
-        next: () =>
-          (this.testDbrealhttps = 'Real backend with adress OK - https'),
+        next: (m) =>
+          (this.testDbrealhttps = 'Real backend with adress OK - https - ' + m),
         error: (e) => {
           this.testDbrealhttps =
             'Real backend not accessed with adress - https';
@@ -91,8 +91,9 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
         responseType: 'text',
       })
       .subscribe({
-        next: () =>
-          (this.testDbrealdevhttps = 'Real dev backend with adress OK - https'),
+        next: (m) =>
+          (this.testDbrealdevhttps =
+            'Real dev backend with adress OK - https - ' + m),
         error: (e) => {
           this.testDbrealdevhttps =
             'Real dev backend not accessed with adress - https';
