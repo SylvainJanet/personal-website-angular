@@ -19,3 +19,23 @@
   background-color: #007bff;
   transition: width 0.6s ease;
 }
+
+.title-s {
+  font-weight: 700;
+  text-align: left;
+}
+
+.skill-mf {
+  overflow: hidden;
+}
+
+:host {
+  padding-top: var(--default-padding);
+  padding-bottom: var(--default-padding);
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  display: block;
+}

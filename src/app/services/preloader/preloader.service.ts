@@ -42,30 +42,30 @@ export class PreloaderService {
   }
 
   showLoader(loader: Preloaders, qtyToLoad = 0) {
-    this.logger.log('showLoader', loader, qtyToLoad);
+    this.logger.debug('showLoader', loader, qtyToLoad);
     this.info.set(loader, { qtyToLoad, isLoading: true });
     this.statusLoading.get(loader)?.next(true);
     this.statusAnyLoading.next(true);
   }
 
   toLoad(loader: Preloaders, qty: number) {
-    this.logger.log('Loading stuff...', loader, qty);
+    this.logger.debug('Loading stuff...', loader, qty);
     const oldQty = this.info.get(loader)?.qtyToLoad ?? 0;
     const newQty = oldQty + qty;
     this.info.set(loader, { isLoading: true, qtyToLoad: newQty });
     this.statusLoading.get(loader)?.next(true);
     this.statusAnyLoading.next(true);
-    this.logger.log('Now has to load', newQty);
+    this.logger.debug('Now has to load', newQty);
   }
 
   loaded(loader: Preloaders, qty: number) {
-    this.logger.log('Stuff has been loaded...', loader, qty);
+    this.logger.debug('Stuff has been loaded...', loader, qty);
     const oldQty = this.info.get(loader)?.qtyToLoad ?? 0;
     const newQty = oldQty - qty < 0 ? 0 : oldQty - qty;
     this.info.set(loader, { isLoading: true, qtyToLoad: newQty });
     this.statusLoading.get(loader)?.next(true);
     this.statusAnyLoading.next(true);
-    this.logger.log('Still has to load', newQty);
+    this.logger.debug('Still has to load', newQty);
     if (newQty === 0) {
       this.hideLoader(loader);
     }
@@ -73,7 +73,7 @@ export class PreloaderService {
 
   hideLoader(loader: Preloaders) {
     if (this.info.get(loader)?.qtyToLoad === 0) {
-      this.logger.log('Loading finished - hide loader', loader);
+      this.logger.debug('Loading finished - hide loader', loader);
       this.info.set(loader, { qtyToLoad: 0, isLoading: false });
       this.statusLoading.get(loader)?.next(false);
       this.statusAnyLoading.next(true);

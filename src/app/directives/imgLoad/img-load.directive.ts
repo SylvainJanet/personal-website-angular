@@ -29,20 +29,20 @@ export class ImgLoadDirective implements OnChanges {
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['appImgLoad']) {
-      this.logger.log('Changes - appImgLoad');
+      this.logger.debug('Changes - appImgLoad');
       this.imageService.imageLoading(this.el.nativeElement, this.appImgLoad);
     }
   }
 
   @HostListener('load')
   onLoad() {
-    this.logger.log('load event');
+    this.logger.debug('load event');
     this.loadOrError();
   }
 
   @HostListener('error')
   onError() {
-    this.logger.log('error event');
+    this.logger.debug('error event');
     this.loadOrError();
   }
 
