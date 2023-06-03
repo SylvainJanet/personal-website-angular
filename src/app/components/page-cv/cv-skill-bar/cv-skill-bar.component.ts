@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
+import { scriptVar } from 'src/scripts/template/tools/setUp';
 import { debounce } from 'src/scripts/tools/debounce';
 
 @Component({
@@ -33,11 +34,31 @@ export class CvSkillBarComponent implements AfterViewInit {
   }
 
   getElPos() {
-    const posViewPort = this.element.nativeElement.getBoundingClientRect().y;
+    const posViewPort =
+      this.element.nativeElement.getBoundingClientRect().y +
+      this.element.nativeElement.firstElementChild.firstElementChild.getBoundingClientRect()
+        .height +
+      parseInt(
+        getComputedStyle(
+          this.element.nativeElement.firstElementChild.firstElementChild
+        ).marginTop
+      ) +
+      parseInt(
+        getComputedStyle(
+          this.element.nativeElement.firstElementChild.firstElementChild
+        ).marginBottom
+      );
     const viewPortOffset = scrollY;
     const viewPortHeight = window.innerHeight;
     this.posElementMax = posViewPort + viewPortOffset;
     this.posElementMin = this.posElementMax - viewPortHeight;
+    this.posElementMax -= parseInt(
+      getComputedStyle(document.documentElement)
+        .getPropertyValue(scriptVar.cssHeaderHeight)
+        .split('px')[0]
+    );
+    this.posElementMax +=
+      this.element.nativeElement.firstElementChild.firstElementChild.nextElementSibling.getBoundingClientRect().height;
   }
 
   @HostListener('window:resize', ['$event'])
