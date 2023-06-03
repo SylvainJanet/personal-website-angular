@@ -33,7 +33,6 @@ export class HeaderComponent implements OnInit {
   }
 
   updateTrigger() {
-    this.logger.debug('Update trigger for dark/light header');
     this.trigger = this.domcomputation.getActualHeight(
       document.getElementsByClassName('banner').item(0)
     );
@@ -42,7 +41,10 @@ export class HeaderComponent implements OnInit {
       scrollY > this.trigger
         ? scriptVar.headerStateLight
         : scriptVar.headerStateDark;
-    if (oldHeaderState != this.headerState) this.updateHeader();
+    if (oldHeaderState != this.headerState) {
+      this.logger.debug('Update trigger for dark/light header');
+      this.updateHeader();
+    }
   }
 
   /**
