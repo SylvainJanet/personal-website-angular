@@ -50,6 +50,10 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
     console.log('ngOnInit : API call');
     this.testService.hello().subscribe({
       next: (m) => (this.message = m),
+      error: (e) => {
+        this.message = 'API call failed';
+        this.logger.error('Erreur', e);
+      },
     });
 
     this.httpClient
