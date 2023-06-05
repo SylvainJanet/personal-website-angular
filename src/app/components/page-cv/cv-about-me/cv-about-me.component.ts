@@ -28,7 +28,6 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
   env = environment;
   message = '';
   testDblocal = '';
-  testDbtestlocal = '';
   testDbrealhttps = '';
   testDbrealdevhttps = '';
   logger: LogService;
@@ -64,18 +63,6 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
         next: (m) => (this.testDblocal = 'Local backend OK - ' + m),
         error: (e) => {
           this.testDblocal = 'Local backend not accessed';
-          this.logger.error('Erreur', e);
-        },
-      });
-
-    this.httpClient
-      .get('http://localhost:8080/hello', {
-        responseType: 'text',
-      })
-      .subscribe({
-        next: (m) => (this.testDbtestlocal = 'Local backend test OK - ' + m),
-        error: (e) => {
-          this.testDbtestlocal = 'Local backend test not accessed';
           this.logger.error('Erreur', e);
         },
       });
