@@ -38,7 +38,7 @@ import { CvContactInfoComponent } from './components/page-cv/cv-contact-info/cv-
 import { CvSkillsComponent } from './components/page-cv/cv-skills/cv-skills.component';
 import { CvSkillBarComponent } from './components/page-cv/cv-skill-bar/cv-skill-bar.component';
 import { CvAboutMeComponent } from './components/page-cv/cv-about-me/cv-about-me.component';
-import { XsrfInterceptor } from './components/interceptors/xsrf.interceptor';
+import { XsrfInterceptor } from './interceptors/xsrf.interceptor';
 
 @Injectable()
 class MyHammerConfig extends HammerGestureConfig {
