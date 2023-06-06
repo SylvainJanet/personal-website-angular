@@ -3,6 +3,8 @@ import { scriptVar } from '../../../../scripts/template/tools/setUp';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { debounce } from 'src/scripts/tools/debounce';
+import { TestService } from 'src/app/services/db/test/test.service';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +17,12 @@ export class HeaderComponent implements OnInit {
   domcomputation: DOMComputationService;
   logger: LogService;
 
-  constructor(domcomputation: DOMComputationService, logService: LogService) {
+  constructor(
+    domcomputation: DOMComputationService,
+    logService: LogService,
+    private testService: TestService,
+    private httpClient: HttpClient
+  ) {
     this.domcomputation = domcomputation;
     this.trigger = 0;
     this.headerState = '';
@@ -117,6 +124,36 @@ export class HeaderComponent implements OnInit {
   }
 
   language() {
-    console.log('This is temporary');
+    const params = new HttpParams().set(
+      'content',
+      'This content was set from the front end'
+    );
+
+    this.httpClient
+      .put('http://localhost:8080/add-message', null, {
+        params: params,
+        responseType: 'text',
+      })
+      .subscribe({
+        next: (m) => {
+          console.log(m);
+        },
+        error: (e) => {
+          console.log(e);
+        },
+      });
+
+    this.httpClient
+      .get('http://localhost:8080/hello', {
+        responseType: 'text',
+      })
+      .subscribe({
+        next: (m) => {
+          console.log(m);
+        },
+        error: (e) => {
+          console.log(e);
+        },
+      });
   }
 }

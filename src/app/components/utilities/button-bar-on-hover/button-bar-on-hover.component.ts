@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
 
@@ -15,16 +15,13 @@ export class ButtonBarOnHoverComponent {
   @Input() buttonStyle = '';
   @Input() lineStyle = '';
   @Input() globalStyle = '';
-  @Input() action: (args: Event) => void;
+  @Output() press = new EventEmitter<Event>();
 
   logger: LogService;
   domcomputation: DOMComputationService;
 
   constructor(logService: LogService, domcomputation: DOMComputationService) {
     this.logger = logService.withClassName('ButtonBarOnHoverComponent');
-    this.action = () => {
-      this.logger.debug('No action binded');
-    };
     this.domcomputation = domcomputation;
     this.lineDisappears();
   }
@@ -42,6 +39,6 @@ export class ButtonBarOnHoverComponent {
 
   doAction(event: Event) {
     this.logger.debug('Do action');
-    this.action(event);
+    this.press.emit(event);
   }
 }
