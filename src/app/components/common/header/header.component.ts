@@ -4,7 +4,7 @@ import { DOMComputationService } from 'src/app/services/domcomputation/domcomput
 import { LogService } from 'src/app/services/log/log.service';
 import { debounce } from 'src/scripts/tools/debounce';
 import { TestService } from 'src/app/services/db/test/test.service';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-header',
