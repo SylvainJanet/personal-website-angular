@@ -13,11 +13,13 @@ export abstract class LogPublisher {
 export class LogConsole extends LogPublisher {
   log(entry: LogEntry): Observable<boolean> {
     // Log to console
+    // eslint-disable-next-line no-console
     console.log(entry.buildLogString());
     return of(true);
   }
 
   clear(): Observable<boolean> {
+    // eslint-disable-next-line no-console
     console.clear();
     return of(true);
   }
@@ -62,6 +64,7 @@ export class LogLocalStorage extends LogPublisher {
       ret = true;
     } catch (ex) {
       // Display error in console
+      // eslint-disable-next-line no-console
       console.log(ex);
     }
 
@@ -116,6 +119,7 @@ export class LogWebApi extends LogPublisher {
     }
     errors.push(msg);
 
+    // eslint-disable-next-line no-console
     console.error('An error occurred', errors);
     return throwError(() => errors);
   }

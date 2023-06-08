@@ -46,10 +46,12 @@ export class AbstractLogPublisher {
 export class LogConsole extends AbstractLogPublisher {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   override log(entry: { buildLogString: () => any }) {
+    // eslint-disable-next-line no-console
     console.log(entry.buildLogString());
   }
 
   override clear() {
+    // eslint-disable-next-line no-console
     console.clear();
   }
 }
@@ -84,6 +86,7 @@ export class LogLocalStroage extends AbstractLogPublisher {
       localStorage.setItem(this.location, JSON.stringify(values, null, '\n'));
     } catch (ex) {
       // if an error occurs during the loging process, we lack any other mean to retrive the information.
+      // eslint-disable-next-line no-console
       console.log(ex);
     }
   }

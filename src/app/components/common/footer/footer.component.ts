@@ -21,7 +21,7 @@ export class FooterComponent implements ComponentWithText, OnDestroy {
     private textService: TextService
   ) {
     this.bannerSrc = 'assets/img/overlay-bg.jpg';
-    this.languageService.subscribe(this, 2);
+    this.languageService.subscribe(this);
     this.updateTexts();
   }
 

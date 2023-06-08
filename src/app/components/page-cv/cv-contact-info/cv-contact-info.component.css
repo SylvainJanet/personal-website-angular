@@ -19,31 +19,18 @@
 
 .info {
   position: relative;
-  width: 100%;
+  flex: content;
   box-sizing: border-box;
   text-align: right;
+  padding-left: calc(var(--default-padding) / 2);
 }
 
 .title-s {
   position: relative;
-  width: 100%;
+  width: fit-content;
   box-sizing: border-box;
   text-align: left;
-}
-
-@media (min-width: 350px) {
-  .info {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 75%;
-    flex: 0 0 75%;
-    max-width: 0 0 75%;
-  }
-  .title-s {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 25%;
-    flex: 0 0 25%;
-    max-width: 0 0 25%;
-  }
+  padding-right: calc(var(--default-padding) / 2);
 }
 
 :host {

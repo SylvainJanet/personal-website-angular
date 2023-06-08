@@ -42,6 +42,7 @@ export class CvAboutMeComponent
   forthPart = '';
   fifthPart = '';
   myCv = '';
+  linkToCv = '';
 
   constructor(
     preloaderService: PreloaderService,
@@ -56,20 +57,60 @@ export class CvAboutMeComponent
     this.element = elRef;
     this.preloader = preloaderService;
     this.logger = logService.withClassName('CvAboutMeComponent');
-    this.languageService.subscribe(this, 8);
+    this.languageService.subscribe(this);
     this.updateTexts();
   }
   updateTexts(): void {
     this.aboutMe = this.textService.get('about-me-title');
+    this.textService.get('cv-file-name').subscribe({
+      next: (name) => (this.linkToCv = 'assets/pdf/' + name),
+    });
     this.textService.getSplit('about-me-content').subscribe({
       next: (r) => {
         this.subtitle = r[0];
         this.firstPart = r[1];
         this.secondPart = r[2];
-        this.thirdPart = r[3];
-        this.forthPart = r[4];
-        this.fifthPart = r[5];
-        this.myCv = r[6];
+        this.thirdPart =
+          r[3] +
+          '<strong><em>' +
+          r[4] +
+          '</em></strong>' +
+          r[5] +
+          '<strong><em>' +
+          r[6] +
+          '</em></strong>' +
+          r[7] +
+          '<strong><em>' +
+          r[8] +
+          '</em></strong>' +
+          r[9] +
+          '<strong><em>' +
+          r[10] +
+          '</em></strong>' +
+          r[11] +
+          '<strong><em>' +
+          r[12] +
+          '</em></strong>' +
+          r[13] +
+          '<strong><em>' +
+          r[14] +
+          '</em></strong>' +
+          r[15] +
+          '<strong><em>' +
+          r[16] +
+          '</em></strong>' +
+          r[17] +
+          '<strong><em>' +
+          r[18] +
+          '</em></strong>' +
+          r[19] +
+          '<strong><em>' +
+          r[20] +
+          '</em></strong>' +
+          r[21];
+        this.forthPart = r[22];
+        this.fifthPart = r[23];
+        this.myCv = r[24] + r[25];
       },
     });
   }
