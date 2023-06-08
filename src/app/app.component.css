@@ -13,5 +13,5 @@ mat-spinner {
 }
 
 .hide {
-  display: none;
+  visibility: hidden;
 }

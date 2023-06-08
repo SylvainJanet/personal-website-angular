@@ -9,7 +9,7 @@
     [style]="buttonStyle"
     [ngStyle]="{ color: textColor }"
   >
-    {{ text }}
+    {{ text | async }}
   </button>
   <div
     class="line-on-hover-line"

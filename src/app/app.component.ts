@@ -16,8 +16,10 @@ import {
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements AfterViewInit, AfterViewChecked {
-  loader = Preloaders.MAIN;
+  mainLoader = Preloaders.MAIN;
+  loaderTexts = Preloaders.TEXTS;
   env = environment;
+  opacity = 1;
 
   constructor(
     public preloader: PreloaderService,
@@ -25,7 +27,6 @@ export class AppComponent implements AfterViewInit, AfterViewChecked {
   ) {}
 
   ngAfterViewInit() {
-    this.preloader.hideLoader(this.loader);
     this.cd.detectChanges();
   }
   ngAfterViewChecked() {

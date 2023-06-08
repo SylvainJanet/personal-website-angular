@@ -9,16 +9,11 @@
       <div class="page-title">
         <div>
           <h2>
-            <span style="color: white">I am Sylvain Janet</span>
+            <span style="color: white">{{ iAmMe | async }}</span>
             <app-typed-animated-text
               class="text-slider-items"
               textColor="white"
-              [textArray]="[
-                'FullStack Developer',
-                'Trainer',
-                'Mathematician',
-                'Musician'
-              ]"
+              [inputArray]="messages"
             ></app-typed-animated-text>
           </h2>
         </div>

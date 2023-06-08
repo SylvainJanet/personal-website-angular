@@ -3,9 +3,12 @@ import {
   Component,
   ElementRef,
   Input,
+  OnChanges,
   Renderer2,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import { Observable, of, zip } from 'rxjs';
 
 // https://medium.com/swlh/an-infinite-type-and-delete-animation-in-angular-10-fc38d87d08ec
 @Component({
@@ -13,15 +16,17 @@ import {
   templateUrl: './typed-animated-text.component.html',
   styleUrls: ['./typed-animated-text.component.css'],
 })
-export class TypedAnimatedTextComponent implements AfterViewInit {
+export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
   @ViewChild('textElement') textElement!: ElementRef;
   @ViewChild('blinkElement') blinkElement!: ElementRef;
 
-  @Input() textArray: string[] = [
-    'You Can...',
-    'Write Anything You want...',
-    '🍻 Enjoy 🍸🍻🍺🍷🍹',
-  ];
+  // @Input() inputArray: Observable<string>[] = [
+  //   of('You Can...'),
+  //   of('Write Anything You want...'),
+  //   of('🍻 Enjoy 🍸🍻🍺🍷🍹'),
+  // ];
+  @Input() inputArray: Observable<string>[] = [of('')];
+  textArray: string[] = [];
   @Input() textColor = 'black';
   @Input() fontSize = '20px';
   @Input() blinkWidth = '2px';
@@ -32,11 +37,27 @@ export class TypedAnimatedTextComponent implements AfterViewInit {
 
   private i = 0;
 
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2) {
+    zip(this.inputArray).subscribe({
+      next: (r) => (this.textArray = r),
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const change = changes['inputArray'];
+    if (!change.firstChange) {
+      zip(this.inputArray).subscribe({ next: (r) => (this.textArray = r) });
+    }
+  }
 
   ngAfterViewInit(): void {
-    this.initVariables();
-    this.typingEffect();
+    zip(this.inputArray).subscribe({
+      next: (r) => {
+        this.textArray = r;
+        this.initVariables();
+        this.typingEffect();
+      },
+    });
   }
 
   private initVariables(): void {

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
 
@@ -12,7 +13,7 @@ export class LinkBarOnHoverComponent {
   @Input() textColor = 'white';
   @Input() lineColor = 'white';
   @Input() link = 'https://sylvainjanet.fr';
-  @Input() text = 'Sylvain Janet';
+  @Input() text: Observable<string> = of('Sylvain Janet');
   @Input() aStyle = '';
   @Input() lineStyle = '';
   @Input() globalStyle = '';

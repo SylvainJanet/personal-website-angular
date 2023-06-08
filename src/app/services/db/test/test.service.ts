@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DatasourceTestService } from '../datasource-test/datasource-test.service';
+import { DatasourceService } from '../datasource/datasource-test.service';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 
@@ -7,7 +7,7 @@ import { HttpParams } from '@angular/common/http';
   providedIn: 'root',
 })
 export class TestService {
-  constructor(private dataSource: DatasourceTestService) {}
+  constructor(private dataSource: DatasourceService) {}
 
   hello(): Observable<string> {
     return this.dataSource.get('hello');

@@ -1,32 +1,49 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { scriptVar } from '../../../../scripts/template/tools/setUp';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { debounce } from 'src/scripts/tools/debounce';
-import { TestService } from 'src/app/services/db/test/test.service';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { TextService } from 'src/app/services/db/text/text.service';
+import { LanguageService } from 'src/app/services/language/language.service';
+import { Languages } from 'src/app/enums/languages';
+import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
   trigger: number;
   headerState: string;
   domcomputation: DOMComputationService;
   logger: LogService;
 
+  myName: Observable<string> = of('');
+  otherLanguage: Observable<string> = of('');
+
   constructor(
     domcomputation: DOMComputationService,
     logService: LogService,
-    private testService: TestService,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private textService: TextService,
+    private languageService: LanguageService
   ) {
     this.domcomputation = domcomputation;
     this.trigger = 0;
     this.headerState = '';
     this.logger = logService.withClassName('HeaderComponent');
+    this.languageService.subscribe(this, 2);
+    this.updateTexts();
+  }
+  ngOnDestroy(): void {
+    this.languageService.unsubscribe(this);
+  }
+  updateTexts(): void {
+    this.myName = this.textService.get('sylvain-janet');
+    this.otherLanguage = this.textService.getOtherLanguage();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -124,36 +141,10 @@ export class HeaderComponent implements OnInit {
   }
 
   language() {
-    const params = new HttpParams().set(
-      'content',
-      'This content was set from the front end'
-    );
-
-    this.httpClient
-      .put('http://localhost:8080/add-message', null, {
-        params: params,
-        responseType: 'text',
-      })
-      .subscribe({
-        next: (m) => {
-          console.log(m);
-        },
-        error: (e) => {
-          console.log(e);
-        },
-      });
-
-    this.httpClient
-      .get('http://localhost:8080/hello', {
-        responseType: 'text',
-      })
-      .subscribe({
-        next: (m) => {
-          console.log(m);
-        },
-        error: (e) => {
-          console.log(e);
-        },
-      });
+    if (this.languageService.current() == Languages.ENGLISH) {
+      this.languageService.set(Languages.FRENCH);
+    } else {
+      this.languageService.set(Languages.ENGLISH);
+    }
   }
 }
