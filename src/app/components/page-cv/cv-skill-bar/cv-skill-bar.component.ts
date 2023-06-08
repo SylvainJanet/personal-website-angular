@@ -5,6 +5,7 @@ import {
   HostListener,
   Input,
 } from '@angular/core';
+import { of } from 'rxjs';
 import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
@@ -16,7 +17,7 @@ import { debounce } from 'src/scripts/tools/debounce';
   styleUrls: ['./cv-skill-bar.component.css'],
 })
 export class CvSkillBarComponent implements AfterViewInit {
-  @Input() skillName = 'SKILL';
+  @Input() skillName = of('SKILL');
   @Input() percent = 50;
   width = '0';
   preloader: PreloaderService;

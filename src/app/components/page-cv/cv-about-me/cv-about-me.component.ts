@@ -4,10 +4,14 @@ import {
   Component,
   ElementRef,
   HostListener,
-  OnInit,
+  OnDestroy,
 } from '@angular/core';
+import { of } from 'rxjs';
+import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TestService } from 'src/app/services/db/test/test.service';
+import { TextService } from 'src/app/services/db/text/text.service';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
+import { LanguageService } from 'src/app/services/language/language.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { environment } from 'src/environments/environment';
@@ -19,7 +23,9 @@ import { debounce } from 'src/scripts/tools/debounce';
   templateUrl: './cv-about-me.component.html',
   styleUrls: ['./cv-about-me.component.css'],
 })
-export class CvAboutMeComponent implements AfterViewInit, OnInit {
+export class CvAboutMeComponent
+  implements AfterViewInit, ComponentWithText, OnDestroy
+{
   width = '0';
   posElementMin = 0;
   posElementMax = 0;
@@ -27,10 +33,15 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
   element: ElementRef;
   env = environment;
   message = '';
-  testDblocal = '';
-  testDbrealhttps = '';
-  testDbrealdevhttps = '';
   logger: LogService;
+  aboutMe = of('');
+  subtitle = '';
+  firstPart = '';
+  secondPart = '';
+  thirdPart = '';
+  forthPart = '';
+  fifthPart = '';
+  myCv = '';
 
   constructor(
     preloaderService: PreloaderService,
@@ -38,63 +49,32 @@ export class CvAboutMeComponent implements AfterViewInit, OnInit {
     private testService: TestService,
     private httpClient: HttpClient,
     logService: LogService,
-    private domComputationService: DOMComputationService
+    private domComputationService: DOMComputationService,
+    private languageService: LanguageService,
+    private textService: TextService
   ) {
     this.element = elRef;
     this.preloader = preloaderService;
     this.logger = logService.withClassName('CvAboutMeComponent');
+    this.languageService.subscribe(this, 8);
+    this.updateTexts();
   }
-
-  ngOnInit(): void {
-    console.log('ngOnInit : API call');
-    this.testService.hello().subscribe({
-      next: (m) => (this.message = m),
-      error: (e) => {
-        this.message = 'API call failed';
-        this.logger.error('Erreur', e);
+  updateTexts(): void {
+    this.aboutMe = this.textService.get('about-me-title');
+    this.textService.getSplit('about-me-content').subscribe({
+      next: (r) => {
+        this.subtitle = r[0];
+        this.firstPart = r[1];
+        this.secondPart = r[2];
+        this.thirdPart = r[3];
+        this.forthPart = r[4];
+        this.fifthPart = r[5];
+        this.myCv = r[6];
       },
     });
-
-    this.httpClient
-      .get('http://localhost:8080/hello', {
-        responseType: 'text',
-      })
-      .subscribe({
-        next: (m) => (this.testDblocal = 'Local backend OK - ' + m),
-        error: (e) => {
-          this.testDblocal = 'Local backend not accessed';
-          this.logger.error('Erreur', e);
-        },
-      });
-
-    this.httpClient
-      .get('https://server.sylvainjanet.fr/test/hello', {
-        responseType: 'text',
-      })
-      .subscribe({
-        next: (m) =>
-          (this.testDbrealhttps = 'Real backend with adress OK - https - ' + m),
-        error: (e) => {
-          this.testDbrealhttps =
-            'Real backend not accessed with adress - https';
-          this.logger.error('Erreur', e);
-        },
-      });
-
-    this.httpClient
-      .get('https://server.sylvainjanet.fr/test-dev/hello', {
-        responseType: 'text',
-      })
-      .subscribe({
-        next: (m) =>
-          (this.testDbrealdevhttps =
-            'Real dev backend with adress OK - https - ' + m),
-        error: (e) => {
-          this.testDbrealdevhttps =
-            'Real dev backend not accessed with adress - https';
-          this.logger.error('Erreur', e);
-        },
-      });
+  }
+  ngOnDestroy(): void {
+    this.languageService.unsubscribe(this);
   }
 
   getElPos() {

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
 
@@ -11,7 +12,7 @@ export class ButtonBarOnHoverComponent {
   lineWidth = '0%';
   @Input() textColor = 'white';
   @Input() lineColor = 'white';
-  @Input() text = 'Action';
+  @Input() text: Observable<string> = of('Action');
   @Input() buttonStyle = '';
   @Input() lineStyle = '';
   @Input() globalStyle = '';

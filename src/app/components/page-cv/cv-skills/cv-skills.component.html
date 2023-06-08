@@ -1,13 +1,10 @@
 <div class="skill-mf">
-  <strong class="title-s">Skills</strong>
-  <app-cv-skill-bar [skillName]="'Java'" [percent]="90"></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="'C#'" [percent]="90"></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="'Python'" [percent]="85"></app-cv-skill-bar>
-  <app-cv-skill-bar
-    [skillName]="'Javascript / TypeScript'"
-    [percent]="85"
-  ></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="'SQL'" [percent]="80"></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="'HTML'" [percent]="75"></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="'LATEX'" [percent]="65"></app-cv-skill-bar>
+  <strong class="title-s">{{ skills | async }}</strong>
+  <app-cv-skill-bar [skillName]="java" [percent]="90"></app-cv-skill-bar>
+  <app-cv-skill-bar [skillName]="csharp" [percent]="90"></app-cv-skill-bar>
+  <app-cv-skill-bar [skillName]="python" [percent]="85"></app-cv-skill-bar>
+  <app-cv-skill-bar [skillName]="jsts" [percent]="85"></app-cv-skill-bar>
+  <app-cv-skill-bar [skillName]="sql" [percent]="80"></app-cv-skill-bar>
+  <app-cv-skill-bar [skillName]="html" [percent]="75"></app-cv-skill-bar>
+  <app-cv-skill-bar [skillName]="latex" [percent]="65"></app-cv-skill-bar>
 </div>

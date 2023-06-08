@@ -1,54 +1,29 @@
 <div>
   <div class="title-and-bar">
     <div>
-      <h2 class="title">About me</h2>
+      <h2 class="title">{{ aboutMe | async }}</h2>
       <span class="title-bar" [style.width]="width"></span>
     </div>
   </div>
-  <p class="lead">Développeur FullStack et formateur.</p>
+  <p class="lead">{{ subtitle }}</p>
   <p class="lead"></p>
+  <p class="lead">{{ firstPart }}</p>
   <p class="lead">
-    Mon parcours professionnel a commencé par des études en mathématiques : je
-    suis normalien, agrégé de mathématiques, et j'ai un master en logique et en
-    informatique théorique.
+    {{ secondPart }}
   </p>
   <p class="lead">
-    J'ai entamé ma carrière dans le développement informatique avec un titre
-    professionnel Concepteur développeur d'applications Java.
+    {{ thirdPart }}
   </p>
   <p class="lead">
-    J'ai participé au développement de plusieurs projets. J'ai des compétences
-    dans des frameworks back-end comme <strong><em>Spring boot</em></strong> ou
-    <strong><em>Entity Framework</em></strong
-    >, et dans des frameworks front-end comme
-    <strong><em>Angular</em></strong> ou <strong><em>Vue.js</em></strong
-    >. J'ai également donné des formations en <strong><em>Python</em></strong
-    >, <strong><em>Java</em></strong
-    >, <strong><em>C#</em></strong
-    >, <strong><em>Javascript</em></strong
-    >, <strong><em>SQL</em></strong> ou encore en
-    <strong><em>Algorithmique</em></strong
-    >.
+    {{ forthPart }}
   </p>
   <p class="lead">
-    Enfin, j'ai plusieurs projets individuels, dont la portée est plus large et
-    reflète mes intérêts personnels. De l'expression artistique avec la musique,
-    ma curiosité pour les langues, ma passion pour les jeux.
-  </p>
-  <p class="lead">
-    Pour plus d'informations, voir
+    {{ fifthPart }}
     <a
       style="color: blue"
       href="/src/assets/pdf/JanetSylvain_CV.pdf"
       target="_blank"
-      >mon cv</a
+      >{{ myCv }}</a
     >
   </p>
-  <div *ngIf="!env.production">
-    Test back :
-    <p>{{ message }}</p>
-    <p>testDblocal {{ testDblocal }}</p>
-    <p>testDbrealhttps {{ testDbrealhttps }}</p>
-    <p>testDbrealdevhttps {{ testDbrealdevhttps }}</p>
-  </div>
 </div>

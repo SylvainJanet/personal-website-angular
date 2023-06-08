@@ -9,8 +9,8 @@
     (mouseleave)="lineDisappears()"
     [style]="aStyle"
     [ngStyle]="{ color: textColor }"
-    >{{ text }}</a
-  >
+    >{{ text | async }}
+  </a>
   <div
     class="line-on-hover-line"
     [style]="lineStyle"

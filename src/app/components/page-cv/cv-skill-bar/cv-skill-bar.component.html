@@ -1,7 +1,7 @@
 <div class="skill-bar-component">
   <div class="skill-name-container">
     <div class="skill-name">
-      <div>{{ skillName }}</div>
+      <div>{{ skillName | async }}</div>
       <div class="pull-right">{{ percent }}%</div>
     </div>
   </div>
