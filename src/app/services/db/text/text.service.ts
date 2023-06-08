@@ -44,7 +44,7 @@ export class TextService {
   getSplit(selector: string): Observable<string[]> {
     return this.getText(selector, this.langageService.current()).pipe(
       map((s) => {
-        const split = s.split(new RegExp('\\[\\[|\\]\\]'));
+        const split = s.split(/\[\[|\]\]/);
         const res = [];
         for (let index = 0; index < split.length; index++) {
           if (index % 2 == 0 && (index != split.length - 1 || split[index])) {
