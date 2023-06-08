@@ -25,7 +25,7 @@ export class BannerComponent implements ComponentWithText, OnDestroy {
       getComputedStyle(document.documentElement)
         .getPropertyValue('--banner-bg-image-url')
         .split("'")[1];
-    this.languageService.subscribe(this, 5);
+    this.languageService.subscribe(this);
     this.updateTexts();
   }
   updateTexts(): void {

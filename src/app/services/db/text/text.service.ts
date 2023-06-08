@@ -27,6 +27,7 @@ export class TextService {
   }
 
   get(selector: string): Observable<string> {
+    this.preloaderService.toLoad(Preloaders.TEXTS, 1);
     return this.getText(selector, this.langageService.current()).pipe(
       map((r) => {
         this.preloaderService.loaded(Preloaders.TEXTS, 1);
@@ -42,6 +43,7 @@ export class TextService {
   }
 
   getSplit(selector: string): Observable<string[]> {
+    this.preloaderService.toLoad(Preloaders.TEXTS, 1);
     return this.getText(selector, this.langageService.current()).pipe(
       map((s) => {
         const split = s.split(/\[\[|\]\]/);
@@ -56,7 +58,7 @@ export class TextService {
             }
           }
         }
-        this.preloaderService.loaded(Preloaders.TEXTS, res.length);
+        this.preloaderService.loaded(Preloaders.TEXTS, 1);
         return res;
       })
     );

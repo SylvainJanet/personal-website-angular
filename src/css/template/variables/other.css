@@ -1,4 +1,7 @@
 :root {
   --default-padding: 15px;
   --default-margin: 15px;
+  --background-color: #f5f5f5;
+  --font-weight-normal: 500;
+  --font-weight-bold: 800;
 }

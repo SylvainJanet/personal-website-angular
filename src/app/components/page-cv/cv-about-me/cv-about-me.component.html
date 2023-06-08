@@ -12,18 +12,13 @@
     {{ secondPart }}
   </p>
   <p class="lead">
-    {{ thirdPart }}
+    <span [innerHTML]="thirdPart"> </span>
   </p>
   <p class="lead">
     {{ forthPart }}
   </p>
   <p class="lead">
     {{ fifthPart }}
-    <a
-      style="color: blue"
-      href="/src/assets/pdf/JanetSylvain_CV.pdf"
-      target="_blank"
-      >{{ myCv }}</a
-    >
+    <a style="color: blue" [href]="linkToCv" target="_blank">{{ myCv }}</a>
   </p>
 </div>

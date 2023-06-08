@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Languages } from 'src/app/enums/languages';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
-import { PreloaderService, Preloaders } from '../preloader/preloader.service';
+import { PreloaderService } from '../preloader/preloader.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,6 @@ import { PreloaderService, Preloaders } from '../preloader/preloader.service';
 export class LanguageService {
   language: Languages = Languages.ENGLISH;
   subscribers: ComponentWithText[] = [];
-  nbrs: Map<ComponentWithText, number> = new Map<ComponentWithText, number>();
 
   constructor(private preloaderService: PreloaderService) {
     if (localStorage.getItem('language') != null) {
@@ -28,15 +27,12 @@ export class LanguageService {
     this.language = language;
     localStorage.setItem('language', Languages[language]);
     this.subscribers.forEach((s) => {
-      this.preloaderService.toLoad(Preloaders.TEXTS, this.nbrs.get(s) ?? 0);
       s.updateTexts();
     });
   }
 
-  subscribe(s: ComponentWithText, numberOfTexts: number) {
+  subscribe(s: ComponentWithText) {
     this.subscribers.push(s);
-    this.preloaderService.toLoad(Preloaders.TEXTS, numberOfTexts);
-    this.nbrs.set(s, numberOfTexts);
   }
 
   unsubscribe(s: ComponentWithText) {

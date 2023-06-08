@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
     this.trigger = 0;
     this.headerState = '';
     this.logger = logService.withClassName('HeaderComponent');
-    this.languageService.subscribe(this, 2);
+    this.languageService.subscribe(this);
     this.updateTexts();
   }
   ngOnDestroy(): void {

@@ -23,7 +23,7 @@ export class CvSkillsComponent implements ComponentWithText, OnDestroy {
     private languageService: LanguageService,
     private textService: TextService
   ) {
-    this.languageService.subscribe(this, 8);
+    this.languageService.subscribe(this);
     this.updateTexts();
   }
 
