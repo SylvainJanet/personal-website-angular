@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DatasourceService } from '../datasource/datasource-test.service';
 import { Languages } from 'src/app/enums/languages';
 import { HttpParams } from '@angular/common/http';
-import { Observable, delay, map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { LanguageService } from '../../language/language.service';
 import {
   PreloaderService,
