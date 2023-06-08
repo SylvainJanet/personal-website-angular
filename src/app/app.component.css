@@ -1,4 +1,4 @@
-mat-spinner {
+mat-progress-spinner {
   position: fixed;
   top: calc(50% - 30px);
   left: calc(50% - 30px);

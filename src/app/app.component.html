@@ -4,11 +4,11 @@
     <p>Merci de revenir plus tard :)</p>
   </div>
 
-  <mat-spinner
+  <mat-progress-spinner
     *ngIf="preloader.isAnyLoading(mainLoader, loaderTexts)"
     [mode]="'determinate'"
     [value]="preloader.getProgessionPercent(mainLoader, loaderTexts)"
-  ></mat-spinner>
+  ></mat-progress-spinner>
 
   <app-header
     *ngIf="!env.production"
