@@ -67,7 +67,6 @@ export class CvAboutMeComponent
     });
     this.textService.getSplit('about-me-content').subscribe({
       next: (r) => {
-        console.log(r);
         this.subtitle = r[0];
         this.firstPart = r[1];
         this.secondPart = r[2];

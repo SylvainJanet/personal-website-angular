@@ -64,6 +64,7 @@ export class LogService {
         logger.log(entry).subscribe({
           next: (response) => {
             if (!response) {
+              // eslint-disable-next-line no-console
               console.log(
                 'Erreur avec loggeur ' +
                   logger.constructor.name +
@@ -73,6 +74,7 @@ export class LogService {
             }
           },
           error: () => {
+            // eslint-disable-next-line no-console
             console.log(
               'Erreur avec loggeur ' +
                 logger.constructor.name +
