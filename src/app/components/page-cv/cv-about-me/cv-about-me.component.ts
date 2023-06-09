@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
@@ -8,15 +7,14 @@ import {
 } from '@angular/core';
 import { of } from 'rxjs';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
-import { TestService } from 'src/app/services/db/test/test.service';
 import { TextService } from 'src/app/services/db/text/text.service';
-import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LanguageService } from 'src/app/services/language/language.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { environment } from 'src/environments/environment';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
 import { debounce } from 'src/scripts/tools/debounce';
+import { Paragraph } from '../../classes/Paragraph';
 
 @Component({
   selector: 'app-cv-about-me',
@@ -35,22 +33,13 @@ export class CvAboutMeComponent
   message = '';
   logger: LogService;
   aboutMe = of('');
-  subtitle = '';
-  firstPart = '';
-  secondPart = '';
-  thirdPart = '';
-  forthPart = '';
-  fifthPart = '';
-  myCv = '';
   linkToCv = '';
+  paragraphs: Paragraph[] = [];
 
   constructor(
     preloaderService: PreloaderService,
     elRef: ElementRef,
-    private testService: TestService,
-    private httpClient: HttpClient,
     logService: LogService,
-    private domComputationService: DOMComputationService,
     private languageService: LanguageService,
     private textService: TextService
   ) {
@@ -63,54 +52,16 @@ export class CvAboutMeComponent
   updateTexts(): void {
     this.aboutMe = this.textService.get('about-me-title');
     this.textService.get('cv-file-name').subscribe({
-      next: (name) => (this.linkToCv = 'assets/pdf/' + name),
-    });
-    this.textService.getSplit('about-me-content').subscribe({
-      next: (r) => {
-        this.subtitle = r[0];
-        this.firstPart = r[1];
-        this.secondPart = r[2];
-        this.thirdPart =
-          r[3] +
-          '<strong><em>' +
-          r[4] +
-          '</em></strong>' +
-          r[5] +
-          '<strong><em>' +
-          r[6] +
-          '</em></strong>' +
-          r[7] +
-          '<strong><em>' +
-          r[8] +
-          '</em></strong>' +
-          r[9] +
-          '<strong><em>' +
-          r[10] +
-          '</em></strong>' +
-          r[11] +
-          '<strong><em>' +
-          r[12] +
-          '</em></strong>' +
-          r[13] +
-          '<strong><em>' +
-          r[14] +
-          '</em></strong>' +
-          r[15] +
-          '<strong><em>' +
-          r[16] +
-          '</em></strong>' +
-          r[17] +
-          '<strong><em>' +
-          r[18] +
-          '</em></strong>' +
-          r[19] +
-          '<strong><em>' +
-          r[20] +
-          '</em></strong>' +
-          r[21];
-        this.forthPart = r[22];
-        this.fifthPart = r[23];
-        this.myCv = r[24] + r[25];
+      next: (name) => {
+        this.linkToCv = 'pdf/' + name;
+        this.textService.getSplit('about-me-content').subscribe({
+          next: (r) => {
+            this.paragraphs = r;
+            this.paragraphs.splice(1, 0, new Paragraph([]));
+            this.paragraphs.forEach((p) => (p.cssClass = 'lead'));
+            this.paragraphs[6].els[1].assetHref = this.linkToCv;
+          },
+        });
       },
     });
   }

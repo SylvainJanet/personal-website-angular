@@ -8,6 +8,9 @@ import {
   PreloaderService,
   Preloaders,
 } from '../../preloader/preloader.service';
+import { SubParagraph } from 'src/app/components/classes/SubParagraph';
+import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
+import { Paragraph } from 'src/app/components/classes/Paragraph';
 
 @Injectable({
   providedIn: 'root',
@@ -42,23 +45,42 @@ export class TextService {
       : this.getText('french-language-name', Languages.FRENCH);
   }
 
-  getSplit(selector: string): Observable<string[]> {
+  getSplit(selector: string): Observable<Paragraph[]> {
     this.preloaderService.toLoad(Preloaders.TEXTS, 1);
     return this.getText(selector, this.langageService.current()).pipe(
       map((s) => {
-        const split = s.split(/\[\[|\]\]/);
         const res = [];
-        for (let index = 0; index < split.length; index++) {
-          if (index % 2 == 0 && (index != split.length - 1 || split[index])) {
-            res.push(split[index]);
-          } else {
-            const element = split[index];
-            if (element) {
-              res.push(element.split(',').splice(-1, 1).join(''));
+        const paragraphs = s.split(/\[\[\]\]/);
+        for (const paragraph of paragraphs) {
+          const split = paragraph.split(/\[\[|\]\]/);
+          const p = new Paragraph([]);
+          for (let i = 0; i < split.length; i++) {
+            if (i % 2 == 0 && (i != split.length - 1 || split[i])) {
+              p.els.push(new SubParagraph(SubParagraphRoot.SPAN, split[i]));
+            } else {
+              const element = split[i];
+              const ref = element.split(',')[0];
+              if (ref == 'br') {
+                p.els.push(new SubParagraph(SubParagraphRoot.BR, ''));
+              } else if (ref == 'a_asset') {
+                p.els.push(
+                  new SubParagraph(
+                    SubParagraphRoot.A_ASSET,
+                    element.split(',').splice(-1, 1).join('')
+                  )
+                );
+              } else {
+                p.els.push(
+                  new SubParagraph(
+                    SubParagraphRoot.STRONG_EM,
+                    element.split(',').splice(-1, 1).join('')
+                  )
+                );
+              }
             }
           }
+          res.push(p);
         }
-        this.preloaderService.loaded(Preloaders.TEXTS, 1);
         return res;
       })
     );

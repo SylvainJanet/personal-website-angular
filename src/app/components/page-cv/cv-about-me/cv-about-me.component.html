@@ -5,20 +5,5 @@
       <span class="title-bar" [style.width]="width"></span>
     </div>
   </div>
-  <p class="lead">{{ subtitle }}</p>
-  <p class="lead"></p>
-  <p class="lead">{{ firstPart }}</p>
-  <p class="lead">
-    {{ secondPart }}
-  </p>
-  <p class="lead">
-    <span [innerHTML]="thirdPart"> </span>
-  </p>
-  <p class="lead">
-    {{ forthPart }}
-  </p>
-  <p class="lead">
-    {{ fifthPart }}
-    <a style="color: blue" [href]="linkToCv" target="_blank">{{ myCv }}</a>
-  </p>
+  <app-text-paragraph-set [paragraphs]="paragraphs"></app-text-paragraph-set>
 </div>
