@@ -4,6 +4,7 @@ import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
 import { Preloaders } from 'src/app/services/preloader/preloader.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-banner',
@@ -21,7 +22,7 @@ export class BannerComponent implements ComponentWithText, OnDestroy {
     private textService: TextService
   ) {
     this.bannerSrc =
-      'assets/img/' +
+      (environment.production ? '' : 'assets/img/') +
       getComputedStyle(document.documentElement)
         .getPropertyValue('--banner-bg-image-url')
         .split('(')[1]
