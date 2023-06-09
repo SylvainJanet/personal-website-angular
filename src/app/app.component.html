@@ -1,9 +1,4 @@
 <div [style.opacity]="opacity">
-  <div *ngIf="env.production">
-    <h2>Site en construction...</h2>
-    <p>Merci de revenir plus tard :)</p>
-  </div>
-
   <mat-progress-spinner
     *ngIf="preloader.isAnyLoading(mainLoader, loaderTexts)"
     [mode]="'determinate'"
@@ -11,23 +6,18 @@
   ></mat-progress-spinner>
 
   <app-header
-    *ngIf="!env.production"
     [ngClass]="{ hide: preloader.isAnyLoading(mainLoader, loaderTexts) }"
   ></app-header>
   <app-banner
-    *ngIf="!env.production"
     [ngClass]="{ hide: preloader.isAnyLoading(mainLoader, loaderTexts) }"
   ></app-banner>
   <app-page-content
-    *ngIf="!env.production"
     [ngClass]="{ hide: preloader.isAnyLoading(mainLoader, loaderTexts) }"
   ></app-page-content>
   <app-footer
-    *ngIf="!env.production"
     [ngClass]="{ hide: preloader.isAnyLoading(mainLoader, loaderTexts) }"
   ></app-footer>
   <app-back-to-top
-    *ngIf="!env.production"
     [ngClass]="{ hide: preloader.isAnyLoading(mainLoader, loaderTexts) }"
   ></app-back-to-top>
 </div>

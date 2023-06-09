@@ -1,0 +1,6 @@
+<p [class]="paragraph.cssClass">
+  <app-text-sub-paragraph
+    *ngFor="let el of paragraph.els"
+    [subPar]="el"
+  ></app-text-sub-paragraph>
+</p>

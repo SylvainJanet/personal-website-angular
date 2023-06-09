@@ -39,6 +39,9 @@ import { CvSkillsComponent } from './components/page-cv/cv-skills/cv-skills.comp
 import { CvSkillBarComponent } from './components/page-cv/cv-skill-bar/cv-skill-bar.component';
 import { CvAboutMeComponent } from './components/page-cv/cv-about-me/cv-about-me.component';
 import { XsrfInterceptor } from './interceptors/xsrf.interceptor';
+import { TextParagraphComponent } from './components/common/text-paragraph/text-paragraph.component';
+import { TextParagraphSetComponent } from './components/common/text-paragraph-set/text-paragraph-set.component';
+import { TextSubParagraphComponent } from './components/common/text-sub-paragraph/text-sub-paragraph.component';
 
 @Injectable()
 class MyHammerConfig extends HammerGestureConfig {
@@ -65,6 +68,9 @@ class MyHammerConfig extends HammerGestureConfig {
     CvSkillsComponent,
     CvSkillBarComponent,
     CvAboutMeComponent,
+    TextParagraphComponent,
+    TextParagraphSetComponent,
+    TextSubParagraphComponent,
   ],
   imports: [
     BrowserModule,
