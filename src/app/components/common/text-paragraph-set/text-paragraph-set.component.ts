@@ -4,7 +4,7 @@ import { Paragraph } from '../../classes/Paragraph';
 @Component({
   selector: 'app-text-paragraph-set',
   templateUrl: './text-paragraph-set.component.html',
-  styleUrls: ['./text-paragraph-set.component.css'],
+  styleUrls: [],
 })
 export class TextParagraphSetComponent {
   @Input() paragraphs: Paragraph[] = [];

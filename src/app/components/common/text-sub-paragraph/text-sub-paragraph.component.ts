@@ -5,7 +5,7 @@ import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 @Component({
   selector: 'app-text-sub-paragraph',
   templateUrl: './text-sub-paragraph.component.html',
-  styleUrls: ['./text-sub-paragraph.component.css'],
+  styleUrls: [],
 })
 export class TextSubParagraphComponent {
   @Input() subPar: SubParagraph = new SubParagraph(SubParagraphRoot.BR, '');
