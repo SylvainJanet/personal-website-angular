@@ -2,7 +2,7 @@
 Banner variables
 */
 :root {
-  --banner-bg-image-url: url("../../../assets/img/intro-bg2.jpg");
+  --banner-bg-image-url: url("/assets/img/intro-bg2.jpg");
   --banner-height: 100vh;
   --banner-page-title-width: 80%;
   --banner-title-height: 25%;

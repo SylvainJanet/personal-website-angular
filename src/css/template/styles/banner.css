@@ -13,7 +13,7 @@ Banner logic
   background-image: var(--banner-bg-image-url);
   background-position: center;
   background-repeat: no-repeat;
-  /* background-attachment: fixed;
+  /* background-attachment: fixed; 
   background-size: cover; */
   width: 100%;
   margin-top: var(--header-height);
