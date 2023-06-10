@@ -41,7 +41,7 @@
         [lineStyle]="
           'transition-property: background-color, color, width; transition-duration: var(--header-color-transition-length), var(--header-color-transition-length), var(--header-lines-on-hover-duration);'
         "
-        (press)="language()"
+        (press)="languageChange()"
       >
       </app-button-bar-on-hover>
     </div>
@@ -103,7 +103,7 @@
               [globalStyle]="
                 'padding: var(--collapsed-header-item-padding) 0px;'
               "
-              (press)="language()"
+              (press)="languageChange()"
             >
             </app-button-bar-on-hover>
           </li>
