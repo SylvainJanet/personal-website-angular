@@ -3,7 +3,6 @@ Back to top icon at the bottom of the display
 */
 
 .back-to-top {
-  /* --dark-header-background-color: rgb(209 208 222); */
   --dark-header-background-color: black;
   position: fixed;
   background: var(--dark-header-background-color);
@@ -16,6 +15,7 @@ Back to top icon at the bottom of the display
   opacity: 0;
   transition: opacity var(--back-to-top-transition-duration);
 }
+
 .back-to-top img {
   width: var(--back-to-top-size);
   height: var(--back-to-top-size);
