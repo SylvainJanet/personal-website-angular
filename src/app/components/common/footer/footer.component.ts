@@ -11,20 +11,46 @@ import { Preloaders } from 'src/app/services/preloader/preloader.service';
   styleUrls: ['./footer.component.css'],
 })
 export class FooterComponent implements ComponentWithText, OnDestroy {
+  /** Footer text just before the link. */
   footerText = of('');
+  /** Text of the footer link. */
   footerLink = of('');
+  /** {@link Preloaders} used for the footer image. */
   preloaders = [Preloaders.MAIN];
-  bannerSrc;
+  /** Footer source. Will be taken from the css variables. */
+  footerSrc;
+  /**
+   * Display style of the image double (see html for explanation as to why it
+   * exists)
+   */
+  doubleImgDisplay = 'block';
 
+  /**
+   * Footer component constructor
+   *
+   * @param languageService The {@link LanguageService}
+   * @param textService The {@link TextService}
+   */
   constructor(
     private languageService: LanguageService,
     private textService: TextService
   ) {
-    this.bannerSrc = 'assets/img/overlay-bg.jpg';
+    this.footerSrc = getComputedStyle(document.documentElement)
+      .getPropertyValue('--footer-bg-image-url')
+      .split('(')[1]
+      .split(')')[0]
+      .replaceAll('"', '');
     this.languageService.subscribe(this);
     this.updateTexts();
   }
 
+  /**
+   * Update the component's texts when the language is updated. See
+   * {@link LanguageService}. The subscriber design pattern is used and this
+   * function is used when the service notifies its subscribers to update the
+   * text contents after a language change. Uses {@link TextService} to get those
+   * contents from the database.
+   */
   updateTexts(): void {
     this.footerText = this.textService
       .get('sylvain-janet')
@@ -32,7 +58,20 @@ export class FooterComponent implements ComponentWithText, OnDestroy {
     this.footerLink = this.textService.get('website');
   }
 
+  /**
+   * On destroy, the component has to be unsubscribed rom the
+   * {@link LanguageService} to avoid having the service try to notify a
+   * destroyed subscriber.
+   */
   ngOnDestroy(): void {
     this.languageService.unsubscribe(this);
+  }
+
+  /**
+   * When the image double loads, it should no longer be displayed. See html for
+   * explanation as to why this behaviour exists
+   */
+  onDoubleImgLoad() {
+    this.doubleImgDisplay = 'none';
   }
 }

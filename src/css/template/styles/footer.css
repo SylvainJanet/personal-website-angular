@@ -9,6 +9,6 @@ footer {
   padding-bottom: var(--footer-padding-bottom);
 }
 
-#footerLink {
+footer a {
   text-decoration: none;
 }
