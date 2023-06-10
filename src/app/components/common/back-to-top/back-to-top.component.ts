@@ -89,8 +89,8 @@ export class BackToTopComponent implements ComponentWithText, OnDestroy {
 
   /**
    * On scroll event. This checks whether or not the state has to be changed. If
-   * it has to be, it changed the state and calls the method responsible for
-   * actually updating the component.
+   * it has to be, it changed the state and calls the method
+   * {@link updateBackToTop} responsible for actually updating the component.
    */
   @HostListener('window:scroll', ['$event'])
   onScroll() {
