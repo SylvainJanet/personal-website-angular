@@ -11,12 +11,11 @@
     "test": "ng test --no-watch --no-progress",
     "lint": "ng lint --max-warnings 0",
     "compodoc": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all'] --coverageTest 100 --coverageMinimumPerFile 100 --coverageTestShowOnlyFailed",
+    "prepare":"husky install"
   },
   "lint-staged": {
-    "*.**": [
-      "eslint --fix",
-      "npx compodoc --coverageMinimumPerFile 100"
-    ]
+    "*.ts":
+    ["eslint --fix","npx compodoc --coverageMinimumPerFile 100"]
   },
   "private": true,
   "dependencies": {
