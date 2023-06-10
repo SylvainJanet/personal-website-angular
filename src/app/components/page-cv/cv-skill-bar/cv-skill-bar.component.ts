@@ -6,34 +6,55 @@ import {
   Input,
 } from '@angular/core';
 import { of } from 'rxjs';
-import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
 import { debounce } from 'src/scripts/tools/debounce';
 
+/**
+ * Component used to display a skill with a animated bar representing a
+ * percentage.
+ */
 @Component({
   selector: 'app-cv-skill-bar',
   templateUrl: './cv-skill-bar.component.html',
   styleUrls: ['./cv-skill-bar.component.css'],
 })
 export class CvSkillBarComponent implements AfterViewInit {
+  /**
+   * An input containinf the name of the skill to be displayed as an
+   * `Observable<string>`.
+   */
   @Input() skillName = of('SKILL');
+  /**
+   * The percentage, to be displayed both as a number but also as the amount the
+   * bar will fill up.
+   */
   @Input() percent = 50;
+  /**
+   * Width of the bar. Initially 0, and gets un to {@link percent}% when the bar
+   * is in view, and goes back to 0 when it gets out of view.
+   */
   width = '0';
-  preloader: PreloaderService;
-  element: ElementRef;
+  /** Minimal scroll value to have the bar in view. */
   posElementMin = 0;
+  /** Maximal scroll value to have the bar in view. */
   posElementMax = 0;
 
+  /**
+   * Skill bar component constructor.
+   *
+   * @param preloaderService The {@link PreloaderService}
+   * @param element The {@link ElementRef}
+   */
   constructor(
-    preloaderService: PreloaderService,
-    logService: LogService,
-    elRef: ElementRef
-  ) {
-    this.element = elRef;
-    this.preloader = preloaderService;
-  }
+    private preloaderService: PreloaderService,
+    private element: ElementRef
+  ) {}
 
+  /**
+   * Computes the position precise position of the element in the page so that
+   * the animation triggers exactly as the bar enters or leaves the viewport.
+   */
   getElPos() {
     const posViewPort =
       this.element.nativeElement.getBoundingClientRect().y +
@@ -62,12 +83,23 @@ export class CvSkillBarComponent implements AfterViewInit {
       this.element.nativeElement.firstElementChild.firstElementChild.nextElementSibling.getBoundingClientRect().height;
   }
 
+  /**
+   * Update the trigger when the window is resized. Indeed, the bar position
+   * will change since it is tied to viewport height. Uses the {@link debounce}
+   * annotation to avoid firing this too much : resize events fire a lot during
+   * resizing. Calls {@link updateAfterLoaded} which does the actual update once
+   * everything is loaded.
+   */
   @HostListener('window:resize', ['$event'])
   @debounce()
   onResize() {
     this.updateAfterLoaded();
   }
 
+  /**
+   * Checks if the width has to be changed (and thus, the animation started) and
+   * do the change if it is the case.
+   */
   updateWidth() {
     if (scrollY < this.posElementMin || scrollY > this.posElementMax) {
       this.width = '0';
@@ -76,8 +108,12 @@ export class CvSkillBarComponent implements AfterViewInit {
     }
   }
 
+  /**
+   * Does the actual update of the scroll trigger amount and the possible width
+   * modification (to create the animation) once all assets are loaded.
+   */
   updateAfterLoaded() {
-    this.preloader.statusAnyLoading.subscribe({
+    this.preloaderService.statusAnyLoading.subscribe({
       next: (isAnyLoading) => {
         if (isAnyLoading != null && !isAnyLoading) {
           setTimeout(() => {
@@ -89,12 +125,23 @@ export class CvSkillBarComponent implements AfterViewInit {
     });
   }
 
+  /**
+   * Update the trigger when client scrolls. Uses the {@link debounce} annotation
+   * to avoid firing this too much : resize events fire a lot during resizing.
+   * Calls {@link updateAfterLoaded} which does the actual update once everything
+   * is loaded.
+   */
   @HostListener('window:scroll', ['$event'])
   @debounce()
   onScroll() {
     this.updateAfterLoaded();
   }
 
+  /**
+   * After the view is initialized, the trigger has to be updated and the
+   * animation may trigger as a results. This may happen if the client loads the
+   * page already scrolled down.
+   */
   ngAfterViewInit(): void {
     this.updateAfterLoaded();
   }
