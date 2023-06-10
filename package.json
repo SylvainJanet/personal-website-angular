@@ -10,7 +10,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test --no-watch --no-progress",
     "lint": "ng lint --max-warnings 0",
-    "compodoc": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all'] "
+    "compodoc": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all'] --coverageTest 100 --coverageMinimumPerFile 100 --coverageTestShowOnlyFailed"
   },
   "lint-staged": {
     "*.ts":
