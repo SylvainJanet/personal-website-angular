@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
+import { Preloaders } from 'src/app/services/preloader/preloader.service';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
 
 /** Component for the back to top icon. */
@@ -49,6 +50,8 @@ export class BackToTopComponent implements ComponentWithText, OnDestroy {
       : scriptVar.backToTopInvisibleState;
   /** Alt text of the image. */
   altTxt = of('');
+  /** {@link Preloaders} used for the icon image. */
+  preloaders = [Preloaders.MAIN];
 
   /**
    * Component constructor.
