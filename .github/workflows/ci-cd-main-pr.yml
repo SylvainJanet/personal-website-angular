@@ -142,3 +142,23 @@ jobs:
           name: personal-website-angular-${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}  
           path: ./dist/personal-website-angular
          
+  document:  
+    runs-on: ubuntu-latest  
+    steps:    
+      - name: Checkout source code  
+        uses: actions/checkout@v3
+      - name: Use Node.js  
+        uses: actions/setup-node@v3  
+        with:  
+          node-version: '18.12.1'
+      - name: Install dependencies  
+        run: npm install
+      - name: Build documentation  
+        run: npm run compodoc
+      - name: Inject slug/short variables  
+        uses: rlespinasse/github-slug-action@v4
+      - name: Upload artifact  
+        uses: actions/upload-artifact@v3  
+        with:  
+          name: personal-website-angular-doc-${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}  
+          path: ./documentation
