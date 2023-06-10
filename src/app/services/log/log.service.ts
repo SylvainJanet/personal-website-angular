@@ -32,7 +32,7 @@ export class LogService {
     this.writeToLog(msg, LogLevel.Debug, optionalParams);
   }
 
-  info(msg: string, ...optionalParams: unknown[]) {
+  info(msg: any, ...optionalParams: unknown[]) {
     this.writeToLog(msg, LogLevel.Info, optionalParams);
   }
 
