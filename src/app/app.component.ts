@@ -29,6 +29,11 @@ export class AppComponent implements AfterViewInit, AfterViewChecked {
   }
 
   ngAfterViewInit() {
+    const scrollbarWidth = window.innerWidth - document.body.clientWidth + 'px';
+    document.documentElement.style.setProperty(
+      '--scroll-bar-width',
+      scrollbarWidth
+    );
     this.cd.detectChanges();
   }
   ngAfterViewChecked() {
@@ -36,9 +41,10 @@ export class AppComponent implements AfterViewInit, AfterViewChecked {
   }
   /**
    * Increases opacity of the page from 0 to 1 in N steps at a certain speed.
-   * @param {*} i current step. Starts at 0
-   * @param {*} N max number of step
-   * @param {*} step duration of a step in millisecond
+   *
+   * @param {any} i Current step. Starts at 0
+   * @param {any} N Max number of step
+   * @param {any} step Duration of a step in millisecond
    */
   increaseOpacity(i: number, N: number, step: number) {
     setTimeout(() => {
