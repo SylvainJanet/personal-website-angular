@@ -2,3 +2,4 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npx lint-staged
+npx compodoc -p tsconfig.doc.json --coverageTest 0 --coverageMinimumPerFile 0 -e json

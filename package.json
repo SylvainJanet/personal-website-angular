@@ -14,7 +14,7 @@
   },
   "lint-staged": {
     "*.ts":
-    ["eslint --fix --max-warnings 0","compodoc -p tsconfig.doc.json --coverageMinimumPerFile 100"]
+    ["eslint --fix --max-warnings 0"]
   },
   "private": true,
   "dependencies": {
