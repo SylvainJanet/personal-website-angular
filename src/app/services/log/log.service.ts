@@ -13,7 +13,7 @@ export class LogService {
   level: LogLevel = environment.logLevel;
   logWithDate = true;
   publishers: LogPublisher[];
-  className = 'none specified - hey Im testing lint staged';
+  className = 'none specified';
 
   constructor(private publishersService: LogPublishersService) {
     // Set publishers
