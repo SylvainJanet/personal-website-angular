@@ -28,7 +28,7 @@ export class LogService {
     return res;
   }
 
-  debug(msg: string, ...optionalParams: unknown[]) {
+  debug(msg: any, ...optionalParams: unknown[]) {
     this.writeToLog(msg, LogLevel.Debug, optionalParams);
   }
 
