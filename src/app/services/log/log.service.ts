@@ -9,11 +9,10 @@ import { LogPublishersService } from './publishers/log-publishers.service';
 })
 export class LogService {
   // https://www.codemag.com/article/1711021/Logging-in-Angular-Applications
-
   level: LogLevel = environment.logLevel;
   logWithDate = true;
   publishers: LogPublisher[];
-  className = 'none specified';
+  className = 'none specified - test compodoc 2';
 
   constructor(private publishersService: LogPublishersService) {
     // Set publishers

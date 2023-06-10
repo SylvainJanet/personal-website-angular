@@ -9,7 +9,12 @@
     "build:staging": "ng build --configuration=staging",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --no-watch --no-progress",
-    "lint": "ng lint --max-warnings 0"
+    "lint": "ng lint --max-warnings 0",
+    "compodoc": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all'] --coverageTest 100 --coverageMinimumPerFile 100 --coverageTestShowOnlyFailed"
+  },
+  "lint-staged": {
+    "*.ts":
+    ["eslint --fix --max-warnings 0"]
   },
   "private": true,
   "dependencies": {
@@ -23,7 +28,9 @@
     "@angular/platform-browser": "^15.0.0",
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
+    "@compodoc/compodoc": "^1.1.21",
     "hammerjs": "^2.0.8",
+    "lint-staged": "^13.2.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
@@ -42,6 +49,7 @@
     "@typescript-eslint/eslint-plugin": "5.44.0",
     "@typescript-eslint/parser": "5.44.0",
     "eslint": "^8.28.0",
+    "husky": "^8.0.3",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
