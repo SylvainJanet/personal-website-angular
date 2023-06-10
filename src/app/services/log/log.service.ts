@@ -20,7 +20,7 @@ export class LogService {
     this.publishers = this.publishersService.publishers;
   }
 
-  withClassName(name: any) {
+  withClassName(name: string) {
     const res = new LogService(this.publishersService);
     res.level = this.level;
     res.logWithDate = this.logWithDate;
@@ -28,11 +28,11 @@ export class LogService {
     return res;
   }
 
-  debug(msg: any, ...optionalParams: unknown[]) {
+  debug(msg: string, ...optionalParams: unknown[]) {
     this.writeToLog(msg, LogLevel.Debug, optionalParams);
   }
 
-  info(msg: any, ...optionalParams: unknown[]) {
+  info(msg: string, ...optionalParams: unknown[]) {
     this.writeToLog(msg, LogLevel.Info, optionalParams);
   }
 
