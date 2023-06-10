@@ -4,21 +4,39 @@ import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
 
+/**
+ * Component exposing the different skills to be displayed. See
+ * {@link CvSkillBarComponent}.
+ */
 @Component({
   selector: 'app-cv-skills',
   templateUrl: './cv-skills.component.html',
   styleUrls: ['./cv-skills.component.css'],
 })
 export class CvSkillsComponent implements ComponentWithText, OnDestroy {
+  /** Text used for the skill subtitle. */
   skills = of('');
+  /** Text used for the java skill. */
   java = of('');
+  /** Text used for the csharp skill. */
   csharp = of('');
+  /** Text used for the python skill. */
   python = of('');
+  /** Text used for the jsts skill. */
   jsts = of('');
+  /** Text used for the sql skill. */
   sql = of('');
+  /** Text used for the html skill. */
   html = of('');
+  /** Text used for the latex skill. */
   latex = of('');
 
+  /**
+   * The skill bar component constructor
+   *
+   * @param languageService The {@link LanguageService}
+   * @param textService The {@link TextService}
+   */
   constructor(
     private languageService: LanguageService,
     private textService: TextService
@@ -27,6 +45,13 @@ export class CvSkillsComponent implements ComponentWithText, OnDestroy {
     this.updateTexts();
   }
 
+  /**
+   * Update the component's texts when the language is updated. See
+   * {@link LanguageService}. The subscriber design pattern is used and this
+   * function is used when the service notifies its subscribers to update the
+   * text contents after a language change. Uses {@link TextService} to get those
+   * contents from the database.
+   */
   updateTexts(): void {
     this.skills = this.textService.get('skills-title');
     this.java = this.textService.get('java-language');
@@ -38,6 +63,11 @@ export class CvSkillsComponent implements ComponentWithText, OnDestroy {
     this.latex = this.textService.get('latex-language');
   }
 
+  /**
+   * On destroy, the component has to be unsubscribed rom the
+   * {@link LanguageService} to avoid having the service try to notify a
+   * destroyed subscriber.
+   */
   ngOnDestroy(): void {
     this.languageService.unsubscribe(this);
   }
