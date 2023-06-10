@@ -14,7 +14,7 @@
   },
   "lint-staged": {
     "*.**": [
-      "npm run lint",
+      "eslint --fix",
       "npx compodoc --coverageMinimumPerFile 100"
     ]
   },
