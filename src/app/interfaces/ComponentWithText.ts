@@ -7,5 +7,9 @@ import { OnDestroy } from '@angular/core';
  * destroyed component in the service.
  */
 export interface ComponentWithText extends OnDestroy {
+  /**
+   * Method called by the {@link LanguageService} when the texts should be
+   * updated after a language change.
+   */
   updateTexts(): void;
 }
