@@ -153,6 +153,8 @@ jobs:
           node-version: '18.12.1'
       - name: Install dependencies  
         run: npm install
+      - name: Check documentation coverage
+        run: npm run compodoc-coverage
       - name: Build documentation  
         run: npm run compodoc
       - name: Inject slug/short variables  

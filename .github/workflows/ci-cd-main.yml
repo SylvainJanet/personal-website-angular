@@ -191,7 +191,9 @@ jobs:
           node-version: '18.12.1'
       - name: Install dependencies  
         run: npm install
-      - name: Build app  
+      - name: Check documentation coverage
+        run: npm run compodoc-coverage
+      - name: Build documentation  
         run: npm run compodoc
       - name: Inject slug/short variables  
         uses: rlespinasse/github-slug-action@v4
