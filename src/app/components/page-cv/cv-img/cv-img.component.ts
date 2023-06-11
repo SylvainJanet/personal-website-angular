@@ -39,7 +39,7 @@ export class CvImgComponent implements ComponentWithText, OnDestroy {
    * contents from the database.
    */
   updateTexts(): void {
-    // this.altTxt = this.textService.get('cv-img-alt');
+    this.altTxt = this.textService.get('cv-img-alt');
   }
 
   /**

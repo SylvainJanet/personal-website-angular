@@ -75,7 +75,7 @@ export class BackToTopComponent implements ComponentWithText, OnDestroy {
    * contents from the database.
    */
   updateTexts(): void {
-    // this.altTxt = this.textService.get('back-to-top-alt');
+    this.altTxt = this.textService.get('back-to-top-alt');
   }
 
   /**
