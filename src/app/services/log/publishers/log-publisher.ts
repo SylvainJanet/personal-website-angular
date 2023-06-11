@@ -1,16 +1,39 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LogEntry } from '../log.service';
 import { environment } from 'src/environments/environment';
 
+/**
+ * Abstract class used to define a Log publisher. Any class extending this
+ * abstrat class may be used in {@link LogPublisherService} so that logging may
+ * occur usind said publisher.
+ */
 export abstract class LogPublisher {
+  /**
+   * Logging location. For instance, used to define the local storage key for
+   * {@link LogLocalStorage}, or the API URI for {@link LogWebApi}.
+   */
   location = '';
+  /**
+   * Method used to actually log a {@link LogEntry}. Returns a boolean indicating
+   * if the entry was logged.
+   *
+   * @param record The {@link LogEntry} to log
+   */
   abstract log(record: LogEntry): Observable<boolean>;
+  /** Method used to clear the logs */
   abstract clear(): Observable<boolean>;
 }
 
+/** Console {@link LogPublisher}. Used to log in console. */
 export class LogConsole extends LogPublisher {
+  /**
+   * Method used to actually log a {@link LogEntry}. Returns
+   *
+   * @param entry The {@link LogEntry} to log
+   * @returns A boolean indicating if the entry was logged.
+   */
   log(entry: LogEntry): Observable<boolean> {
     // Log to console
     // eslint-disable-next-line no-console
@@ -18,6 +41,7 @@ export class LogConsole extends LogPublisher {
     return of(true);
   }
 
+  /** Method used to clear the console */
   clear(): Observable<boolean> {
     // eslint-disable-next-line no-console
     console.clear();
@@ -25,8 +49,12 @@ export class LogConsole extends LogPublisher {
   }
 }
 
+/** Local storage {@link LogPublisher}. Used to log in local storage. */
 export class LogLocalStorage extends LogPublisher {
+  /** Max number of elements in local storage */
   maxSize;
+
+  /** Log local storage publisher constructor. */
   constructor() {
     // Must call `super()`from derived classes
     super();
@@ -36,6 +64,15 @@ export class LogLocalStorage extends LogPublisher {
     this.maxSize = environment.production ? 100 : 1000;
   }
 
+  /**
+   * Push a {@link LogEntry} in an array if the array is small enough, but shift
+   * all the values otherwise. Used to ensure the localStorage size doesn't
+   * increase above the set limit.
+   *
+   * @param values The array of {@link LogEntry}
+   * @param entry The {@link LogEntry} to push at the end of the array, after a
+   *   shift if necessary
+   */
   pushOrShift(values: LogEntry[], entry: LogEntry) {
     if (values.length > this.maxSize) {
       values.shift();
@@ -43,7 +80,12 @@ export class LogLocalStorage extends LogPublisher {
     values.push(entry);
   }
 
-  // Append log entry to local storage
+  /**
+   * Method used to actually log a {@link LogEntry}. Returns
+   *
+   * @param entry The {@link LogEntry} to log
+   * @returns A boolean indicating if the entry was logged.
+   */
   log(entry: LogEntry): Observable<boolean> {
     let ret = false;
     let values: LogEntry[];
@@ -71,25 +113,34 @@ export class LogLocalStorage extends LogPublisher {
     return of(ret);
   }
 
-  // Clear all log entries from local storage
+  /** Method used to clear the local storage */
   clear(): Observable<boolean> {
     localStorage.removeItem(this.location);
     return of(true);
   }
 }
 
+/** Web API log publisher. Used to post logs to an API. */
 export class LogWebApi extends LogPublisher {
-  http: HttpClient;
-  constructor(httpClient: HttpClient) {
+  /**
+   * Publisher constructor.
+   *
+   * @param http The `HttpClient`
+   */
+  constructor(private http: HttpClient) {
     // Must call `super()`from derived classes
     super();
 
     // Set location
     this.location = '/api/log';
-    this.http = httpClient;
   }
 
-  // Add log entry to back end data store
+  /**
+   * Method used to actually log a {@link LogEntry}. Returns
+   *
+   * @param entry The {@link LogEntry} to log
+   * @returns A boolean indicating if the entry was logged.
+   */
   log(entry: LogEntry): Observable<boolean> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return (
@@ -101,12 +152,18 @@ export class LogWebApi extends LogPublisher {
     );
   }
 
-  // Clear all log entries from local storage
+  /** Method used to clear the logs */
   clear(): Observable<boolean> {
     // Call Web API to clear all values
     return of(true);
   }
 
+  /**
+   * Handles exceptions occuring during the log.
+   *
+   * @param error The error
+   * @returns False, to indicate that the log
+   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handleErrors(error: any): Observable<any> {
     const errors: string[] = [];
@@ -121,6 +178,6 @@ export class LogWebApi extends LogPublisher {
 
     // eslint-disable-next-line no-console
     console.error('An error occurred', errors);
-    return throwError(() => errors);
+    return of(false);
   }
 }

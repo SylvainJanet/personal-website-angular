@@ -6,4 +6,5 @@ export const environment = {
   logLevel: LogLevel.All,
   compactLogDisplay: true,
   api: 'https://server.sylvainjanet.fr/app-dev/',
+  logWithDate: false,
 };

@@ -6,4 +6,5 @@ export const environment = {
   logLevel: LogLevel.All,
   compactLogDisplay: false,
   api: 'http://localhost:8080/',
+  logWithDate: false,
 };
