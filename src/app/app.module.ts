@@ -4,13 +4,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { APP_BASE_HREF } from '@angular/common';
-import { Injectable, NgModule } from '@angular/core';
-import {
-  BrowserModule,
-  HammerGestureConfig,
-  HammerModule,
-  HAMMER_GESTURE_CONFIG,
-} from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,7 +15,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FooterComponent } from './components/common/footer/footer.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ImgLoadDirective } from './directives/imgLoad/img-load.directive';
-import * as Hammer from 'hammerjs';
 import { TypedAnimatedTextComponent } from './components/utilities/typed-animated-text/typed-animated-text.component';
 import { HeaderComponent } from './components/common/header/header.component';
 import { BackToTopComponent } from './components/common/back-to-top/back-to-top.component';
@@ -38,14 +32,6 @@ import { XsrfInterceptor } from './interceptors/xsrf.interceptor';
 import { TextParagraphComponent } from './components/common/text-paragraph/text-paragraph.component';
 import { TextParagraphSetComponent } from './components/common/text-paragraph-set/text-paragraph-set.component';
 import { TextSubParagraphComponent } from './components/common/text-sub-paragraph/text-sub-paragraph.component';
-
-@Injectable()
-class MyHammerConfig extends HammerGestureConfig {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  override overrides = <any>{
-    swipe: { direction: Hammer.DIRECTION_ALL },
-  };
-}
 
 @NgModule({
   declarations: [
@@ -85,7 +71,6 @@ class MyHammerConfig extends HammerGestureConfig {
   ],
   providers: [
     { provide: APP_BASE_HREF, useValue: environment.baseHref },
-    { provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig },
     { provide: HTTP_INTERCEPTORS, useClass: XsrfInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
