@@ -55,9 +55,14 @@ export class TextService {
    */
   get(selector: string): Observable<string> {
     this.preloaderService.toLoad(Preloaders.TEXTS, 1);
+    let isFirstTime = true;
     return this.getText(selector, this.langageService.current()).pipe(
       map((r) => {
-        this.preloaderService.loaded(Preloaders.TEXTS, 1);
+        // in case the Observable is binded multiple times, this should only happen once.
+        if (isFirstTime) {
+          this.preloaderService.loaded(Preloaders.TEXTS, 1);
+        }
+        isFirstTime = false;
         return r;
       })
     );
@@ -96,6 +101,7 @@ export class TextService {
    */
   getSplit(selector: string): Observable<Paragraph[]> {
     this.preloaderService.toLoad(Preloaders.TEXTS, 1);
+    let isFirstTime = true;
     return this.getText(selector, this.langageService.current()).pipe(
       map((s) => {
         const res = [];
@@ -131,6 +137,14 @@ export class TextService {
           res.push(p);
         }
         return res;
+      }),
+      map((r) => {
+        // in case the Observable is binded multiple times, this should only happen once.
+        if (isFirstTime) {
+          this.preloaderService.loaded(Preloaders.TEXTS, 1);
+        }
+        isFirstTime = false;
+        return r;
       })
     );
   }
