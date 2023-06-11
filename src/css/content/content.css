@@ -4,21 +4,22 @@
 */
 .content {
   display: flex;
-  width: 100%;
+  width: var(--resp-content-width);
   justify-content: center;
+  box-sizing: border-box;
+  padding-right: calc(2 * var(--default-padding));
+  padding-left: calc(2 * var(--default-padding));
+  padding-top: var(--content-padding-top);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .page-content-container {
-  max-width: var(--resp-content-width);
+  max-width: 100%;
   display: flex;
   width: 100%;
   height: 100%;
   align-items: center;
-  padding-right: var(--default-padding);
-  padding-left: var(--default-padding);
-  padding-top: var(--content-padding-top);
-  margin-right: auto;
-  margin-left: auto;
 }
 
 .page-content-box {
@@ -33,7 +34,6 @@
   padding-right: var(--default-padding);
   padding-top: var(--default-padding);
   padding-bottom: var(--default-padding);
-  box-sizing: border-box;
 }
 
 .page-content-box p {

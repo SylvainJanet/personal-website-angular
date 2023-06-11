@@ -7,48 +7,95 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { ImageService } from 'src/app/services/image/image.service';
-import { LogService } from 'src/app/services/log/log.service';
 import { Preloaders } from 'src/app/services/preloader/preloader.service';
 
-// https://dev.to/paviad/angular-wait-for-all-images-to-load-3hp1
+/**
+ * Directive used to indicate that the app should track the loading of the
+ * images the directive is applied to, and tie their loading to a set of
+ * preloaders given as input.
+ *
+ * Inspired by https://dev.to/paviad/angular-wait-for-all-images-to-load-3hp1
+ *
+ * For instance, using
+ *
+ * @example
+ *   <img [appImgLoad]="myPreloaderArray" ...\>
+ *
+ *   will result in having every preloaders in `myPreloaderArray` take into account the loading of the image. See {@link Preloaders} for more info.
+ */
 @Directive({
   selector: 'img[appImgLoad]',
 })
 export class ImgLoadDirective implements OnChanges {
+  /** The preloaders used for the image having the directive. */
   @Input() appImgLoad: Preloaders[] = [];
-  elementRef: ElementRef;
-  logger: LogService;
+  /**
+   * The notification to the preloaders that the image is loading is tied to the
+   * injection of a value into the {@link appImgLoad} input. Since that value
+   * could be binded and changed at runtime, this boolean tracks whether or not
+   * it's the first binding of the value, and more practically if the img
+   * already has loaded (or not in case of an error)
+   */
+  isLoadedOrError = false;
 
+  /**
+   * Image loading directive constructor
+   *
+   * @param elementRef The `ElementRef`
+   * @param imageService The {@link ImageService}
+   */
   constructor(
-    private el: ElementRef,
-    private imageService: ImageService,
-    logService: LogService
-  ) {
-    this.elementRef = el;
-    this.logger = logService.withClassName('ImgLoadDirective');
-  }
+    private elementRef: ElementRef,
+    private imageService: ImageService
+  ) {}
+
+  /**
+   * When the directive value is injected, and the array of preloader is ready,
+   * notify the {@link ImageService} that the image is now loading.
+   *
+   * @param changes The `SimpleChanges`
+   */
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['appImgLoad']) {
-      this.logger.debug('Changes - appImgLoad');
-      this.imageService.imageLoading(this.el.nativeElement, this.appImgLoad);
+    if (changes['appImgLoad'] && !this.isLoadedOrError) {
+      this.imageService.imageLoading(
+        this.elementRef.nativeElement,
+        this.appImgLoad
+      );
     }
   }
 
+  /**
+   * When the image is loaded, the {@link ImageService} should be notified. In
+   * our case, it makes no difference if its actually loaded or if there was an
+   * error. In both cases, the ressources fetching process is finished. The
+   * function {@link loadOrError} makes the actual call to the
+   * {@linkImageService}.
+   */
   @HostListener('load')
   onLoad() {
-    this.logger.debug('load event');
     this.loadOrError();
   }
 
+  /**
+   * When the image is not loaded due to an error, the {@link ImageService}
+   * should be notified. In our case, it makes no difference if its actually
+   * loaded or if there was an error. In both cases, the ressources fetching
+   * process is finished. The function {@link loadOrError} makes the actual call
+   * to the {@linkImageService}.
+   */
   @HostListener('error')
   onError() {
-    this.logger.debug('error event');
     this.loadOrError();
   }
 
+  /**
+   * Makes the actual call to the {@linkImageService} in case the image is
+   * either loaded or if there was an error.
+   */
   loadOrError() {
+    this.isLoadedOrError = true;
     this.imageService.imageLoadedOrError(
-      this.el.nativeElement,
+      this.elementRef.nativeElement,
       this.appImgLoad
     );
   }

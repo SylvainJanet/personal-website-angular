@@ -5,4 +5,5 @@ Footer variables
   --footer-margin-top: calc(3 * var(--default-padding));
   --footer-padding-top: calc(3 * var(--default-padding));
   --footer-padding-bottom: calc(3 * var(--default-padding));
+  --footer-bg-image-url: url("/assets/img/overlay-bg.jpg");
 }

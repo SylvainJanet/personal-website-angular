@@ -1,13 +1,20 @@
-<!-- Footer -->
-<div style="display: none">
-  <img [src]="bannerSrc" [appImgLoad]="preloaders" alt="footer image" />
+<!-- https://stackoverflow.com/questions/5057990/how-can-i-check-if-a-background-image-is-loaded/5058336#5058336 -->
+<!-- preloaders should take into account the loading of all images, even those specified in css. It's 
+  easy to directly do so when the img source is defined in the html, using the appropriate directive. Unfortunately,
+  I haven't found a direct way to do so when the img is loaded using css (as a background-image css property, for instance).
+  This workaround works, however, by defining another image. The browser will not load the same asset twice. The preloader logic
+  can be done with that image, and once it's loaded, we can remove the double from the DOM.-->
+<div [style]="{ display: doubleImgDisplay }">
+  <img
+    [src]="footerSrc"
+    [appImgLoad]="preloaders"
+    alt=""
+    (load)="onDoubleImgLoad()"
+  />
 </div>
 <section
-  class="paralax-mf footer-paralax bg-image sect-mt4 route"
-  style="
-    background-image: url(assets/img/overlay-bg.jpg);
-    background-position: center;
-  "
+  [style.background-image]="'url(' + footerSrc + ')'"
+  [style.background-position]="'center'"
 >
   <div class="overlay-mf">
     <footer>

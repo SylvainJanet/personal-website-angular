@@ -4,4 +4,6 @@
   --background-color: #f5f5f5;
   --font-weight-normal: 600;
   --font-weight-bold: 800;
+  /* scrollbar width is computed using js */
+  --scroll-bar-width: 0px;
 }

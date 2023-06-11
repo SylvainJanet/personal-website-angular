@@ -1,22 +1,24 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LogConsole, LogPublisher, LogLocalStorage } from './log-publishers';
+import { LogConsole, LogPublisher, LogLocalStorage } from './log-publisher';
 
+/**
+ * Service responsible for giving an array of {@link LogPublisher} used for
+ * logging.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class LogPublishersService {
-  http: HttpClient;
-  constructor(private httpClient: HttpClient) {
+  /** Log publisher service constructor. */
+  constructor() {
     // Build publishers arrays
-    this.http = this.httpClient;
     this.buildPublishers();
   }
 
-  // Public properties
+  /** Public properties */
   publishers: LogPublisher[] = [];
 
-  // Build publishers array
+  /** Build publishers array */
   buildPublishers(): void {
     // Create instance of LogConsole Class
     this.publishers.push(new LogConsole());

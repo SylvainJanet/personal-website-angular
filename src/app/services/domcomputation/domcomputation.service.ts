@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 
+/** DOM Computation service. */
 @Injectable({
   providedIn: 'root',
 })
 export class DOMComputationService {
   /**
    * Gets the actual width of an element
-   * @param {*} element the element
-   * @returns the actual width
+   *
+   * @param {any} element The element
+   * @returns The actual width
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getActualWidth(element: any) {
@@ -27,8 +29,9 @@ export class DOMComputationService {
 
   /**
    * Gets the actual height of an element
-   * @param {*} element the element
-   * @returns the actual height
+   *
+   * @param {any} element The element
+   * @returns The actual height
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getActualHeight(element: any) {

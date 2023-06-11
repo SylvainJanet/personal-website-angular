@@ -1,9 +1,11 @@
 import { LogLevel } from 'src/app/services/log/logLevel';
 
+/** Production environment. */
 export const environment = {
   production: false,
   baseHref: '/',
   logLevel: LogLevel.All,
   compactLogDisplay: false,
   api: 'http://localhost:8080/',
+  logWithDate: false,
 };

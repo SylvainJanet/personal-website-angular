@@ -1,11 +1,1 @@
 @import "src/css/template/styles/back-to-top.css";
-/**
-Back to top icon at the bottom of the display
-*/
-
-:root {
-  /* with banner : 2*--default-padding, without banner : 2*--default-padding + --header-height */
-  --content-padding-top: calc(
-    calc(2 * var(--default-padding)) + var(--header-height)
-  );
-}

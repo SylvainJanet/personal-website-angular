@@ -1,8 +1,11 @@
 <span *ngIf="subPar.root === SubParagraphRoot.SPAN">{{ subPar.content }}</span>
+
 <br *ngIf="subPar.root === SubParagraphRoot.BR" />
+
 <strong *ngIf="subPar.root === SubParagraphRoot.STRONG_EM"
   ><em>{{ subPar.content }}</em></strong
 >
+
 <a
   *ngIf="subPar.root === SubParagraphRoot.A_ASSET"
   [href]="'assets/' + subPar.assetHref"

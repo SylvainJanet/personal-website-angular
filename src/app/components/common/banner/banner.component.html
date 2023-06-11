@@ -1,8 +1,17 @@
-<!-- Banner -->
 <div class="banner-container">
   <!-- https://stackoverflow.com/questions/5057990/how-can-i-check-if-a-background-image-is-loaded/5058336#5058336 -->
-  <div style="display: none">
-    <img [src]="bannerSrc" [appImgLoad]="preloaders" alt="banner image" />
+  <!-- preloaders should take into account the loading of all images, even those specified in css. It's 
+  easy to directly do so when the img source is defined in the html, using the appropriate directive. Unfortunately,
+  I haven't found a direct way to do so when the img is loaded using css (as a background-image css property, for instance).
+  This workaround works, however, by defining another image. The browser will not load the same asset twice. The preloader logic
+  can be done with that image, and once it's loaded, we can remove the double from the DOM.-->
+  <div [style]="{ display: doubleImgDisplay }">
+    <img
+      [src]="bannerSrc"
+      [appImgLoad]="preloaders"
+      alt=""
+      (load)="onDoubleImgLoad()"
+    />
   </div>
   <div class="banner">
     <div class="page-title-container">
@@ -11,7 +20,6 @@
           <h2>
             <span style="color: white">{{ iAmMe | async }}</span>
             <app-typed-animated-text
-              class="text-slider-items"
               textColor="white"
               [inputArray]="messages"
             ></app-typed-animated-text>
