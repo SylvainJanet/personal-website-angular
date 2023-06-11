@@ -19,7 +19,7 @@ jobs:
           node-version: '18.12.1'
       - name: Install dependencies  
         run: npm install
-      - name: Test app  
+      - name: Lint app  
         run: npm run lint
   
   test:
@@ -33,7 +33,7 @@ jobs:
           node-version: '18.12.1'
       - name: Install dependencies  
         run: npm install
-      - name: Lint app  
+      - name: Test app  
         run: npm run test
 
   analysis_sonarcloud:
