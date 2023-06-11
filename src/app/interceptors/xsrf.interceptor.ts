@@ -33,7 +33,7 @@ export class XsrfInterceptor implements HttpInterceptor {
    * the cookie name, the HttpClientXsrfModule has to be configured.
    *
    * @param req The intercepted request
-   * @param next The {@link HttpHandler}
+   * @param next The `HttpHandler`
    * @returns The request, having added the xsrf header.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

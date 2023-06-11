@@ -44,7 +44,7 @@ export class CvSkillBarComponent implements AfterViewInit {
    * Skill bar component constructor.
    *
    * @param preloaderService The {@link PreloaderService}
-   * @param element The {@link ElementRef}
+   * @param element The `ElementRef`
    */
   constructor(
     private preloaderService: PreloaderService,

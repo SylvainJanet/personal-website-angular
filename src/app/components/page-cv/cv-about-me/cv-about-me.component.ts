@@ -52,7 +52,7 @@ export class CvAboutMeComponent
    * About me component constructor
    *
    * @param preloader The {@link PreloaderService}
-   * @param element The {@link ElementRef}
+   * @param element The `ElementRef`
    * @param logService The {@link LogService}
    * @param languageService The {@link LanguageService}
    * @param textService The {@link TextService}

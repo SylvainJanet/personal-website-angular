@@ -125,8 +125,8 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
    * Changes every element having class oldClass. Replace that class with the
    * class newClass
    *
-   * @param {any} oldClass The class to replace
-   * @param {any} newClass The new class
+   * @param oldClass The class to replace
+   * @param newClass The new class
    */
   changeEveryClass(oldClass: string, newClass: string) {
     this.logger.debug('Change every class', oldClass, 'to', newClass);

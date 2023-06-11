@@ -30,7 +30,7 @@ export class Paragraph {
   /**
    * Paragraph constructor.
    *
-   * @param els Subparagraph elements. Represents the different elements
+   * @param els {@link Subparagraph} elements. Represents the different elements
    *   contained inside the paragraph.
    * @param cssClass Used to apply style to a paragraph element by specifying
    *   which css class it has to have.

@@ -41,7 +41,7 @@ export class ImgLoadDirective implements OnChanges {
   /**
    * Image loading directive constructor
    *
-   * @param elementRef The {@link ElementRef}
+   * @param elementRef The `ElementRef`
    * @param imageService The {@link ImageService}
    */
   constructor(
@@ -53,7 +53,7 @@ export class ImgLoadDirective implements OnChanges {
    * When the directive value is injected, and the array of preloader is ready,
    * notify the {@link ImageService} that the image is now loading.
    *
-   * @param changes
+   * @param changes The `SimpleChanges`
    */
   ngOnChanges(changes: SimpleChanges) {
     if (changes['appImgLoad'] && !this.isLoadedOrError) {

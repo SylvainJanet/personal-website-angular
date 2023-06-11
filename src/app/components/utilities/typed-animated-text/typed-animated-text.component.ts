@@ -62,7 +62,7 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
   /**
    * Typed animation text component constructor
    *
-   * @param renderer The {@link Renderer}
+   * @param renderer The `Renderer`
    */
   constructor(private renderer: Renderer2) {
     zip(this.inputArray).subscribe({
