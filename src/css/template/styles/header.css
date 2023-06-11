@@ -18,19 +18,22 @@ Setup color, size
   width: 100%;
   height: 100%;
   align-items: center;
-  padding-right: var(--header-container-padding);
-  padding-left: var(--header-container-padding);
+  padding-right: calc(2 * var(--header-container-padding));
+  padding-left: calc(2 * var(--header-container-padding));
   margin-right: auto;
   margin-left: auto;
   /**
   Responsive header
   */
-  max-width: var(--resp-content-width);
+  max-width: calc(
+    var(--resp-content-width) - 4 * var(--header-container-padding)
+  );
   /**
 Set up responsive design to switch between collapsed
 and extended links.
 */
   justify-content: var(--resp-header-container-justify);
+  box-sizing: border-box;
 }
 
 .sticky {
