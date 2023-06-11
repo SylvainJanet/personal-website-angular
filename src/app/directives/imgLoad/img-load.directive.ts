@@ -10,9 +10,9 @@ import { ImageService } from 'src/app/services/image/image.service';
 import { Preloaders } from 'src/app/services/preloader/preloader.service';
 
 /**
- * Directive use to indicate that the app should track the loading of the images
- * the directive is applied to, and tie their loading to a set of preloaders
- * given as input.
+ * Directive used to indicate that the app should track the loading of the
+ * images the directive is applied to, and tie their loading to a set of
+ * preloaders given as input.
  *
  * Inspired by https://dev.to/paviad/angular-wait-for-all-images-to-load-3hp1
  *
