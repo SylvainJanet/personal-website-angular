@@ -28,11 +28,7 @@ import { BannerComponent } from './components/common/banner/banner.component';
 import { PageContentComponent } from './components/page-cv/page-content/page-content.component';
 import { LinkBarOnHoverComponent } from './components/utilities/link-bar-on-hover/link-bar-on-hover.component';
 import { ButtonBarOnHoverComponent } from './components/utilities/button-bar-on-hover/button-bar-on-hover.component';
-import {
-  HTTP_INTERCEPTORS,
-  HttpClientModule,
-  HttpClientXsrfModule,
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CvImgComponent } from './components/page-cv/cv-img/cv-img.component';
 import { CvContactInfoComponent } from './components/page-cv/cv-contact-info/cv-contact-info.component';
 import { CvSkillsComponent } from './components/page-cv/cv-skills/cv-skills.component';
@@ -86,10 +82,6 @@ class MyHammerConfig extends HammerGestureConfig {
     HammerModule,
     BrowserModule,
     HttpClientModule,
-    HttpClientXsrfModule.withOptions({
-      cookieName: 'XSRF-TOKEN',
-      headerName: 'X-XSRF-TOKEN',
-    }),
   ],
   providers: [
     { provide: APP_BASE_HREF, useValue: environment.baseHref },
