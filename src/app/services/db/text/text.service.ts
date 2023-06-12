@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DatasourceService } from '../datasource/datasource.service';
 import { Languages } from 'src/app/enums/languages';
 import { HttpParams } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 import { LanguageService } from '../../language/language.service';
 import {
   PreloaderService,
@@ -57,6 +57,13 @@ export class TextService {
     this.preloaderService.toLoad(Preloaders.TEXTS, 1);
     let isFirstTime = true;
     return this.getText(selector, this.langageService.current()).pipe(
+      catchError(() => {
+        if (isFirstTime) {
+          this.preloaderService.loaded(Preloaders.TEXTS, 1);
+        }
+        isFirstTime = false;
+        return ['error'];
+      }),
       map((r) => {
         // in case the Observable is binded multiple times, this should only happen once.
         if (isFirstTime) {
@@ -103,6 +110,13 @@ export class TextService {
     this.preloaderService.toLoad(Preloaders.TEXTS, 1);
     let isFirstTime = true;
     return this.getText(selector, this.langageService.current()).pipe(
+      catchError(() => {
+        if (isFirstTime) {
+          this.preloaderService.loaded(Preloaders.TEXTS, 1);
+        }
+        isFirstTime = false;
+        return ['error'];
+      }),
       map((s) => {
         const res = [];
         const paragraphs = s.split(/\[\[\]\]/);
