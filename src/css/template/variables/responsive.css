@@ -15,11 +15,15 @@ https://bholmes.dev/blog/alternative-to-css-variable-media-queries/
 @media (max-width: 575px) {
   :root {
     --resp-content-width: 100%;
+    --default-padding: 15px;
+    --default-margin: 15px;
   }
 }
 @media (min-width: 576px) {
   :root {
     --resp-content-width: calc(var(--bp-1) - var(--scroll-bar-width));
+    --default-padding: 15px;
+    --default-margin: 15px;
   }
 }
 @media (min-width: 768px) {
@@ -45,5 +49,8 @@ https://bholmes.dev/blog/alternative-to-css-variable-media-queries/
 @media (min-width: 1600px) {
   :root {
     --resp-content-width: 100%;
+    --default-padding: 1vw;
+    --default-margin: 1vw;
+    font-size: 1vw;
   }
 }
