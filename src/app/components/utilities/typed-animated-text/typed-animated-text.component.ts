@@ -44,7 +44,7 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
   /** Text color */
   @Input() textColor = 'black';
   /** Font size */
-  @Input() fontSize = '20px';
+  @Input() fontSize = '1em';
   /** Blinking line width */
   @Input() blinkWidth = '2px';
   /** Typing speed (in ms) */
