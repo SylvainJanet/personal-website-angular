@@ -5,8 +5,12 @@ module.exports = function (config) {
     plugins: [
       require("karma-jasmine"),
       require("karma-chrome-launcher"),
+      require("karma-firefox-launcher"),
       require("karma-jasmine-html-reporter"),
+      // require("karma-safari-launcher"),
+      // require("karma-edge-launcher"),
       require("karma-coverage"),
+      require("karma-sabarivka-reporter"),
       require("@angular-devkit/build-angular/plugins/karma"),
     ],
     client: {
@@ -19,7 +23,7 @@ module.exports = function (config) {
       clearContext: false, // leave Jasmine Spec Runner output visible in browser
     },
     jasmineHtmlReporter: {
-      suppressAll: true, // removes the duplicated traces
+      suppressAll: false, // removes the duplicated traces
     },
     preprocessors: {
       "**/src/*.ts": "coverage",
@@ -28,13 +32,37 @@ module.exports = function (config) {
       dir: require("path").join(__dirname, "./coverage/"),
       subdir: ".",
       reporters: [{ type: "html" }, { type: "text-summary" }, { type: "lcov" }],
+      check: {
+        global: {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100,
+        },
+      },
+      include: [
+        // Specify include pattern(s) first
+        "src/**/*.(ts|js)",
+        // Then specify "do not touch" patterns (note `!` sign on the beginning of each statement)
+        "!src/main.(ts|js)",
+        "!src/**/*.spec.(ts|js)",
+        "!src/**/*.module.(ts|js)",
+        "!src/**/environment*.(ts|js)",
+      ],
+      includeAllSources: false,
     },
-    reporters: ["progress", "kjhtml", "coverage"],
+    reporters: ["progress", "kjhtml", "sabarivka", "coverage"],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ["ChromeHeadlessNoSandbox"],
+    browsers: [
+      "ChromeHeadlessNoSandbox",
+      "Chrome",
+      "Firefox",
+      // "Safari", // doesn't work : Eroors on start
+      // "Edge", // doesn't work : redirects to example.com and then hangs.
+    ],
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: "ChromeHeadless",
