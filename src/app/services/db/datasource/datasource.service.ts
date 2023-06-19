@@ -30,10 +30,12 @@ export class DatasourceService {
    *   type text
    */
   get(path: string, params: HttpParams = new HttpParams()): Observable<string> {
-    return this.http.get(`${DatasourceService.URL}${path}`, {
-      responseType: 'text',
-      params: params,
-    });
+    return this.http
+      .get(`${DatasourceService.URL}${path}`, {
+        responseType: 'text',
+        params: params,
+      })
+      .pipe(map((c) => JSON.parse(c).message));
   }
 
   /**
