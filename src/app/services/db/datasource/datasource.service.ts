@@ -24,18 +24,17 @@ export class DatasourceService {
   /**
    * Get request to the api, returning text.
    *
+   * @template T The type of the expected json response
    * @param path The request path
    * @param params Additionnal HttpParams
-   * @returns An `Observable<string>` of the response, with the response body of
-   *   type text
+   * @returns An `Observable<T>` of the response, with the response body of type
+   *   T
    */
-  get(path: string, params: HttpParams = new HttpParams()): Observable<string> {
-    return this.http
-      .get(`${DatasourceService.URL}${path}`, {
-        responseType: 'text',
-        params: params,
-      })
-      .pipe(map((c) => JSON.parse(c).message));
+  get<T>(path: string, params: HttpParams = new HttpParams()): Observable<T> {
+    return this.http.get<T>(`${DatasourceService.URL}${path}`, {
+      responseType: 'json',
+      params: params,
+    });
   }
 
   /**

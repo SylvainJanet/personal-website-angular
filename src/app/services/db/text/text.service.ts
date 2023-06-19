@@ -11,6 +11,7 @@ import {
 import { SubParagraph } from 'src/app/components/classes/SubParagraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { Paragraph } from 'src/app/components/classes/Paragraph';
+import { StringDto } from 'src/app/interfaces/StringDto';
 
 /** Text service. */
 @Injectable({
@@ -41,7 +42,9 @@ export class TextService {
     const params = new HttpParams()
       .set('selector', selector)
       .set('language', Languages[language]);
-    return this.dataSource.get('text', params);
+    return this.dataSource
+      .get<StringDto>('text', params)
+      .pipe(map((c) => c.message));
   }
 
   /**
