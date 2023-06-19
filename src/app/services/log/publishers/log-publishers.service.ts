@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { LogConsole, LogPublisher, LogLocalStorage } from './log-publisher';
+import { LogPublisher } from './log-publisher';
+import { LogConsole } from './log-console';
+import { LogLocalStorage } from './log-local-storage';
 
 /**
  * Service responsible for giving an array of {@link LogPublisher} used for
