@@ -11,5 +11,11 @@
   ],
   "include": [
     "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "src/**/*.unused.(ts|js)",
+    "src/**/*.i.spec.(ts|js)",
+    "src/**/*.u.spec.(ts|js)",
+    "src/**/*.spec.(ts|js)"
   ]
 }

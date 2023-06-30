@@ -41,15 +41,16 @@ module.exports = function (config) {
         },
       },
       include: [
-        // Specify include pattern(s) first
-        "src/**/*.(ts|js)",
-        // Then specify "do not touch" patterns (note `!` sign on the beginning of each statement)
-        "!src/main.(ts|js)",
-        "!src/**/*.spec.(ts|js)",
-        "!src/**/*.module.(ts|js)",
-        "!src/**/environment*.(ts|js)",
+        // // Specify include pattern(s) first
+        // "src/**/*.(ts|js)",
+        // // Then specify "do not touch" patterns (note `!` sign on the beginning of each statement)
+        // "!src/main.ts",
+        // "!src/**/*.spec.(ts|js)",
+        // "!src/**/*.module.(ts|js)",
+        // "!src/**/*.unused.(ts|js)",
+        // "!src/**/environments/**",
       ],
-      includeAllSources: false,
+      includeAllSources: true,
     },
     reporters: ["progress", "kjhtml", "sabarivka", "coverage"],
     port: 9876,
