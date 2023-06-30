@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { LogEntry } from '../log.service';
+import { LogEntry } from '../../logEntry/logEntry';
 
 /**
  * Abstract class used to define a Log publisher. Any class extending this

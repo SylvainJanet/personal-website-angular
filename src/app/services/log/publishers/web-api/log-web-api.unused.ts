@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
-import { LogEntry } from '../log.service';
-import { LogPublisher } from './log-publisher';
+import { LogPublisher } from '../publisher/log-publisher';
+import { LogEntry } from '../../logEntry/logEntry';
 
 /** Web API log publisher. Used to post logs to an API. */
 export class LogWebApi extends LogPublisher {

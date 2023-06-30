@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { LogEntry } from '../log.service';
-import { LogPublisher } from './log-publisher';
+import { IEnvironment } from 'src/environments/interface/ienvironment';
+import { LogPublisher } from '../publisher/log-publisher';
+import { LogEntry } from '../../logEntry/logEntry';
 
 /** Local storage {@link LogPublisher}. Used to log in local storage. */
 export class LogLocalStorage extends LogPublisher {
@@ -9,7 +9,7 @@ export class LogLocalStorage extends LogPublisher {
   maxSize;
 
   /** Log local storage publisher constructor. */
-  constructor() {
+  constructor(environment: IEnvironment) {
     // Must call `super()`from derived classes
     super();
 
@@ -28,7 +28,7 @@ export class LogLocalStorage extends LogPublisher {
    *   shift if necessary
    */
   pushOrShift(values: LogEntry[], entry: LogEntry) {
-    if (values.length > this.maxSize) {
+    if (values.length >= this.maxSize) {
       values.shift();
     }
     values.push(entry);

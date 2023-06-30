@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
-import { LogEntry } from '../log.service';
-import { LogPublisher } from './log-publisher';
+import { LogPublisher } from '../publisher/log-publisher';
+import { LogEntry } from '../../logEntry/logEntry';
 
 /** Console {@link LogPublisher}. Used to log in console. */
 export class LogConsole extends LogPublisher {
