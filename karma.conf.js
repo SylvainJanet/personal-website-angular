@@ -59,9 +59,9 @@ module.exports = function (config) {
     autoWatch: true,
     browsers: [
       "ChromeHeadlessNoSandbox",
-      "Chrome",
-      "Firefox",
-      // "Safari", // doesn't work : Eroors on start
+      // "Chrome", // not headless
+      "FirefoxHeadless",
+      // "Safari", // doesn't work : Errors on start
       // "Edge", // doesn't work : redirects to example.com and then hangs.
     ],
     customLaunchers: {
