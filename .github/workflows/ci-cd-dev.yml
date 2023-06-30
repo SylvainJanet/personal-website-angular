@@ -26,6 +26,9 @@ jobs:
   
   test:
     runs-on: ubuntu-latest
+    # used by karma tests for browsers
+    env:  
+      DISPLAY: 0
     steps:
       - name: Checkout source code  
         uses: actions/checkout@v3
