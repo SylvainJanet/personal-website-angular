@@ -32,6 +32,10 @@ import { XsrfInterceptor } from './interceptors/xsrf.interceptor';
 import { TextParagraphComponent } from './components/common/text-paragraph/text-paragraph.component';
 import { TextParagraphSetComponent } from './components/common/text-paragraph-set/text-paragraph-set.component';
 import { TextSubParagraphComponent } from './components/common/text-sub-paragraph/text-sub-paragraph.component';
+import {
+  ENV,
+  getEnv,
+} from 'src/environments/injectionToken/environment-provider';
 
 @NgModule({
   declarations: [
@@ -72,6 +76,7 @@ import { TextSubParagraphComponent } from './components/common/text-sub-paragrap
   providers: [
     { provide: APP_BASE_HREF, useValue: environment.baseHref },
     { provide: HTTP_INTERCEPTORS, useClass: XsrfInterceptor, multi: true },
+    { provide: ENV, useFactory: getEnv },
   ],
   bootstrap: [AppComponent],
 })
