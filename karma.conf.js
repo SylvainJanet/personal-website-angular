@@ -60,6 +60,7 @@ module.exports = function (config) {
     browsers: [
       "ChromeHeadlessNoSandbox",
       // "Chrome", // not headless
+      // "Firefox",
       "FirefoxHeadless",
       // "Safari", // doesn't work : Errors on start
       // "Edge", // doesn't work : redirects to example.com and then hangs.
