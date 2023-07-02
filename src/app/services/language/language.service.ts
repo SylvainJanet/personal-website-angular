@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Languages } from 'src/app/enums/languages';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
-import { PreloaderService } from '../preloader/preloader.service';
 
 /**
  * Language service. The current language is stored in the client's local
@@ -20,12 +19,8 @@ export class LanguageService {
    */
   subscribers: ComponentWithText[] = [];
 
-  /**
-   * Language service.
-   *
-   * @param preloaderService The {@link PreloaderService}
-   */
-  constructor(private preloaderService: PreloaderService) {
+  /** Language service. */
+  constructor() {
     if (localStorage.getItem('language') != null) {
       this.language =
         Languages[localStorage.getItem('language') as keyof typeof Languages];
