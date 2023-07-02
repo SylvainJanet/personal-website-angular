@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
-import { Preloaders } from 'src/app/services/preloader/preloader.service';
+import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
 
 /** Component for the back to top icon. */

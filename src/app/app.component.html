@@ -2,7 +2,7 @@
   <mat-progress-spinner
     *ngIf="preloader.isAnyLoading(mainLoader, loaderTexts)"
     [mode]="'determinate'"
-    [value]="preloader.getProgessionPercent(mainLoader, loaderTexts)"
+    [value]="preloader.getProgressionPercent(mainLoader, loaderTexts)"
   ></mat-progress-spinner>
 
   <app-header

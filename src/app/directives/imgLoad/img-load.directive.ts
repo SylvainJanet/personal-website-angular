@@ -7,7 +7,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { ImageService } from 'src/app/services/image/image.service';
-import { Preloaders } from 'src/app/services/preloader/preloader.service';
+import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
 
 /**
  * Directive used to indicate that the app should track the loading of the

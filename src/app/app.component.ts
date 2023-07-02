@@ -1,9 +1,7 @@
 import { environment } from './../environments/environment';
-import {
-  PreloaderService,
-  Preloaders,
-} from './services/preloader/preloader.service';
+import { PreloaderService } from './services/preloader/preloader.service';
 import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
+import { Preloaders } from './services/preloader/preloaders/preloaders';
 
 /** Main app component. */
 @Component({

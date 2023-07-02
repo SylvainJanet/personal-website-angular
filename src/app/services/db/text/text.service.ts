@@ -4,14 +4,12 @@ import { Languages } from 'src/app/enums/languages';
 import { HttpParams } from '@angular/common/http';
 import { Observable, catchError, map } from 'rxjs';
 import { LanguageService } from '../../language/language.service';
-import {
-  PreloaderService,
-  Preloaders,
-} from '../../preloader/preloader.service';
+import { PreloaderService } from '../../preloader/preloader.service';
 import { SubParagraph } from 'src/app/components/classes/SubParagraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { Paragraph } from 'src/app/components/classes/Paragraph';
 import { StringDto } from 'src/app/interfaces/StringDto';
+import { Preloaders } from '../../preloader/preloaders/preloaders';
 
 /** Text service. */
 @Injectable({

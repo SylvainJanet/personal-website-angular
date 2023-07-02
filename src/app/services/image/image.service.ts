@@ -1,6 +1,7 @@
-import { Preloaders, PreloaderService } from './../preloader/preloader.service';
+import { PreloaderService } from './../preloader/preloader.service';
 import { Injectable } from '@angular/core';
 import { LogService } from '../log/log.service';
+import { Preloaders } from '../preloader/preloaders/preloaders';
 
 /**
  * Service used to notify {@link Preloaders} that some images are loading, and
