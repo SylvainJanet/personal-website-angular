@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { DatasourceService } from '../datasource/datasource.service';
 import { Languages } from 'src/app/enums/languages';
 import { HttpParams } from '@angular/common/http';
-import { Observable, catchError, map } from 'rxjs';
+import { Observable, catchError, concat, map, of, skip } from 'rxjs';
 import { LanguageService } from '../../language/language.service';
 import { PreloaderService } from '../../preloader/preloader.service';
-import { SubParagraph } from 'src/app/components/classes/SubParagraph';
-import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { Paragraph } from 'src/app/components/classes/Paragraph';
 import { StringDto } from 'src/app/interfaces/StringDto';
 import { Preloaders } from '../../preloader/preloaders/preloaders';
+import { ifFirst } from 'src/app/operators/ifFirst';
+import { ParagraphDecoderService } from '../../paragraphdecoder/paragraph-decoder.service';
 
 /** Text service. */
 @Injectable({
@@ -22,11 +22,13 @@ export class TextService {
    * @param dataSource The {@link DatasourceService}
    * @param langageService The {@link LanguageService}
    * @param preloaderService The {@link PreloaderService}
+   * @param paragraphDecoderService The {@link ParagraphDecoderService}
    */
   constructor(
     private dataSource: DatasourceService,
     private langageService: LanguageService,
-    private preloaderService: PreloaderService
+    private preloaderService: PreloaderService,
+    private paragraphDecoderService: ParagraphDecoderService
   ) {}
 
   /**
@@ -48,32 +50,29 @@ export class TextService {
   /**
    * Get a text for a selector. Uses {@link getText} and the
    * {@link LanguageService} to get the current language. Notifies the TEXTS
-   * {@link Preloaders} the a text is loading, as weel as when the text is
+   * {@link Preloaders} that a text is loading, as well as when the text is
    * loaded.
    *
    * @param selector The selector
    * @returns An observable of the text
    */
   get(selector: string): Observable<string> {
-    this.preloaderService.toLoad(Preloaders.TEXTS, 1);
-    let isFirstTime = true;
-    return this.getText(selector, this.langageService.current()).pipe(
-      catchError(() => {
-        if (isFirstTime) {
-          this.preloaderService.loaded(Preloaders.TEXTS, 1);
-        }
-        isFirstTime = false;
-        return ['error'];
+    const initLoad = of('').pipe(
+      ifFirst(() => {
+        this.preloaderService.toLoad(Preloaders.TEXTS, 1);
       }),
-      map((r) => {
-        // in case the Observable is binded multiple times, this should only happen once.
-        if (isFirstTime) {
-          this.preloaderService.loaded(Preloaders.TEXTS, 1);
-        }
-        isFirstTime = false;
-        return r;
-      })
+      skip(1)
     );
+    const getTextRes = this.getText(
+      selector,
+      this.langageService.current()
+    ).pipe(
+      ifFirst(() => {
+        this.preloaderService.loaded(Preloaders.TEXTS, 1);
+      }),
+      catchError(() => ['error'])
+    );
+    return concat(initLoad, getTextRes);
   }
 
   /**
@@ -90,7 +89,7 @@ export class TextService {
 
   /**
    * Get a string for a selector, but splits the result to get an array of
-   * {@link Paragraph}.
+   * {@link Paragraph} using the {@link ParagraphDecoderService}.
    *
    * In the text, use `[[]]` to create new paragraph, use `[[br]]` to create a
    * `<br>` element, use `[[a_asset, link/to/asset.jpg]]` to create an `<a>`
@@ -108,59 +107,22 @@ export class TextService {
    * @returns An observable of the {@link Paragraph}.
    */
   getSplit(selector: string): Observable<Paragraph[]> {
-    this.preloaderService.toLoad(Preloaders.TEXTS, 1);
-    let isFirstTime = true;
-    return this.getText(selector, this.langageService.current()).pipe(
-      catchError(() => {
-        if (isFirstTime) {
-          this.preloaderService.loaded(Preloaders.TEXTS, 1);
-        }
-        isFirstTime = false;
-        return ['error'];
+    const initLoad = of([]).pipe(
+      ifFirst(() => {
+        this.preloaderService.toLoad(Preloaders.TEXTS, 1);
       }),
-      map((s) => {
-        const res = [];
-        const paragraphs = s.split(/\[\[\]\]/);
-        for (const paragraph of paragraphs) {
-          const split = paragraph.split(/\[\[|\]\]/);
-          const p = new Paragraph([]);
-          for (let i = 0; i < split.length; i++) {
-            if (i % 2 == 0 && (i != split.length - 1 || split[i])) {
-              p.els.push(new SubParagraph(SubParagraphRoot.SPAN, split[i]));
-            } else {
-              const element = split[i];
-              const ref = element.split(',')[0];
-              if (ref == 'br') {
-                p.els.push(new SubParagraph(SubParagraphRoot.BR, ''));
-              } else if (ref == 'a_asset') {
-                p.els.push(
-                  new SubParagraph(
-                    SubParagraphRoot.A_ASSET,
-                    element.split(',').splice(-1, 1).join('')
-                  )
-                );
-              } else {
-                p.els.push(
-                  new SubParagraph(
-                    SubParagraphRoot.STRONG_EM,
-                    element.split(',').splice(-1, 1).join('')
-                  )
-                );
-              }
-            }
-          }
-          res.push(p);
-        }
-        return res;
-      }),
-      map((r) => {
-        // in case the Observable is binded multiple times, this should only happen once.
-        if (isFirstTime) {
-          this.preloaderService.loaded(Preloaders.TEXTS, 1);
-        }
-        isFirstTime = false;
-        return r;
-      })
+      skip(1)
     );
+    const getTextRes = this.getText(
+      selector,
+      this.langageService.current()
+    ).pipe(
+      ifFirst(() => {
+        this.preloaderService.loaded(Preloaders.TEXTS, 1);
+      }),
+      catchError(() => ['error']),
+      map((s) => this.paragraphDecoderService.decode(s))
+    );
+    return concat(initLoad, getTextRes);
   }
 }
