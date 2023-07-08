@@ -1,25 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/**
- * The debounce type
- *
- * IMMEDIATE : the function should be called immediately, and then not anymore
- * until the delay has passed without a call.
- *
- * END : the function should not be called immediately, and will only be called
- * once the delay has passed without a call.
- *
- * BOTH : IMMEDIATE and END : the function should be called immediately, has
- * well as when the delay has passed without a call, but never in between.
- *
- * PERIODIC :
- */
-export enum DebounceType {
-  IMMEDIATE,
-  END,
-  BOTH,
-  PERIODIC,
-}
+
+import { DebounceType } from './debounceType/debounceType';
 
 /**
  * Debounce decorator. Inspired by
@@ -38,9 +20,7 @@ export function debounce(
   type = DebounceType.PERIODIC
 ): MethodDecorator {
   return (
-    // eslint-disable-next-line @typescript-eslint/ban-types
     target: Object,
-    // eslint-disable-next-line @typescript-eslint/ban-types
     propertyKey: string | Symbol,
     descriptor: PropertyDescriptor
   ) => {
@@ -51,18 +31,48 @@ export function debounce(
     descriptor[keyTimeStarted as keyof PropertyDescriptor] = false;
 
     descriptor.value = function (...args: unknown[]) {
+      //https://stackoverflow.com/questions/59034388/jasmine-spying-an-exported-function-that-is-called-by-an-another-function-does
+      //https://medium.com/@DavideRama/mock-spy-exported-functions-within-a-single-module-in-jest-cdf2b61af642
       switch (type) {
         case DebounceType.IMMEDIATE:
-          immediate(this, key, keyTimeStarted, original, delay, args);
+          exportedForTesting.immediate(
+            this,
+            key,
+            keyTimeStarted,
+            original,
+            delay,
+            args
+          );
           break;
         case DebounceType.END:
-          end(this, key, keyTimeStarted, original, delay, args);
+          exportedForTesting.end(
+            this,
+            key,
+            keyTimeStarted,
+            original,
+            delay,
+            args
+          );
           break;
         case DebounceType.BOTH:
-          both(this, key, keyTimeStarted, original, delay, args);
+          exportedForTesting.both(
+            this,
+            key,
+            keyTimeStarted,
+            original,
+            delay,
+            args
+          );
           break;
         case DebounceType.PERIODIC:
-          periodic(this, key, keyTimeStarted, original, delay, args);
+          exportedForTesting.periodic(
+            this,
+            key,
+            keyTimeStarted,
+            original,
+            delay,
+            args
+          );
           break;
       }
     };
@@ -178,3 +188,10 @@ function periodic(
   }
   (target as any)[keyTimeStarted] = true;
 }
+
+/**
+ * Functions exported for unit testing purposes.
+ * https://stackoverflow.com/questions/59034388/jasmine-spying-an-exported-function-that-is-called-by-an-another-function-does
+ * https://medium.com/@DavideRama/mock-spy-exported-functions-within-a-single-module-in-jest-cdf2b61af642
+ */
+export const exportedForTesting = { immediate, end, both, periodic };

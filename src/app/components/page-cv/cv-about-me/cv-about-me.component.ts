@@ -13,7 +13,7 @@ import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { environment } from 'src/environments/environment';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
-import { debounce } from 'src/scripts/tools/debounce';
+import { debounce } from 'src/scripts/tools/debounce/debounce';
 import { Paragraph } from '../../classes/Paragraph';
 
 /** Component used to display About Me information. */

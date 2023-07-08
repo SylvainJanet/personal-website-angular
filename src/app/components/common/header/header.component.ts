@@ -2,7 +2,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { scriptVar } from '../../../../scripts/template/tools/setUp';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
-import { debounce } from 'src/scripts/tools/debounce';
+import { debounce } from 'src/scripts/tools/debounce/debounce';
 import { Observable, of } from 'rxjs';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';

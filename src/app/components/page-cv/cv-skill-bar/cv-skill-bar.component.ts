@@ -8,7 +8,7 @@ import {
 import { of } from 'rxjs';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
-import { debounce } from 'src/scripts/tools/debounce';
+import { debounce } from 'src/scripts/tools/debounce/debounce';
 
 /**
  * Component used to display a skill with a animated bar representing a
