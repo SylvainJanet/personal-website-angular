@@ -36,7 +36,7 @@ describe('LinkBarOnHoverComponent - unit', () => {
 
       linkBarOnHoverComponent = TestBed.inject(LinkBarOnHoverComponent);
     });
-    it('should created', () => {
+    it('should create', () => {
       expect(linkBarOnHoverComponent).toBeTruthy();
       expect(linkBarOnHoverComponent.logger).toBe(logServiceSpy);
     });
