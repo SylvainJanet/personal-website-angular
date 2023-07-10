@@ -12,7 +12,7 @@ import {
 import { XsrfInterceptor } from './xsrf.interceptor';
 
 // https://angular.io/guide/http-test-requests
-describe('HttpClient testing', () => {
+describe('XsrfInterceptor - integration', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
   const testUrl = 'this/is/a/test';
