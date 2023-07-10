@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Paragraph } from 'src/app/components/classes/Paragraph';
+import { Paragraph } from 'src/app/components/classes/paragraph/paragraph';
 import { SubParagraph } from 'src/app/components/classes/SubParagraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 

@@ -1,7 +1,7 @@
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { ParagraphDecoderService } from './paragraph-decoder.service';
 import { SubParagraph } from 'src/app/components/classes/SubParagraph';
-import { Paragraph } from 'src/app/components/classes/Paragraph';
+import { Paragraph } from 'src/app/components/classes/paragraph/paragraph';
 
 let paragraphDecoderService: ParagraphDecoderService;
 

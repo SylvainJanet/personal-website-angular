@@ -1,4 +1,4 @@
-import { SubParagraph } from './SubParagraph';
+import { SubParagraph } from '../SubParagraph';
 
 /**
  * Paragraph class.

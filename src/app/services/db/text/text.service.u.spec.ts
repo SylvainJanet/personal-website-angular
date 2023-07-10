@@ -9,7 +9,7 @@ import { of, throwError } from 'rxjs';
 import { Preloaders } from '../../preloader/preloaders/preloaders';
 import { SubParagraph } from 'src/app/components/classes/SubParagraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
-import { Paragraph } from 'src/app/components/classes/Paragraph';
+import { Paragraph } from 'src/app/components/classes/paragraph/paragraph';
 import { ParagraphDecoderService } from '../../paragraphdecoder/paragraph-decoder.service';
 
 let textService: TextService;

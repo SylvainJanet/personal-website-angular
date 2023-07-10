@@ -5,7 +5,7 @@ import { HttpParams } from '@angular/common/http';
 import { Observable, catchError, concat, map, of, skip } from 'rxjs';
 import { LanguageService } from '../../language/language.service';
 import { PreloaderService } from '../../preloader/preloader.service';
-import { Paragraph } from 'src/app/components/classes/Paragraph';
+import { Paragraph } from 'src/app/components/classes/paragraph/paragraph';
 import { StringDto } from 'src/app/interfaces/StringDto';
 import { Preloaders } from '../../preloader/preloaders/preloaders';
 import { ifFirst } from 'src/app/operators/ifFirst';
