@@ -2,6 +2,7 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
+  HttpRequest,
   HttpXsrfTokenExtractor,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -36,8 +37,12 @@ export class XsrfInterceptor implements HttpInterceptor {
    * @param next The `HttpHandler`
    * @returns The request, having added the xsrf header.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  intercept(req: any, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    req: HttpRequest<any>,
+    next: HttpHandler
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Observable<HttpEvent<any>> {
     const cookieheaderName = 'X-XSRF-TOKEN';
     const csrfToken = this.tokenExtractor.getToken() as string;
     req = req.clone({
