@@ -49,6 +49,7 @@ module.exports = function (config) {
         // "!src/**/*.module.(ts|js)",
         // "!src/**/*.unused.(ts|js)",
         // "!src/**/environments/**",
+        // "!src/test/**",
       ],
       includeAllSources: true,
     },
