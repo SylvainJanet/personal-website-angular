@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SubParagraph } from '../../classes/SubParagraph';
+import { SubParagraph } from '../../classes/subparagraph/subParagraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 
 /**

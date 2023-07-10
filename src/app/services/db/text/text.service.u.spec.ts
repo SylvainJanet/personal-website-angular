@@ -7,7 +7,7 @@ import { Languages } from 'src/app/enums/languages';
 import { StringDto } from 'src/app/interfaces/StringDto';
 import { of, throwError } from 'rxjs';
 import { Preloaders } from '../../preloader/preloaders/preloaders';
-import { SubParagraph } from 'src/app/components/classes/SubParagraph';
+import { SubParagraph } from 'src/app/components/classes/subparagraph/subParagraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { Paragraph } from 'src/app/components/classes/paragraph/paragraph';
 import { ParagraphDecoderService } from '../../paragraphdecoder/paragraph-decoder.service';

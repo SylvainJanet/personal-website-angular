@@ -1,5 +1,5 @@
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
-import { SubParagraph } from '../SubParagraph';
+import { SubParagraph } from '../subparagraph/subParagraph';
 import { Paragraph } from './paragraph';
 
 describe('Paragraph', () => {
