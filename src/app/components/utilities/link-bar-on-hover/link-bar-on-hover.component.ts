@@ -44,9 +44,9 @@ export class LinkBarOnHoverComponent {
    */
   constructor(
     private domcomputation: DOMComputationService,
-    logService: LogService
+    private logService: LogService
   ) {
-    this.logger = logService.withClassName('LinkBarOnHoverComponent');
+    this.logger = this.logService.withClassName('LinkBarOnHoverComponent');
     this.lineDisappears();
   }
 
