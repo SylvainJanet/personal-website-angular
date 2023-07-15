@@ -123,7 +123,7 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
     expect(linkDebugEl.styles['background-color']).toBe(expectedBgColor);
     expect(linkDebugEl.styles['text-decoration']).toBe(expectedTxtDecoration);
   });
-  it('sould have proper dom structure', () => {
+  it('should have proper dom structure', () => {
     const debugEl: DebugElement = fixture.debugElement;
 
     expect(debugEl.children.length).toBe(1);
