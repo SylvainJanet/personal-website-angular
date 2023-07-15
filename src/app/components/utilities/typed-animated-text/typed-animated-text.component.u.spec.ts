@@ -51,11 +51,10 @@ describe('TypedAnimatedTextComponent - unit', () => {
       expect(typedAnimatedTextComponent.blinkElement).toBeTruthy();
       expect(typedAnimatedTextComponent.inputArray).toBeTruthy();
       expect(typedAnimatedTextComponent.inputArray.length).toBe(1);
-      expect(
-        typedAnimatedTextComponent.inputArray[0].subscribe((s) =>
-          expect(s).toBe('')
-        )
+      typedAnimatedTextComponent.inputArray[0].subscribe((s) =>
+        expect(s).toBe('')
       );
+
       expect(typedAnimatedTextComponent.textArray).toEqual(['']);
       expect(typedAnimatedTextComponent.textColor).toBe('black');
       expect(typedAnimatedTextComponent.fontSize).toBe('1em');
