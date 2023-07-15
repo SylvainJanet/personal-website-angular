@@ -76,9 +76,10 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
    */
   ngOnChanges(changes: SimpleChanges): void {
     const change = changes['inputArray'];
-    if (!change.firstChange) {
+    if (change && change.currentValue != change.previousValue) {
       zip(this.inputArray).subscribe({ next: (r) => (this.textArray = r) });
     }
+    this.initVariables();
   }
 
   /**
@@ -86,17 +87,17 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
    * initialize the proper parameters and start the typing effect.
    */
   ngAfterViewInit(): void {
+    this.initVariables();
     zip(this.inputArray).subscribe({
       next: (r) => {
         this.textArray = r;
-        this.initVariables();
         this.typingEffect();
       },
     });
   }
 
   /** Style setup. This could be done with binding in HTML */
-  private initVariables(): void {
+  initVariables(): void {
     this.renderer.setStyle(
       this.textElement.nativeElement,
       'color',
@@ -130,7 +131,7 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
    * Typing effect : Types the string letter after letter with {@link typinSpeed}
    * delay. Once the string is totally written, call {@link deletingEffect}.
    */
-  private typingEffect(): void {
+  typingEffect(): void {
     const word = this.textArray[this.i].split('');
     const loopTyping = () => {
       if (word.length > 0) {
@@ -152,7 +153,7 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
    * after having changed the index of the current element being display
    * {@link i}
    */
-  private deletingEffect(): void {
+  deletingEffect(): void {
     const word = this.textArray[this.i].split('');
     const loopDeleting = () => {
       if (word.length > 0) {
