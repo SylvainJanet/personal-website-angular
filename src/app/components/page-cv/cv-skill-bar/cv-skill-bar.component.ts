@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  AfterContentInit,
   Component,
   ElementRef,
   HostListener,
@@ -19,7 +19,7 @@ import { debounce } from 'src/scripts/tools/debounce/debounce';
   templateUrl: './cv-skill-bar.component.html',
   styleUrls: ['./cv-skill-bar.component.css'],
 })
-export class CvSkillBarComponent implements AfterViewInit {
+export class CvSkillBarComponent implements AfterContentInit {
   /**
    * An input containinf the name of the skill to be displayed as an
    * `Observable<string>`.
@@ -140,7 +140,7 @@ export class CvSkillBarComponent implements AfterViewInit {
    * animation may trigger as a results. This may happen if the client loads the
    * page already scrolled down.
    */
-  ngAfterViewInit(): void {
+  ngAfterContentInit(): void {
     this.updateAfterLoaded();
   }
 }

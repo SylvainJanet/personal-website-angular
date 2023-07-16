@@ -148,7 +148,7 @@ describe('CvSkillBarComponent - unit', () => {
     });
   });
 
-  describe('ngAfterViewInit method', () => {
+  describe('ngAfterContentInit method', () => {
     it('should call updateAfterLoaded method', () => {
       spyOn(cvSkillBarComponent, 'updateAfterLoaded');
       (
@@ -156,7 +156,7 @@ describe('CvSkillBarComponent - unit', () => {
           ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
       ).and.returnValue(new BehaviorSubject<boolean | null>(true));
 
-      cvSkillBarComponent.ngAfterViewInit();
+      cvSkillBarComponent.ngAfterContentInit();
 
       expect(cvSkillBarComponent.updateAfterLoaded).toHaveBeenCalledTimes(1);
     });
