@@ -24,7 +24,7 @@ export class CvContactInfoComponent implements ComponentWithText, OnDestroy {
   fsDev = of('');
   /** Text containing the email label. */
   email = of('');
-  /** Text containingthe phone label. */
+  /** Text containing the phone label. */
   phone = of('');
 
   /**
@@ -59,8 +59,8 @@ export class CvContactInfoComponent implements ComponentWithText, OnDestroy {
 
   /**
    * On destroy, the component has to be unsubscribed rom the
-   * {@link LanguageService} to avoid having the service try to notify a destroyed
-   * subscriber.
+   * {@link LanguageService} to avoid having the service try to notify a
+   * destroyed subscriber.
    */
   ngOnDestroy(): void {
     this.languageService.unsubscribe(this);
