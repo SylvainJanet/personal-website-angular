@@ -93,10 +93,12 @@ export class ImgLoadDirective implements OnChanges {
    * either loaded or if there was an error.
    */
   loadOrError() {
-    this.isLoadedOrError = true;
-    this.imageService.imageLoadedOrError(
-      this.elementRef.nativeElement,
-      this.appImgLoad
-    );
+    if (!this.isLoadedOrError) {
+      this.isLoadedOrError = true;
+      this.imageService.imageLoadedOrError(
+        this.elementRef.nativeElement,
+        this.appImgLoad
+      );
+    }
   }
 }
