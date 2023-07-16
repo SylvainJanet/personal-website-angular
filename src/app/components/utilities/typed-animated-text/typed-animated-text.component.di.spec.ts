@@ -6,7 +6,6 @@ import {
   tick,
   waitForAsync,
 } from '@angular/core/testing';
-import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { TypedAnimatedTextComponent } from './typed-animated-text.component';
 import { Renderer2 } from '@angular/core';
 import { of } from 'rxjs';
@@ -21,7 +20,7 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TypedAnimatedTextComponent],
-      providers: [DOMComputationService, Renderer2],
+      providers: [Renderer2],
     }).compileComponents();
   }));
 

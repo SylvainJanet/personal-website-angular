@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { DebugElement, Renderer2 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { TypedAnimatedTextComponent } from './typed-animated-text.component';
@@ -11,7 +10,7 @@ describe('TypedAnimatedTextComponent - dom unit', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TypedAnimatedTextComponent],
-      providers: [DOMComputationService, Renderer2],
+      providers: [Renderer2],
     }).compileComponents();
   }));
 
