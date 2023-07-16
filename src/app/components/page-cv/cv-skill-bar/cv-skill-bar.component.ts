@@ -116,10 +116,8 @@ export class CvSkillBarComponent implements AfterViewInit {
     this.preloaderService.statusAnyLoading.subscribe({
       next: (isAnyLoading) => {
         if (isAnyLoading != null && !isAnyLoading) {
-          setTimeout(() => {
-            this.getElPos();
-            this.updateWidth();
-          });
+          this.getElPos();
+          this.updateWidth();
         }
       },
     });
