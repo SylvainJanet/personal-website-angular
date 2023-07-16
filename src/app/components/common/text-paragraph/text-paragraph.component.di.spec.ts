@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
-import { DebugElement, Renderer2 } from '@angular/core';
+import { DebugElement } from '@angular/core';
 import { SubParagraph } from '../../classes/subparagraph/subParagraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { TextParagraphComponent } from './text-paragraph.component';
@@ -14,7 +13,6 @@ describe('TextParagraphComponent - dom integration', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TextParagraphComponent, TextSubParagraphComponent],
-      providers: [DOMComputationService, Renderer2],
     }).compileComponents();
   }));
 
