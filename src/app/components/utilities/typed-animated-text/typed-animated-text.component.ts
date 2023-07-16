@@ -77,9 +77,15 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const change = changes['inputArray'];
     if (change && change.currentValue != change.previousValue) {
-      zip(this.inputArray).subscribe({ next: (r) => (this.textArray = r) });
+      zip(this.inputArray).subscribe({
+        next: (r) => {
+          this.textArray = r;
+        },
+      });
     }
-    this.initVariables();
+    if (this.textElement) {
+      this.initVariables();
+    }
   }
 
   /**
