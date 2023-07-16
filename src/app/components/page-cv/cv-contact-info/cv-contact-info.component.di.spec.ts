@@ -103,6 +103,7 @@ describe("CvContactInfoComponent - dom integration", () => {
       componentInstance = fixture.componentInstance;
       fixture.detectChanges();
     });
+
     it(shouldCreateExpectation, shouldCreate);
     it(shouldHaveContentSetByServiceExpectation, shouldHaveContentSetByService);
   });
@@ -128,6 +129,7 @@ describe("CvContactInfoComponent - dom integration", () => {
       componentInstance = fixture.componentInstance;
       fixture.detectChanges();
     });
+
     it(shouldCreateExpectation, shouldCreate);
     it(shouldHaveContentSetByServiceExpectation, shouldHaveContentSetByService);
   });
@@ -153,6 +155,7 @@ describe("CvContactInfoComponent - dom integration", () => {
       componentInstance = fixture.componentInstance;
       fixture.detectChanges();
     });
+
     it(shouldCreateExpectation, shouldCreate);
     it(shouldHaveContentSetByServiceExpectation, shouldHaveContentSetByService);
   });
