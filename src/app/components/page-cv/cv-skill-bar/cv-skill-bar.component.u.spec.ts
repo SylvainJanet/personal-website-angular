@@ -15,6 +15,10 @@ describe('CvSkillBarComponent - unit', () => {
       [],
       ['statusAnyLoading']
     );
+    (
+      Object.getOwnPropertyDescriptor(preloaderServiceSpy, 'statusAnyLoading')
+        ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+    ).and.returnValue(new BehaviorSubject<boolean | null>(null));
     elementRefSpy = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
     TestBed.configureTestingModule({
       providers: [
@@ -48,10 +52,6 @@ describe('CvSkillBarComponent - unit', () => {
   describe('onResize method', () => {
     it('should call updateAfterLoaded method', () => {
       spyOn(cvSkillBarComponent, 'updateAfterLoaded');
-      (
-        Object.getOwnPropertyDescriptor(preloaderServiceSpy, 'statusAnyLoading')
-          ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
-      ).and.returnValue(new BehaviorSubject<boolean | null>(true));
 
       cvSkillBarComponent.onResize();
 
@@ -137,10 +137,6 @@ describe('CvSkillBarComponent - unit', () => {
   describe('onScroll method', () => {
     it('should call updateAfterLoaded method', () => {
       spyOn(cvSkillBarComponent, 'updateAfterLoaded');
-      (
-        Object.getOwnPropertyDescriptor(preloaderServiceSpy, 'statusAnyLoading')
-          ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
-      ).and.returnValue(new BehaviorSubject<boolean | null>(true));
 
       cvSkillBarComponent.onScroll();
 
@@ -151,10 +147,6 @@ describe('CvSkillBarComponent - unit', () => {
   describe('ngAfterContentInit method', () => {
     it('should call updateAfterLoaded method', () => {
       spyOn(cvSkillBarComponent, 'updateAfterLoaded');
-      (
-        Object.getOwnPropertyDescriptor(preloaderServiceSpy, 'statusAnyLoading')
-          ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
-      ).and.returnValue(new BehaviorSubject<boolean | null>(true));
 
       cvSkillBarComponent.ngAfterContentInit();
 
