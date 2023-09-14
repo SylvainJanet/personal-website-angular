@@ -20,7 +20,7 @@
     <footer>
       <p>
         <span>{{ footerText | async }}</span
-        ><a href="https://sylvainjanet.fr">{{ footerLink | async }}</a>
+        ><a [href]="footerHref | async">{{ footerLink | async }}</a>
       </p>
     </footer>
   </div>

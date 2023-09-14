@@ -16,6 +16,8 @@ export class FooterComponent implements ComponentWithText, OnDestroy {
   footerText = of('');
   /** Text of the footer link. */
   footerLink = of('');
+  /** Actual link. */
+  footerHref = of('');
   /** {@link Preloaders} used for the footer image. */
   preloaders = [Preloaders.MAIN];
   /** Footer source. Will be taken from the css variables. */
@@ -57,6 +59,7 @@ export class FooterComponent implements ComponentWithText, OnDestroy {
       .get('sylvain-janet')
       .pipe(map((s) => s + ' - '));
     this.footerLink = this.textService.get('website');
+    this.footerHref = this.footerLink.pipe(map((s) => 'https://www.' + s));
   }
 
   /**
