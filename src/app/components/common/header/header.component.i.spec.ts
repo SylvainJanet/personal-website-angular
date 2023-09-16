@@ -21,7 +21,7 @@ describe('HeaderComponent - integration', () => {
   const prodEnv = productionEnvironment;
 
   const expectedName = 'test title';
-  const expectedOtherLanguage = 'other language';
+  const expectedOtherLanguage = 'test other language';
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);

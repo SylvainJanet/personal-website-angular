@@ -18,7 +18,7 @@ describe('HeaderComponent - unit', () => {
 
   const myNameSelector = 'sylvain-janet';
   const expectedName = 'test title';
-  const expectedOtherLanguage = 'other language';
+  const expectedOtherLanguage = 'test other language';
   const expectedActualHeight = 18;
 
   const headerStateLight = scriptVar.headerStateLight;
