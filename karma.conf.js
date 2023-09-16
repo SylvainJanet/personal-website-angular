@@ -41,15 +41,15 @@ module.exports = function (config) {
         },
       },
       include: [
-        // // Specify include pattern(s) first
-        // "src/**/*.(ts|js)",
-        // // Then specify "do not touch" patterns (note `!` sign on the beginning of each statement)
-        // "!src/main.ts",
-        // "!src/**/*.spec.(ts|js)",
-        // "!src/**/*.module.(ts|js)",
-        // "!src/**/*.unused.(ts|js)",
-        // "!src/**/environments/**",
-        // "!src/test/**",
+        // Specify include pattern(s) first
+        "src/**/*.(ts|js)",
+        // Then specify "do not touch" patterns (note `!` sign on the beginning of each statement)
+        "!src/main.ts",
+        "!src/**/*.spec.(ts|js)",
+        "!src/**/*.module.(ts|js)",
+        "!src/**/*.unused.(ts|js)",
+        "!src/**/environments/**",
+        "!src/test/**",
       ],
       includeAllSources: true,
     },
