@@ -1,10 +1,4 @@
-import {
-  AfterContentInit,
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-} from '@angular/core';
+import { Component, ElementRef, HostListener, Input } from '@angular/core';
 import { of } from 'rxjs';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
@@ -19,7 +13,7 @@ import { debounce } from 'src/scripts/tools/debounce/debounce';
   templateUrl: './cv-skill-bar.component.html',
   styleUrls: ['./cv-skill-bar.component.css'],
 })
-export class CvSkillBarComponent implements AfterContentInit {
+export class CvSkillBarComponent {
   /**
    * An input containinf the name of the skill to be displayed as an
    * `Observable<string>`.
@@ -132,15 +126,6 @@ export class CvSkillBarComponent implements AfterContentInit {
   @HostListener('window:scroll', ['$event'])
   @debounce()
   onScroll() {
-    this.updateAfterLoaded();
-  }
-
-  /**
-   * After the view is initialized, the trigger has to be updated and the
-   * animation may trigger as a results. This may happen if the client loads the
-   * page already scrolled down.
-   */
-  ngAfterContentInit(): void {
     this.updateAfterLoaded();
   }
 }

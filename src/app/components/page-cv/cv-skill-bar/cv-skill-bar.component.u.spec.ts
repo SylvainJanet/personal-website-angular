@@ -143,14 +143,4 @@ describe('CvSkillBarComponent - unit', () => {
       expect(cvSkillBarComponent.updateAfterLoaded).toHaveBeenCalledTimes(1);
     });
   });
-
-  describe('ngAfterContentInit method', () => {
-    it('should call updateAfterLoaded method', () => {
-      spyOn(cvSkillBarComponent, 'updateAfterLoaded');
-
-      cvSkillBarComponent.ngAfterContentInit();
-
-      expect(cvSkillBarComponent.updateAfterLoaded).toHaveBeenCalledTimes(1);
-    });
-  });
 });
