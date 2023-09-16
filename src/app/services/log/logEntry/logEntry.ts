@@ -42,7 +42,8 @@ export class LogEntry {
     let ret = '';
 
     if (this.logWithDate) {
-      ret = new Date().toLocaleString() + (this.compactDisplay ? ' - ' : '');
+      ret =
+        this.entryDate.toLocaleString() + (this.compactDisplay ? ' - ' : '');
     }
 
     ret +=
