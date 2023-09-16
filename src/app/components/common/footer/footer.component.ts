@@ -3,7 +3,7 @@ import { map, of } from 'rxjs';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
-import { Preloaders } from 'src/app/services/preloader/preloader.service';
+import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
 
 /** Footer component, displaying a banner and a link to the website. */
 @Component({
@@ -16,6 +16,8 @@ export class FooterComponent implements ComponentWithText, OnDestroy {
   footerText = of('');
   /** Text of the footer link. */
   footerLink = of('');
+  /** Actual link. */
+  footerHref = of('');
   /** {@link Preloaders} used for the footer image. */
   preloaders = [Preloaders.MAIN];
   /** Footer source. Will be taken from the css variables. */
@@ -57,6 +59,7 @@ export class FooterComponent implements ComponentWithText, OnDestroy {
       .get('sylvain-janet')
       .pipe(map((s) => s + ' - '));
     this.footerLink = this.textService.get('website');
+    this.footerHref = this.footerLink.pipe(map((s) => 'https://www.' + s));
   }
 
   /**

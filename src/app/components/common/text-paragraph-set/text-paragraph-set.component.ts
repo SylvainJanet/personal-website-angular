@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Paragraph } from '../../classes/Paragraph';
+import { Paragraph } from '../../classes/paragraph/paragraph';
 
 /** Component used to display an array of {@link Paragraph} entities. */
 @Component({

@@ -1,20 +1,8 @@
 import { Injectable } from '@angular/core';
 import { LogService } from '../log/log.service';
 import { BehaviorSubject } from 'rxjs';
-
-/** Preloaders */
-export enum Preloaders {
-  MAIN = 'MAIN',
-  TEXTS = 'TEXTS',
-}
-
-/** Loading information */
-interface LoadingInfo {
-  /** Quantity to load */
-  qtyToLoad: number;
-  /** Is it loading */
-  isLoading: boolean;
-}
+import { LoadingInfo } from './loadingInfo/loadingInfo';
+import { Preloaders } from './preloaders/preloaders';
 
 /**
  * Preloader service, used to manage asset loading, so that the app may display
@@ -82,7 +70,7 @@ export class PreloaderService {
    * @param qty The quantity
    */
   toLoad(loader: Preloaders, qty: number) {
-    const oldQty = this.info.get(loader)?.qtyToLoad ?? 0;
+    const oldQty = this.info.get(loader)?.qtyToLoad as number;
     const newQty = oldQty + qty;
 
     this.info.set(loader, { isLoading: true, qtyToLoad: newQty });
@@ -90,7 +78,7 @@ export class PreloaderService {
     this.statusLoading.get(loader)?.next(true);
     this.statusAnyLoading.next(true);
 
-    this.maxQty.set(loader, (this.maxQty.get(loader) ?? 0) + qty);
+    this.maxQty.set(loader, (this.maxQty.get(loader) as number) + qty);
   }
 
   /**
@@ -100,7 +88,7 @@ export class PreloaderService {
    * @param qty The quantity
    */
   loaded(loader: Preloaders, qty: number) {
-    const oldQty = this.info.get(loader)?.qtyToLoad ?? 0;
+    const oldQty = this.info.get(loader)?.qtyToLoad as number;
 
     if (oldQty - qty < 0) {
       this.logger.warn(
@@ -131,7 +119,7 @@ export class PreloaderService {
    * @returns If he {@link Preloaders} is loading
    */
   isLoading(loader: Preloaders) {
-    return this.info.get(loader)?.isLoading ?? false;
+    return this.info.get(loader)?.isLoading as boolean;
   }
 
   /**
@@ -172,7 +160,7 @@ export class PreloaderService {
       }
     } else {
       for (const loader of loaders) {
-        res += this.maxQty.get(loader) ?? 0;
+        res += this.maxQty.get(loader) as number;
       }
     }
     return res;
@@ -195,7 +183,7 @@ export class PreloaderService {
       }
     } else {
       for (const loader of loaders) {
-        res += this.info.get(loader)?.qtyToLoad ?? 0;
+        res += this.info.get(loader)?.qtyToLoad as number;
       }
     }
     return res;
@@ -210,11 +198,11 @@ export class PreloaderService {
    * @param loaders The {@link Preloaders}
    * @returns The progression percentage
    */
-  getProgessionPercent(...loaders: Preloaders[]) {
-    const res =
-      (this.getTotalElToLoad(...loaders) /
-        this.getTotalMaxElToLoad(...loaders)) *
-      100;
+  getProgressionPercent(...loaders: Preloaders[]) {
+    const maxElToLoad = this.getTotalMaxElToLoad(...loaders);
+    if (maxElToLoad === 0) return 100;
+
+    const res = (this.getTotalElToLoad(...loaders) / maxElToLoad) * 100;
     return 100 - res;
   }
 }

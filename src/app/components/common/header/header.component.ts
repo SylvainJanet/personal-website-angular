@@ -2,7 +2,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { scriptVar } from '../../../../scripts/template/tools/setUp';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
-import { debounce } from 'src/scripts/tools/debounce';
+import { debounce } from 'src/scripts/tools/debounce/debounce';
 import { Observable, of } from 'rxjs';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
@@ -89,8 +89,8 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
    */
   @HostListener('window:resize', ['$event'])
   @debounce()
-  onResize() {
-    this.updateTrigger();
+  onResize(event: Event) {
+    this.updateTrigger(event);
   }
 
   /**
@@ -98,7 +98,9 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
    * because the client could be loading the page already scolled.
    */
   ngOnInit() {
-    this.updateTrigger();
+    this.updateTrigger({
+      currentTarget: { scrollY: 0 } as Window,
+    } as unknown as Event);
   }
 
   /**
@@ -106,13 +108,13 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
    * changes. In that case, calls the method {@link updateHeader} responsible for
    * making the actual changes
    */
-  updateTrigger() {
+  updateTrigger(event: Event) {
     this.trigger = this.domcomputation.getActualHeight(
       document.getElementsByClassName('banner').item(0)
     );
     const oldHeaderState = this.headerState;
     this.headerState =
-      scrollY > this.trigger
+      (event.currentTarget as Window).scrollY > this.trigger
         ? scriptVar.headerStateLight
         : scriptVar.headerStateDark;
     if (oldHeaderState != this.headerState) {
@@ -172,18 +174,15 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
    * scrollY value goes over, the header should be light.
    */
   @HostListener('window:scroll', ['$event'])
-  @debounce()
-  onScroll() {
-    if (scrollY > this.trigger) {
+  onScroll(event: Event) {
+    if ((event.currentTarget as Window).scrollY > this.trigger) {
       if (this.headerState == scriptVar.headerStateDark) {
-        this.logger.debug('Scroll check');
         this.headerState = scriptVar.headerStateLight;
         this.updateHeader();
       }
     }
-    if (scrollY <= this.trigger) {
+    if ((event.currentTarget as Window).scrollY <= this.trigger) {
       if (this.headerState == scriptVar.headerStateLight) {
-        this.logger.debug('Scroll check');
         this.headerState = scriptVar.headerStateDark;
         this.updateHeader();
       }

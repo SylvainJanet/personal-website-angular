@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
-import { Preloaders } from 'src/app/services/preloader/preloader.service';
+import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
 
 /** Component for the back to top icon. */
@@ -44,10 +44,7 @@ export class BackToTopComponent implements ComponentWithText, OnDestroy {
    * The state of the icon, based on the scroll amount compared with the
    * trigger.
    */
-  backToTopState =
-    scrollY > this.trigger
-      ? scriptVar.backToTopVisibleState
-      : scriptVar.backToTopInvisibleState;
+  backToTopState = scriptVar.backToTopInvisibleState;
   /** Alt text of the image. */
   altTxt = of('');
   /** {@link Preloaders} used for the icon image. */
@@ -93,14 +90,14 @@ export class BackToTopComponent implements ComponentWithText, OnDestroy {
    * {@link updateBackToTop} responsible for actually updating the component.
    */
   @HostListener('window:scroll', ['$event'])
-  onScroll() {
-    if (scrollY > this.trigger) {
+  onScroll(event: Event) {
+    if ((event.currentTarget as Window).scrollY > this.trigger) {
       if (this.backToTopState == scriptVar.backToTopInvisibleState) {
         this.backToTopState = scriptVar.backToTopVisibleState;
         this.updateBackToTop();
       }
     }
-    if (scrollY <= this.trigger) {
+    if ((event.currentTarget as Window).scrollY <= this.trigger) {
       if (this.backToTopState == scriptVar.backToTopVisibleState) {
         this.backToTopState = scriptVar.backToTopInvisibleState;
         this.updateBackToTop();

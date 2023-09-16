@@ -1,9 +1,6 @@
-import { environment } from './../environments/environment';
-import {
-  PreloaderService,
-  Preloaders,
-} from './services/preloader/preloader.service';
-import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
+import { PreloaderService } from './services/preloader/preloader.service';
+import { AfterViewInit, Component } from '@angular/core';
+import { Preloaders } from './services/preloader/preloaders/preloaders';
 
 /** Main app component. */
 @Component({
@@ -16,8 +13,6 @@ export class AppComponent implements AfterViewInit {
   mainLoader = Preloaders.MAIN;
   /** Text loader, so that this {@link Preloaders} can be binded to in HTML */
   loaderTexts = Preloaders.TEXTS;
-  /** The {@link environment} */
-  env = environment;
   /** Opacity, used to smoothly make the page appear on first load */
   opacity = 0;
 
@@ -27,10 +22,7 @@ export class AppComponent implements AfterViewInit {
    * @param preloader The {@link PreloaderService}
    * @param cd The `ChangeDetectorRef`
    */
-  constructor(
-    public preloader: PreloaderService,
-    private cd: ChangeDetectorRef
-  ) {
+  constructor(public preloader: PreloaderService) {
     this.increaseOpacity(0, 10, 10);
   }
 
@@ -52,7 +44,7 @@ export class AppComponent implements AfterViewInit {
    */
   increaseOpacity(i: number, N: number, step: number) {
     setTimeout(() => {
-      this.opacity = i / (N - 1);
+      this.opacity = (i + 1) / N;
       if (i < N - 1) {
         this.increaseOpacity(i + 1, N, step);
       }

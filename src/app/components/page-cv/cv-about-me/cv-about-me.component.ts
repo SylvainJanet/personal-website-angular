@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  AfterContentInit,
   Component,
   ElementRef,
   HostListener,
@@ -11,10 +11,9 @@ import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
-import { environment } from 'src/environments/environment';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
-import { debounce } from 'src/scripts/tools/debounce';
-import { Paragraph } from '../../classes/Paragraph';
+import { debounce } from 'src/scripts/tools/debounce/debounce';
+import { Paragraph } from '../../classes/paragraph/paragraph';
 
 /** Component used to display About Me information. */
 @Component({
@@ -23,7 +22,7 @@ import { Paragraph } from '../../classes/Paragraph';
   styleUrls: ['./cv-about-me.component.css'],
 })
 export class CvAboutMeComponent
-  implements AfterViewInit, ComponentWithText, OnDestroy
+  implements AfterContentInit, ComponentWithText, OnDestroy
 {
   /**
    * Width of the bar underneath the title. It will be animated when the bar
@@ -34,8 +33,6 @@ export class CvAboutMeComponent
   posElementMin = 0;
   /** Maximal scroll value to have the bar in view */
   posElementMax = 0;
-  /** Environment. See {@link environment} */
-  env = environment;
   /** Logger. See {@link LogService} */
   logger: LogService;
   /** About me title */
@@ -170,10 +167,8 @@ export class CvAboutMeComponent
     this.preloader.statusAnyLoading.subscribe({
       next: (isAnyLoading) => {
         if (isAnyLoading != null && !isAnyLoading) {
-          setTimeout(() => {
-            this.getElPos();
-            this.updateWidth();
-          });
+          this.getElPos();
+          this.updateWidth();
         }
       },
     });
@@ -184,7 +179,7 @@ export class CvAboutMeComponent
    * animation may trigger as a results. This may happen if the client loads the
    * page already scrolled down.
    */
-  ngAfterViewInit(): void {
+  ngAfterContentInit(): void {
     this.updateAfterLoaded();
   }
 }

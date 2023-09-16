@@ -3,3 +3,4 @@
 
 npx lint-staged
 npx compodoc -p tsconfig.doc.json --coverageTest 100 --coverageMinimumPerFile 100 -e json
+npm run test

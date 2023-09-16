@@ -28,10 +28,14 @@ import { CvContactInfoComponent } from './components/page-cv/cv-contact-info/cv-
 import { CvSkillsComponent } from './components/page-cv/cv-skills/cv-skills.component';
 import { CvSkillBarComponent } from './components/page-cv/cv-skill-bar/cv-skill-bar.component';
 import { CvAboutMeComponent } from './components/page-cv/cv-about-me/cv-about-me.component';
-import { XsrfInterceptor } from './interceptors/xsrf.interceptor';
+import { XsrfInterceptor } from './interceptors/xsrf/xsrf.interceptor';
 import { TextParagraphComponent } from './components/common/text-paragraph/text-paragraph.component';
 import { TextParagraphSetComponent } from './components/common/text-paragraph-set/text-paragraph-set.component';
 import { TextSubParagraphComponent } from './components/common/text-sub-paragraph/text-sub-paragraph.component';
+import {
+  ENV,
+  getEnv,
+} from 'src/environments/injectionToken/environment-provider';
 
 @NgModule({
   declarations: [
@@ -72,6 +76,7 @@ import { TextSubParagraphComponent } from './components/common/text-sub-paragrap
   providers: [
     { provide: APP_BASE_HREF, useValue: environment.baseHref },
     { provide: HTTP_INTERCEPTORS, useClass: XsrfInterceptor, multi: true },
+    { provide: ENV, useFactory: getEnv },
   ],
   bootstrap: [AppComponent],
 })

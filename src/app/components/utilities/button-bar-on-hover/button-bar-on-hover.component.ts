@@ -43,10 +43,10 @@ export class ButtonBarOnHoverComponent {
    * @param domcomputation The {@link DOMComputationService}
    */
   constructor(
-    logService: LogService,
+    private logService: LogService,
     private domcomputation: DOMComputationService
   ) {
-    this.logger = logService.withClassName('ButtonBarOnHoverComponent');
+    this.logger = this.logService.withClassName('ButtonBarOnHoverComponent');
     this.lineDisappears();
   }
 
@@ -76,6 +76,7 @@ export class ButtonBarOnHoverComponent {
    */
   doAction(event: Event) {
     this.logger.debug('Do action');
+    this.lineDisappears();
     this.press.emit(event);
   }
 }
