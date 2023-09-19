@@ -1,10 +1,4 @@
-import {
-  AfterContentInit,
-  Component,
-  ElementRef,
-  HostListener,
-  OnDestroy,
-} from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { of } from 'rxjs';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
@@ -14,16 +8,18 @@ import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
 import { debounce } from 'src/scripts/tools/debounce/debounce';
 import { Paragraph } from '../../classes/paragraph/paragraph';
+import { CommonModule } from '@angular/common';
+import { TextParagraphSetComponent } from '../../utilities/text-paragraph-set/text-paragraph-set.component';
 
 /** Component used to display About Me information. */
 @Component({
   selector: 'app-cv-about-me',
   templateUrl: './cv-about-me.component.html',
   styleUrls: ['./cv-about-me.component.css'],
+  standalone: true,
+  imports: [CommonModule, TextParagraphSetComponent],
 })
-export class CvAboutMeComponent
-  implements AfterContentInit, ComponentWithText, OnDestroy
-{
+export class CvAboutMeComponent implements ComponentWithText, OnDestroy {
   /**
    * Width of the bar underneath the title. It will be animated when the bar
    * enter/exits the client's view.
@@ -172,14 +168,5 @@ export class CvAboutMeComponent
         }
       },
     });
-  }
-
-  /**
-   * After the view is initialized, the trigger has to be updated and the
-   * animation may trigger as a results. This may happen if the client loads the
-   * page already scrolled down.
-   */
-  ngAfterContentInit(): void {
-    this.updateAfterLoaded();
   }
 }

@@ -114,7 +114,7 @@ describe('HeaderComponent - dom integration', () => {
   describe('in dev environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           HeaderComponent,
           LinkBarOnHoverComponent,
           ButtonBarOnHoverComponent,
@@ -146,7 +146,7 @@ describe('HeaderComponent - dom integration', () => {
   describe('in staging environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           HeaderComponent,
           LinkBarOnHoverComponent,
           ButtonBarOnHoverComponent,
@@ -178,7 +178,7 @@ describe('HeaderComponent - dom integration', () => {
   describe('in prod environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           HeaderComponent,
           LinkBarOnHoverComponent,
           ButtonBarOnHoverComponent,

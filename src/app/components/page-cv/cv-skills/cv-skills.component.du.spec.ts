@@ -57,7 +57,7 @@ describe('CvSkillsComponent - dom unit', () => {
       latexObs
     );
     TestBed.configureTestingModule({
-      declarations: [CvSkillsComponent, CvSkillBarComponent],
+      imports: [CvSkillsComponent, CvSkillBarComponent],
       providers: [
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: TextService, useValue: textServiceSpy },

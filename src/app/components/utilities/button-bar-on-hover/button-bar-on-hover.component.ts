@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
@@ -12,6 +13,8 @@ import { LogService } from 'src/app/services/log/log.service';
   selector: 'app-button-bar-on-hover',
   templateUrl: './button-bar-on-hover.component.html',
   styleUrls: ['./button-bar-on-hover.component.css'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class ButtonBarOnHoverComponent {
   /**

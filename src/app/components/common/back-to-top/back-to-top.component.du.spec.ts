@@ -7,7 +7,7 @@ import { ImgLoadDirective } from 'src/app/directives/imgLoad/img-load.directive'
 import { ImageService } from 'src/app/services/image/image.service';
 import { DebugElement } from '@angular/core';
 
-describe('CvAboutMeComponent - dom unit', () => {
+describe('BackToTopComponent - dom unit', () => {
   let fixture: ComponentFixture<BackToTopComponent>;
   let componentInstance: BackToTopComponent;
   let languageServiceSpy: jasmine.SpyObj<LanguageService>;
@@ -29,7 +29,7 @@ describe('CvAboutMeComponent - dom unit', () => {
     textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
 
     TestBed.configureTestingModule({
-      declarations: [BackToTopComponent, ImgLoadDirective],
+      imports: [BackToTopComponent, ImgLoadDirective],
       providers: [
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: ImageService, useValue: imageServiceSpy },

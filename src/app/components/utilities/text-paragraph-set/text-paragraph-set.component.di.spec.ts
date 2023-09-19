@@ -13,7 +13,7 @@ describe('TextParagraphComponent - dom integration', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+      imports: [
         TextParagraphSetComponent,
         TextParagraphComponent,
         TextSubParagraphComponent,

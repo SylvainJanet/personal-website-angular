@@ -18,7 +18,7 @@ describe('ButtonBarOnHoverComponent - dom unit', () => {
     logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
 
     TestBed.configureTestingModule({
-      declarations: [ButtonBarOnHoverComponent],
+      imports: [ButtonBarOnHoverComponent],
       providers: [
         DOMComputationService,
         { provide: LogService, useValue: logServiceGlobalSpy },

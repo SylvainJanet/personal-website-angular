@@ -19,7 +19,7 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [TypedAnimatedTextComponent],
+      imports: [TypedAnimatedTextComponent],
       providers: [Renderer2],
     }).compileComponents();
   }));

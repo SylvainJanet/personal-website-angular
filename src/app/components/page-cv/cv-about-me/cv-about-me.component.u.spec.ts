@@ -288,16 +288,16 @@ describe('CvAboutMeComponent - unit', () => {
     });
   });
 
-  describe('ngAfterContentInit method', () => {
-    beforeEach(() => {
-      cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
-    });
-    it('should call updateAfterLoaded method', () => {
-      spyOn(cvAboutMeComponent, 'updateAfterLoaded');
+  // describe('ngAfterContentInit method', () => {
+  //   beforeEach(() => {
+  //     cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+  //   });
+  //   it('should call updateAfterLoaded method', () => {
+  //     spyOn(cvAboutMeComponent, 'updateAfterLoaded');
 
-      cvAboutMeComponent.ngAfterContentInit();
+  //     cvAboutMeComponent.ngAfterContentInit();
 
-      expect(cvAboutMeComponent.updateAfterLoaded).toHaveBeenCalledTimes(1);
-    });
-  });
+  //     expect(cvAboutMeComponent.updateAfterLoaded).toHaveBeenCalledTimes(1);
+  //   });
+  // });
 });

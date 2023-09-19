@@ -22,7 +22,8 @@ describe('ImgLoadDirective - dom unit', () => {
       'imageLoadedOrError',
     ]);
     TestBed.configureTestingModule({
-      declarations: [ImgLoadDirective, TestComponent],
+      imports: [ImgLoadDirective],
+      declarations: [TestComponent],
       providers: [{ provide: ImageService, useValue: imageServiceSpy }],
     }).compileComponents();
   }));

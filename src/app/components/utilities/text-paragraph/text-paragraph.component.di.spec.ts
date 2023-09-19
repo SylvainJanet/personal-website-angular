@@ -6,13 +6,13 @@ import { TextParagraphComponent } from './text-paragraph.component';
 import { Paragraph } from '../../classes/paragraph/paragraph';
 import { TextSubParagraphComponent } from '../text-sub-paragraph/text-sub-paragraph.component';
 
-describe('TextParagraphComponent - dom unit', () => {
+describe('TextParagraphComponent - dom integration', () => {
   let fixture: ComponentFixture<TextParagraphComponent>;
   let componentInstance: TextParagraphComponent;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [TextParagraphComponent, TextSubParagraphComponent],
+      imports: [TextParagraphComponent, TextSubParagraphComponent],
     }).compileComponents();
   }));
 
@@ -40,15 +40,19 @@ describe('TextParagraphComponent - dom unit', () => {
       expect(debugEl.children[0].children.length).toBe(0);
     });
     it('with full subParagraph', () => {
+      const expectedAText = 'this is a test';
+      const expectedAHrefParam = 'this/is/a/test';
+      const expectedSpanText = 'this is also a test';
+      const expectedStrongEmTextParam = 'this is again a test';
       componentInstance.paragraph = new Paragraph([
         new SubParagraph(SubParagraphRoot.BR, ''),
         new SubParagraph(
           SubParagraphRoot.A_ASSET,
-          'this is a test',
-          'this/is/a/test'
+          expectedAText,
+          expectedAHrefParam
         ),
-        new SubParagraph(SubParagraphRoot.SPAN, 'this is a test'),
-        new SubParagraph(SubParagraphRoot.STRONG_EM, 'this is a test'),
+        new SubParagraph(SubParagraphRoot.SPAN, expectedSpanText),
+        new SubParagraph(SubParagraphRoot.STRONG_EM, expectedStrongEmTextParam),
       ]);
       fixture.detectChanges();
 
@@ -70,17 +74,40 @@ describe('TextParagraphComponent - dom unit', () => {
       expect(debugEl.children[0].children[3].nativeElement.tagName).toBe(
         'APP-TEXT-SUB-PARAGRAPH'
       );
+
+      // 1st el
+      let childDebugEl = debugEl.children[0].children[0];
+      expect(childDebugEl.children.length).toBe(1);
+      expect(childDebugEl.children[0].nativeElement.tagName).toBe('BR');
+
+      // 2nd el
+      childDebugEl = debugEl.children[0].children[1];
+      expect(childDebugEl.children.length).toBe(1);
+      expect(childDebugEl.children[0].nativeElement.tagName).toBe('A');
+      const actualAText = childDebugEl.children[0].nativeElement.innerHTML;
+
+      expect(actualAText).toBe(expectedAText);
+
+      const expectedAHref = 'assets/' + expectedAHrefParam;
+      const actualAHref = childDebugEl.children[0].properties['href'];
+
+      expect(actualAHref).toBe(expectedAHref);
+
+      // 3rd el
+      childDebugEl = debugEl.children[0].children[2];
+      expect(childDebugEl.children.length).toBe(1);
+      expect(childDebugEl.children[0].nativeElement.tagName).toBe('SPAN');
+      const actualSpanText = childDebugEl.children[0].nativeElement.innerHTML;
+
+      expect(actualSpanText).toBe(expectedSpanText);
+
+      // 4th el
+      childDebugEl = debugEl.children[0].children[3];
+      const expectedStrongEmText = '<em>' + expectedStrongEmTextParam + '</em>';
+      const actualStrongEmText =
+        childDebugEl.children[0].nativeElement.innerHTML;
+
+      expect(actualStrongEmText).toBe(expectedStrongEmText);
     });
-  });
-  it('should have proper cssClass', () => {
-    const expectedClass = 'this-is-a-test';
-    componentInstance.paragraph = new Paragraph([], expectedClass);
-    fixture.detectChanges();
-
-    const debugEl: DebugElement = fixture.debugElement;
-
-    const actual = debugEl.children[0].classes[expectedClass];
-
-    expect(actual).toBe(true);
   });
 });

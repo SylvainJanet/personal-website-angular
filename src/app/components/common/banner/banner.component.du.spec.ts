@@ -40,11 +40,7 @@ describe('BannerComponent - dom unit', () => {
     );
 
     TestBed.configureTestingModule({
-      declarations: [
-        BannerComponent,
-        TypedAnimatedTextComponent,
-        ImgLoadDirective,
-      ],
+      imports: [BannerComponent, TypedAnimatedTextComponent, ImgLoadDirective],
       providers: [
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: ImageService, useValue: imageServiceSpy },

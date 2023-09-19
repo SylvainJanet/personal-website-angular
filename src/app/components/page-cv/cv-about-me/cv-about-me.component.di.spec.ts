@@ -14,9 +14,9 @@ import { Paragraph } from '../../classes/paragraph/paragraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { SubParagraph } from '../../classes/subparagraph/subParagraph';
 import { LogService } from 'src/app/services/log/log.service';
-import { TextParagraphSetComponent } from '../../common/text-paragraph-set/text-paragraph-set.component';
-import { TextParagraphComponent } from '../../common/text-paragraph/text-paragraph.component';
-import { TextSubParagraphComponent } from '../../common/text-sub-paragraph/text-sub-paragraph.component';
+import { TextParagraphComponent } from '../../utilities/text-paragraph/text-paragraph.component';
+import { TextSubParagraphComponent } from '../../utilities/text-sub-paragraph/text-sub-paragraph.component';
+import { TextParagraphSetComponent } from '../../utilities/text-paragraph-set/text-paragraph-set.component';
 
 describe('CvAboutMeComponent - dom integration', () => {
   let fixture: ComponentFixture<CvAboutMeComponent>;
@@ -101,7 +101,7 @@ describe('CvAboutMeComponent - dom integration', () => {
   describe('in dev environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           CvAboutMeComponent,
           TextParagraphSetComponent,
           TextParagraphComponent,
@@ -131,7 +131,7 @@ describe('CvAboutMeComponent - dom integration', () => {
   describe('in staging environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           CvAboutMeComponent,
           TextParagraphSetComponent,
           TextParagraphComponent,
@@ -161,7 +161,7 @@ describe('CvAboutMeComponent - dom integration', () => {
   describe('in prod environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           CvAboutMeComponent,
           TextParagraphSetComponent,
           TextParagraphComponent,

@@ -45,7 +45,7 @@ describe('HeaderComponent - dom unit', () => {
     logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
 
     TestBed.configureTestingModule({
-      declarations: [
+      imports: [
         HeaderComponent,
         LinkBarOnHoverComponent,
         ButtonBarOnHoverComponent,

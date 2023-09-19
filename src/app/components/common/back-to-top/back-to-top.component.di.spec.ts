@@ -47,7 +47,7 @@ describe('BackToTopComponent - dom integration', () => {
   describe('in dev environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [BackToTopComponent, ImgLoadDirective],
+        imports: [BackToTopComponent, ImgLoadDirective],
         providers: [
           LanguageService,
           TextService,
@@ -70,7 +70,7 @@ describe('BackToTopComponent - dom integration', () => {
   describe('in staging environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [BackToTopComponent, ImgLoadDirective],
+        imports: [BackToTopComponent, ImgLoadDirective],
         providers: [
           LanguageService,
           TextService,
@@ -93,7 +93,7 @@ describe('BackToTopComponent - dom integration', () => {
   describe('in prod environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [BackToTopComponent, ImgLoadDirective],
+        imports: [BackToTopComponent, ImgLoadDirective],
         providers: [
           LanguageService,
           TextService,

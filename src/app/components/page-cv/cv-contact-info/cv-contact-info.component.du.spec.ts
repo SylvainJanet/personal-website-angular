@@ -41,7 +41,7 @@ describe('CvContactInfoComponent - dom unit', () => {
       phoneObs
     );
     TestBed.configureTestingModule({
-      declarations: [CvContactInfoComponent],
+      imports: [CvContactInfoComponent],
       providers: [
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: TextService, useValue: textServiceSpy },

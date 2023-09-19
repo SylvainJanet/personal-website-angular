@@ -1,5 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { map, of } from 'rxjs';
+import { ImgLoadDirective } from 'src/app/directives/imgLoad/img-load.directive';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
@@ -10,6 +12,8 @@ import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css'],
+  standalone: true,
+  imports: [CommonModule, ImgLoadDirective],
 })
 export class FooterComponent implements ComponentWithText, OnDestroy {
   /** Footer text just before the link. */

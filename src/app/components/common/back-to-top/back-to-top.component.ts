@@ -1,5 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { of } from 'rxjs';
+import { ImgLoadDirective } from 'src/app/directives/imgLoad/img-load.directive';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
@@ -11,6 +13,8 @@ import { scriptVar } from 'src/scripts/template/tools/setUp';
   selector: 'app-back-to-top',
   templateUrl: './back-to-top.component.html',
   styleUrls: ['./back-to-top.component.css'],
+  standalone: true,
+  imports: [ImgLoadDirective, CommonModule],
 })
 export class BackToTopComponent implements ComponentWithText, OnDestroy {
   /**

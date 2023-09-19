@@ -8,6 +8,8 @@ import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
 import { Languages } from 'src/app/enums/languages';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
+import { ButtonBarOnHoverComponent } from '../../utilities/button-bar-on-hover/button-bar-on-hover.component';
+import { LinkBarOnHoverComponent } from '../../utilities/link-bar-on-hover/link-bar-on-hover.component';
 
 /**
  * Header component, displaying either a link back home to the left and a button
@@ -19,6 +21,8 @@ import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
+  standalone: true,
+  imports: [ButtonBarOnHoverComponent, LinkBarOnHoverComponent],
 })
 export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
   /**

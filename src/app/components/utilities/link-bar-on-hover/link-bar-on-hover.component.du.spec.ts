@@ -18,7 +18,7 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
     logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
 
     TestBed.configureTestingModule({
-      declarations: [LinkBarOnHoverComponent],
+      imports: [LinkBarOnHoverComponent],
       providers: [
         DOMComputationService,
         { provide: LogService, useValue: logServiceGlobalSpy },
