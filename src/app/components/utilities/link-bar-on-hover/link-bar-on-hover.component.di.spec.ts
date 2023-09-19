@@ -20,7 +20,7 @@ describe('LinkBarOnHoverComponent - dom integration', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [LinkBarOnHoverComponent],
+      imports: [LinkBarOnHoverComponent],
       providers: [
         {
           provide: DOMComputationService,

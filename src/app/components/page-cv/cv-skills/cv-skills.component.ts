@@ -3,6 +3,8 @@ import { of } from 'rxjs';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
+import { CvSkillBarComponent } from '../cv-skill-bar/cv-skill-bar.component';
+import { CommonModule } from '@angular/common';
 
 /**
  * Component exposing the different skills to be displayed. See
@@ -12,6 +14,8 @@ import { LanguageService } from 'src/app/services/language/language.service';
   selector: 'app-cv-skills',
   templateUrl: './cv-skills.component.html',
   styleUrls: ['./cv-skills.component.css'],
+  standalone: true,
+  imports: [CommonModule, CvSkillBarComponent],
 })
 export class CvSkillsComponent implements ComponentWithText, OnDestroy {
   /** Text used for the skill subtitle. */

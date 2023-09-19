@@ -1,14 +1,32 @@
 import { PreloaderService } from './services/preloader/preloader.service';
-import { AfterViewInit, Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Preloaders } from './services/preloader/preloaders/preloaders';
+import { BackToTopComponent } from './components/common/back-to-top/back-to-top.component';
+import { CommonModule } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HeaderComponent } from './components/common/header/header.component';
+import { PageContentComponent } from './components/page-cv/page-content/page-content.component';
+import { FooterComponent } from './components/common/footer/footer.component';
+import { BannerComponent } from './components/common/banner/banner.component';
 
 /** Main app component. */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    BackToTopComponent,
+    MatProgressSpinnerModule,
+    HeaderComponent,
+    PageContentComponent,
+    FooterComponent,
+    BackToTopComponent,
+    BannerComponent,
+  ],
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit {
   /** Main loader, so that this {@link Preloaders} can be binded to in HTML */
   mainLoader = Preloaders.MAIN;
   /** Text loader, so that this {@link Preloaders} can be binded to in HTML */
@@ -27,7 +45,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   /** Used to set a css variable representing the scroll bar width. */
-  ngAfterViewInit() {
+  ngOnInit() {
     const scrollbarWidth = window.innerWidth - document.body.clientWidth + 'px';
     document.documentElement.style.setProperty(
       '--scroll-bar-width',

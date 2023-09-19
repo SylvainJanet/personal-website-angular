@@ -25,6 +25,7 @@ import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
  */
 @Directive({
   selector: 'img[appImgLoad]',
+  standalone: true,
 })
 export class ImgLoadDirective implements OnChanges {
   /** The preloaders used for the image having the directive. */

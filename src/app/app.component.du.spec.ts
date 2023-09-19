@@ -3,37 +3,41 @@ import { AppComponent } from './app.component';
 import { PreloaderService } from './services/preloader/preloader.service';
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { environment as developmentEnvironment } from 'src/environments/environment';
+import { environment as stagingEnvironment } from 'src/environments/environment.staging';
+import { environment as productionEnvironment } from 'src/environments/environment.prod';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
+import { HttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
 
 describe('AppComponent - dom unit', () => {
   let fixture: ComponentFixture<AppComponent>;
   let componentInstance: AppComponent;
   let preloaderServiceSpy: jasmine.SpyObj<PreloaderService>;
+  let httpClientSpy: jasmine.SpyObj<HttpClient>;
+  const devEnv = developmentEnvironment;
+  const stagingEnv = stagingEnvironment;
+  const prodEnv = productionEnvironment;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     preloaderServiceSpy = jasmine.createSpyObj('PreloaderService', [
       'isAnyLoading',
       'getProgressionPercent',
+      'toLoad',
     ]);
-
-    TestBed.configureTestingModule({
-      declarations: [AppComponent, MatProgressSpinner],
-      providers: [{ provide: PreloaderService, useValue: preloaderServiceSpy }],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AppComponent);
-    componentInstance = fixture.componentInstance;
-    fixture.detectChanges();
+    httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+    httpClientSpy.get.and.returnValue(of({}));
   });
 
-  it('should create', () => {
+  const shouldCreateExpectation = 'should create';
+  const shouldCreate = () => {
     expect(componentInstance).toBeDefined();
     expect(componentInstance).toBeTruthy();
-  });
+  };
 
-  it('should have proper dom structure', () => {
+  const shouldHaveProperDomStructureExpectation =
+    'should have proper dom structure';
+  const shouldHaveProperDomStructure = () => {
     const debugEl: DebugElement = fixture.debugElement;
 
     expect(debugEl.children.length).toBe(1);
@@ -80,9 +84,11 @@ describe('AppComponent - dom unit', () => {
     expect(mainDivEl.children[2].classes['hide']).toBeUndefined();
     expect(mainDivEl.children[3].classes['hide']).toBeUndefined();
     expect(mainDivEl.children[4].classes['hide']).toBeUndefined();
-  });
+  };
 
-  it('should use progression percent for progress spinner', () => {
+  const shouldUseProgressionPercentForProgressSpinnerExpectation =
+    'should use progression percent for progress spinner';
+  const shouldUseProgressionPercentForProgressSpinner = () => {
     const expectedPercent = 48;
     const debugEl: DebugElement = fixture.debugElement;
 
@@ -99,5 +105,78 @@ describe('AppComponent - dom unit', () => {
       mainDivEl.children[0].componentInstance;
     const actual = progressSpinner.value;
     expect(actual).toBe(expectedPercent);
+  };
+
+  describe('in dev environment', () => {
+    beforeEach(waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MatProgressSpinner],
+        providers: [
+          { provide: HttpClient, useValue: httpClientSpy },
+          { provide: PreloaderService, useValue: preloaderServiceSpy },
+          { provide: ENV, useValue: devEnv },
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    }));
+    beforeEach(() => {
+      fixture = TestBed.createComponent(AppComponent);
+      componentInstance = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+    it(shouldCreateExpectation, shouldCreate);
+    it(shouldHaveProperDomStructureExpectation, shouldHaveProperDomStructure);
+    it(
+      shouldUseProgressionPercentForProgressSpinnerExpectation,
+      shouldUseProgressionPercentForProgressSpinner
+    );
+  });
+  describe('in staging environment', () => {
+    beforeEach(waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MatProgressSpinner],
+        providers: [
+          { provide: HttpClient, useValue: httpClientSpy },
+          { provide: PreloaderService, useValue: preloaderServiceSpy },
+          { provide: ENV, useValue: stagingEnv },
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    }));
+    beforeEach(() => {
+      fixture = TestBed.createComponent(AppComponent);
+      componentInstance = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+    it(shouldCreateExpectation, shouldCreate);
+    it(shouldHaveProperDomStructureExpectation, shouldHaveProperDomStructure);
+    it(
+      shouldUseProgressionPercentForProgressSpinnerExpectation,
+      shouldUseProgressionPercentForProgressSpinner
+    );
+  });
+  describe('in prod environment', () => {
+    beforeEach(waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MatProgressSpinner],
+        providers: [
+          { provide: HttpClient, useValue: httpClientSpy },
+          { provide: PreloaderService, useValue: preloaderServiceSpy },
+          { provide: ENV, useValue: prodEnv },
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    }));
+    beforeEach(() => {
+      fixture = TestBed.createComponent(AppComponent);
+      componentInstance = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+    it(shouldCreateExpectation, shouldCreate);
+    it(shouldHaveProperDomStructureExpectation, shouldHaveProperDomStructure);
+    it(
+      shouldUseProgressionPercentForProgressSpinnerExpectation,
+      shouldUseProgressionPercentForProgressSpinner
+    );
   });
 });

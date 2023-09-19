@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, Input } from '@angular/core';
 import { of } from 'rxjs';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
@@ -12,6 +13,8 @@ import { debounce } from 'src/scripts/tools/debounce/debounce';
   selector: 'app-cv-skill-bar',
   templateUrl: './cv-skill-bar.component.html',
   styleUrls: ['./cv-skill-bar.component.css'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class CvSkillBarComponent {
   /**

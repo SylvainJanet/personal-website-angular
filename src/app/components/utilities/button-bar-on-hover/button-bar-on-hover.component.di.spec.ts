@@ -22,7 +22,7 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [ButtonBarOnHoverComponent],
+      imports: [ButtonBarOnHoverComponent],
       providers: [
         {
           provide: DOMComputationService,

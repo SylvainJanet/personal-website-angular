@@ -22,6 +22,7 @@ import { Observable, of, zip } from 'rxjs';
   selector: 'app-typed-animated-text',
   templateUrl: './typed-animated-text.component.html',
   styleUrls: ['./typed-animated-text.component.css'],
+  standalone: true,
 })
 export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
   /** The text element */

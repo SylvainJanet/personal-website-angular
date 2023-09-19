@@ -35,7 +35,7 @@ describe('FooterComponent - dom unit', () => {
     );
 
     TestBed.configureTestingModule({
-      declarations: [FooterComponent, ImgLoadDirective],
+      imports: [FooterComponent, ImgLoadDirective],
       providers: [
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: ImageService, useValue: imageServiceSpy },

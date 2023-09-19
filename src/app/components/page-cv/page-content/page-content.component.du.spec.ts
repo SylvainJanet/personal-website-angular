@@ -16,8 +16,8 @@ import { CvContactInfoComponent } from '../cv-contact-info/cv-contact-info.compo
 import { CvSkillsComponent } from '../cv-skills/cv-skills.component';
 import { CvSkillBarComponent } from '../cv-skill-bar/cv-skill-bar.component';
 import { CvAboutMeComponent } from '../cv-about-me/cv-about-me.component';
-import { TextParagraphSetComponent } from '../../common/text-paragraph-set/text-paragraph-set.component';
 import { ImgLoadDirective } from 'src/app/directives/imgLoad/img-load.directive';
+import { TextParagraphSetComponent } from '../../utilities/text-paragraph-set/text-paragraph-set.component';
 
 describe('PageContentComponent - dom unit', () => {
   let fixture: ComponentFixture<PageContentComponent>;
@@ -121,7 +121,7 @@ describe('PageContentComponent - dom unit', () => {
   describe('in dev environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           PageContentComponent,
           CvImgComponent,
           CvContactInfoComponent,
@@ -151,7 +151,7 @@ describe('PageContentComponent - dom unit', () => {
   describe('in staging environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           PageContentComponent,
           CvImgComponent,
           CvContactInfoComponent,
@@ -181,7 +181,7 @@ describe('PageContentComponent - dom unit', () => {
   describe('in prod environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           PageContentComponent,
           CvImgComponent,
           CvContactInfoComponent,

@@ -9,9 +9,9 @@ import { LogService } from 'src/app/services/log/log.service';
 import { Paragraph } from '../../classes/paragraph/paragraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { SubParagraph } from '../../classes/subparagraph/subParagraph';
-import { TextParagraphSetComponent } from '../../common/text-paragraph-set/text-paragraph-set.component';
-import { TextParagraphComponent } from '../../common/text-paragraph/text-paragraph.component';
-import { TextSubParagraphComponent } from '../../common/text-sub-paragraph/text-sub-paragraph.component';
+import { TextParagraphComponent } from '../../utilities/text-paragraph/text-paragraph.component';
+import { TextSubParagraphComponent } from '../../utilities/text-sub-paragraph/text-sub-paragraph.component';
+import { TextParagraphSetComponent } from '../../utilities/text-paragraph-set/text-paragraph-set.component';
 
 describe('CvAboutMeComponent - dom unit', () => {
   let fixture: ComponentFixture<CvAboutMeComponent>;
@@ -74,7 +74,7 @@ describe('CvAboutMeComponent - dom unit', () => {
     logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
     logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
     TestBed.configureTestingModule({
-      declarations: [
+      imports: [
         CvAboutMeComponent,
         TextParagraphSetComponent,
         TextParagraphComponent,

@@ -12,7 +12,7 @@ import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { DebugElement } from '@angular/core';
 import { FooterComponent } from './footer.component';
 
-describe('BannerComponent - dom integration', () => {
+describe('FooterComponent - dom integration', () => {
   let fixture: ComponentFixture<FooterComponent>;
   let componentInstance: FooterComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
@@ -73,7 +73,7 @@ describe('BannerComponent - dom integration', () => {
   describe('in dev environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           FooterComponent,
           TypedAnimatedTextComponent,
           ImgLoadDirective,
@@ -100,7 +100,7 @@ describe('BannerComponent - dom integration', () => {
   describe('in staging environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           FooterComponent,
           TypedAnimatedTextComponent,
           ImgLoadDirective,
@@ -127,7 +127,7 @@ describe('BannerComponent - dom integration', () => {
   describe('in prod environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           FooterComponent,
           TypedAnimatedTextComponent,
           ImgLoadDirective,

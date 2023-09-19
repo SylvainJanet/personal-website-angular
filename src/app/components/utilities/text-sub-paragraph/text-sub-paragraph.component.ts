@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { SubParagraph } from '../../classes/subparagraph/subParagraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
+import { CommonModule } from '@angular/common';
 
 /**
  * Component used to display a {@link SubParagraph} entity.
@@ -15,6 +16,8 @@ import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
   selector: 'app-text-sub-paragraph',
   templateUrl: './text-sub-paragraph.component.html',
   styleUrls: [],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class TextSubParagraphComponent {
   /** The {@link SubParagraph} entity to display. */

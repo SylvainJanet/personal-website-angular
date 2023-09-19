@@ -20,7 +20,7 @@ describe('CvSkillBarComponent - dom unit', () => {
         ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
     ).and.returnValue(new BehaviorSubject<boolean | null>(null));
     TestBed.configureTestingModule({
-      declarations: [CvSkillBarComponent],
+      imports: [CvSkillBarComponent],
       providers: [{ provide: PreloaderService, useValue: preloaderServiceSpy }],
     }).compileComponents();
   }));

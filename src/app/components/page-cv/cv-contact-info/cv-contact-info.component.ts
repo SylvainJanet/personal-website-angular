@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { of } from 'rxjs';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
@@ -12,6 +13,8 @@ import { LanguageService } from 'src/app/services/language/language.service';
   selector: 'app-cv-contact-info',
   templateUrl: './cv-contact-info.component.html',
   styleUrls: ['./cv-contact-info.component.css'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class CvContactInfoComponent implements ComponentWithText, OnDestroy {
   /** Text containing the name label. */

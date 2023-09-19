@@ -92,7 +92,7 @@ describe('BannerComponent - dom integration', () => {
   describe('in dev environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           BannerComponent,
           TypedAnimatedTextComponent,
           ImgLoadDirective,
@@ -119,7 +119,7 @@ describe('BannerComponent - dom integration', () => {
   describe('in staging environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           BannerComponent,
           TypedAnimatedTextComponent,
           ImgLoadDirective,
@@ -146,7 +146,7 @@ describe('BannerComponent - dom integration', () => {
   describe('in prod environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
+        imports: [
           BannerComponent,
           TypedAnimatedTextComponent,
           ImgLoadDirective,

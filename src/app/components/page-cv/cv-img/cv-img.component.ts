@@ -1,5 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { of } from 'rxjs';
+import { ImgLoadDirective } from 'src/app/directives/imgLoad/img-load.directive';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LanguageService } from 'src/app/services/language/language.service';
@@ -10,6 +12,8 @@ import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
   selector: 'app-cv-img',
   templateUrl: './cv-img.component.html',
   styleUrls: ['./cv-img.component.css'],
+  standalone: true,
+  imports: [CommonModule, ImgLoadDirective],
 })
 export class CvImgComponent implements ComponentWithText, OnDestroy {
   /** {@link Preloaders} used for the cv profile picture. */

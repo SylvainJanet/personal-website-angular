@@ -136,7 +136,7 @@ describe('CvSkillsComponent - dom integration', () => {
   describe('in dev environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [CvSkillsComponent, CvSkillBarComponent],
+        imports: [CvSkillsComponent, CvSkillBarComponent],
         providers: [
           LanguageService,
           TextService,
@@ -161,7 +161,7 @@ describe('CvSkillsComponent - dom integration', () => {
   describe('in staging environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [CvSkillsComponent, CvSkillBarComponent],
+        imports: [CvSkillsComponent, CvSkillBarComponent],
         providers: [
           LanguageService,
           TextService,
@@ -186,7 +186,7 @@ describe('CvSkillsComponent - dom integration', () => {
   describe('in prod environment', () => {
     beforeEach(waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [CvSkillsComponent, CvSkillBarComponent],
+        imports: [CvSkillsComponent, CvSkillBarComponent],
         providers: [
           LanguageService,
           TextService,

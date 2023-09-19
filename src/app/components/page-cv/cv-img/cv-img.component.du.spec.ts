@@ -29,7 +29,7 @@ describe('CvImgComponent - dom unit', () => {
     const altTextObs = of(expectedAltText);
     textServiceSpy.get.and.returnValues(altTextObs);
     TestBed.configureTestingModule({
-      declarations: [CvImgComponent, ImgLoadDirective],
+      imports: [CvImgComponent, ImgLoadDirective],
       providers: [
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: TextService, useValue: textServiceSpy },

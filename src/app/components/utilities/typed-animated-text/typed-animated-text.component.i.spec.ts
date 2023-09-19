@@ -12,7 +12,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TypedAnimatedTextComponent, Renderer2],
+      providers: [Renderer2, TypedAnimatedTextComponent],
     });
     typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
   });

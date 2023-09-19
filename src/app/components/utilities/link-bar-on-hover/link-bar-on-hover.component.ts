@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
@@ -12,6 +13,8 @@ import { LogService } from 'src/app/services/log/log.service';
   selector: 'app-link-bar-on-hover',
   templateUrl: './link-bar-on-hover.component.html',
   styleUrls: ['./link-bar-on-hover.component.css'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class LinkBarOnHoverComponent {
   /**
