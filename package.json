@@ -1,6 +1,6 @@
 {
   "name": "personal-website-angular",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration=development",
@@ -13,9 +13,9 @@
     "compodoc": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all']",
     "compodoc-coverage": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all'] --coverageTest 100 --coverageMinimumPerFile 100 --coverageTestShowOnlyFailed",
     "compodoc-serve": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all'] --port 8081 -s -o",
-    "version-patch":"npm version patch",
-    "version-minor":"npm version minor",
-    "version-major":"npm version major"
+    "version-patch": "npm version patch",
+    "version-minor": "npm version minor",
+    "version-major": "npm version major"
   },
   "lint-staged": {
     "*.ts": [
