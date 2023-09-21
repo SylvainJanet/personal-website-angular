@@ -1,6 +1,6 @@
 {
   "name": "personal-website-angular",
-  "version": "0.0.0",
+  "version": "0.0.3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration=development",
@@ -12,7 +12,10 @@
     "lint": "ng lint --max-warnings 0",
     "compodoc": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all']",
     "compodoc-coverage": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all'] --coverageTest 100 --coverageMinimumPerFile 100 --coverageTestShowOnlyFailed",
-    "compodoc-serve": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all'] --port 8081 -s -o"
+    "compodoc-serve": "npx compodoc -p tsconfig.doc.json --theme=readthedocs --name=Documentation --hideGenerator --toggleMenuItems ['all'] --port 8081 -s -o",
+    "version-patch": "npm version patch -m \"Patch to %%s\"",
+    "version-minor": "npm version minor -m \"Minor to %%s\"",
+    "version-major": "npm version major -m \"Major to %%s\""
   },
   "lint-staged": {
     "*.ts": [
@@ -32,6 +35,7 @@
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
     "@compodoc/compodoc": "^1.1.21",
+    "@types/node": "^20.6.3",
     "edge-launcher": "^1.2.2",
     "hammerjs": "^2.0.8",
     "lint-staged": "^13.2.2",

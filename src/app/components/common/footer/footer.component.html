@@ -16,12 +16,13 @@
   [style.background-image]="'url(' + footerSrc + ')'"
   [style.background-position]="'center'"
 >
-  <div class="overlay-mf">
+  <div>
     <footer>
       <p>
         <span>{{ footerText | async }}</span
         ><a [href]="footerHref | async">{{ footerLink | async }}</a>
       </p>
+      <p class="footer-version">v{{ environment.appVersion }}</p>
     </footer>
   </div>
 </section>
