@@ -1,7 +1,7 @@
 import { LogLevel } from 'src/app/services/log/logLevel/logLevel';
 import { IEnvironment } from './interface/ienvironment';
 
-/** Production environment. */
+/** Development environment. */
 export const environment: IEnvironment = {
   production: false,
   logLevel: LogLevel.All,
@@ -9,4 +9,6 @@ export const environment: IEnvironment = {
   api: 'http://localhost:8080/',
   logWithDate: false,
   baseHref: '',
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  appVersion: require('../../package.json').version + '-dev',
 };

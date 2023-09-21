@@ -3,6 +3,8 @@
 */
 footer {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   margin-top: var(--footer-margin-top);
   padding-top: var(--footer-padding-top);
@@ -11,4 +13,8 @@ footer {
 
 footer a {
   text-decoration: none;
+}
+
+.footer-version {
+  font-size: 0.6rem;
 }

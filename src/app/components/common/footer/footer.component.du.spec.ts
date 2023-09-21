@@ -6,6 +6,14 @@ import { ImgLoadDirective } from 'src/app/directives/imgLoad/img-load.directive'
 import { ImageService } from 'src/app/services/image/image.service';
 import { DebugElement } from '@angular/core';
 import { FooterComponent } from './footer.component';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
+import { environment as developmentEnvironment } from 'src/environments/environment';
+import { environment as stagingEnvironment } from 'src/environments/environment.staging';
+import { environment as productionEnvironment } from 'src/environments/environment.prod';
+
+const devEnv = developmentEnvironment;
+const stagingEnv = stagingEnvironment;
+const prodEnv = productionEnvironment;
 
 describe('FooterComponent - dom unit', () => {
   let fixture: ComponentFixture<FooterComponent>;
@@ -33,29 +41,17 @@ describe('FooterComponent - dom unit', () => {
       of(retrievedFooterText),
       of(expectedFooterLink)
     );
-
-    TestBed.configureTestingModule({
-      imports: [FooterComponent, ImgLoadDirective],
-      providers: [
-        { provide: LanguageService, useValue: languageServiceSpy },
-        { provide: ImageService, useValue: imageServiceSpy },
-        { provide: TextService, useValue: textServiceSpy },
-      ],
-    }).compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(FooterComponent);
-    componentInstance = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
+  const shouldCreateExpectation = 'should create';
+  const shouldCreate = () => {
     expect(componentInstance).toBeDefined();
     expect(componentInstance).toBeTruthy();
-  });
+  };
 
-  it('should have proper dom structure', () => {
+  const shouldHaveProperDomStructureExpectation =
+    'should have proper dom structure';
+  const shouldHaveProperDomStructure = () => {
     const debugEl: DebugElement = fixture.debugElement;
 
     expect(debugEl.children.length).toBe(2);
@@ -77,16 +73,21 @@ describe('FooterComponent - dom unit', () => {
     expect(sectionDivEl.children[0].nativeElement.tagName).toBe('FOOTER');
 
     const sectionFooterEl = sectionDivEl.children[0];
-    expect(sectionFooterEl.children.length).toBe(1);
+    expect(sectionFooterEl.children.length).toBe(2);
     expect(sectionFooterEl.children[0].nativeElement.tagName).toBe('P');
+    expect(sectionFooterEl.children[1].nativeElement.tagName).toBe('P');
 
     const sectionPEl = sectionFooterEl.children[0];
     expect(sectionPEl.children.length).toBe(2);
     expect(sectionPEl.children[0].nativeElement.tagName).toBe('SPAN');
     expect(sectionPEl.children[1].nativeElement.tagName).toBe('A');
-  });
 
-  it('should set footer text', () => {
+    const sectionP2El = sectionFooterEl.children[1];
+    expect(sectionP2El.children.length).toBe(0);
+  };
+
+  const shouldSetFooterTextExpectation = 'should set footer text';
+  const shouldSetFooterText = () => {
     const debugEl: DebugElement = fixture.debugElement;
 
     // section
@@ -98,9 +99,10 @@ describe('FooterComponent - dom unit', () => {
 
     const actual = spanEl.nativeElement.innerHTML;
     expect(actual).toBe(expectedFooterText);
-  });
+  };
 
-  it('should set footer link', () => {
+  const shouldSetFooterLinkExpectation = 'should set footer link';
+  const shouldSetFooterLink = () => {
     const debugEl: DebugElement = fixture.debugElement;
 
     // section
@@ -114,17 +116,20 @@ describe('FooterComponent - dom unit', () => {
     expect(actualText).toBe(expectedFooterLink);
     const actualHref = aEl.attributes['href'];
     expect(actualHref).toBe(expectedFooterHref);
-  });
+  };
 
-  it('should not hide img at first', () => {
+  const shouldNotHidImgAtFirstExpectation = 'should not hide img at first';
+  const shouldNotHidImgAtFirst = () => {
     const debugEl: DebugElement = fixture.debugElement;
     const firstDivEl: DebugElement = debugEl.children[0];
 
     const actual = firstDivEl.styles['display'];
     expect(actual).toBe('block');
-  });
+  };
 
-  it('should call onDoubleImgLoad when img is loaded', () => {
+  const shouldCallOnDoubleImgLoadWhenImgLoadedExpectation =
+    'should call onDoubleImgLoad when img is loaded';
+  const shouldCallOnDoubleImgLoadWhenImgLoaded = () => {
     const debugEl: DebugElement = fixture.debugElement;
     const firstDivEl: DebugElement = debugEl.children[0];
     const imgEl = firstDivEl.children[0];
@@ -133,9 +138,10 @@ describe('FooterComponent - dom unit', () => {
     imgEl.triggerEventHandler('load');
 
     expect(componentInstance.onDoubleImgLoad).toHaveBeenCalled();
-  });
+  };
 
-  it('should hide img once loaded', () => {
+  const shouldHideImgOnceLoadedExpectation = 'should hide img once loaded';
+  const shouldHideImgOnceLoaded = () => {
     const debugEl: DebugElement = fixture.debugElement;
     const firstDivEl: DebugElement = debugEl.children[0];
 
@@ -145,5 +151,84 @@ describe('FooterComponent - dom unit', () => {
 
     const actual = firstDivEl.styles['display'];
     expect(actual).toBe('none');
+  };
+
+  describe('in dev environment', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [FooterComponent, ImgLoadDirective],
+        providers: [
+          { provide: LanguageService, useValue: languageServiceSpy },
+          { provide: ImageService, useValue: imageServiceSpy },
+          { provide: TextService, useValue: textServiceSpy },
+          { provide: ENV, useValue: devEnv },
+        ],
+      }).compileComponents();
+      fixture = TestBed.createComponent(FooterComponent);
+      componentInstance = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+    it(shouldCreateExpectation, shouldCreate);
+    it(shouldHaveProperDomStructureExpectation, shouldHaveProperDomStructure);
+    it(shouldSetFooterTextExpectation, shouldSetFooterText);
+    it(shouldSetFooterLinkExpectation, shouldSetFooterLink);
+    it(shouldNotHidImgAtFirstExpectation, shouldNotHidImgAtFirst);
+    it(
+      shouldCallOnDoubleImgLoadWhenImgLoadedExpectation,
+      shouldCallOnDoubleImgLoadWhenImgLoaded
+    );
+    it(shouldHideImgOnceLoadedExpectation, shouldHideImgOnceLoaded);
+  });
+  describe('in staging environment', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [FooterComponent, ImgLoadDirective],
+        providers: [
+          { provide: LanguageService, useValue: languageServiceSpy },
+          { provide: ImageService, useValue: imageServiceSpy },
+          { provide: TextService, useValue: textServiceSpy },
+          { provide: ENV, useValue: stagingEnv },
+        ],
+      }).compileComponents();
+      fixture = TestBed.createComponent(FooterComponent);
+      componentInstance = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+    it(shouldCreateExpectation, shouldCreate);
+    it(shouldHaveProperDomStructureExpectation, shouldHaveProperDomStructure);
+    it(shouldSetFooterTextExpectation, shouldSetFooterText);
+    it(shouldSetFooterLinkExpectation, shouldSetFooterLink);
+    it(shouldNotHidImgAtFirstExpectation, shouldNotHidImgAtFirst);
+    it(
+      shouldCallOnDoubleImgLoadWhenImgLoadedExpectation,
+      shouldCallOnDoubleImgLoadWhenImgLoaded
+    );
+    it(shouldHideImgOnceLoadedExpectation, shouldHideImgOnceLoaded);
+  });
+  describe('in prod environment', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [FooterComponent, ImgLoadDirective],
+        providers: [
+          { provide: LanguageService, useValue: languageServiceSpy },
+          { provide: ImageService, useValue: imageServiceSpy },
+          { provide: TextService, useValue: textServiceSpy },
+          { provide: ENV, useValue: prodEnv },
+        ],
+      }).compileComponents();
+      fixture = TestBed.createComponent(FooterComponent);
+      componentInstance = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+    it(shouldCreateExpectation, shouldCreate);
+    it(shouldHaveProperDomStructureExpectation, shouldHaveProperDomStructure);
+    it(shouldSetFooterTextExpectation, shouldSetFooterText);
+    it(shouldSetFooterLinkExpectation, shouldSetFooterLink);
+    it(shouldNotHidImgAtFirstExpectation, shouldNotHidImgAtFirst);
+    it(
+      shouldCallOnDoubleImgLoadWhenImgLoadedExpectation,
+      shouldCallOnDoubleImgLoadWhenImgLoaded
+    );
+    it(shouldHideImgOnceLoadedExpectation, shouldHideImgOnceLoaded);
   });
 });

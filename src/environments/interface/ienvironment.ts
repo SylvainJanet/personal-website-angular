@@ -17,4 +17,6 @@ export interface IEnvironment {
   baseHref: string;
   /** If true, logs will contain the date of log. */
   logWithDate: boolean;
+  /** Property holding the application version. */
+  appVersion: string;
 }
