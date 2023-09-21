@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Inject } from '@angular/core';
 import { map, of } from 'rxjs';
 import { ImgLoadDirective } from 'src/app/directives/imgLoad/img-load.directive';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
@@ -8,7 +8,6 @@ import { LanguageService } from 'src/app/services/language/language.service';
 import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { IEnvironment } from 'src/environments/interface/ienvironment';
-import { Inject } from '@angular/core';
 
 /** Footer component, displaying a banner and a link to the website. */
 @Component({
