@@ -32,20 +32,32 @@ describe('CvSkillBarComponent - unit', () => {
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(cvSkillBarComponent).toBeTruthy();
+      expect(cvSkillBarComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(cvSkillBarComponent).toBeTruthy();
+      expect(cvSkillBarComponent)
+        .withContext('component should create')
+        .toBeTruthy();
 
       cvSkillBarComponent.skillName.subscribe((s) => {
-        expect(s).toBe('SKILL');
+        expect(s).withContext('skill name should be set').toBe('SKILL');
       });
 
-      expect(cvSkillBarComponent.percent).toBe(50);
-      expect(cvSkillBarComponent.width).toBe('0');
-      expect(cvSkillBarComponent.posElementMin).toBe(0);
-      expect(cvSkillBarComponent.posElementMax).toBe(0);
+      expect(cvSkillBarComponent.percent)
+        .withContext('percent should be set')
+        .toBe(50);
+      expect(cvSkillBarComponent.width)
+        .withContext('width should be set')
+        .toBe('0');
+      expect(cvSkillBarComponent.posElementMin)
+        .withContext('posElementMin should be set')
+        .toBe(0);
+      expect(cvSkillBarComponent.posElementMax)
+        .withContext('posElementMax should be set')
+        .toBe(0);
     });
   });
 
@@ -55,7 +67,9 @@ describe('CvSkillBarComponent - unit', () => {
 
       cvSkillBarComponent.onResize();
 
-      expect(cvSkillBarComponent.updateAfterLoaded).toHaveBeenCalledTimes(1);
+      expect(cvSkillBarComponent.updateAfterLoaded)
+        .withContext('updateAfterLoaded should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -67,7 +81,9 @@ describe('CvSkillBarComponent - unit', () => {
       scrollY = 5;
 
       cvSkillBarComponent.updateWidth();
-      expect(cvSkillBarComponent.width).toBe('0');
+      expect(cvSkillBarComponent.width)
+        .withContext('width should be set')
+        .toBe('0');
     });
     it('should set to 0 if scrollY is more than max', () => {
       cvSkillBarComponent.posElementMin = 10;
@@ -76,7 +92,9 @@ describe('CvSkillBarComponent - unit', () => {
       scrollY = 25;
 
       cvSkillBarComponent.updateWidth();
-      expect(cvSkillBarComponent.width).toBe('0');
+      expect(cvSkillBarComponent.width)
+        .withContext('width should be set')
+        .toBe('0');
     });
     it('should set to percent % if scrollY is between min and max', () => {
       cvSkillBarComponent.posElementMin = 10;
@@ -85,7 +103,9 @@ describe('CvSkillBarComponent - unit', () => {
       scrollY = 15;
 
       cvSkillBarComponent.updateWidth();
-      expect(cvSkillBarComponent.width).toBe(cvSkillBarComponent.percent + '%');
+      expect(cvSkillBarComponent.width)
+        .withContext('width should be set')
+        .toBe(cvSkillBarComponent.percent + '%');
     });
   });
 
@@ -101,9 +121,9 @@ describe('CvSkillBarComponent - unit', () => {
 
       cvSkillBarComponent.updateAfterLoaded();
 
-      expect(
-        preloaderServiceSpy.statusAnyLoading.subscribe
-      ).toHaveBeenCalledTimes(1);
+      expect(preloaderServiceSpy.statusAnyLoading.subscribe)
+        .withContext('subscribe should be have been called')
+        .toHaveBeenCalledTimes(1);
     });
     it('should call getElPos and UpdateWidth when all assets are loaded', () => {
       spyOn(cvSkillBarComponent, 'getElPos');
@@ -117,20 +137,36 @@ describe('CvSkillBarComponent - unit', () => {
 
       cvSkillBarComponent.updateAfterLoaded();
 
-      expect(cvSkillBarComponent.getElPos).not.toHaveBeenCalled();
-      expect(cvSkillBarComponent.updateWidth).not.toHaveBeenCalled();
+      expect(cvSkillBarComponent.getElPos)
+        .withContext('getElPos should not have been called - 1')
+        .not.toHaveBeenCalled();
+      expect(cvSkillBarComponent.updateWidth)
+        .withContext('updateWidth should not have been called - 1')
+        .not.toHaveBeenCalled();
 
       bs.next(true);
-      expect(cvSkillBarComponent.getElPos).not.toHaveBeenCalled();
-      expect(cvSkillBarComponent.updateWidth).not.toHaveBeenCalled();
+      expect(cvSkillBarComponent.getElPos)
+        .withContext('getElPos should not have been called - 2')
+        .not.toHaveBeenCalled();
+      expect(cvSkillBarComponent.updateWidth)
+        .withContext('updateWidth should not have been called - 2')
+        .not.toHaveBeenCalled();
 
       bs.next(false);
-      expect(cvSkillBarComponent.getElPos).toHaveBeenCalledTimes(1);
-      expect(cvSkillBarComponent.updateWidth).toHaveBeenCalledTimes(1);
+      expect(cvSkillBarComponent.getElPos)
+        .withContext('getElPos should have been called once')
+        .toHaveBeenCalledTimes(1);
+      expect(cvSkillBarComponent.updateWidth)
+        .withContext('updateWidth should have been called once')
+        .toHaveBeenCalledTimes(1);
 
       bs.next(false);
-      expect(cvSkillBarComponent.getElPos).toHaveBeenCalledTimes(2);
-      expect(cvSkillBarComponent.updateWidth).toHaveBeenCalledTimes(2);
+      expect(cvSkillBarComponent.getElPos)
+        .withContext('getElPos should have been called twice')
+        .toHaveBeenCalledTimes(2);
+      expect(cvSkillBarComponent.updateWidth)
+        .withContext('updateWidth should have been called twice')
+        .toHaveBeenCalledTimes(2);
     });
   });
 
@@ -140,7 +176,9 @@ describe('CvSkillBarComponent - unit', () => {
 
       cvSkillBarComponent.onScroll();
 
-      expect(cvSkillBarComponent.updateAfterLoaded).toHaveBeenCalledTimes(1);
+      expect(cvSkillBarComponent.updateAfterLoaded)
+        .withContext('updateAfterLoaded should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 });

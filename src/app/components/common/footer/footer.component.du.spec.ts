@@ -45,8 +45,9 @@ describe('FooterComponent - dom unit', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveProperDomStructureExpectation =
@@ -54,36 +55,66 @@ describe('FooterComponent - dom unit', () => {
   const shouldHaveProperDomStructure = () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(2);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('DIV');
-    expect(debugEl.children[1].nativeElement.tagName).toBe('SECTION');
+    expect(debugEl.children.length).withContext('2 children at root').toBe(2);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is DIV')
+      .toBe('DIV');
+    expect(debugEl.children[1].nativeElement.tagName)
+      .withContext('child 2 at root is SECTION')
+      .toBe('SECTION');
 
     // img
     const imgDivEl = debugEl.children[0];
-    expect(imgDivEl.children.length).toBe(1);
-    expect(imgDivEl.children[0].nativeElement.tagName).toBe('IMG');
+    expect(imgDivEl.children.length)
+      .withContext('child 1 at root should have 1 child')
+      .toBe(1);
+    expect(imgDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of child 1 at root should be IMG')
+      .toBe('IMG');
 
     // section
     const sectionEl = debugEl.children[1];
-    expect(sectionEl.children.length).toBe(1);
-    expect(sectionEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(sectionEl.children.length)
+      .withContext('SECTION at root should have 1 child')
+      .toBe(1);
+    expect(sectionEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of SECTION at root should be DIV')
+      .toBe('DIV');
 
     const sectionDivEl = sectionEl.children[0];
-    expect(sectionDivEl.children.length).toBe(1);
-    expect(sectionDivEl.children[0].nativeElement.tagName).toBe('FOOTER');
+    expect(sectionDivEl.children.length)
+      .withContext('SECTION-DIV should have 1 child')
+      .toBe(1);
+    expect(sectionDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of SECTION-DIV should be FOOTER')
+      .toBe('FOOTER');
 
     const sectionFooterEl = sectionDivEl.children[0];
-    expect(sectionFooterEl.children.length).toBe(2);
-    expect(sectionFooterEl.children[0].nativeElement.tagName).toBe('P');
-    expect(sectionFooterEl.children[1].nativeElement.tagName).toBe('P');
+    expect(sectionFooterEl.children.length)
+      .withContext('footer should have 2 children')
+      .toBe(2);
+    expect(sectionFooterEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of footer should be P')
+      .toBe('P');
+    expect(sectionFooterEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of footer should be P')
+      .toBe('P');
 
     const sectionPEl = sectionFooterEl.children[0];
-    expect(sectionPEl.children.length).toBe(2);
-    expect(sectionPEl.children[0].nativeElement.tagName).toBe('SPAN');
-    expect(sectionPEl.children[1].nativeElement.tagName).toBe('A');
+    expect(sectionPEl.children.length)
+      .withContext('child 1 of footer should have 2 children')
+      .toBe(2);
+    expect(sectionPEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of child 1 of footer should be SPAN')
+      .toBe('SPAN');
+    expect(sectionPEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of child 1 of footer should be A')
+      .toBe('A');
 
     const sectionP2El = sectionFooterEl.children[1];
-    expect(sectionP2El.children.length).toBe(0);
+    expect(sectionP2El.children.length)
+      .withContext('child 2 of footer should have no children')
+      .toBe(0);
   };
 
   const shouldSetFooterTextExpectation = 'should set footer text';
@@ -98,7 +129,9 @@ describe('FooterComponent - dom unit', () => {
     const spanEl = sectionPEl.children[0];
 
     const actual = spanEl.nativeElement.innerHTML;
-    expect(actual).toBe(expectedFooterText);
+    expect(actual)
+      .withContext('footer text should be set')
+      .toBe(expectedFooterText);
   };
 
   const shouldSetFooterLinkExpectation = 'should set footer link';
@@ -113,9 +146,13 @@ describe('FooterComponent - dom unit', () => {
     const aEl = sectionPEl.children[1];
 
     const actualText = aEl.nativeElement.innerHTML;
-    expect(actualText).toBe(expectedFooterLink);
+    expect(actualText)
+      .withContext('footer link should be set')
+      .toBe(expectedFooterLink);
     const actualHref = aEl.attributes['href'];
-    expect(actualHref).toBe(expectedFooterHref);
+    expect(actualHref)
+      .withContext('footer href should be set')
+      .toBe(expectedFooterHref);
   };
 
   const shouldNotHidImgAtFirstExpectation = 'should not hide img at first';
@@ -124,7 +161,7 @@ describe('FooterComponent - dom unit', () => {
     const firstDivEl: DebugElement = debugEl.children[0];
 
     const actual = firstDivEl.styles['display'];
-    expect(actual).toBe('block');
+    expect(actual).withContext("display should be 'block'").toBe('block');
   };
 
   const shouldCallOnDoubleImgLoadWhenImgLoadedExpectation =
@@ -137,7 +174,9 @@ describe('FooterComponent - dom unit', () => {
     spyOn(componentInstance, 'onDoubleImgLoad');
     imgEl.triggerEventHandler('load');
 
-    expect(componentInstance.onDoubleImgLoad).toHaveBeenCalled();
+    expect(componentInstance.onDoubleImgLoad)
+      .withContext('onDoubleImgLoad should have been called')
+      .toHaveBeenCalled();
   };
 
   const shouldHideImgOnceLoadedExpectation = 'should hide img once loaded';
@@ -150,7 +189,7 @@ describe('FooterComponent - dom unit', () => {
     fixture.detectChanges();
 
     const actual = firstDivEl.styles['display'];
-    expect(actual).toBe('none');
+    expect(actual).withContext("display should be 'none'").toBe('none');
   };
 
   describe('in dev environment', () => {

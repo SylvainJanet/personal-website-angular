@@ -25,10 +25,16 @@ describe('LogPublishersService', () => {
     const actual = logPublishersService.publishers;
     const actual_nbr = actual.length;
 
-    expect(actual_nbr).toBe(expected_nbr);
+    expect(actual_nbr)
+      .withContext('there should be the expected amount of publishers')
+      .toBe(expected_nbr);
 
-    expect(actual[0]).toBeInstanceOf(LogConsole);
-    expect(actual[1]).toBeInstanceOf(LogLocalStorage);
+    expect(actual[0])
+      .withContext('first publisher should be LogConsole')
+      .toBeInstanceOf(LogConsole);
+    expect(actual[1])
+      .withContext('second publisher should be LogLocalStorage')
+      .toBeInstanceOf(LogLocalStorage);
   };
 
   describe('in dev environment', () => {

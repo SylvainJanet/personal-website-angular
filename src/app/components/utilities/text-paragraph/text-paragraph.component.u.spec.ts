@@ -14,14 +14,22 @@ describe('TextParagraphComponent - unit', () => {
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(textParagraphComponent).toBeTruthy();
+      expect(textParagraphComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(textParagraphComponent).toBeTruthy();
+      expect(textParagraphComponent)
+        .withContext('component should create')
+        .toBeTruthy();
 
-      expect(textParagraphComponent.paragraph).toBeTruthy();
-      expect(textParagraphComponent.paragraph).toEqual(new Paragraph([]));
+      expect(textParagraphComponent.paragraph)
+        .withContext('paragraph should be defined')
+        .toBeTruthy();
+      expect(textParagraphComponent.paragraph)
+        .withContext('paragraph should be empty')
+        .toEqual(new Paragraph([]));
     });
   });
 });

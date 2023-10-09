@@ -38,30 +38,52 @@ describe('CvSkillsComponent - unit', () => {
       cvSkillsComponent = TestBed.inject(CvSkillsComponent);
     });
     it('should create', () => {
-      expect(cvSkillsComponent).toBeTruthy();
+      expect(cvSkillsComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(cvSkillsComponent).toBeTruthy();
+      expect(cvSkillsComponent)
+        .withContext('component should create')
+        .toBeTruthy();
 
-      cvSkillsComponent.skills.subscribe((s) => expect(s).toBe(''));
-      cvSkillsComponent.java.subscribe((s) => expect(s).toBe(''));
-      cvSkillsComponent.csharp.subscribe((s) => expect(s).toBe(''));
-      cvSkillsComponent.python.subscribe((s) => expect(s).toBe(''));
-      cvSkillsComponent.jsts.subscribe((s) => expect(s).toBe(''));
-      cvSkillsComponent.sql.subscribe((s) => expect(s).toBe(''));
-      cvSkillsComponent.html.subscribe((s) => expect(s).toBe(''));
-      cvSkillsComponent.latex.subscribe((s) => expect(s).toBe(''));
-    });
-
-    it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe).toHaveBeenCalledOnceWith(
-        cvSkillsComponent
+      cvSkillsComponent.skills.subscribe((s) =>
+        expect(s).withContext('skills should be set').toBe('')
+      );
+      cvSkillsComponent.java.subscribe((s) =>
+        expect(s).withContext('java should be set').toBe('')
+      );
+      cvSkillsComponent.csharp.subscribe((s) =>
+        expect(s).withContext('csharp should be set').toBe('')
+      );
+      cvSkillsComponent.python.subscribe((s) =>
+        expect(s).withContext('python should be set').toBe('')
+      );
+      cvSkillsComponent.jsts.subscribe((s) =>
+        expect(s).withContext('jsts should be set').toBe('')
+      );
+      cvSkillsComponent.sql.subscribe((s) =>
+        expect(s).withContext('sql should be set').toBe('')
+      );
+      cvSkillsComponent.html.subscribe((s) =>
+        expect(s).withContext('html should be set').toBe('')
+      );
+      cvSkillsComponent.latex.subscribe((s) =>
+        expect(s).withContext('latex should be set').toBe('')
       );
     });
 
+    it('should subscribe to the languageService', () => {
+      expect(languageServiceSpy.subscribe)
+        .withContext('subscribe should have been called')
+        .toHaveBeenCalledOnceWith(cvSkillsComponent);
+    });
+
     it('should update the texts', () => {
-      expect(cvSkillsComponent.updateTexts).toHaveBeenCalledTimes(1);
+      expect(cvSkillsComponent.updateTexts)
+        .withContext('updateTexts should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -70,19 +92,55 @@ describe('CvSkillsComponent - unit', () => {
       cvSkillsComponent = TestBed.inject(CvSkillsComponent);
     });
     it('should call the textService', () => {
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(8);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(skillsSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(javaSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(csharpSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(pythonSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(jstsSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(sqlSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(htmlSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(latexSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called 8 times')
+        .toHaveBeenCalledTimes(8);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 1'
+        )
+        .toHaveBeenCalledWith(skillsSelector);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 2'
+        )
+        .toHaveBeenCalledWith(javaSelector);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 3'
+        )
+        .toHaveBeenCalledWith(csharpSelector);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 4'
+        )
+        .toHaveBeenCalledWith(pythonSelector);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 5'
+        )
+        .toHaveBeenCalledWith(jstsSelector);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 6'
+        )
+        .toHaveBeenCalledWith(sqlSelector);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 7'
+        )
+        .toHaveBeenCalledWith(htmlSelector);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 8'
+        )
+        .toHaveBeenCalledWith(latexSelector);
 
       cvSkillsComponent.updateTexts();
 
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(16);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called 16 times')
+        .toHaveBeenCalledTimes(16);
     });
     it('should set the properties to the textService result', () => {
       const expectedSkillsObs = of('test skills');
@@ -115,14 +173,30 @@ describe('CvSkillsComponent - unit', () => {
       const actualHtmlObs = cvSkillsComponent.html;
       const actualLatexObs = cvSkillsComponent.latex;
 
-      expect(actualSkillsObs).toBe(expectedSkillsObs);
-      expect(actualJavaObs).toBe(expectedJavaObs);
-      expect(actualCsharpObs).toBe(expectedCsharpObs);
-      expect(actualPythonDevObs).toBe(expectedPythonDevObs);
-      expect(actualJstsObs).toBe(expectedJstsObs);
-      expect(actualSqlObs).toBe(expectedSqlObs);
-      expect(actualHtmlObs).toBe(expectedHtmlObs);
-      expect(actualLatexObs).toBe(expectedLatexObs);
+      expect(actualSkillsObs)
+        .withContext('skills obs should be set')
+        .toBe(expectedSkillsObs);
+      expect(actualJavaObs)
+        .withContext('java obs should be set')
+        .toBe(expectedJavaObs);
+      expect(actualCsharpObs)
+        .withContext('csharp obs should be set')
+        .toBe(expectedCsharpObs);
+      expect(actualPythonDevObs)
+        .withContext('python obs should be set')
+        .toBe(expectedPythonDevObs);
+      expect(actualJstsObs)
+        .withContext('jsts obs should be set')
+        .toBe(expectedJstsObs);
+      expect(actualSqlObs)
+        .withContext('sql obs should be set')
+        .toBe(expectedSqlObs);
+      expect(actualHtmlObs)
+        .withContext('html obs should be set')
+        .toBe(expectedHtmlObs);
+      expect(actualLatexObs)
+        .withContext('latex obs should be set')
+        .toBe(expectedLatexObs);
     });
   });
 });

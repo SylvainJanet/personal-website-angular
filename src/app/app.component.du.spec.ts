@@ -31,8 +31,9 @@ describe('AppComponent - dom unit', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveProperDomStructureExpectation =
@@ -40,50 +41,98 @@ describe('AppComponent - dom unit', () => {
   const shouldHaveProperDomStructure = () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is DIV')
+      .toBe('DIV');
 
     // loading
     preloaderServiceSpy.isAnyLoading.and.returnValue(true);
     fixture.detectChanges();
 
     const mainDivEl = debugEl.children[0];
-    expect(mainDivEl.children.length).toBe(6);
-    expect(mainDivEl.children[0].nativeElement.tagName).toBe(
-      'MAT-PROGRESS-SPINNER'
-    );
-    expect(mainDivEl.children[1].nativeElement.tagName).toBe('APP-HEADER');
-    expect(mainDivEl.children[2].nativeElement.tagName).toBe('APP-BANNER');
-    expect(mainDivEl.children[3].nativeElement.tagName).toBe(
-      'APP-PAGE-CONTENT'
-    );
-    expect(mainDivEl.children[4].nativeElement.tagName).toBe('APP-FOOTER');
-    expect(mainDivEl.children[5].nativeElement.tagName).toBe('APP-BACK-TO-TOP');
+    expect(mainDivEl.children.length)
+      .withContext('(while loading) main div should have 6 children')
+      .toBe(6);
+    expect(mainDivEl.children[0].nativeElement.tagName)
+      .withContext(
+        '(while loading) child 1 of main div should be MAT-PROGRESS-SPINNER'
+      )
+      .toBe('MAT-PROGRESS-SPINNER');
+    expect(mainDivEl.children[1].nativeElement.tagName)
+      .withContext('(while loading) child 2 of main div should be APP-HEADER')
+      .toBe('APP-HEADER');
+    expect(mainDivEl.children[2].nativeElement.tagName)
+      .withContext('(while loading) child 3 of main div should be APP-BANNER')
+      .toBe('APP-BANNER');
+    expect(mainDivEl.children[3].nativeElement.tagName)
+      .withContext(
+        '(while loading) child 4 of main div should be APP-PAGE-CONTENT'
+      )
+      .toBe('APP-PAGE-CONTENT');
+    expect(mainDivEl.children[4].nativeElement.tagName)
+      .withContext('(while loading) child 5 of main div should be APP-FOOTER')
+      .toBe('APP-FOOTER');
+    expect(mainDivEl.children[5].nativeElement.tagName)
+      .withContext(
+        '(while loading) child 6 of main div should be APP-BACK-TO-TOP'
+      )
+      .toBe('APP-BACK-TO-TOP');
 
-    expect(mainDivEl.children[1].classes['hide']).toBeTrue();
-    expect(mainDivEl.children[2].classes['hide']).toBeTrue();
-    expect(mainDivEl.children[3].classes['hide']).toBeTrue();
-    expect(mainDivEl.children[4].classes['hide']).toBeTrue();
-    expect(mainDivEl.children[5].classes['hide']).toBeTrue();
+    expect(mainDivEl.children[1].classes['hide'])
+      .withContext('(while loading) child 2 of main div should have class hide')
+      .toBeTrue();
+    expect(mainDivEl.children[2].classes['hide'])
+      .withContext('(while loading) child 3 of main div should have class hide')
+      .toBeTrue();
+    expect(mainDivEl.children[3].classes['hide'])
+      .withContext('(while loading) child 4 of main div should have class hide')
+      .toBeTrue();
+    expect(mainDivEl.children[4].classes['hide'])
+      .withContext('(while loading) child 5 of main div should have class hide')
+      .toBeTrue();
+    expect(mainDivEl.children[5].classes['hide'])
+      .withContext('(while loading) child 6 of main div should have class hide')
+      .toBeTrue();
 
     // not loading
     preloaderServiceSpy.isAnyLoading.and.returnValue(false);
     fixture.detectChanges();
 
-    expect(mainDivEl.children.length).toBe(5);
-    expect(mainDivEl.children[0].nativeElement.tagName).toBe('APP-HEADER');
-    expect(mainDivEl.children[1].nativeElement.tagName).toBe('APP-BANNER');
-    expect(mainDivEl.children[2].nativeElement.tagName).toBe(
-      'APP-PAGE-CONTENT'
-    );
-    expect(mainDivEl.children[3].nativeElement.tagName).toBe('APP-FOOTER');
-    expect(mainDivEl.children[4].nativeElement.tagName).toBe('APP-BACK-TO-TOP');
+    expect(mainDivEl.children.length)
+      .withContext('(loaded) main div should have 5 children')
+      .toBe(5);
+    expect(mainDivEl.children[0].nativeElement.tagName)
+      .withContext('(loaded) child 1 of main div should be APP-HEADER')
+      .toBe('APP-HEADER');
+    expect(mainDivEl.children[1].nativeElement.tagName)
+      .withContext('(loaded) child 2 of main div should be APP-BANNER')
+      .toBe('APP-BANNER');
+    expect(mainDivEl.children[2].nativeElement.tagName)
+      .withContext('(loaded) child 3 of main div should be APP-PAGE-CONTENT')
+      .toBe('APP-PAGE-CONTENT');
+    expect(mainDivEl.children[3].nativeElement.tagName)
+      .withContext('(loaded) child 4 of main div should be APP-FOOTER')
+      .toBe('APP-FOOTER');
+    expect(mainDivEl.children[4].nativeElement.tagName)
+      .withContext('(loaded) child 5 of main div should be APP-BACK-TO-TOP')
+      .toBe('APP-BACK-TO-TOP');
 
-    expect(mainDivEl.children[0].classes['hide']).toBeUndefined();
-    expect(mainDivEl.children[1].classes['hide']).toBeUndefined();
-    expect(mainDivEl.children[2].classes['hide']).toBeUndefined();
-    expect(mainDivEl.children[3].classes['hide']).toBeUndefined();
-    expect(mainDivEl.children[4].classes['hide']).toBeUndefined();
+    expect(mainDivEl.children[0].classes['hide'])
+      .withContext('(loaded) child 1 of main div should have class hide')
+      .toBeUndefined();
+    expect(mainDivEl.children[1].classes['hide'])
+      .withContext('(loaded) child 2 of main div should have class hide')
+      .toBeUndefined();
+    expect(mainDivEl.children[2].classes['hide'])
+      .withContext('(loaded) child 3 of main div should have class hide')
+      .toBeUndefined();
+    expect(mainDivEl.children[3].classes['hide'])
+      .withContext('(loaded) child 4 of main div should have class hide')
+      .toBeUndefined();
+    expect(mainDivEl.children[4].classes['hide'])
+      .withContext('(loaded) child 5 of main div should have class hide')
+      .toBeUndefined();
   };
 
   const shouldUseProgressionPercentForProgressSpinnerExpectation =
@@ -91,9 +140,6 @@ describe('AppComponent - dom unit', () => {
   const shouldUseProgressionPercentForProgressSpinner = () => {
     const expectedPercent = 48;
     const debugEl: DebugElement = fixture.debugElement;
-
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('DIV');
 
     // loading
     preloaderServiceSpy.isAnyLoading.and.returnValue(true);
@@ -104,7 +150,9 @@ describe('AppComponent - dom unit', () => {
     const progressSpinner: MatProgressSpinner =
       mainDivEl.children[0].componentInstance;
     const actual = progressSpinner.value;
-    expect(actual).toBe(expectedPercent);
+    expect(actual)
+      .withContext('percent progression should be used')
+      .toBe(expectedPercent);
   };
 
   describe('in dev environment', () => {

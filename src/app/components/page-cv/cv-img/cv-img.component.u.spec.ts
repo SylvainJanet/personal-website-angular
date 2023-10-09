@@ -32,25 +32,35 @@ describe('CvImgComponent - unit', () => {
       cvImgComponent = TestBed.inject(CvImgComponent);
     });
     it('should create', () => {
-      expect(cvImgComponent).toBeTruthy();
+      expect(cvImgComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(cvImgComponent).toBeTruthy();
+      expect(cvImgComponent)
+        .withContext('component should create')
+        .toBeTruthy();
 
-      expect(cvImgComponent.preloaders).toEqual([Preloaders.MAIN]);
+      expect(cvImgComponent.preloaders)
+        .withContext('preloaders should be set')
+        .toEqual([Preloaders.MAIN]);
 
-      cvImgComponent.altTxt.subscribe((s) => expect(s).toBe(''));
-    });
-
-    it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe).toHaveBeenCalledOnceWith(
-        cvImgComponent
+      cvImgComponent.altTxt.subscribe((s) =>
+        expect(s).withContext('altTxt should be set').toBe('')
       );
     });
 
+    it('should subscribe to the languageService', () => {
+      expect(languageServiceSpy.subscribe)
+        .withContext('languageService should have been called')
+        .toHaveBeenCalledOnceWith(cvImgComponent);
+    });
+
     it('should update the texts', () => {
-      expect(cvImgComponent.updateTexts).toHaveBeenCalledTimes(1);
+      expect(cvImgComponent.updateTexts)
+        .withContext('updateTexts should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -59,13 +69,25 @@ describe('CvImgComponent - unit', () => {
       cvImgComponent = TestBed.inject(CvImgComponent);
     });
     it('should call the textService', () => {
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(1);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(altTextSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called once')
+        .toHaveBeenCalledTimes(1);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 1'
+        )
+        .toHaveBeenCalledWith(altTextSelector);
 
       cvImgComponent.updateTexts();
 
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(2);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(altTextSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called twice')
+        .toHaveBeenCalledTimes(2);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 2'
+        )
+        .toHaveBeenCalledWith(altTextSelector);
     });
     it('should set the properties to the textService result', () => {
       const expectedaltTextObs = of('alt text test');
@@ -75,7 +97,9 @@ describe('CvImgComponent - unit', () => {
 
       const actualNameObs = cvImgComponent.altTxt;
 
-      expect(actualNameObs).toBe(expectedaltTextObs);
+      expect(actualNameObs)
+        .withContext('altTxt should be set')
+        .toBe(expectedaltTextObs);
     });
   });
 
@@ -85,9 +109,9 @@ describe('CvImgComponent - unit', () => {
     });
     it('should unsubscribe from the languageService', () => {
       cvImgComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe).toHaveBeenCalledOnceWith(
-        cvImgComponent
-      );
+      expect(languageServiceSpy.unsubscribe)
+        .withContext('unsubscribe should have been called')
+        .toHaveBeenCalledOnceWith(cvImgComponent);
     });
   });
 });

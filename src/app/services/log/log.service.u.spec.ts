@@ -23,7 +23,7 @@ describe('LogService - unit', () => {
     const expected = env.logLevel;
     const actual = logService.level;
 
-    expect(actual).toBe(expected);
+    expect(actual).withContext('level should be set').toBe(expected);
   };
 
   const withDateSetByEnvironmentExpectation =
@@ -32,7 +32,7 @@ describe('LogService - unit', () => {
     const expected = env.logWithDate;
     const actual = logService.logWithDate;
 
-    expect(actual).toBe(expected);
+    expect(actual).withContext('logWithDate should be set').toBe(expected);
   };
 
   const publishersSetByServiceExpectation =
@@ -44,7 +44,7 @@ describe('LogService - unit', () => {
     logService = new LogService(env, logPublishersService);
 
     const actual = logService.publishers;
-    expect(actual).toEqual(expected);
+    expect(actual).withContext('publishers should be set').toEqual(expected);
   };
 
   const classNameDefaultExpectation =
@@ -53,7 +53,7 @@ describe('LogService - unit', () => {
     const expected = 'none specified';
     const actual = logService.className;
 
-    expect(actual).toBe(expected);
+    expect(actual).withContext('className should be set').toBe(expected);
   };
 
   describe('in dev environment', () => {
@@ -104,7 +104,7 @@ describe('LogService - unit', () => {
       'should return a new LogService instance';
     const shouldReturnNewService = () => {
       const result = logService.withClassName('Test');
-      expect(result).toBeTruthy();
+      expect(result).withContext('should return a non null value').toBeTruthy();
     };
 
     const shouldReturnNewServiceWithCorrectLevelExpectation =
@@ -114,7 +114,7 @@ describe('LogService - unit', () => {
       const result = logService.withClassName('Test');
       const actual = result.level;
 
-      expect(actual).toBe(expected);
+      expect(actual).withContext('level should be as expected').toBe(expected);
     };
 
     const shouldReturnNewServiceWithCorrectLogWithDateExpectation =
@@ -124,7 +124,9 @@ describe('LogService - unit', () => {
       const result = logService.withClassName('Test');
       const actual = result.logWithDate;
 
-      expect(actual).toBe(expected);
+      expect(actual)
+        .withContext('logWithDate should be as expected')
+        .toBe(expected);
     };
 
     const shouldReturnNewServiceWithCorrectPublishersExpectation =
@@ -138,7 +140,9 @@ describe('LogService - unit', () => {
       const result = logService.withClassName('Test');
 
       const actual = result.publishers;
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('publishers should be as expected')
+        .toEqual(expected);
     };
 
     const shouldReturnNewServiceWithCorrectClassNameExpectation =
@@ -148,7 +152,9 @@ describe('LogService - unit', () => {
       const result = logService.withClassName(expected);
       const actual = result.className;
 
-      expect(actual).toBe(expected);
+      expect(actual)
+        .withContext('className should be as expected')
+        .toBe(expected);
     };
 
     describe('in dev environment', () => {
@@ -251,11 +257,11 @@ describe('LogService - unit', () => {
         break;
     }
 
-    expect(logService['writeToLog']).toHaveBeenCalledOnceWith(message, level, [
-      param1,
-      param2,
-      param3,
-    ]);
+    expect(logService['writeToLog'])
+      .withContext(
+        'writeToLog should have been called once with proper arguments'
+      )
+      .toHaveBeenCalledOnceWith(message, level, [param1, param2, param3]);
     done();
   };
 
@@ -305,8 +311,12 @@ describe('LogService - unit', () => {
     }
 
     if (level < env.logLevel || env.logLevel === LogLevel.Off) {
-      expect(logConsole.log).not.toHaveBeenCalled();
-      expect(logLocalStorage.log).not.toHaveBeenCalled();
+      expect(logConsole.log)
+        .withContext('logConsole.log should not have been called')
+        .not.toHaveBeenCalled();
+      expect(logLocalStorage.log)
+        .withContext('logLocalStorage.log should not have been called')
+        .not.toHaveBeenCalled();
     }
     expect().nothing();
     done();
@@ -358,8 +368,12 @@ describe('LogService - unit', () => {
     }
 
     if (!(level < env.logLevel || env.logLevel === LogLevel.Off)) {
-      expect(logConsole.log).toHaveBeenCalledTimes(1);
-      expect(logLocalStorage.log).toHaveBeenCalledTimes(1);
+      expect(logConsole.log)
+        .withContext('logConsole.log should have been called once')
+        .toHaveBeenCalledTimes(1);
+      expect(logLocalStorage.log)
+        .withContext('logLocalStorage.log should have been called once')
+        .toHaveBeenCalledTimes(1);
     }
     expect().nothing();
     done();
@@ -420,8 +434,16 @@ describe('LogService - unit', () => {
       expected.logWithDate = logService.logWithDate;
       expected.className = logService.className;
 
-      expect(logConsole.log).toHaveBeenCalledOnceWith(expected);
-      expect(logLocalStorage.log).toHaveBeenCalledOnceWith(expected);
+      expect(logConsole.log)
+        .withContext(
+          'logConsole.log should have been called once with the proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(expected);
+      expect(logLocalStorage.log)
+        .withContext(
+          'logLocalStorage.log should have been called once with the proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(expected);
     }
     expect().nothing();
     done();
@@ -475,12 +497,16 @@ describe('LogService - unit', () => {
     }
 
     if (!(level < env.logLevel || env.logLevel === LogLevel.Off)) {
-      expect(window.console.log).toHaveBeenCalledWith(
-        'Erreur avec loggeur LogConsole '
-      );
-      expect(window.console.log).toHaveBeenCalledWith(
-        'Erreur avec loggeur LogLocalStorage logging'
-      );
+      expect(window.console.log)
+        .withContext(
+          'window.console.log should have been called with the proper arguments - 1'
+        )
+        .toHaveBeenCalledWith('Erreur avec loggeur LogConsole ');
+      expect(window.console.log)
+        .withContext(
+          'window.console.log should have been called with the proper arguments - 2'
+        )
+        .toHaveBeenCalledWith('Erreur avec loggeur LogLocalStorage logging');
     }
     expect().nothing();
     done();
@@ -538,12 +564,16 @@ describe('LogService - unit', () => {
     }
 
     if (!(level < env.logLevel || env.logLevel === LogLevel.Off)) {
-      expect(window.console.log).toHaveBeenCalledWith(
-        'Erreur avec loggeur LogConsole '
-      );
-      expect(window.console.log).toHaveBeenCalledWith(
-        'Erreur avec loggeur LogLocalStorage logging'
-      );
+      expect(window.console.log)
+        .withContext(
+          'window.console.log should have been called with the proper arguments - 1'
+        )
+        .toHaveBeenCalledWith('Erreur avec loggeur LogConsole ');
+      expect(window.console.log)
+        .withContext(
+          'window.console.log should have been called with the proper arguments - 2'
+        )
+        .toHaveBeenCalledWith('Erreur avec loggeur LogLocalStorage logging');
     }
     expect().nothing();
     done();

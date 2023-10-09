@@ -26,7 +26,9 @@ describe('BackToTopComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(backToTopComponent).toBeTruthy();
+      expect(backToTopComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -82,7 +84,9 @@ describe('BackToTopComponent - integration', () => {
       const actualAltTxtObs = backToTopComponent.altTxt;
 
       actualAltTxtObs.subscribe((s) => {
-        expect(s).toBe(expectedBackToTopAlt);
+        expect(s)
+          .withContext('altTxt should be set')
+          .toBe(expectedBackToTopAlt);
       });
     };
     describe('in dev environment', () => {

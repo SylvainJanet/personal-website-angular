@@ -13,17 +13,21 @@ describe('Paragraph', () => {
     it('should set elements', () => {
       paragraph = new Paragraph(elsToTest, cssClassToTest);
 
-      expect(paragraph.els).toBe(elsToTest);
+      expect(paragraph.els).withContext('els should be set').toBe(elsToTest);
     });
     it('should set cssClass', () => {
       paragraph = new Paragraph(elsToTest, cssClassToTest);
 
-      expect(paragraph.cssClass).toBe(cssClassToTest);
+      expect(paragraph.cssClass)
+        .withContext('cssClass should be set')
+        .toBe(cssClassToTest);
     });
     it('should set cssClass to empty string by default', () => {
       paragraph = new Paragraph(elsToTest);
 
-      expect(paragraph.cssClass).toBe('');
+      expect(paragraph.cssClass)
+        .withContext('cssClass should be set to an empty string by default')
+        .toBe('');
     });
   });
 });

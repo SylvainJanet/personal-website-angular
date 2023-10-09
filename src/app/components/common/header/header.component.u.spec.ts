@@ -71,38 +71,50 @@ describe('HeaderComponent - unit', () => {
       headerComponent = TestBed.inject(HeaderComponent);
     });
     it('should create', () => {
-      expect(headerComponent).toBeTruthy();
+      expect(headerComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(headerComponent).toBeTruthy();
-      expect(headerComponent.logger).toBe(logServiceSpy);
+      expect(headerComponent)
+        .withContext('component should create')
+        .toBeTruthy();
+      expect(headerComponent.logger)
+        .withContext('logger should be set')
+        .toBe(logServiceSpy);
 
-      expect(headerComponent.trigger).toBe(0);
-      expect(headerComponent.headerState).toBe('');
+      expect(headerComponent.trigger)
+        .withContext('trigger should be set')
+        .toBe(0);
+      expect(headerComponent.headerState)
+        .withContext('headerState should be set')
+        .toBe('');
       headerComponent.myName.subscribe((s) => {
-        expect(s).toBe('');
+        expect(s).withContext('myName should be set').toBe('');
       });
       headerComponent.otherLanguage.subscribe((s) => {
-        expect(s).toBe('');
+        expect(s).withContext('otherLanguage should be set').toBe('');
       });
     });
 
     it('should set proper logger', () => {
       const expected = 'HeaderComponent';
-      expect(logServiceGlobalSpy.withClassName).toHaveBeenCalledOnceWith(
-        expected
-      );
+      expect(logServiceGlobalSpy.withClassName)
+        .withContext('withClassName should have been called')
+        .toHaveBeenCalledOnceWith(expected);
     });
 
     it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe).toHaveBeenCalledOnceWith(
-        headerComponent
-      );
+      expect(languageServiceSpy.subscribe)
+        .withContext('withContext should have been called')
+        .toHaveBeenCalledOnceWith(headerComponent);
     });
 
     it('should update the texts', () => {
-      expect(headerComponent.updateTexts).toHaveBeenCalledTimes(1);
+      expect(headerComponent.updateTexts)
+        .withContext('updateTexts should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -111,20 +123,28 @@ describe('HeaderComponent - unit', () => {
       headerComponent = TestBed.inject(HeaderComponent);
     });
     it('should call the textService', () => {
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(1);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(myNameSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called')
+        .toHaveBeenCalledTimes(1);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with the proper arguments')
+        .toHaveBeenCalledWith(myNameSelector);
 
-      expect(textServiceSpy.getOtherLanguage).toHaveBeenCalledTimes(1);
+      expect(textServiceSpy.getOtherLanguage)
+        .withContext('getOtherLanguage should have been called')
+        .toHaveBeenCalledTimes(1);
     });
     it('should set the properties to the textService result', () => {
       const actualMyNameObs = headerComponent.myName;
       const actualOtherLanguageObs = headerComponent.otherLanguage;
 
       actualMyNameObs.subscribe((s) => {
-        expect(s).toBe(expectedName);
+        expect(s).withContext('myName should be set').toBe(expectedName);
       });
       actualOtherLanguageObs.subscribe((s) => {
-        expect(s).toBe(expectedOtherLanguage);
+        expect(s)
+          .withContext('otherLanguage should be set')
+          .toBe(expectedOtherLanguage);
       });
     });
   });
@@ -135,9 +155,9 @@ describe('HeaderComponent - unit', () => {
     });
     it('should unsubscribe from the languageService', () => {
       headerComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe).toHaveBeenCalledOnceWith(
-        headerComponent
-      );
+      expect(languageServiceSpy.unsubscribe)
+        .withContext('unsubscribe should have been called')
+        .toHaveBeenCalledOnceWith(headerComponent);
     });
   });
 
@@ -153,9 +173,9 @@ describe('HeaderComponent - unit', () => {
 
       headerComponent.onResize(eventInput);
 
-      expect(headerComponent.updateTrigger).toHaveBeenCalledOnceWith(
-        eventInput
-      );
+      expect(headerComponent.updateTrigger)
+        .withContext('updateTrigger should have been called')
+        .toHaveBeenCalledOnceWith(eventInput);
     });
   });
 
@@ -168,7 +188,9 @@ describe('HeaderComponent - unit', () => {
 
       headerComponent.ngOnInit();
 
-      expect(headerComponent.updateTrigger).toHaveBeenCalledTimes(1);
+      expect(headerComponent.updateTrigger)
+        .withContext('updateTrigger should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -183,18 +205,26 @@ describe('HeaderComponent - unit', () => {
 
       const actualTrigger = headerComponent.trigger;
 
-      expect(DOMComputationServiceSpy.getActualHeight).toHaveBeenCalledOnceWith(
-        document.getElementsByClassName('banner').item(0)
-      );
+      expect(DOMComputationServiceSpy.getActualHeight)
+        .withContext(
+          'getActualHeight should have been called once with the proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(
+          document.getElementsByClassName('banner').item(0)
+        );
 
-      expect(actualTrigger).toBe(expectedActualHeight);
+      expect(actualTrigger)
+        .withContext('trigger should be set')
+        .toBe(expectedActualHeight);
     });
     it('should switch header state from light to dark when appropriate', () => {
       headerComponent.updateTrigger({
         currentTarget: { scrollY: 0 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.headerState).toBe(headerStateDark);
+      expect(headerComponent.headerState)
+        .withContext('headerState should be dark initially')
+        .toBe(headerStateDark);
 
       // trigger is now set
 
@@ -202,7 +232,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger + 1 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.headerState).toBe(headerStateLight);
+      expect(headerComponent.headerState)
+        .withContext('headerState should be light')
+        .toBe(headerStateLight);
 
       // state is now light
 
@@ -210,14 +242,18 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger - 1 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.headerState).toBe(headerStateDark);
+      expect(headerComponent.headerState)
+        .withContext('headerState should be dark')
+        .toBe(headerStateDark);
     });
     it('should switch header state from dark to light when appropriate', () => {
       headerComponent.updateTrigger({
         currentTarget: { scrollY: 0 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.headerState).toBe(headerStateDark);
+      expect(headerComponent.headerState)
+        .withContext('headerState should be dark after an update')
+        .toBe(headerStateDark);
 
       // trigger is now set
 
@@ -225,7 +261,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger + 1 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.headerState).toBe(headerStateLight);
+      expect(headerComponent.headerState)
+        .withContext('headerState should be light')
+        .toBe(headerStateLight);
 
       // state is now light
 
@@ -233,7 +271,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger - 1 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.headerState).toBe(headerStateDark);
+      expect(headerComponent.headerState)
+        .withContext('headerState should be dark')
+        .toBe(headerStateDark);
     });
     it('should call updateHeader when there is a change', () => {
       spyOn(headerComponent, 'updateHeader');
@@ -241,7 +281,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: 0 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.updateHeader).toHaveBeenCalledTimes(1);
+      expect(headerComponent.updateHeader)
+        .withContext('updateHeader should have been called 1 time')
+        .toHaveBeenCalledTimes(1);
 
       // trigger is now set
 
@@ -249,7 +291,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger + 1 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.updateHeader).toHaveBeenCalledTimes(2);
+      expect(headerComponent.updateHeader)
+        .withContext('updateHeader should have been called 2 times')
+        .toHaveBeenCalledTimes(2);
 
       // state is now light
 
@@ -257,7 +301,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger - 1 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.updateHeader).toHaveBeenCalledTimes(3);
+      expect(headerComponent.updateHeader)
+        .withContext('updateHeader should have been called 3 times')
+        .toHaveBeenCalledTimes(3);
 
       // state has not changed
 
@@ -265,7 +311,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger - 2 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.updateHeader).toHaveBeenCalledTimes(3);
+      expect(headerComponent.updateHeader)
+        .withContext('updateHeader should have been called 3 times')
+        .toHaveBeenCalledTimes(3);
     });
   });
 
@@ -290,14 +338,16 @@ describe('HeaderComponent - unit', () => {
       document.querySelector('html')?.appendChild(newSpan);
 
       const elements = document.querySelectorAll('.' + oldClass);
-      expect(elements.length).toBeGreaterThan(0);
+      expect(elements.length)
+        .withContext('elements should be non empty')
+        .toBeGreaterThan(0);
       spyOn(document, 'querySelectorAll').and.returnValue(elements);
 
       headerComponent.changeEveryClass(oldClass, newClass);
 
-      expect(document.querySelectorAll).toHaveBeenCalledOnceWith(
-        '.' + oldClass
-      );
+      expect(document.querySelectorAll)
+        .withContext('elements with the appropriate class should be queried')
+        .toHaveBeenCalledOnceWith('.' + oldClass);
     });
     it('should change the classes of the elements', () => {
       const oldClass = 'old-class-test-test-test';
@@ -316,19 +366,25 @@ describe('HeaderComponent - unit', () => {
       document.querySelector('html')?.appendChild(newSpan);
 
       const elements = document.querySelectorAll('.' + oldClass);
-      expect(elements.length).toBeGreaterThan(0);
+      expect(elements.length)
+        .withContext('elements should be non empty')
+        .toBeGreaterThan(0);
       spyOn(document, 'querySelectorAll').and.returnValue(elements);
 
       headerComponent.changeEveryClass(oldClass, newClass);
 
-      expect(document.querySelectorAll).toHaveBeenCalledOnceWith(
-        '.' + oldClass
-      );
+      expect(document.querySelectorAll)
+        .withContext('elements with the appropriate class should be queried')
+        .toHaveBeenCalledOnceWith('.' + oldClass);
 
       for (let i = 0; i < elements.length; i++) {
         const el = elements.item(i);
-        expect(el.classList.contains(oldClass)).toBeFalse();
-        expect(el.classList.contains(newClass)).toBeTrue();
+        expect(el.classList.contains(oldClass))
+          .withContext('element i=' + i + ' should not have old css class')
+          .toBeFalse();
+        expect(el.classList.contains(newClass))
+          .withContext('element i=' + i + ' should have new css class')
+          .toBeTrue();
       }
     });
   });
@@ -343,15 +399,19 @@ describe('HeaderComponent - unit', () => {
 
       headerComponent.updateHeader();
 
-      expect(headerComponent.changeEveryClass).toHaveBeenCalledTimes(2);
-      expect(headerComponent.changeEveryClass).toHaveBeenCalledWith(
-        cssDarkClass,
-        cssLightClass
-      );
-      expect(headerComponent.changeEveryClass).toHaveBeenCalledWith(
-        cssContentDarkClass,
-        cssContentLightClass
-      );
+      expect(headerComponent.changeEveryClass)
+        .withContext('changeEveryClass should have been called 2 times')
+        .toHaveBeenCalledTimes(2);
+      expect(headerComponent.changeEveryClass)
+        .withContext(
+          'changeEveryClass should have been called with the proper arguments - 1'
+        )
+        .toHaveBeenCalledWith(cssDarkClass, cssLightClass);
+      expect(headerComponent.changeEveryClass)
+        .withContext(
+          'changeEveryClass should have been called with the proper arguments - 2'
+        )
+        .toHaveBeenCalledWith(cssContentDarkClass, cssContentLightClass);
     });
     it('should change every light class to dark class when appropriate', () => {
       spyOn(headerComponent, 'changeEveryClass');
@@ -359,15 +419,19 @@ describe('HeaderComponent - unit', () => {
 
       headerComponent.updateHeader();
 
-      expect(headerComponent.changeEveryClass).toHaveBeenCalledTimes(2);
-      expect(headerComponent.changeEveryClass).toHaveBeenCalledWith(
-        cssLightClass,
-        cssDarkClass
-      );
-      expect(headerComponent.changeEveryClass).toHaveBeenCalledWith(
-        cssContentLightClass,
-        cssContentDarkClass
-      );
+      expect(headerComponent.changeEveryClass)
+        .withContext('changeEveryClass should have been called 2 times')
+        .toHaveBeenCalledTimes(2);
+      expect(headerComponent.changeEveryClass)
+        .withContext(
+          'changeEveryClass should have been called with the proper arguments - 1'
+        )
+        .toHaveBeenCalledWith(cssLightClass, cssDarkClass);
+      expect(headerComponent.changeEveryClass)
+        .withContext(
+          'changeEveryClass should have been called with the proper arguments - 2'
+        )
+        .toHaveBeenCalledWith(cssContentLightClass, cssContentDarkClass);
     });
   });
 
@@ -385,7 +449,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger + 1 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.headerState).toBe(headerStateLight);
+      expect(headerComponent.headerState)
+        .withContext('headerState should be light')
+        .toBe(headerStateLight);
     });
     it('should switch state to dark', () => {
       headerComponent.updateTrigger({
@@ -397,7 +463,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger - 1 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.headerState).toBe(headerStateDark);
+      expect(headerComponent.headerState)
+        .withContext('headerState should be dark')
+        .toBe(headerStateDark);
     });
     it('should call updateHeader when switching state to light', () => {
       headerComponent.updateTrigger({
@@ -410,7 +478,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger + 1 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.updateHeader).toHaveBeenCalledTimes(1);
+      expect(headerComponent.updateHeader)
+        .withContext('updateHeader should have been called')
+        .toHaveBeenCalledTimes(1);
     });
     it('should call updateHeader when switching state to dark', () => {
       headerComponent.updateTrigger({
@@ -423,7 +493,9 @@ describe('HeaderComponent - unit', () => {
         currentTarget: { scrollY: headerComponent.trigger - 1 } as Window,
       } as unknown as Event);
 
-      expect(headerComponent.updateHeader).toHaveBeenCalledTimes(1);
+      expect(headerComponent.updateHeader)
+        .withContext('updateHeader should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -436,16 +508,18 @@ describe('HeaderComponent - unit', () => {
 
       headerComponent.languageChange();
 
-      expect(languageServiceSpy.set).toHaveBeenCalledOnceWith(Languages.FRENCH);
+      expect(languageServiceSpy.set)
+        .withContext('set should have been called')
+        .toHaveBeenCalledOnceWith(Languages.FRENCH);
     });
     it('should switch language from FRENCH to ENGLISH', () => {
       languageServiceSpy.current.and.returnValue(Languages.FRENCH);
 
       headerComponent.languageChange();
 
-      expect(languageServiceSpy.set).toHaveBeenCalledOnceWith(
-        Languages.ENGLISH
-      );
+      expect(languageServiceSpy.set)
+        .withContext('set should have been called')
+        .toHaveBeenCalledOnceWith(Languages.ENGLISH);
     });
   });
 });

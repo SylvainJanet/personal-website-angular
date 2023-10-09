@@ -45,8 +45,9 @@ describe('BackToTopComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   describe('onScroll method', () => {
@@ -55,20 +56,26 @@ describe('BackToTopComponent - dom unit', () => {
 
       window.dispatchEvent(new Event('scroll'));
 
-      expect(componentInstance.onScroll).toHaveBeenCalledTimes(1);
+      expect(componentInstance.onScroll)
+        .withContext('onScroll should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
   it('should have proper dom structure', () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('A');
+    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is A')
+      .toBe('A');
 
     const aEl: DebugElement = debugEl.children[0];
 
-    expect(aEl.children.length).toBe(1);
-    expect(aEl.children[0].nativeElement.tagName).toBe('IMG');
+    expect(aEl.children.length).withContext('1 child at A').toBe(1);
+    expect(aEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at A is IMG')
+      .toBe('IMG');
   });
 
   it('should set alt img text', () => {
@@ -78,7 +85,7 @@ describe('BackToTopComponent - dom unit', () => {
 
     const actual = imgEl.attributes['alt'];
 
-    expect(actual).toBe(expectedBackToTopAlt);
+    expect(actual).withContext('alt should be set').toBe(expectedBackToTopAlt);
   });
 
   it('should set the icon opacity', () => {
@@ -93,8 +100,12 @@ describe('BackToTopComponent - dom unit', () => {
     const actualAOpacity = aEl.styles['opacity'];
     const actualImgOpacity = imgEl.styles['opacity'];
 
-    expect(actualAOpacity).toBe(opacityValueToTest);
-    expect(actualImgOpacity).toBe(opacityValueToTest);
+    expect(actualAOpacity)
+      .withContext('A opacity should be set')
+      .toBe(opacityValueToTest);
+    expect(actualImgOpacity)
+      .withContext('IMG opacity should be set')
+      .toBe(opacityValueToTest);
   });
 
   it('should set the icon opacity', () => {
@@ -107,21 +118,29 @@ describe('BackToTopComponent - dom unit', () => {
     const aEl: DebugElement = debugEl.children[0];
     const imgEl: DebugElement = aEl.children[0];
 
-    let actualAOpacity = aEl.styles['pointerEvents'];
-    let actualImgOpacity = imgEl.styles['pointerEvents'];
+    let actualAPointerEvent = aEl.styles['pointerEvents'];
+    let actualImgPointerEvent = imgEl.styles['pointerEvents'];
 
-    expect(actualAOpacity).toBe(pointerEventToTest);
-    expect(actualImgOpacity).toBe(pointerEventToTest);
+    expect(actualAPointerEvent)
+      .withContext('A pointer event should be set - all')
+      .toBe(pointerEventToTest);
+    expect(actualImgPointerEvent)
+      .withContext('IMG pointer event should be set - all')
+      .toBe(pointerEventToTest);
 
     // none
     pointerEventToTest = 'none';
     componentInstance.iconPointerEvent = pointerEventToTest;
     fixture.detectChanges();
 
-    actualAOpacity = aEl.styles['pointerEvents'];
-    actualImgOpacity = imgEl.styles['pointerEvents'];
+    actualAPointerEvent = aEl.styles['pointerEvents'];
+    actualImgPointerEvent = imgEl.styles['pointerEvents'];
 
-    expect(actualAOpacity).toBe(pointerEventToTest);
-    expect(actualImgOpacity).toBe(pointerEventToTest);
+    expect(actualAPointerEvent)
+      .withContext('A pointer event should be set - none')
+      .toBe(pointerEventToTest);
+    expect(actualImgPointerEvent)
+      .withContext('IMG pointer event should be set - none')
+      .toBe(pointerEventToTest);
   });
 });

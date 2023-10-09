@@ -39,34 +39,48 @@ describe('ImgLoadDirective - dom unit', () => {
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(imgLoadDirective).toBeTruthy();
+      expect(imgLoadDirective)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(imgLoadDirective).toBeTruthy();
+      expect(imgLoadDirective)
+        .withContext('component should create')
+        .toBeTruthy();
 
-      expect(imgLoadDirective.appImgLoad).toEqual([Preloaders.MAIN]);
+      expect(imgLoadDirective.appImgLoad)
+        .withContext('appImgLoad should be set')
+        .toEqual([Preloaders.MAIN]);
 
-      expect(imgLoadDirective.isLoadedOrError).toBeFalse();
+      expect(imgLoadDirective.isLoadedOrError)
+        .withContext('isLoadedOrError should be set')
+        .toBeFalse();
     });
   });
 
   describe('ngOnChanges method', () => {
     it('should notify the imageService when the directive value is injected', () => {
-      expect(imageServiceSpy.imageLoading).toHaveBeenCalledOnceWith(
-        testComponentFixture.debugElement.children[0].nativeElement,
-        imgLoadDirective.appImgLoad
-      );
+      expect(imageServiceSpy.imageLoading)
+        .withContext('imageLoading should have been called')
+        .toHaveBeenCalledOnceWith(
+          testComponentFixture.debugElement.children[0].nativeElement,
+          imgLoadDirective.appImgLoad
+        );
     });
     it('should not notify the imageService if isLoadedOrError is true', () => {
-      expect(imageServiceSpy.imageLoading).toHaveBeenCalledTimes(1);
+      expect(imageServiceSpy.imageLoading)
+        .withContext('imageLoading should have been called - 1')
+        .toHaveBeenCalledTimes(1);
       imgLoadDirective.isLoadedOrError = true;
       const change = new SimpleChange(undefined, imgLoadDirective, false);
       const changes = { appImgLoad: change };
 
       imgLoadDirective.ngOnChanges(changes);
 
-      expect(imageServiceSpy.imageLoading).toHaveBeenCalledTimes(1);
+      expect(imageServiceSpy.imageLoading)
+        .withContext('imageLoading should have been called - 2')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -76,7 +90,9 @@ describe('ImgLoadDirective - dom unit', () => {
       testComponentFixture.debugElement.children[0].nativeElement.dispatchEvent(
         new Event('load')
       );
-      expect(imgLoadDirective.loadOrError).toHaveBeenCalledTimes(1);
+      expect(imgLoadDirective.loadOrError)
+        .withContext('loadOrError should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -86,7 +102,9 @@ describe('ImgLoadDirective - dom unit', () => {
       testComponentFixture.debugElement.children[0].nativeElement.dispatchEvent(
         new Event('error')
       );
-      expect(imgLoadDirective.loadOrError).toHaveBeenCalledTimes(1);
+      expect(imgLoadDirective.loadOrError)
+        .withContext('loadOrError should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 });

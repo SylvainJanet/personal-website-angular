@@ -30,15 +30,23 @@ describe('ImgLoadDirective - unit', () => {
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(imgLoadDirective).toBeTruthy();
+      expect(imgLoadDirective)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(imgLoadDirective).toBeTruthy();
+      expect(imgLoadDirective)
+        .withContext('component should create')
+        .toBeTruthy();
 
-      expect(imgLoadDirective.appImgLoad).toEqual([]);
+      expect(imgLoadDirective.appImgLoad)
+        .withContext('appImgLoad should be set')
+        .toEqual([]);
 
-      expect(imgLoadDirective.isLoadedOrError).toBeFalse();
+      expect(imgLoadDirective.isLoadedOrError)
+        .withContext('isLoadedOrError should be set')
+        .toBeFalse();
     });
   });
 
@@ -50,10 +58,12 @@ describe('ImgLoadDirective - unit', () => {
 
       imgLoadDirective.ngOnChanges(changes);
 
-      expect(imageServiceSpy.imageLoading).toHaveBeenCalledOnceWith(
-        elementRefSpy.nativeElement,
-        imgLoadDirective.appImgLoad
-      );
+      expect(imageServiceSpy.imageLoading)
+        .withContext('imageLoading should have been called')
+        .toHaveBeenCalledOnceWith(
+          elementRefSpy.nativeElement,
+          imgLoadDirective.appImgLoad
+        );
     });
     it('should not notify the imageService if isLoadedOrError is true', () => {
       imgLoadDirective.isLoadedOrError = true;
@@ -62,7 +72,9 @@ describe('ImgLoadDirective - unit', () => {
 
       imgLoadDirective.ngOnChanges(changes);
 
-      expect(imageServiceSpy.imageLoading).not.toHaveBeenCalled();
+      expect(imageServiceSpy.imageLoading)
+        .withContext('imageLoading should not have been called')
+        .not.toHaveBeenCalled();
     });
   });
 
@@ -71,7 +83,9 @@ describe('ImgLoadDirective - unit', () => {
       spyOn(imgLoadDirective, 'loadOrError');
       imgLoadDirective.onLoad();
 
-      expect(imgLoadDirective.loadOrError).toHaveBeenCalledTimes(1);
+      expect(imgLoadDirective.loadOrError)
+        .withContext('loadOrError should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -80,7 +94,9 @@ describe('ImgLoadDirective - unit', () => {
       spyOn(imgLoadDirective, 'loadOrError');
       imgLoadDirective.onError();
 
-      expect(imgLoadDirective.loadOrError).toHaveBeenCalledTimes(1);
+      expect(imgLoadDirective.loadOrError)
+        .withContext('loadOrError should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -90,24 +106,30 @@ describe('ImgLoadDirective - unit', () => {
 
       imgLoadDirective.loadOrError();
 
-      expect(imageServiceSpy.imageLoadedOrError).toHaveBeenCalledOnceWith(
-        elementRefSpy.nativeElement,
-        imgLoadDirective.appImgLoad
-      );
+      expect(imageServiceSpy.imageLoadedOrError)
+        .withContext('imageLoadedOrError should have been called')
+        .toHaveBeenCalledOnceWith(
+          elementRefSpy.nativeElement,
+          imgLoadDirective.appImgLoad
+        );
     });
     it('should change isLoadedOrError to true if it is false', () => {
       imgLoadDirective.isLoadedOrError = false;
 
       imgLoadDirective.loadOrError();
 
-      expect(imgLoadDirective.isLoadedOrError).toBeTrue();
+      expect(imgLoadDirective.isLoadedOrError)
+        .withContext('isLoadedOrError should be set')
+        .toBeTrue();
     });
     it('should not notify the service if isLoadedOrError is true', () => {
       imgLoadDirective.isLoadedOrError = true;
 
       imgLoadDirective.loadOrError();
 
-      expect(imageServiceSpy.imageLoadedOrError).not.toHaveBeenCalled();
+      expect(imageServiceSpy.imageLoadedOrError)
+        .withContext('imageLoadedOrError should not have been called')
+        .not.toHaveBeenCalled();
     });
   });
 });

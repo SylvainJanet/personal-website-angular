@@ -22,12 +22,14 @@ describe('PreloaderService', () => {
 
   const shouldHaveProperLoggerExpectation = 'should have a proper logger';
   const shouldHaveProperLogger = () => {
-    expect(preloaderService.logger).toBeTruthy();
+    expect(preloaderService.logger)
+      .withContext('logger should be set')
+      .toBeTruthy();
 
     const expected = 'PreloaderService';
     const actual = preloaderService.logger.className;
 
-    expect(actual).toBe(expected);
+    expect(actual).withContext('logger className should be set').toBe(expected);
   };
 
   const shouldHaveProperlyDefinedInfoMapExpectation =
@@ -36,9 +38,15 @@ describe('PreloaderService', () => {
     const actual = preloaderService.info;
 
     Object.keys(Preloaders).forEach((element) => {
-      expect(actual.get(element as Preloaders)).toBeTruthy();
-      expect(actual.get(element as Preloaders)?.qtyToLoad).toBe(0);
-      expect(actual.get(element as Preloaders)?.isLoading).toBeFalse();
+      expect(actual.get(element as Preloaders))
+        .withContext('element ' + element + ' should be defined in the map')
+        .toBeTruthy();
+      expect(actual.get(element as Preloaders)?.qtyToLoad)
+        .withContext('element ' + element + ' should be defined with qtyToLoad')
+        .toBe(0);
+      expect(actual.get(element as Preloaders)?.isLoading)
+        .withContext('element ' + element + ' should be defined with isLoading')
+        .toBeFalse();
     });
   };
 
@@ -48,10 +56,14 @@ describe('PreloaderService', () => {
     const actual = preloaderService.statusLoading;
 
     Object.keys(Preloaders).forEach((element) => {
-      expect(actual.get(element as Preloaders)).toBeTruthy();
+      expect(actual.get(element as Preloaders))
+        .withContext('element ' + element + ' should be defined in the map')
+        .toBeTruthy();
       actual.get(element as Preloaders)?.subscribe({
         next: (value) => {
-          expect(value).toBeNull();
+          expect(value)
+            .withContext('element ' + element + ' should be defined with value')
+            .toBeNull();
         },
       });
     });
@@ -64,7 +76,7 @@ describe('PreloaderService', () => {
 
     actual.subscribe({
       next: (value) => {
-        expect(value).toBeNull();
+        expect(value).withContext('statusAnyLoading should be set').toBeNull();
       },
     });
   };
@@ -75,7 +87,9 @@ describe('PreloaderService', () => {
     const actual = preloaderService.maxQty;
 
     Object.keys(Preloaders).forEach((element) => {
-      expect(actual.get(element as Preloaders)).toBe(0);
+      expect(actual.get(element as Preloaders))
+        .withContext('element ' + element + ' should be defined in the map')
+        .toBe(0);
     });
   };
 
@@ -172,29 +186,37 @@ describe('PreloaderService', () => {
 
       preloaderService.toLoad(preloaderToTest, expectedQtyToLoad);
 
-      expect(preloaderService.info.get(preloaderToTest)).toBeTruthy();
-
       const actualIsLoading =
         preloaderService.info.get(preloaderToTest)?.isLoading;
-      expect(actualIsLoading).toBe(expectedIsLoading);
+      expect(actualIsLoading)
+        .withContext(
+          'preloader isLoading should be as expected - before update'
+        )
+        .toBe(expectedIsLoading);
 
       const actualQtyToLoad =
         preloaderService.info.get(preloaderToTest)?.qtyToLoad;
-      expect(actualQtyToLoad).toBe(expectedQtyToLoad);
+      expect(actualQtyToLoad)
+        .withContext(
+          'preloader qtyToLoad should be as expected - before update'
+        )
+        .toBe(expectedQtyToLoad);
 
       const newLoadQty = 4;
 
       preloaderService.toLoad(preloaderToTest, newLoadQty);
 
-      expect(preloaderService.info.get(preloaderToTest)).toBeTruthy();
-
       const newActualIsLoading =
         preloaderService.info.get(preloaderToTest)?.isLoading;
-      expect(newActualIsLoading).toBe(expectedIsLoading);
+      expect(newActualIsLoading)
+        .withContext('preloader isLoading should be as expected - after update')
+        .toBe(expectedIsLoading);
 
       const newActualQtyToLoad =
         preloaderService.info.get(preloaderToTest)?.qtyToLoad;
-      expect(newActualQtyToLoad).toBe(expectedQtyToLoad + newLoadQty);
+      expect(newActualQtyToLoad)
+        .withContext('preloader qtyToLoad should be as expected - after update')
+        .toBe(expectedQtyToLoad + newLoadQty);
     };
     const shouldEmitStatusLoadingExpectation =
       'should emit corresponding loading status';
@@ -207,12 +229,18 @@ describe('PreloaderService', () => {
         ?.pipe(take(1))
         .subscribe({
           next: (value) => {
-            expect(value).toBeNull();
+            expect(value)
+              .withContext('loading status should be null at first')
+              .toBeNull();
             preloaderService.toLoad(preloaderToTest, qtyToTest);
 
             preloaderService.statusLoading.get(preloaderToTest)?.subscribe({
               next: (value) => {
-                expect(value).toBeTrue();
+                expect(value)
+                  .withContext(
+                    'loading status should be true after calling toLoad'
+                  )
+                  .toBeTrue();
               },
             });
           },
@@ -226,12 +254,18 @@ describe('PreloaderService', () => {
 
       preloaderService.statusAnyLoading?.pipe(take(1)).subscribe({
         next: (value) => {
-          expect(value).toBeNull();
+          expect(value)
+            .withContext('loading status should be null at first')
+            .toBeNull();
           preloaderService.toLoad(preloaderToTest, qtyToTest);
 
           preloaderService.statusAnyLoading.subscribe({
             next: (value) => {
-              expect(value).toBeTrue();
+              expect(value)
+                .withContext(
+                  'loading status should be true after calling toLoad'
+                )
+                .toBeTrue();
             },
           });
         },
@@ -248,7 +282,9 @@ describe('PreloaderService', () => {
 
       const newMax = preloaderService.maxQty.get(preloaderToTest);
 
-      expect(newMax).toBe(oldMax + qtyToTest);
+      expect(newMax)
+        .withContext('maxQty should be updated')
+        .toBe(oldMax + qtyToTest);
     };
 
     describe('in dev environment', () => {
@@ -305,22 +341,30 @@ describe('PreloaderService', () => {
 
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
-      expect(preloaderService.logger.warn).toHaveBeenCalledOnceWith(
-        'More data was loaded than expected for the preloader ',
-        preloaderToTest
-      );
+      expect(preloaderService.logger.warn)
+        .withContext('warn should have been called once with proper arguments')
+        .toHaveBeenCalledOnceWith(
+          'More data was loaded than expected for the preloader ',
+          preloaderToTest
+        );
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
 
-      expect(preloaderService.logger.warn).toHaveBeenCalledTimes(1);
+      expect(preloaderService.logger.warn)
+        .withContext('warn should have been called once - 1')
+        .toHaveBeenCalledTimes(1);
 
       preloaderService.loaded(preloaderToTest, qtyToTest - 1);
 
-      expect(preloaderService.logger.warn).toHaveBeenCalledTimes(1);
+      expect(preloaderService.logger.warn)
+        .withContext('warn should have been called once - 2')
+        .toHaveBeenCalledTimes(1);
 
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
-      expect(preloaderService.logger.warn).toHaveBeenCalledTimes(2);
+      expect(preloaderService.logger.warn)
+        .withContext('warn should have been called tiwce')
+        .toHaveBeenCalledTimes(2);
     };
     const shouldUpdateQtyExpectation =
       'should update the info with quantity when there is still more to load';
@@ -331,27 +375,33 @@ describe('PreloaderService', () => {
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
 
-      expect(preloaderService.info.get(preloaderToTest)).toBeTruthy();
-
       const actualIsLoading =
         preloaderService.info.get(preloaderToTest)?.isLoading;
-      expect(actualIsLoading).toBe(true);
+      expect(actualIsLoading)
+        .withContext('preloader isLoading should be true at first')
+        .toBe(true);
 
       const actualQtyToLoad =
         preloaderService.info.get(preloaderToTest)?.qtyToLoad;
-      expect(actualQtyToLoad).toBe(qtyToTest);
+      expect(actualQtyToLoad)
+        .withContext('preloader qtyToLoad should be as expected at first')
+        .toBe(qtyToTest);
 
       preloaderService.loaded(preloaderToTest, qtyLoaded);
 
-      expect(preloaderService.info.get(preloaderToTest)).toBeTruthy();
-
       const newActualIsLoading =
         preloaderService.info.get(preloaderToTest)?.isLoading;
-      expect(newActualIsLoading).toBe(true);
+      expect(newActualIsLoading)
+        .withContext('preloader isLoading should be true after loaded call')
+        .toBe(true);
 
       const newActualQtyToLoad =
         preloaderService.info.get(preloaderToTest)?.qtyToLoad;
-      expect(newActualQtyToLoad).toBe(qtyToTest - qtyLoaded);
+      expect(newActualQtyToLoad)
+        .withContext(
+          'preloader qtyToLoad should be as expected after loaded call'
+        )
+        .toBe(qtyToTest - qtyLoaded);
     };
     const shouldUpdateQtyZeroExpectation =
       'should update the info with quantity when there is no more to load';
@@ -361,27 +411,31 @@ describe('PreloaderService', () => {
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
 
-      expect(preloaderService.info.get(preloaderToTest)).toBeTruthy();
-
       const actualIsLoading =
         preloaderService.info.get(preloaderToTest)?.isLoading;
-      expect(actualIsLoading).toBe(true);
+      expect(actualIsLoading)
+        .withContext('preloader isLoading should be true at first')
+        .toBe(true);
 
       const actualQtyToLoad =
         preloaderService.info.get(preloaderToTest)?.qtyToLoad;
-      expect(actualQtyToLoad).toBe(qtyToTest);
+      expect(actualQtyToLoad)
+        .withContext('preloader qtyToLoad should be true at first')
+        .toBe(qtyToTest);
 
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
-      expect(preloaderService.info.get(preloaderToTest)).toBeTruthy();
-
       const newActualIsLoading =
         preloaderService.info.get(preloaderToTest)?.isLoading;
-      expect(newActualIsLoading).toBe(false);
+      expect(newActualIsLoading)
+        .withContext('preloader isLoading should be true after loaded call')
+        .toBe(false);
 
       const newActualQtyToLoad =
         preloaderService.info.get(preloaderToTest)?.qtyToLoad;
-      expect(newActualQtyToLoad).toBe(0);
+      expect(newActualQtyToLoad)
+        .withContext('preloader qtyToLoad should be true after loaded call')
+        .toBe(0);
     };
     const shouldNotUpdateMaxQtyExpectation =
       'should not update max quantity when there is still more to load';
@@ -398,7 +452,9 @@ describe('PreloaderService', () => {
 
       const newMaxQty = preloaderService.maxQty.get(preloaderToTest) as number;
 
-      expect(newMaxQty).toBe(oldMaxQty);
+      expect(newMaxQty)
+        .withContext('maxQty should not be updated')
+        .toBe(oldMaxQty);
     };
     const shouldUpdateMaxQtyZeroExpectation =
       'should update max quantity when there is no more to load';
@@ -412,7 +468,7 @@ describe('PreloaderService', () => {
 
       const newMaxQty = preloaderService.maxQty.get(preloaderToTest) as number;
 
-      expect(newMaxQty).toBe(0);
+      expect(newMaxQty).withContext('maxQty should be updated').toBe(0);
     };
     const shouldEmitStatusLoadingZeroExpectation =
       'should emit corresponding status loading when there is no more to load';
@@ -427,11 +483,15 @@ describe('PreloaderService', () => {
         ?.pipe(take(1))
         .subscribe({
           next: (value) => {
-            expect(value).toBeTrue();
+            expect(value)
+              .withContext('loading status should be true at first')
+              .toBeTrue();
             preloaderService.loaded(preloaderToTest, qtyToTest);
             preloaderService.statusLoading.get(preloaderToTest)?.subscribe({
               next: (value) => {
-                expect(value).toBeFalse();
+                expect(value)
+                  .withContext('loading status should be false after')
+                  .toBeFalse();
               },
             });
           },
@@ -451,11 +511,15 @@ describe('PreloaderService', () => {
         ?.pipe(take(1))
         .subscribe({
           next: (value) => {
-            expect(value).toBeTrue();
+            expect(value)
+              .withContext('loading status should be true at first')
+              .toBeTrue();
             preloaderService.loaded(preloaderToTest, qtyLoaded);
             preloaderService.statusLoading.get(preloaderToTest)?.subscribe({
               next: (value) => {
-                expect(value).toBeTrue();
+                expect(value)
+                  .withContext('loading status should be true after')
+                  .toBeTrue();
               },
             });
           },
@@ -473,22 +537,36 @@ describe('PreloaderService', () => {
 
       preloaderService.statusAnyLoading.pipe(take(1)).subscribe({
         next: (value) => {
-          expect(value).toBeTrue();
+          expect(value)
+            .withContext('loading status should be true at first')
+            .toBeTrue();
           preloaderService.loaded(preloaderToTest, qtyLoaded);
           preloaderService.statusAnyLoading.pipe(take(1)).subscribe({
             next: (value) => {
-              expect(value).toBeTrue();
+              expect(value)
+                .withContext(
+                  'loading status should be true after incomplete loaded - 1'
+                )
+                .toBeTrue();
               preloaderService.toLoad(otherPreloader, qtyToTest);
               preloaderService.statusAnyLoading.pipe(take(1)).subscribe({
                 next: (value) => {
-                  expect(value).toBeTrue();
+                  expect(value)
+                    .withContext(
+                      'loading status should be true after incomplete loaded - 2'
+                    )
+                    .toBeTrue();
                   preloaderService.loaded(
                     preloaderToTest,
                     qtyToTest - qtyLoaded
                   );
                   preloaderService.statusAnyLoading.pipe(take(1)).subscribe({
                     next: (value) => {
-                      expect(value).toBeTrue();
+                      expect(value)
+                        .withContext(
+                          'loading status should be true after incomplete loaded - 3'
+                        )
+                        .toBeTrue();
                     },
                   });
                 },
@@ -509,19 +587,33 @@ describe('PreloaderService', () => {
 
       preloaderService.statusAnyLoading.pipe(take(1)).subscribe({
         next: (value) => {
-          expect(value).toBeTrue();
+          expect(value)
+            .withContext('loading status should be true at first')
+            .toBeTrue();
           preloaderService.toLoad(otherPreloader, qtyToTest);
           preloaderService.statusAnyLoading.pipe(take(1)).subscribe({
             next: (value) => {
-              expect(value).toBeTrue();
+              expect(value)
+                .withContext(
+                  'loading status should be true after incomplete loaded - 1'
+                )
+                .toBeTrue();
               preloaderService.loaded(otherPreloader, qtyToTest);
               preloaderService.statusAnyLoading.pipe(take(1)).subscribe({
                 next: (value) => {
-                  expect(value).toBeTrue();
+                  expect(value)
+                    .withContext(
+                      'loading status should be true after incomplete loaded - 2'
+                    )
+                    .toBeTrue();
                   preloaderService.loaded(preloaderToTest, qtyToTest);
                   preloaderService.statusAnyLoading.pipe(take(1)).subscribe({
                     next: (value) => {
-                      expect(value).toBeFalse();
+                      expect(value)
+                        .withContext(
+                          'loading status should be false after complete loaded'
+                        )
+                        .toBeFalse();
                     },
                   });
                 },
@@ -609,7 +701,7 @@ describe('PreloaderService', () => {
       preloaderService.toLoad(preloaderToTest, qtyToTest);
 
       const actual = preloaderService.isLoading(preloaderToTest);
-      expect(actual).toBeTrue();
+      expect(actual).withContext('should return true').toBeTrue();
     };
     const shouldReturnInfoFalseExpectation =
       "should return false for a preloader that isn't loading";
@@ -619,17 +711,21 @@ describe('PreloaderService', () => {
       const qtyToTest = 2;
 
       const actualBefore = preloaderService.isLoading(preloaderToTest);
-      expect(actualBefore).toBeFalse();
+      expect(actualBefore)
+        .withContext('should return false before')
+        .toBeFalse();
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
 
       const actualDuring = preloaderService.isLoading(otherPreloader);
-      expect(actualDuring).toBeFalse();
+      expect(actualDuring)
+        .withContext('should return false during')
+        .toBeFalse();
 
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
       const actualAfter = preloaderService.isLoading(preloaderToTest);
-      expect(actualAfter).toBeFalse();
+      expect(actualAfter).withContext('should return false after').toBeFalse();
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -679,7 +775,7 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.isAnyLoading();
 
-      expect(actual).toBeTrue();
+      expect(actual).withContext('should return true').toBeTrue();
     };
     const shouldReturnFalseIfNoneLoadingEmptyParamsExpectation =
       'should return false if empty params and no preloader is loading';
@@ -693,7 +789,7 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.isAnyLoading();
 
-      expect(actual).toBeFalse();
+      expect(actual).withContext('should return false').toBeFalse();
     };
     const shouldReturnTrueIfAnyLoadingWithParamsExpectation =
       'should return true with params and any preloader is loading';
@@ -706,20 +802,20 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.isAnyLoading(preloaderToTest);
 
-      expect(actual).toBeTrue();
+      expect(actual).withContext('should return true - 1').toBeTrue();
 
       preloaderService.toLoad(otherPreloader, qtyToTest);
 
       const otherActual = preloaderService.isAnyLoading(otherPreloader);
 
-      expect(otherActual).toBeTrue();
+      expect(otherActual).withContext('should return true - 2').toBeTrue();
 
       const lastActual = preloaderService.isAnyLoading(
         preloaderToTest,
         otherPreloader
       );
 
-      expect(lastActual).toBeTrue();
+      expect(lastActual).withContext('should return true - 3').toBeTrue();
     };
     const shouldReturnFalseIfNoneLoadingWithParamsExpectation =
       'should return false with params and no preloader is loading';
@@ -734,18 +830,18 @@ describe('PreloaderService', () => {
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
       const actual = preloaderService.isAnyLoading(preloaderToTest);
-      expect(actual).toBeFalse();
+      expect(actual).withContext('should return false - 1').toBeFalse();
 
       preloaderService.loaded(otherPreloader, qtyToTest);
 
       const otherActual = preloaderService.isAnyLoading(otherPreloader);
-      expect(otherActual).toBeFalse();
+      expect(otherActual).withContext('should return false - 2').toBeFalse();
 
       const lastActual = preloaderService.isAnyLoading(
         preloaderToTest,
         otherPreloader
       );
-      expect(lastActual).toBeFalse();
+      expect(lastActual).withContext('should return false - 3').toBeFalse();
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -835,14 +931,14 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getTotalMaxElToLoad();
 
-      expect(actual).toBe(0);
+      expect(actual).withContext('should return 0 - 1').toBe(0);
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
       const otherActual = preloaderService.getTotalMaxElToLoad();
 
-      expect(otherActual).toBe(0);
+      expect(otherActual).withContext('should return 0 - 2').toBe(0);
     };
     const shouldReturnValueElToLoadEmptyParamsExpectation =
       'should return the total max to load when empty params and something has to load';
@@ -855,25 +951,33 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getTotalMaxElToLoad();
 
-      expect(actual).toBe(qtyToTest);
+      expect(actual)
+        .withContext('should return expected value - 1')
+        .toBe(qtyToTest);
 
       preloaderService.toLoad(otherPreloader, qtyToTest);
 
       const otherActual = preloaderService.getTotalMaxElToLoad();
 
-      expect(otherActual).toBe(qtyToTest + qtyToTest);
+      expect(otherActual)
+        .withContext('should return expected value - 2')
+        .toBe(qtyToTest + qtyToTest);
 
       preloaderService.loaded(otherPreloader, qtyToTest - 1);
 
       const anotherActual = preloaderService.getTotalMaxElToLoad();
 
-      expect(anotherActual).toBe(qtyToTest + qtyToTest);
+      expect(anotherActual)
+        .withContext('should return expected value - 3')
+        .toBe(qtyToTest + qtyToTest);
 
       preloaderService.loaded(otherPreloader, 1);
 
       const lastActual = preloaderService.getTotalMaxElToLoad();
 
-      expect(lastActual).toBe(qtyToTest);
+      expect(lastActual)
+        .withContext('should return expected value - 4')
+        .toBe(qtyToTest);
     };
     const shouldReturn0NoElToLoadWithParamsExpectation =
       'should return 0 with params and nothing has to load';
@@ -884,27 +988,27 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getTotalMaxElToLoad(preloaderToTest);
 
-      expect(actual).toBe(0);
+      expect(actual).withContext('should return 0 - 1').toBe(0);
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
 
       const otherActual = preloaderService.getTotalMaxElToLoad(otherPreloader);
 
-      expect(otherActual).toBe(0);
+      expect(otherActual).withContext('should return 0 - 2').toBe(0);
 
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
       const anotherActual =
         preloaderService.getTotalMaxElToLoad(preloaderToTest);
 
-      expect(anotherActual).toBe(0);
+      expect(anotherActual).withContext('should return 0 - 3').toBe(0);
 
       const lastActual = preloaderService.getTotalMaxElToLoad(
         preloaderToTest,
         otherPreloader
       );
 
-      expect(lastActual).toBe(0);
+      expect(lastActual).withContext('should return 0 - 4').toBe(0);
     };
     const shouldReturnValueElToLoadWithParamsExpectation =
       'should return the total max to load whith params and something has to load';
@@ -917,39 +1021,51 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getTotalMaxElToLoad(preloaderToTest);
 
-      expect(actual).toBe(qtyToTest);
+      expect(actual)
+        .withContext('should return expected value - 1')
+        .toBe(qtyToTest);
 
       preloaderService.toLoad(otherPreloader, qtyToTest);
 
       const otherActual = preloaderService.getTotalMaxElToLoad(otherPreloader);
 
-      expect(otherActual).toBe(qtyToTest);
+      expect(otherActual)
+        .withContext('should return expected value - 2')
+        .toBe(qtyToTest);
 
       const anotherActual = preloaderService.getTotalMaxElToLoad(
         preloaderToTest,
         otherPreloader
       );
 
-      expect(anotherActual).toBe(qtyToTest + qtyToTest);
+      expect(anotherActual)
+        .withContext('should return expected value - 3')
+        .toBe(qtyToTest + qtyToTest);
 
       preloaderService.loaded(otherPreloader, qtyToTest - 1);
 
       const otherActual2 = preloaderService.getTotalMaxElToLoad(otherPreloader);
 
-      expect(otherActual2).toBe(qtyToTest);
+      expect(otherActual2)
+        .withContext('should return expected value - 4')
+        .toBe(qtyToTest);
 
       const anotherActual2 = preloaderService.getTotalMaxElToLoad(
         preloaderToTest,
         otherPreloader
       );
 
-      expect(anotherActual2).toBe(qtyToTest + qtyToTest);
+      expect(anotherActual2)
+        .withContext('should return expected value - 5')
+        .toBe(qtyToTest + qtyToTest);
 
       preloaderService.loaded(otherPreloader, 1);
 
       const lastActual = preloaderService.getTotalMaxElToLoad(preloaderToTest);
 
-      expect(lastActual).toBe(qtyToTest);
+      expect(lastActual)
+        .withContext('should return expected value - 6')
+        .toBe(qtyToTest);
     };
 
     describe('in dev environment', () => {
@@ -1040,14 +1156,14 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getTotalElToLoad();
 
-      expect(actual).toBe(0);
+      expect(actual).withContext('should return 0 - 1').toBe(0);
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
       const otherActual = preloaderService.getTotalElToLoad();
 
-      expect(otherActual).toBe(0);
+      expect(otherActual).withContext('should return 0 - 2').toBe(0);
     };
     const shouldReturnValueElToLoadEmptyParamsExpectation =
       'should return the total to load when empty params and something has to load';
@@ -1060,25 +1176,33 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getTotalElToLoad();
 
-      expect(actual).toBe(qtyToTest);
+      expect(actual)
+        .withContext('should return expected value - 1')
+        .toBe(qtyToTest);
 
       preloaderService.toLoad(otherPreloader, qtyToTest);
 
       const otherActual = preloaderService.getTotalElToLoad();
 
-      expect(otherActual).toBe(qtyToTest + qtyToTest);
+      expect(otherActual)
+        .withContext('should return expected value - 2')
+        .toBe(qtyToTest + qtyToTest);
 
       preloaderService.loaded(otherPreloader, qtyToTest - 1);
 
       const anotherActual = preloaderService.getTotalElToLoad();
 
-      expect(anotherActual).toBe(qtyToTest + 1);
+      expect(anotherActual)
+        .withContext('should return expected value - 3')
+        .toBe(qtyToTest + 1);
 
       preloaderService.loaded(otherPreloader, 1);
 
       const lastActual = preloaderService.getTotalElToLoad();
 
-      expect(lastActual).toBe(qtyToTest);
+      expect(lastActual)
+        .withContext('should return expected value - 4')
+        .toBe(qtyToTest);
     };
     const shouldReturn0NoElToLoadWithParamsExpectation =
       'should return 0 whith params and nothing has to load';
@@ -1089,26 +1213,26 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getTotalElToLoad(preloaderToTest);
 
-      expect(actual).toBe(0);
+      expect(actual).withContext('should return 0 - 1').toBe(0);
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
 
       const otherActual = preloaderService.getTotalElToLoad(otherPreloader);
 
-      expect(otherActual).toBe(0);
+      expect(otherActual).withContext('should return 0 - 2').toBe(0);
 
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
       const anotherActual = preloaderService.getTotalElToLoad(preloaderToTest);
 
-      expect(anotherActual).toBe(0);
+      expect(anotherActual).withContext('should return 0 - 3').toBe(0);
 
       const lastActual = preloaderService.getTotalElToLoad(
         preloaderToTest,
         otherPreloader
       );
 
-      expect(lastActual).toBe(0);
+      expect(lastActual).withContext('should return 0 - 4').toBe(0);
     };
     const shouldReturnValueElToLoadWithParamsExpectation =
       'should return the total to load whith params and something has to load';
@@ -1121,39 +1245,51 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getTotalElToLoad(preloaderToTest);
 
-      expect(actual).toBe(qtyToTest);
+      expect(actual)
+        .withContext('should return the expected value - 1')
+        .toBe(qtyToTest);
 
       preloaderService.toLoad(otherPreloader, qtyToTest);
 
       const otherActual = preloaderService.getTotalElToLoad(otherPreloader);
 
-      expect(otherActual).toBe(qtyToTest);
+      expect(otherActual)
+        .withContext('should return the expected value - 2')
+        .toBe(qtyToTest);
 
       const anotherActual = preloaderService.getTotalElToLoad(
         preloaderToTest,
         otherPreloader
       );
 
-      expect(anotherActual).toBe(qtyToTest + qtyToTest);
+      expect(anotherActual)
+        .withContext('should return the expected value - 3')
+        .toBe(qtyToTest + qtyToTest);
 
       preloaderService.loaded(otherPreloader, qtyToTest - 1);
 
       const otherActual2 = preloaderService.getTotalElToLoad(otherPreloader);
 
-      expect(otherActual2).toBe(1);
+      expect(otherActual2)
+        .withContext('should return the expected value - 4')
+        .toBe(1);
 
       const anotherActual2 = preloaderService.getTotalElToLoad(
         preloaderToTest,
         otherPreloader
       );
 
-      expect(anotherActual2).toBe(qtyToTest + 1);
+      expect(anotherActual2)
+        .withContext('should return the expected value - 5')
+        .toBe(qtyToTest + 1);
 
       preloaderService.loaded(otherPreloader, 1);
 
       const lastActual = preloaderService.getTotalElToLoad(preloaderToTest);
 
-      expect(lastActual).toBe(qtyToTest);
+      expect(lastActual)
+        .withContext('should return the expected value - 6')
+        .toBe(qtyToTest);
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -1243,14 +1379,14 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getProgressionPercent();
 
-      expect(actual).toBe(100);
+      expect(actual).withContext('should return 100 - 1').toBe(100);
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
       const otherActual = preloaderService.getProgressionPercent();
 
-      expect(otherActual).toBe(100);
+      expect(otherActual).withContext('should return 100 - 2').toBe(100);
     };
     const shouldReturnProgressToLoadEmptyParamsExpectation =
       'should return the progression percent when empty params and something has to load';
@@ -1263,27 +1399,27 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getProgressionPercent();
 
-      expect(actual).toBe(0);
+      expect(actual).withContext('should return 0 - 1').toBe(0);
 
       preloaderService.toLoad(otherPreloader, qtyToTest);
 
       const otherActual = preloaderService.getProgressionPercent();
 
-      expect(otherActual).toBe(0);
+      expect(otherActual).withContext('should return 0 - 2').toBe(0);
 
       preloaderService.loaded(otherPreloader, qtyToTest - 1);
 
       const anotherActual = preloaderService.getProgressionPercent();
 
-      expect(anotherActual).toBe(
-        ((qtyToTest - 1) / (qtyToTest + qtyToTest)) * 100
-      );
+      expect(anotherActual)
+        .withContext('should return the expected value')
+        .toBe(((qtyToTest - 1) / (qtyToTest + qtyToTest)) * 100);
 
       preloaderService.loaded(otherPreloader, 1);
 
       const lastActual = preloaderService.getProgressionPercent();
 
-      expect(lastActual).toBe(0);
+      expect(lastActual).withContext('should return 0 - 3').toBe(0);
     };
     const shouldReturn100NoElToLoadWithParamsExpectation =
       'should return 100 whith params and nothing has to load';
@@ -1294,28 +1430,28 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getProgressionPercent(preloaderToTest);
 
-      expect(actual).toBe(100);
+      expect(actual).withContext('should return 100 - 1').toBe(100);
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
 
       const otherActual =
         preloaderService.getProgressionPercent(otherPreloader);
 
-      expect(otherActual).toBe(100);
+      expect(otherActual).withContext('should return 100 - 2').toBe(100);
 
       preloaderService.loaded(preloaderToTest, qtyToTest);
 
       const anotherActual =
         preloaderService.getProgressionPercent(preloaderToTest);
 
-      expect(anotherActual).toBe(100);
+      expect(anotherActual).withContext('should return 100 - 3').toBe(100);
 
       const lastActual = preloaderService.getProgressionPercent(
         preloaderToTest,
         otherPreloader
       );
 
-      expect(lastActual).toBe(100);
+      expect(lastActual).withContext('should return 100 - 4').toBe(100);
     };
     const shouldReturnProgressToLoadWithParamsExpectation =
       'should return the progression percent whith params and something has to load';
@@ -1328,44 +1464,46 @@ describe('PreloaderService', () => {
 
       const actual = preloaderService.getProgressionPercent(preloaderToTest);
 
-      expect(actual).toBe(0);
+      expect(actual).withContext('should return 0 - 1').toBe(0);
 
       preloaderService.toLoad(otherPreloader, qtyToTest);
 
       const otherActual =
         preloaderService.getProgressionPercent(otherPreloader);
 
-      expect(otherActual).toBe(0);
+      expect(otherActual).withContext('should return 0 - 2').toBe(0);
 
       const anotherActual = preloaderService.getProgressionPercent(
         preloaderToTest,
         otherPreloader
       );
 
-      expect(anotherActual).toBe(0);
+      expect(anotherActual).withContext('should return 0 - 3').toBe(0);
 
       preloaderService.loaded(otherPreloader, qtyToTest - 1);
 
       const otherActual2 =
         preloaderService.getProgressionPercent(otherPreloader);
 
-      expect(otherActual2).toBe(((qtyToTest - 1) / qtyToTest) * 100);
+      expect(otherActual2)
+        .withContext('should return expected value - 1')
+        .toBe(((qtyToTest - 1) / qtyToTest) * 100);
 
       const anotherActual2 = preloaderService.getProgressionPercent(
         preloaderToTest,
         otherPreloader
       );
 
-      expect(anotherActual2).toBe(
-        ((qtyToTest - 1) / (qtyToTest + qtyToTest)) * 100
-      );
+      expect(anotherActual2)
+        .withContext('should return expected value - 2')
+        .toBe(((qtyToTest - 1) / (qtyToTest + qtyToTest)) * 100);
 
       preloaderService.loaded(otherPreloader, 1);
 
       const lastActual =
         preloaderService.getProgressionPercent(preloaderToTest);
 
-      expect(lastActual).toBe(0);
+      expect(lastActual).withContext('should return 0 - 4').toBe(0);
     };
     describe('in dev environment', () => {
       beforeEach(() => {

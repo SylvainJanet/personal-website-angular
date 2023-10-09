@@ -26,7 +26,7 @@ describe('CvContactInfoComponent - dom integration', () => {
   const expectedFsDev = 'test fsDev';
   const expectedEmail = 'test email';
   const expectedPhone = 'test phone';
-  const expectedEmailAdress = 'contact@sylvainjanet.fr';
+  const expectedEmailAddress = 'contact@sylvainjanet.fr';
   const expectedPhoneNumber = '06&nbsp;62&nbsp;02&nbsp;14&nbsp;12';
   beforeEach(() => {
     const expectedNameDto = of({ message: expectedName });
@@ -48,8 +48,9 @@ describe('CvContactInfoComponent - dom integration', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveContentSetByServiceExpectation =
@@ -60,26 +61,48 @@ describe('CvContactInfoComponent - dom integration', () => {
     const firstDivEl: DebugElement = debugEl.children[0];
 
     let pEl: DebugElement = firstDivEl.children[0];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.innerHTML).toBe(expectedName + ': ');
-    expect(pEl.children[1].nativeElement.innerHTML).toBe(expectedSj);
+    expect(pEl.children.length)
+      .withContext('p should have 2 children - 1')
+      .toBe(2);
+    expect(pEl.children[0].nativeElement.innerHTML)
+      .withContext('name should be set')
+      .toBe(expectedName + ': ');
+    expect(pEl.children[1].nativeElement.innerHTML)
+      .withContext('sj should be set')
+      .toBe(expectedSj);
 
     pEl = firstDivEl.children[1];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.innerHTML).toBe(
-      expectedProfile + ': '
-    );
-    expect(pEl.children[1].nativeElement.innerHTML).toBe(expectedFsDev);
+    expect(pEl.children.length)
+      .withContext('p should have 2 children - 2')
+      .toBe(2);
+    expect(pEl.children[0].nativeElement.innerHTML)
+      .withContext('profile should be set')
+      .toBe(expectedProfile + ': ');
+    expect(pEl.children[1].nativeElement.innerHTML)
+      .withContext('fsdev should be set')
+      .toBe(expectedFsDev);
 
     pEl = firstDivEl.children[2];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.innerHTML).toBe(expectedEmail + ': ');
-    expect(pEl.children[1].nativeElement.innerHTML).toBe(expectedEmailAdress);
+    expect(pEl.children.length)
+      .withContext('p should have 2 children - 3')
+      .toBe(2);
+    expect(pEl.children[0].nativeElement.innerHTML)
+      .withContext('email should be set')
+      .toBe(expectedEmail + ': ');
+    expect(pEl.children[1].nativeElement.innerHTML)
+      .withContext('email address should be set')
+      .toBe(expectedEmailAddress);
 
     pEl = firstDivEl.children[3];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.innerHTML).toBe(expectedPhone + ': ');
-    expect(pEl.children[1].nativeElement.innerHTML).toBe(expectedPhoneNumber);
+    expect(pEl.children.length)
+      .withContext('p should have 2 children - 4')
+      .toBe(2);
+    expect(pEl.children[0].nativeElement.innerHTML)
+      .withContext('phone should be set')
+      .toBe(expectedPhone + ': ');
+    expect(pEl.children[1].nativeElement.innerHTML)
+      .withContext('phone number should be set')
+      .toBe(expectedPhoneNumber);
   };
 
   describe('in dev environment', () => {

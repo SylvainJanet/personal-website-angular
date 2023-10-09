@@ -28,8 +28,9 @@ describe('BackToTopComponent - dom integration', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveContentSetByServiceExpectation =
@@ -41,7 +42,7 @@ describe('BackToTopComponent - dom integration', () => {
 
     const actual = imgEl.attributes['alt'];
 
-    expect(actual).toBe(expectedBackToTopAlt);
+    expect(actual).withContext('alt should be set').toBe(expectedBackToTopAlt);
   };
 
   describe('in dev environment', () => {

@@ -39,7 +39,9 @@ describe('TextService - integration', () => {
 
       textService['getText'](selectorToTest, languageToTest).subscribe({
         next: (actual) => {
-          expect(actual).toBe(expectedMessage);
+          expect(actual)
+            .withContext('message should be as expected')
+            .toBe(expectedMessage);
           done();
         },
         error: done.fail,
@@ -117,7 +119,9 @@ describe('TextService - integration', () => {
 
       textService.get(selectorToTest).subscribe({
         next: (actual) => {
-          expect(actual).toBe(EXPECTED_TEXT_ERROR_MESSAGE);
+          expect(actual)
+            .withContext('message should be as expected')
+            .toBe(EXPECTED_TEXT_ERROR_MESSAGE);
           done();
         },
         error: done.fail,
@@ -136,7 +140,9 @@ describe('TextService - integration', () => {
 
       textService.get(selectorToTest).subscribe({
         next: (actual) => {
-          expect(actual).toBe(expectedMessage);
+          expect(actual)
+            .withContext('message should be as expected')
+            .toBe(expectedMessage);
           done();
         },
         error: done.fail,
@@ -226,7 +232,9 @@ describe('TextService - integration', () => {
 
       textService.getOtherLanguage().subscribe({
         next: (actual) => {
-          expect(actual).toBe(expectedText);
+          expect(actual)
+            .withContext('other language should be as expected')
+            .toBe(expectedText);
           done();
         },
         error: done.fail,
@@ -244,7 +252,9 @@ describe('TextService - integration', () => {
 
       textService.getOtherLanguage().subscribe({
         next: (actual) => {
-          expect(actual).toBe(expectedText);
+          expect(actual)
+            .withContext('other language should be as expected')
+            .toBe(expectedText);
           done();
         },
         error: done.fail,
@@ -350,14 +360,16 @@ describe('TextService - integration', () => {
 
       textService.getSplit(selectorToTest).subscribe({
         next: (actual) => {
-          expect(actual).toEqual([
-            new Paragraph([
-              new SubParagraph(
-                SubParagraphRoot.SPAN,
-                EXPECTED_TEXT_ERROR_MESSAGE
-              ),
-            ]),
-          ]);
+          expect(actual)
+            .withContext('error message should be as expected')
+            .toEqual([
+              new Paragraph([
+                new SubParagraph(
+                  SubParagraphRoot.SPAN,
+                  EXPECTED_TEXT_ERROR_MESSAGE
+                ),
+              ]),
+            ]);
           done();
         },
         error: done.fail,
@@ -438,7 +450,9 @@ describe('TextService - integration', () => {
 
       textService.getSplit(selectorToTest).subscribe({
         next: (actual) => {
-          expect(actual).toEqual(expected);
+          expect(actual)
+            .withContext('paragraphs should be as expected')
+            .toEqual(expected);
           done();
         },
         error: done.fail,

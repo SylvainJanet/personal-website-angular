@@ -28,8 +28,9 @@ describe('TextParagraphSetComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   describe('should have proper dom structure', () => {
@@ -39,7 +40,9 @@ describe('TextParagraphSetComponent - dom unit', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(0);
+      expect(debugEl.children.length)
+        .withContext('there should be no elements')
+        .toBe(0);
     });
     it('with paragraphs', () => {
       componentInstance.paragraphs = [
@@ -61,13 +64,15 @@ describe('TextParagraphSetComponent - dom unit', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(2);
-      expect(debugEl.children[0].nativeElement.tagName).toBe(
-        'APP-TEXT-PARAGRAPH'
-      );
-      expect(debugEl.children[1].nativeElement.tagName).toBe(
-        'APP-TEXT-PARAGRAPH'
-      );
+      expect(debugEl.children.length)
+        .withContext('there should be 2 elements')
+        .toBe(2);
+      expect(debugEl.children[0].nativeElement.tagName)
+        .withContext('element 1 should be APP-TEXT-PARAGRAPH')
+        .toBe('APP-TEXT-PARAGRAPH');
+      expect(debugEl.children[1].nativeElement.tagName)
+        .withContext('element 2 should be APP-TEXT-PARAGRAPH')
+        .toBe('APP-TEXT-PARAGRAPH');
     });
   });
 });

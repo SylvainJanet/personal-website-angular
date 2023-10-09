@@ -74,7 +74,9 @@ describe('CvAboutMeComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvAboutMeComponent).toBeTruthy();
+      expect(cvAboutMeComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -141,10 +143,14 @@ describe('CvAboutMeComponent - integration', () => {
       const actualParagraphs = cvAboutMeComponent.paragraphs;
 
       actualTitleObs.subscribe((s) => {
-        expect(s).toBe(expectedTitle);
+        expect(s).withContext('title should be set').toBe(expectedTitle);
       });
-      expect(actualPdfLink).toBe('pdf/' + expectedPdfName);
-      expect(actualParagraphs).toEqual(expectedParagraphs);
+      expect(actualPdfLink)
+        .withContext('pdf link should be set')
+        .toBe('pdf/' + expectedPdfName);
+      expect(actualParagraphs)
+        .withContext('paragraphs should be set')
+        .toEqual(expectedParagraphs);
     };
     describe('in dev environment', () => {
       beforeEach(() => {

@@ -39,30 +39,46 @@ describe('BackToTopComponent - unit', () => {
       backToTopComponent = TestBed.inject(BackToTopComponent);
     });
     it('should create', () => {
-      expect(backToTopComponent).toBeTruthy();
+      expect(backToTopComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(backToTopComponent).toBeTruthy();
-      expect(backToTopComponent.trigger).toBeGreaterThan(0);
+      expect(backToTopComponent)
+        .withContext('component should create')
+        .toBeTruthy();
+      expect(backToTopComponent.trigger)
+        .withContext('trigger should be set')
+        .toBeGreaterThan(0);
 
-      expect(backToTopComponent.iconOpacity).toBe('0');
-      expect(backToTopComponent.iconPointerEvent).toBe('none');
-      expect(backToTopComponent.backToTopState).toBe(invisibleState);
+      expect(backToTopComponent.iconOpacity)
+        .withContext('iconOpacity should be set')
+        .toBe('0');
+      expect(backToTopComponent.iconPointerEvent)
+        .withContext('iconPointerEvent should be set')
+        .toBe('none');
+      expect(backToTopComponent.backToTopState)
+        .withContext('backToTopState should be set')
+        .toBe(invisibleState);
       backToTopComponent.altTxt.subscribe((s) => {
-        expect(s).toBe('');
+        expect(s).withContext('altTxt should be set').toBe('');
       });
-      expect(backToTopComponent.preloaders).toEqual([Preloaders.MAIN]);
+      expect(backToTopComponent.preloaders)
+        .withContext('preloaders should be set')
+        .toEqual([Preloaders.MAIN]);
     });
 
     it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe).toHaveBeenCalledOnceWith(
-        backToTopComponent
-      );
+      expect(languageServiceSpy.subscribe)
+        .withContext('subscribe should have been called')
+        .toHaveBeenCalledOnceWith(backToTopComponent);
     });
 
     it('should update the texts', () => {
-      expect(backToTopComponent.updateTexts).toHaveBeenCalledTimes(1);
+      expect(backToTopComponent.updateTexts)
+        .withContext('updateTexts should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -71,14 +87,20 @@ describe('BackToTopComponent - unit', () => {
       backToTopComponent = TestBed.inject(BackToTopComponent);
     });
     it('should call the textService', () => {
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(1);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(backToTopAltSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called one time')
+        .toHaveBeenCalledTimes(1);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with the correct arguments')
+        .toHaveBeenCalledWith(backToTopAltSelector);
     });
     it('should set the properties to the textService result', () => {
       const actualAltObs = backToTopComponent.altTxt;
 
       actualAltObs.subscribe((s) => {
-        expect(s).toBe(expectedBackToTopAlt);
+        expect(s)
+          .withContext('altTxt should be set')
+          .toBe(expectedBackToTopAlt);
       });
     });
   });
@@ -89,9 +111,9 @@ describe('BackToTopComponent - unit', () => {
     });
     it('should unsubscribe from the languageService', () => {
       backToTopComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe).toHaveBeenCalledOnceWith(
-        backToTopComponent
-      );
+      expect(languageServiceSpy.unsubscribe)
+        .withContext('unsubscribe should have been called')
+        .toHaveBeenCalledOnceWith(backToTopComponent);
     });
   });
 
@@ -100,14 +122,18 @@ describe('BackToTopComponent - unit', () => {
       backToTopComponent = TestBed.inject(BackToTopComponent);
     });
     it('should call updateAfterLoaded method from invisible to visible', () => {
-      expect(backToTopComponent.backToTopState).toBe(invisibleState);
+      expect(backToTopComponent.backToTopState)
+        .withContext('altTxt should be set')
+        .toBe(invisibleState);
       spyOn(backToTopComponent, 'updateBackToTop');
 
       backToTopComponent.onScroll({
         currentTarget: { scrollY: backToTopComponent.trigger + 1 } as Window,
       } as unknown as Event);
 
-      expect(backToTopComponent.updateBackToTop).toHaveBeenCalledTimes(1);
+      expect(backToTopComponent.updateBackToTop)
+        .withContext('updateBackToTop should have been called')
+        .toHaveBeenCalledTimes(1);
     });
     it('should call updateAfterLoaded method from visible to invisible', () => {
       spyOn(backToTopComponent, 'updateBackToTop');
@@ -116,23 +142,31 @@ describe('BackToTopComponent - unit', () => {
         currentTarget: { scrollY: backToTopComponent.trigger + 1 } as Window,
       } as unknown as Event);
 
-      expect(backToTopComponent.updateBackToTop).toHaveBeenCalledTimes(1);
+      expect(backToTopComponent.updateBackToTop)
+        .withContext('updateBackToTop should have been called - 1')
+        .toHaveBeenCalledTimes(1);
 
       backToTopComponent.onScroll({
         currentTarget: { scrollY: backToTopComponent.trigger - 1 } as Window,
       } as unknown as Event);
 
-      expect(backToTopComponent.updateBackToTop).toHaveBeenCalledTimes(2);
+      expect(backToTopComponent.updateBackToTop)
+        .withContext('updateBackToTop should have been called - 2')
+        .toHaveBeenCalledTimes(2);
     });
     it('should change from invisible to visible', () => {
-      expect(backToTopComponent.backToTopState).toBe(invisibleState);
+      expect(backToTopComponent.backToTopState)
+        .withContext('backToTopState should be invisible')
+        .toBe(invisibleState);
       spyOn(backToTopComponent, 'updateBackToTop');
 
       backToTopComponent.onScroll({
         currentTarget: { scrollY: backToTopComponent.trigger + 1 } as Window,
       } as unknown as Event);
 
-      expect(backToTopComponent.backToTopState).toBe(visibleState);
+      expect(backToTopComponent.backToTopState)
+        .withContext('backToTopState should be visible')
+        .toBe(visibleState);
     });
     it('should change from visible to invisible', () => {
       spyOn(backToTopComponent, 'updateBackToTop');
@@ -141,13 +175,17 @@ describe('BackToTopComponent - unit', () => {
         currentTarget: { scrollY: backToTopComponent.trigger + 1 } as Window,
       } as unknown as Event);
 
-      expect(backToTopComponent.backToTopState).toBe(visibleState);
+      expect(backToTopComponent.backToTopState)
+        .withContext('backToTopState should be visible')
+        .toBe(visibleState);
 
       backToTopComponent.onScroll({
         currentTarget: { scrollY: backToTopComponent.trigger - 1 } as Window,
       } as unknown as Event);
 
-      expect(backToTopComponent.backToTopState).toBe(invisibleState);
+      expect(backToTopComponent.backToTopState)
+        .withContext('backToTopState should be invisible')
+        .toBe(invisibleState);
     });
   });
 
@@ -163,7 +201,9 @@ describe('BackToTopComponent - unit', () => {
 
       backToTopComponent.onClick(eventSpy);
 
-      expect(eventSpy.preventDefault).toHaveBeenCalledOnceWith();
+      expect(eventSpy.preventDefault)
+        .withContext('preventDefault should have been called')
+        .toHaveBeenCalledOnceWith();
     });
   });
 
@@ -179,7 +219,7 @@ describe('BackToTopComponent - unit', () => {
 
       const actual = backToTopComponent.iconOpacity;
 
-      expect(actual).toBe(expected);
+      expect(actual).withContext('opacity should be set').toBe(expected);
     });
     it('set pointer event when invisible', () => {
       const expected = 'none';
@@ -189,7 +229,7 @@ describe('BackToTopComponent - unit', () => {
 
       const actual = backToTopComponent.iconPointerEvent;
 
-      expect(actual).toBe(expected);
+      expect(actual).withContext('pointer event should be set').toBe(expected);
     });
     it('set icon opacity when visible', () => {
       const expected = '1';
@@ -199,7 +239,7 @@ describe('BackToTopComponent - unit', () => {
 
       const actual = backToTopComponent.iconOpacity;
 
-      expect(actual).toBe(expected);
+      expect(actual).withContext('opacity should be set').toBe(expected);
     });
     it('set pointer event when visible', () => {
       const expected = 'all';
@@ -209,7 +249,7 @@ describe('BackToTopComponent - unit', () => {
 
       const actual = backToTopComponent.iconPointerEvent;
 
-      expect(actual).toBe(expected);
+      expect(actual).withContext('pointer event should be set').toBe(expected);
     });
   });
 });

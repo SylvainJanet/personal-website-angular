@@ -92,38 +92,56 @@ describe('CvAboutMeComponent - unit', () => {
       cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
     });
     it('should create', () => {
-      expect(cvAboutMeComponent).toBeTruthy();
+      expect(cvAboutMeComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(cvAboutMeComponent).toBeTruthy();
-      expect(cvAboutMeComponent.logger).toBe(logServiceSpy);
+      expect(cvAboutMeComponent)
+        .withContext('component should create')
+        .toBeTruthy();
+      expect(cvAboutMeComponent.logger)
+        .withContext('logger should be set')
+        .toBe(logServiceSpy);
 
-      expect(cvAboutMeComponent.width).toBe('0');
-      expect(cvAboutMeComponent.posElementMin).toBe(0);
-      expect(cvAboutMeComponent.posElementMax).toBe(0);
+      expect(cvAboutMeComponent.width)
+        .withContext('width should be set')
+        .toBe('0');
+      expect(cvAboutMeComponent.posElementMin)
+        .withContext('posElementMin should be set')
+        .toBe(0);
+      expect(cvAboutMeComponent.posElementMax)
+        .withContext('posElementMax should be set')
+        .toBe(0);
       cvAboutMeComponent.aboutMe.subscribe((s) => {
-        expect(s).toBe('');
+        expect(s).withContext('aboutMe should be set').toBe('');
       });
-      expect(cvAboutMeComponent.linkToCv).toBe('');
-      expect(cvAboutMeComponent.paragraphs).toEqual([]);
+      expect(cvAboutMeComponent.linkToCv)
+        .withContext('linkToCv should be set')
+        .toBe('');
+      expect(cvAboutMeComponent.paragraphs)
+        .withContext('paragraphs should be set')
+        .toEqual([]);
     });
 
     it('should set proper logger', () => {
       const expected = 'CvAboutMeComponent';
-      expect(logServiceGlobalSpy.withClassName).toHaveBeenCalledOnceWith(
-        expected
-      );
+      expect(logServiceGlobalSpy.withClassName)
+        .withContext('withClassName should have been called')
+        .toHaveBeenCalledOnceWith(expected);
     });
 
     it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe).toHaveBeenCalledOnceWith(
-        cvAboutMeComponent
-      );
+      expect(languageServiceSpy.subscribe)
+        .withContext('subscribe should have been called')
+        .toHaveBeenCalledOnceWith(cvAboutMeComponent);
     });
 
     it('should update the texts', () => {
-      expect(cvAboutMeComponent.updateTexts).toHaveBeenCalledTimes(1);
+      expect(cvAboutMeComponent.updateTexts)
+        .withContext('updateTexts should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -132,13 +150,27 @@ describe('CvAboutMeComponent - unit', () => {
       cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
     });
     it('should call the textService', () => {
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(2);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(titleSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(cvFileNameSelector);
-      expect(textServiceSpy.getSplit).toHaveBeenCalledTimes(1);
-      expect(textServiceSpy.getSplit).toHaveBeenCalledWith(
-        aboutMeContentSelector
-      );
+      expect(textServiceSpy.get)
+        .withContext('get should have been called twice')
+        .toHaveBeenCalledTimes(2);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 1'
+        )
+        .toHaveBeenCalledWith(titleSelector);
+      expect(textServiceSpy.get)
+        .withContext(
+          'get should have been called with the proper arguments - 2'
+        )
+        .toHaveBeenCalledWith(cvFileNameSelector);
+      expect(textServiceSpy.getSplit)
+        .withContext('getSplit should have been called once')
+        .toHaveBeenCalledTimes(1);
+      expect(textServiceSpy.getSplit)
+        .withContext(
+          'getSplit should have been called with the proper arguments'
+        )
+        .toHaveBeenCalledWith(aboutMeContentSelector);
     });
     it('should set the properties to the textService result', () => {
       const actualTitleObs = cvAboutMeComponent.aboutMe;
@@ -146,26 +178,34 @@ describe('CvAboutMeComponent - unit', () => {
       const actualAboutMeContent = cvAboutMeComponent.paragraphs;
 
       actualTitleObs.subscribe((s) => {
-        expect(s).toBe(expectedTitle);
+        expect(s).withContext('width should be set').toBe(expectedTitle);
       });
-      expect(actualCvFileName).toBe('pdf/' + expectedPdfName);
-      expect(actualAboutMeContent).toBe(expectedParagraphs);
+      expect(actualCvFileName)
+        .withContext('cv file name should be set')
+        .toBe('pdf/' + expectedPdfName);
+      expect(actualAboutMeContent)
+        .withContext('about me content should be set')
+        .toBe(expectedParagraphs);
     });
     it('should insert a new paragraph at index 1', () => {
       const actualAboutMeContent = cvAboutMeComponent.paragraphs;
-      expect(actualAboutMeContent[1].els.length).toBe(0);
+      expect(actualAboutMeContent[1].els.length)
+        .withContext('first paragraph should have no elements')
+        .toBe(0);
     });
     it('should add cssClass to all paragraphs', () => {
       const actualAboutMeContent = cvAboutMeComponent.paragraphs;
       actualAboutMeContent.forEach((p) => {
-        expect(p.cssClass).toBe('lead');
+        expect(p.cssClass)
+          .withContext("cssClass should be 'lead'")
+          .toBe('lead');
       });
     });
     it('should add link to cv to the proper paragraph', () => {
       const actualAboutMeContent = cvAboutMeComponent.paragraphs;
-      expect(actualAboutMeContent[6].els[1].assetHref).toBe(
-        'pdf/' + expectedPdfName
-      );
+      expect(actualAboutMeContent[6].els[1].assetHref)
+        .withContext('assetHref should be set')
+        .toBe('pdf/' + expectedPdfName);
     });
   });
 
@@ -175,9 +215,9 @@ describe('CvAboutMeComponent - unit', () => {
     });
     it('should unsubscribe from the languageService', () => {
       cvAboutMeComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe).toHaveBeenCalledOnceWith(
-        cvAboutMeComponent
-      );
+      expect(languageServiceSpy.unsubscribe)
+        .withContext('unsubscribe should have been called')
+        .toHaveBeenCalledOnceWith(cvAboutMeComponent);
     });
   });
 
@@ -192,7 +232,9 @@ describe('CvAboutMeComponent - unit', () => {
       scrollY = 5;
 
       cvAboutMeComponent.updateWidth();
-      expect(cvAboutMeComponent.width).toBe('0');
+      expect(cvAboutMeComponent.width)
+        .withContext('width should be set')
+        .toBe('0');
     });
     it('should set to 0 if scrollY is more than max', () => {
       cvAboutMeComponent.posElementMin = 10;
@@ -201,7 +243,9 @@ describe('CvAboutMeComponent - unit', () => {
       scrollY = 25;
 
       cvAboutMeComponent.updateWidth();
-      expect(cvAboutMeComponent.width).toBe('0');
+      expect(cvAboutMeComponent.width)
+        .withContext('width should be set')
+        .toBe('0');
     });
     it('should set to 75% if scrollY is between min and max', () => {
       cvAboutMeComponent.posElementMin = 10;
@@ -210,7 +254,9 @@ describe('CvAboutMeComponent - unit', () => {
       scrollY = 15;
 
       cvAboutMeComponent.updateWidth();
-      expect(cvAboutMeComponent.width).toBe('75%');
+      expect(cvAboutMeComponent.width)
+        .withContext('width should be set')
+        .toBe('75%');
     });
   });
 
@@ -223,7 +269,9 @@ describe('CvAboutMeComponent - unit', () => {
 
       cvAboutMeComponent.onResize();
 
-      expect(cvAboutMeComponent.updateAfterLoaded).toHaveBeenCalledTimes(1);
+      expect(cvAboutMeComponent.updateAfterLoaded)
+        .withContext('updateAfterLoaded should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -236,7 +284,9 @@ describe('CvAboutMeComponent - unit', () => {
 
       cvAboutMeComponent.onScroll();
 
-      expect(cvAboutMeComponent.updateAfterLoaded).toHaveBeenCalledTimes(1);
+      expect(cvAboutMeComponent.updateAfterLoaded)
+        .withContext('updateAfterLoaded should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -255,9 +305,9 @@ describe('CvAboutMeComponent - unit', () => {
 
       cvAboutMeComponent.updateAfterLoaded();
 
-      expect(
-        preloaderServiceSpy.statusAnyLoading.subscribe
-      ).toHaveBeenCalledTimes(1);
+      expect(preloaderServiceSpy.statusAnyLoading.subscribe)
+        .withContext('subscribe should have been called')
+        .toHaveBeenCalledTimes(1);
     });
     it('should call getElPos and UpdateWidth when all assets are loaded', () => {
       spyOn(cvAboutMeComponent, 'getElPos');
@@ -271,33 +321,36 @@ describe('CvAboutMeComponent - unit', () => {
 
       cvAboutMeComponent.updateAfterLoaded();
 
-      expect(cvAboutMeComponent.getElPos).not.toHaveBeenCalled();
-      expect(cvAboutMeComponent.updateWidth).not.toHaveBeenCalled();
+      expect(cvAboutMeComponent.getElPos)
+        .withContext('getElPos should not have been called - 1')
+        .not.toHaveBeenCalled();
+      expect(cvAboutMeComponent.updateWidth)
+        .withContext('updateWidth should not have been called - 1')
+        .not.toHaveBeenCalled();
 
       bs.next(true);
-      expect(cvAboutMeComponent.getElPos).not.toHaveBeenCalled();
-      expect(cvAboutMeComponent.updateWidth).not.toHaveBeenCalled();
+      expect(cvAboutMeComponent.getElPos)
+        .withContext('getElPos should not have been called - 2')
+        .not.toHaveBeenCalled();
+      expect(cvAboutMeComponent.updateWidth)
+        .withContext('updateWidth should not have been called - 2')
+        .not.toHaveBeenCalled();
 
       bs.next(false);
-      expect(cvAboutMeComponent.getElPos).toHaveBeenCalledTimes(1);
-      expect(cvAboutMeComponent.updateWidth).toHaveBeenCalledTimes(1);
+      expect(cvAboutMeComponent.getElPos)
+        .withContext('getElPos should have been called once')
+        .toHaveBeenCalledTimes(1);
+      expect(cvAboutMeComponent.updateWidth)
+        .withContext('updateWidth should have been called once')
+        .toHaveBeenCalledTimes(1);
 
       bs.next(false);
-      expect(cvAboutMeComponent.getElPos).toHaveBeenCalledTimes(2);
-      expect(cvAboutMeComponent.updateWidth).toHaveBeenCalledTimes(2);
+      expect(cvAboutMeComponent.getElPos)
+        .withContext('getElPos should have been called twice')
+        .toHaveBeenCalledTimes(2);
+      expect(cvAboutMeComponent.updateWidth)
+        .withContext('updateWidth should have been called twice')
+        .toHaveBeenCalledTimes(2);
     });
   });
-
-  // describe('ngAfterContentInit method', () => {
-  //   beforeEach(() => {
-  //     cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
-  //   });
-  //   it('should call updateAfterLoaded method', () => {
-  //     spyOn(cvAboutMeComponent, 'updateAfterLoaded');
-
-  //     cvAboutMeComponent.ngAfterContentInit();
-
-  //     expect(cvAboutMeComponent.updateAfterLoaded).toHaveBeenCalledTimes(1);
-  //   });
-  // });
 });

@@ -17,7 +17,9 @@ describe('ParagraphDecoderService', () => {
       const actual =
         paragraphDecoderService['decodeSubParagraphSpan'](textInput);
 
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('span subparagraph should be decoded')
+        .toEqual(expected);
     });
   });
   describe('decodeSubParagraphBr method', () => {
@@ -26,11 +28,13 @@ describe('ParagraphDecoderService', () => {
 
       const actual = paragraphDecoderService['decodeSubParagraphBr']();
 
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('br subparagraph should be decoded')
+        .toEqual(expected);
     });
   });
   describe('decodeSubParagraphAasset method', () => {
-    it('should decode an a link for assets subparagraph', () => {
+    it('should decode a link for assets subparagraph', () => {
       const linkToAsset = 'link to asset text, some other text';
       const textInput = 'a_asset,' + linkToAsset;
       const expected = new SubParagraph(SubParagraphRoot.A_ASSET, linkToAsset);
@@ -38,7 +42,9 @@ describe('ParagraphDecoderService', () => {
       const actual =
         paragraphDecoderService['decodeSubParagraphAasset'](textInput);
 
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('link for assets subparagraph should be decoded')
+        .toEqual(expected);
     });
   });
   describe('decodeSubParagraphStrongEm method', () => {
@@ -50,7 +56,9 @@ describe('ParagraphDecoderService', () => {
       const actual =
         paragraphDecoderService['decodeSubParagraphStrongEm'](textInput);
 
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('strong em subparagraph should be decoded')
+        .toEqual(expected);
     });
   });
 
@@ -63,15 +71,17 @@ describe('ParagraphDecoderService', () => {
 
       paragraphDecoderService['decodeSubParagraph'](0, textInput);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraphSpan']
-      ).toHaveBeenCalledOnceWith(textInput);
+      expect(paragraphDecoderService['decodeSubParagraphSpan'])
+        .withContext(
+          'decodeSubParagraphSpan should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(textInput);
 
       paragraphDecoderService['decodeSubParagraph'](4, textInput);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraphSpan']
-      ).toHaveBeenCalledTimes(2);
+      expect(paragraphDecoderService['decodeSubParagraphSpan'])
+        .withContext('decodeSubParagraphSpan should have been called twice')
+        .toHaveBeenCalledTimes(2);
     });
     it('should decode a br subparagraph, at odd positions', () => {
       const input = 'br';
@@ -81,15 +91,15 @@ describe('ParagraphDecoderService', () => {
 
       paragraphDecoderService['decodeSubParagraph'](1, input);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraphBr']
-      ).toHaveBeenCalledOnceWith();
+      expect(paragraphDecoderService['decodeSubParagraphBr'])
+        .withContext('decodeSubParagraphBr should have been called once')
+        .toHaveBeenCalledOnceWith();
 
       paragraphDecoderService['decodeSubParagraph'](5, input);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraphBr']
-      ).toHaveBeenCalledTimes(2);
+      expect(paragraphDecoderService['decodeSubParagraphBr'])
+        .withContext('decodeSubParagraphBr should have been called twice')
+        .toHaveBeenCalledTimes(2);
     });
     it('should decode an a link for assets subparagraph, at odd positions', () => {
       const linkToAsset = 'link to asset text, some other text';
@@ -100,15 +110,17 @@ describe('ParagraphDecoderService', () => {
 
       paragraphDecoderService['decodeSubParagraph'](1, textInput);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraphAasset']
-      ).toHaveBeenCalledOnceWith(textInput);
+      expect(paragraphDecoderService['decodeSubParagraphAasset'])
+        .withContext(
+          'decodeSubParagraphAasset should have been called once with the proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(textInput);
 
       paragraphDecoderService['decodeSubParagraph'](5, textInput);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraphAasset']
-      ).toHaveBeenCalledTimes(2);
+      expect(paragraphDecoderService['decodeSubParagraphAasset'])
+        .withContext('decodeSubParagraphAasset should have been called twice')
+        .toHaveBeenCalledTimes(2);
     });
     it('should decode a strong em subparagraph, at odd positions', () => {
       const content = 'this is a test, some other text';
@@ -119,15 +131,17 @@ describe('ParagraphDecoderService', () => {
 
       paragraphDecoderService['decodeSubParagraph'](1, textInput);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraphStrongEm']
-      ).toHaveBeenCalledOnceWith(textInput);
+      expect(paragraphDecoderService['decodeSubParagraphStrongEm'])
+        .withContext(
+          'decodeSubParagraphStrongEm should have been called once with the proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(textInput);
 
       paragraphDecoderService['decodeSubParagraph'](5, textInput);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraphStrongEm']
-      ).toHaveBeenCalledTimes(2);
+      expect(paragraphDecoderService['decodeSubParagraphStrongEm'])
+        .withContext('decodeSubParagraphStrongEm should have been called twice')
+        .toHaveBeenCalledTimes(2);
     });
   });
   describe('decodeParagraph method', () => {
@@ -194,47 +208,65 @@ describe('ParagraphDecoderService', () => {
       );
       const actual = paragraphDecoderService['decodeParagraph'](input);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraph']
-      ).toHaveBeenCalledTimes(7);
+      expect(paragraphDecoderService['decodeSubParagraph'])
+        .withContext(
+          'decodeSubParagraph should have been called the correct amount of times'
+        )
+        .toHaveBeenCalledTimes(7);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraph']
-      ).toHaveBeenCalledWith(0, spanContent1);
+      expect(paragraphDecoderService['decodeSubParagraph'])
+        .withContext(
+          'decodeSubParagraph should have been called with the proper arguments - 1'
+        )
+        .toHaveBeenCalledWith(0, spanContent1);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraph']
-      ).toHaveBeenCalledWith(1, br);
+      expect(paragraphDecoderService['decodeSubParagraph'])
+        .withContext(
+          'decodeSubParagraph should have been called with the proper arguments - 2'
+        )
+        .toHaveBeenCalledWith(1, br);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraph']
-      ).toHaveBeenCalledWith(2, spanContent2);
+      expect(paragraphDecoderService['decodeSubParagraph'])
+        .withContext(
+          'decodeSubParagraph should have been called with the proper arguments - 3'
+        )
+        .toHaveBeenCalledWith(2, spanContent2);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraph']
-      ).toHaveBeenCalledWith(3, a);
+      expect(paragraphDecoderService['decodeSubParagraph'])
+        .withContext(
+          'decodeSubParagraph should have been called with the proper arguments - 4'
+        )
+        .toHaveBeenCalledWith(3, a);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraph']
-      ).toHaveBeenCalledWith(4, spanContent3);
+      expect(paragraphDecoderService['decodeSubParagraph'])
+        .withContext(
+          'decodeSubParagraph should have been called with the proper arguments - 5'
+        )
+        .toHaveBeenCalledWith(4, spanContent3);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraph']
-      ).toHaveBeenCalledWith(5, strongEm);
+      expect(paragraphDecoderService['decodeSubParagraph'])
+        .withContext(
+          'decodeSubParagraph should have been called with the proper arguments - 6'
+        )
+        .toHaveBeenCalledWith(5, strongEm);
 
-      expect(
-        paragraphDecoderService['decodeSubParagraph']
-      ).toHaveBeenCalledWith(6, spanContent4);
+      expect(paragraphDecoderService['decodeSubParagraph'])
+        .withContext(
+          'decodeSubParagraph should have been called with the proper arguments - 7'
+        )
+        .toHaveBeenCalledWith(6, spanContent4);
 
-      expect(actual.els).toEqual([
-        expectedSubPar1,
-        expectedSubPar2,
-        expectedSubPar3,
-        expectedSubPar4,
-        expectedSubPar5,
-        expectedSubPar6,
-        expectedSubPar7,
-      ]);
+      expect(actual.els)
+        .withContext('subparagraphs should be decoded')
+        .toEqual([
+          expectedSubPar1,
+          expectedSubPar2,
+          expectedSubPar3,
+          expectedSubPar4,
+          expectedSubPar5,
+          expectedSubPar6,
+          expectedSubPar7,
+        ]);
     });
   });
   describe('decode method', () => {
@@ -314,19 +346,27 @@ describe('ParagraphDecoderService', () => {
 
       const actual = paragraphDecoderService.decode(input);
 
-      expect(paragraphDecoderService['decodeParagraph']).toHaveBeenCalledTimes(
-        2
-      );
+      expect(paragraphDecoderService['decodeParagraph'])
+        .withContext(
+          'decodeParagraph should have been called the correct amount of times'
+        )
+        .toHaveBeenCalledTimes(2);
 
-      expect(paragraphDecoderService['decodeParagraph']).toHaveBeenCalledWith(
-        par1
-      );
+      expect(paragraphDecoderService['decodeParagraph'])
+        .withContext(
+          'decodeParagraph should have been called with the proper arguments - 1'
+        )
+        .toHaveBeenCalledWith(par1);
 
-      expect(paragraphDecoderService['decodeParagraph']).toHaveBeenCalledWith(
-        par2
-      );
+      expect(paragraphDecoderService['decodeParagraph'])
+        .withContext(
+          'decodeParagraph should have been called with the proper arguments - 2'
+        )
+        .toHaveBeenCalledWith(par2);
 
-      expect(actual).toEqual([expectedPar1, expectedPar2]);
+      expect(actual)
+        .withContext('paragraphs should be decoded')
+        .toEqual([expectedPar1, expectedPar2]);
     });
   });
 });

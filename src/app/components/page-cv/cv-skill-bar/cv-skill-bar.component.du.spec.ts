@@ -32,8 +32,9 @@ describe('CvSkillBarComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   describe('onResize method', () => {
@@ -42,7 +43,9 @@ describe('CvSkillBarComponent - dom unit', () => {
 
       window.dispatchEvent(new Event('resize'));
 
-      expect(componentInstance.onResize).toHaveBeenCalledTimes(1);
+      expect(componentInstance.onResize)
+        .withContext('onResize should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
   describe('onScroll method', () => {
@@ -51,7 +54,9 @@ describe('CvSkillBarComponent - dom unit', () => {
 
       window.dispatchEvent(new Event('scroll'));
 
-      expect(componentInstance.onScroll).toHaveBeenCalledTimes(1);
+      expect(componentInstance.onScroll)
+        .withContext('onScroll should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -60,51 +65,72 @@ describe('CvSkillBarComponent - dom unit', () => {
       componentInstance.getElPos();
 
       // an e2e test would be more appropriate to check the accuracy of the values
-      //   const expectedPosElementMin = 0;
-      //   const expectedPosElementMax = 0;
 
       const actualPosElementMin = componentInstance.posElementMin;
       const actualPosElementMax = componentInstance.posElementMax;
 
-      //   expect(actualPosElementMin).toBe(expectedPosElementMin);
-      //   expect(actualPosElementMax).toBe(expectedPosElementMax);
-
-      expect(actualPosElementMax > actualPosElementMin).toBeTrue();
+      expect(actualPosElementMax > actualPosElementMin)
+        .withContext('min < max')
+        .toBeTrue();
     });
   });
 
   it('should have proper dom structure', () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is DIV')
+      .toBe('DIV');
 
     const firstDivEl: DebugElement = debugEl.children[0];
 
-    expect(firstDivEl.children.length).toBe(2);
-    expect(firstDivEl.children[0].nativeElement.tagName).toBe('DIV');
-    expect(firstDivEl.children[1].nativeElement.tagName).toBe('DIV');
+    expect(firstDivEl.children.length)
+      .withContext('child 1 at root should have 2 children')
+      .toBe(2);
+    expect(firstDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of child 1 at root should be DIV')
+      .toBe('DIV');
+    expect(firstDivEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of child 1 at root should be DIV')
+      .toBe('DIV');
 
     // skill name
     let secondDivEl: DebugElement = firstDivEl.children[0];
-    expect(secondDivEl.children.length).toBe(1);
-    expect(secondDivEl.children[0].nativeElement.tagName).toBe('DIV');
-    expect(secondDivEl.children[0].children.length).toBe(2);
+    expect(secondDivEl.children.length)
+      .withContext('skill name should have 1 child')
+      .toBe(1);
+    expect(secondDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of skill name should be DIV')
+      .toBe('DIV');
+    expect(secondDivEl.children[0].children.length)
+      .withContext('skill name - div should have 2 children')
+      .toBe(2);
 
-    expect(secondDivEl.children[0].children[0].nativeElement.tagName).toBe(
-      'DIV'
-    );
-    expect(secondDivEl.children[0].children[0].children.length).toBe(0);
-    expect(secondDivEl.children[0].children[1].nativeElement.tagName).toBe(
-      'DIV'
-    );
-    expect(secondDivEl.children[0].children[1].children.length).toBe(0);
+    expect(secondDivEl.children[0].children[0].nativeElement.tagName)
+      .withContext('child 1 of skill name - div should be DIV')
+      .toBe('DIV');
+    expect(secondDivEl.children[0].children[0].children.length)
+      .withContext('child 1 of skill name - div should have no children')
+      .toBe(0);
+    expect(secondDivEl.children[0].children[1].nativeElement.tagName)
+      .withContext('child 2 of skill name - div should be DIV')
+      .toBe('DIV');
+    expect(secondDivEl.children[0].children[1].children.length)
+      .withContext('child 2 of skill name - div should have no children')
+      .toBe(0);
 
     // progress
     secondDivEl = firstDivEl.children[1];
-    expect(secondDivEl.children.length).toBe(1);
-    expect(secondDivEl.children[0].nativeElement.tagName).toBe('DIV');
-    expect(secondDivEl.children[0].children.length).toBe(0);
+    expect(secondDivEl.children.length)
+      .withContext('progress should have 1 child')
+      .toBe(1);
+    expect(secondDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of progress should be DIV')
+      .toBe('DIV');
+    expect(secondDivEl.children[0].children.length)
+      .withContext('child 1 of progress should have no children')
+      .toBe(0);
   });
 
   it('should set skillName', () => {
@@ -120,7 +146,7 @@ describe('CvSkillBarComponent - dom unit', () => {
 
     const actual = skillNameDivEl.nativeElement.innerHTML;
 
-    expect(actual).toBe(expected);
+    expect(actual).withContext('skill name should be set').toBe(expected);
   });
   it('should set percent', () => {
     const expected = 40;
@@ -131,11 +157,13 @@ describe('CvSkillBarComponent - dom unit', () => {
     const firstDivEl: DebugElement = debugEl.children[0];
     const secondDivEl: DebugElement = firstDivEl.children[0];
     const thirdDivEl: DebugElement = secondDivEl.children[0];
-    const skillNameDivEl: DebugElement = thirdDivEl.children[1];
+    const percentDivEl: DebugElement = thirdDivEl.children[1];
 
-    const actual = skillNameDivEl.nativeElement.innerHTML;
+    const actual = percentDivEl.nativeElement.innerHTML;
 
-    expect(actual).toBe(expected + '%');
+    expect(actual)
+      .withContext('percent should be set')
+      .toBe(expected + '%');
   });
   it('should set progress bar width', () => {
     componentInstance.updateWidth();
@@ -149,8 +177,8 @@ describe('CvSkillBarComponent - dom unit', () => {
 
     const actual = progressBarDivEl.styles['width'];
 
-    expect(actual).toBe(
-      widthProperty.endsWith('%') ? widthProperty : widthProperty + 'px'
-    );
+    expect(actual)
+      .withContext('width should be set')
+      .toBe(widthProperty.endsWith('%') ? widthProperty : widthProperty + 'px');
   });
 });

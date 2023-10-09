@@ -36,28 +36,46 @@ describe('CvContactInfoComponent - unit', () => {
       cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
     });
     it('should create', () => {
-      expect(cvContactInfoComponent).toBeTruthy();
+      expect(cvContactInfoComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(cvContactInfoComponent).toBeTruthy();
+      expect(cvContactInfoComponent)
+        .withContext('component should create')
+        .toBeTruthy();
 
-      cvContactInfoComponent.name.subscribe((s) => expect(s).toBe(''));
-      cvContactInfoComponent.sj.subscribe((s) => expect(s).toBe(''));
-      cvContactInfoComponent.profile.subscribe((s) => expect(s).toBe(''));
-      cvContactInfoComponent.fsDev.subscribe((s) => expect(s).toBe(''));
-      cvContactInfoComponent.email.subscribe((s) => expect(s).toBe(''));
-      cvContactInfoComponent.phone.subscribe((s) => expect(s).toBe(''));
-    });
-
-    it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe).toHaveBeenCalledOnceWith(
-        cvContactInfoComponent
+      cvContactInfoComponent.name.subscribe((s) =>
+        expect(s).withContext('name should be set').toBe('')
+      );
+      cvContactInfoComponent.sj.subscribe((s) =>
+        expect(s).withContext('sj should be set').toBe('')
+      );
+      cvContactInfoComponent.profile.subscribe((s) =>
+        expect(s).withContext('profile should be set').toBe('')
+      );
+      cvContactInfoComponent.fsDev.subscribe((s) =>
+        expect(s).withContext('fsDev should be set').toBe('')
+      );
+      cvContactInfoComponent.email.subscribe((s) =>
+        expect(s).withContext('email should be set').toBe('')
+      );
+      cvContactInfoComponent.phone.subscribe((s) =>
+        expect(s).withContext('phone should be set').toBe('')
       );
     });
 
+    it('should subscribe to the languageService', () => {
+      expect(languageServiceSpy.subscribe)
+        .withContext('subscribe should have been called')
+        .toHaveBeenCalledOnceWith(cvContactInfoComponent);
+    });
+
     it('should update the texts', () => {
-      expect(cvContactInfoComponent.updateTexts).toHaveBeenCalledTimes(1);
+      expect(cvContactInfoComponent.updateTexts)
+        .withContext('updateTexts should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -66,23 +84,51 @@ describe('CvContactInfoComponent - unit', () => {
       cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
     });
     it('should call the textService', () => {
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(6);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(nameSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(sjSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(profileSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(fsDevSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(emailSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(phoneSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called 6 times')
+        .toHaveBeenCalledTimes(6);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 1')
+        .toHaveBeenCalledWith(nameSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 2')
+        .toHaveBeenCalledWith(sjSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 3')
+        .toHaveBeenCalledWith(profileSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 4')
+        .toHaveBeenCalledWith(fsDevSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 5')
+        .toHaveBeenCalledWith(emailSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 6')
+        .toHaveBeenCalledWith(phoneSelector);
 
       cvContactInfoComponent.updateTexts();
 
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(12);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(nameSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(sjSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(profileSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(fsDevSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(emailSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(phoneSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called 12 times')
+        .toHaveBeenCalledTimes(12);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 7')
+        .toHaveBeenCalledWith(nameSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 8')
+        .toHaveBeenCalledWith(sjSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 9')
+        .toHaveBeenCalledWith(profileSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 10')
+        .toHaveBeenCalledWith(fsDevSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 11')
+        .toHaveBeenCalledWith(emailSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 12')
+        .toHaveBeenCalledWith(phoneSelector);
     });
     it('should set the properties to the textService result', () => {
       const expectedNameObs = of('test name');
@@ -109,12 +155,24 @@ describe('CvContactInfoComponent - unit', () => {
       const actualEmailObs = cvContactInfoComponent.email;
       const actualPhoneObs = cvContactInfoComponent.phone;
 
-      expect(actualNameObs).toBe(expectedNameObs);
-      expect(actualSjObs).toBe(expectedSjObs);
-      expect(actualProfileObs).toBe(expectedProfileObs);
-      expect(actualFsDevObs).toBe(expectedFsDevObs);
-      expect(actualEmailObs).toBe(expectedEmailObs);
-      expect(actualPhoneObs).toBe(expectedPhoneObs);
+      expect(actualNameObs)
+        .withContext('name obs should be set')
+        .toBe(expectedNameObs);
+      expect(actualSjObs)
+        .withContext('sj obs should be set')
+        .toBe(expectedSjObs);
+      expect(actualProfileObs)
+        .withContext('profile obs should be set')
+        .toBe(expectedProfileObs);
+      expect(actualFsDevObs)
+        .withContext('fsdev obs should be set')
+        .toBe(expectedFsDevObs);
+      expect(actualEmailObs)
+        .withContext('email obs should be set')
+        .toBe(expectedEmailObs);
+      expect(actualPhoneObs)
+        .withContext('phone obs should be set')
+        .toBe(expectedPhoneObs);
     });
   });
 
@@ -124,9 +182,9 @@ describe('CvContactInfoComponent - unit', () => {
     });
     it('should unsubscribe from the languageService', () => {
       cvContactInfoComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe).toHaveBeenCalledOnceWith(
-        cvContactInfoComponent
-      );
+      expect(languageServiceSpy.unsubscribe)
+        .withContext('unsubscribe should have been called')
+        .toHaveBeenCalledOnceWith(cvContactInfoComponent);
     });
   });
 });

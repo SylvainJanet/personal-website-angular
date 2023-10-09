@@ -36,7 +36,9 @@ describe('HeaderComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(headerComponent).toBeTruthy();
+      expect(headerComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -99,10 +101,12 @@ describe('HeaderComponent - integration', () => {
       const actualOtherLanguageObs = headerComponent.otherLanguage;
 
       actualMyNameObs.subscribe((s) => {
-        expect(s).toBe(expectedName);
+        expect(s).withContext('name should be set').toBe(expectedName);
       });
       actualOtherLanguageObs.subscribe((s) => {
-        expect(s).toBe(expectedOtherLanguage);
+        expect(s)
+          .withContext('other language should be set')
+          .toBe(expectedOtherLanguage);
       });
     };
     describe('in dev environment', () => {

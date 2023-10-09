@@ -6,7 +6,9 @@ describe('injectionToken', () => {
     it('should return the environment', () => {
       const expected = environment;
       const actual = getEnv();
-      expect(actual).toBe(expected);
+      expect(actual)
+        .withContext('environment should be as expected')
+        .toBe(expected);
     });
   });
 });

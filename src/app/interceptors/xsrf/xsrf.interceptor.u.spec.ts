@@ -27,8 +27,10 @@ describe('XsrfInterceptor - unit', () => {
   });
 
   it('should be an interceptor', () => {
-    expect(xsrfInterceptor).toBeTruthy();
-    expect(xsrfInterceptor.intercept).toBeTruthy();
+    expect(xsrfInterceptor).withContext('should be defined').toBeTruthy();
+    expect(xsrfInterceptor.intercept)
+      .withContext('intercept should be defined')
+      .toBeTruthy();
   });
 
   describe('intercept method', () => {
@@ -50,40 +52,52 @@ describe('XsrfInterceptor - unit', () => {
 
       const actual = xsrfInterceptor.intercept(httpRequest, httpHandler);
 
-      expect(httpHandler.handle).toHaveBeenCalledTimes(1);
-      expect(actual).toBe(expected);
+      expect(httpHandler.handle)
+        .withContext('handle should have been called')
+        .toHaveBeenCalledTimes(1);
+      expect(actual)
+        .withContext('returned request should be as expected')
+        .toBe(expected);
     });
 
     it('should not change the method', () => {
       xsrfInterceptor.intercept(httpRequest, httpHandler);
 
-      expect(httpHandler.handle).toHaveBeenCalledOnceWith(
-        jasmine.objectContaining({ method: testMethod })
-      );
+      expect(httpHandler.handle)
+        .withContext('handle should have been called')
+        .toHaveBeenCalledOnceWith(
+          jasmine.objectContaining({ method: testMethod })
+        );
     });
 
     it('should not change the url', () => {
       xsrfInterceptor.intercept(httpRequest, httpHandler);
 
-      expect(httpHandler.handle).toHaveBeenCalledOnceWith(
-        jasmine.objectContaining({ url: testUrl })
-      );
+      expect(httpHandler.handle)
+        .withContext('handle should have been called')
+        .toHaveBeenCalledOnceWith(jasmine.objectContaining({ url: testUrl }));
     });
 
     it('should add xsrf token in headers', () => {
       xsrfInterceptor.intercept(httpRequest, httpHandler);
-      expect(httpHandler.handle).toHaveBeenCalledTimes(1);
-      expect(httpHandler.handle.calls.allArgs()[0][0]).toSatisfy(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (r: HttpRequest<any>) => r.headers.has('X-XSRF-TOKEN')
-      );
+      expect(httpHandler.handle)
+        .withContext('handle should have been called')
+        .toHaveBeenCalledTimes(1);
+      expect(httpHandler.handle.calls.allArgs()[0][0])
+        .withContext('handle should have been called with the proper argument')
+        .toSatisfy(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (r: HttpRequest<any>) => r.headers.has('X-XSRF-TOKEN')
+        );
     });
 
     it('should add with credentials true', () => {
       xsrfInterceptor.intercept(httpRequest, httpHandler);
-      expect(httpHandler.handle).toHaveBeenCalledOnceWith(
-        jasmine.objectContaining({ withCredentials: true })
-      );
+      expect(httpHandler.handle)
+        .withContext('handle should have been called')
+        .toHaveBeenCalledOnceWith(
+          jasmine.objectContaining({ withCredentials: true })
+        );
     });
 
     it('should add the correct xsrf token in headers', () => {
@@ -96,15 +110,25 @@ describe('XsrfInterceptor - unit', () => {
       xsrfInterceptor = new XsrfInterceptor(tokenExtractorSpy);
 
       xsrfInterceptor.intercept(httpRequest, httpHandler);
-      expect(httpHandler.handle).toHaveBeenCalledTimes(1);
-      expect(httpHandler.handle.calls.allArgs()[0][0]).toSatisfy(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (r: HttpRequest<any>) => r.headers.has('X-XSRF-TOKEN')
-      );
-      expect(httpHandler.handle.calls.allArgs()[0][0]).toSatisfy(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (r: HttpRequest<any>) => r.headers.get('X-XSRF-TOKEN') === expected
-      );
+      expect(httpHandler.handle)
+        .withContext('handle should have been called')
+        .toHaveBeenCalledTimes(1);
+      expect(httpHandler.handle.calls.allArgs()[0][0])
+        .withContext(
+          'handle should have been called with the proper argument - 1'
+        )
+        .toSatisfy(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (r: HttpRequest<any>) => r.headers.has('X-XSRF-TOKEN')
+        );
+      expect(httpHandler.handle.calls.allArgs()[0][0])
+        .withContext(
+          'handle should have been called with the proper argument - 2'
+        )
+        .toSatisfy(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (r: HttpRequest<any>) => r.headers.get('X-XSRF-TOKEN') === expected
+        );
     });
   });
 });

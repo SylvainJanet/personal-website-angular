@@ -35,7 +35,9 @@ describe('FooterComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(footerComponent).toBeTruthy();
+      expect(footerComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     };
 
     describe('in dev environment', () => {
@@ -93,13 +95,19 @@ describe('FooterComponent - integration', () => {
       const actualFooterHref = footerComponent.footerHref;
 
       actualText.subscribe((s) => {
-        expect(s).toBe(expectedFooterText);
+        expect(s)
+          .withContext('footer text should be set')
+          .toBe(expectedFooterText);
       });
       actualLink.subscribe((s) => {
-        expect(s).toBe(expectedFooterLink);
+        expect(s)
+          .withContext('footer link should be set')
+          .toBe(expectedFooterLink);
       });
       actualFooterHref.subscribe((s) => {
-        expect(s).toBe(expectedFooterHref);
+        expect(s)
+          .withContext('footer href should be set')
+          .toBe(expectedFooterHref);
       });
     };
     describe('in dev environment', () => {

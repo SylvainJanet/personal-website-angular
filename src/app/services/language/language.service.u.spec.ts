@@ -17,7 +17,7 @@ describe('LanguageService', () => {
     const expected = Languages.ENGLISH;
     const actual = languageService.language;
 
-    expect(actual).toBe(expected);
+    expect(actual).withContext('language should be english').toBe(expected);
   });
 
   it('should set the language to english in localStorage by default', () => {
@@ -26,10 +26,9 @@ describe('LanguageService', () => {
     localStorage.removeItem('language');
     languageService = new LanguageService();
 
-    expect(window.localStorage.setItem).toHaveBeenCalledOnceWith(
-      'language',
-      Languages[Languages.ENGLISH]
-    );
+    expect(window.localStorage.setItem)
+      .withContext('setItem should have been called once with proper arguments')
+      .toHaveBeenCalledOnceWith('language', Languages[Languages.ENGLISH]);
   });
 
   it('should set the language to the one in localStorage if there is one', () => {
@@ -40,7 +39,7 @@ describe('LanguageService', () => {
     const expected = Languages.FRENCH;
     const actual = languageService.language;
 
-    expect(actual).toBe(expected);
+    expect(actual).withContext('language should be as expected').toBe(expected);
   });
 
   describe('current method', () => {
@@ -48,13 +47,17 @@ describe('LanguageService', () => {
       const expected = Languages.ENGLISH;
       const actual = languageService.current();
 
-      expect(actual).toBe(expected);
+      expect(actual)
+        .withContext('language should be as expected - 1')
+        .toBe(expected);
 
       const expected2 = Languages.FRENCH;
       languageService.language = expected2;
       const actual2 = languageService.current();
 
-      expect(actual2).toBe(expected2);
+      expect(actual2)
+        .withContext('language should be as expected - 2')
+        .toBe(expected2);
     });
   });
 
@@ -63,13 +66,17 @@ describe('LanguageService', () => {
       const expected = Languages.ENGLISH;
       const actual = languageService.language;
 
-      expect(actual).toBe(expected);
+      expect(actual)
+        .withContext('language should be as expected - 1')
+        .toBe(expected);
 
       const expected2 = Languages.FRENCH;
       languageService.set(expected2);
       const actual2 = languageService.current();
 
-      expect(actual2).toBe(expected2);
+      expect(actual2)
+        .withContext('language should be as expected - 2')
+        .toBe(expected2);
     });
 
     it('should set the current language in localStorage', () => {
@@ -78,10 +85,11 @@ describe('LanguageService', () => {
       const newLanguage = Languages.FRENCH;
       languageService.set(newLanguage);
 
-      expect(window.localStorage.setItem).toHaveBeenCalledOnceWith(
-        'language',
-        Languages[newLanguage]
-      );
+      expect(window.localStorage.setItem)
+        .withContext(
+          'setItem should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith('language', Languages[newLanguage]);
     });
 
     it('should notify all subscribers of the language change', () => {
@@ -111,8 +119,12 @@ describe('LanguageService', () => {
       const newLanguage = Languages.FRENCH;
       languageService.set(newLanguage);
 
-      expect(subscriber1.updateTexts).toHaveBeenCalledTimes(1);
-      expect(subscriber2.updateTexts).toHaveBeenCalledTimes(1);
+      expect(subscriber1.updateTexts)
+        .withContext('updateTexts should have been called once - subscriber 1')
+        .toHaveBeenCalledTimes(1);
+      expect(subscriber2.updateTexts)
+        .withContext('updateTexts should have been called once - subscriber 2')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -127,12 +139,18 @@ describe('LanguageService', () => {
         },
       };
 
-      expect(languageService.subscribers.length).toBe(0);
+      expect(languageService.subscribers.length)
+        .withContext('there should be no subscribers')
+        .toBe(0);
 
       languageService.subscribe(subscriber);
 
-      expect(languageService.subscribers.length).toBe(1);
-      expect(languageService.subscribers[0]).toBe(subscriber);
+      expect(languageService.subscribers.length)
+        .withContext('there should be 1 subscriber')
+        .toBe(1);
+      expect(languageService.subscribers[0])
+        .withContext('the subscriber should be as expected')
+        .toBe(subscriber);
     });
   });
 
@@ -155,19 +173,33 @@ describe('LanguageService', () => {
         },
       };
 
-      expect(languageService.subscribers.length).toBe(0);
+      expect(languageService.subscribers.length)
+        .withContext('there should be no subscribers')
+        .toBe(0);
 
       languageService.subscribe(subscriber1);
       languageService.subscribe(subscriber2);
 
-      expect(languageService.subscribers.length).toBe(2);
-      expect(languageService.subscribers[0]).toBe(subscriber1);
-      expect(languageService.subscribers[1]).toBe(subscriber2);
+      expect(languageService.subscribers.length)
+        .withContext('there should be 2 subscribers')
+        .toBe(2);
+      expect(languageService.subscribers[0])
+        .withContext('the first subscriber should be as expected')
+        .toBe(subscriber1);
+      expect(languageService.subscribers[1])
+        .withContext('the second subscriber should be as expected')
+        .toBe(subscriber2);
 
       languageService.unsubscribe(subscriber1);
 
-      expect(languageService.subscribers.length).toBe(1);
-      expect(languageService.subscribers[0]).toBe(subscriber2);
+      expect(languageService.subscribers.length)
+        .withContext('there should be 1 subscriber')
+        .toBe(1);
+      expect(languageService.subscribers[0])
+        .withContext(
+          "the only subscriber left should be the one which didn't unsubscribe"
+        )
+        .toBe(subscriber2);
     });
   });
 });

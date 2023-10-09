@@ -20,7 +20,7 @@ describe('DOMComputationService', () => {
       elToTest.style.borderRightWidth = '10px';
 
       const actual = domComputationService.getActualWidth(elToTest);
-      expect(actual).toBe(expected);
+      expect(actual).withContext('width should be correct - 1').toBe(expected);
 
       elToTest.style.boxSizing = 'border-box';
       elToTest.style.width = (expected + 20).toString() + 'px';
@@ -28,7 +28,7 @@ describe('DOMComputationService', () => {
       elToTest.style.paddingRight = '10px';
 
       const actual2 = domComputationService.getActualWidth(elToTest);
-      expect(actual2).toBe(expected);
+      expect(actual2).withContext('width should be correct - 2').toBe(expected);
     });
   });
   describe('getActualHeight method', () => {
@@ -44,7 +44,7 @@ describe('DOMComputationService', () => {
       elToTest.style.borderBottomWidth = '10px';
 
       const actual = domComputationService.getActualHeight(elToTest);
-      expect(actual).toBe(expected);
+      expect(actual).withContext('width should be correct - 1').toBe(expected);
 
       elToTest.style.boxSizing = 'border-box';
       elToTest.style.height = (expected + 20).toString() + 'px';
@@ -52,7 +52,7 @@ describe('DOMComputationService', () => {
       elToTest.style.paddingBottom = '10px';
 
       const actual2 = domComputationService.getActualHeight(elToTest);
-      expect(actual2).toBe(expected);
+      expect(actual2).withContext('width should be correct - 2').toBe(expected);
     });
   });
 });

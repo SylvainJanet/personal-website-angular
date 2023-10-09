@@ -23,12 +23,16 @@ describe('ImageService', () => {
 
   const shouldHaveProperLoggerExpectation = 'should have a proper logger';
   const shouldHaveProperLogger = () => {
-    expect(imageService.logger).toBeTruthy();
+    expect(imageService.logger)
+      .withContext('logger should be set')
+      .toBeTruthy();
 
     const expected = 'ImageService';
     const actual = imageService.logger.className;
 
-    expect(actual).toBe(expected);
+    expect(actual)
+      .withContext('logger should be set with expected value')
+      .toBe(expected);
   };
 
   describe('in dev environment', () => {
@@ -77,27 +81,41 @@ describe('ImageService', () => {
       const imgInput = document.createElement('img');
       const loadersInput = [Preloaders.MAIN];
 
-      expect(imageService['images'].get(imgInput)).not.toBeTruthy();
+      expect(imageService['images'].get(imgInput))
+        .withContext('img should not appear in map at first')
+        .not.toBeTruthy();
 
       imageService.imageLoading(imgInput, loadersInput);
 
-      expect(imageService['images'].get(imgInput)).toBeTruthy();
-      expect(
-        imageService['images'].get(imgInput)?.get(Preloaders.TEXTS)
-      ).not.toBeTruthy();
-      expect(
-        imageService['images'].get(imgInput)?.get(Preloaders.MAIN)
-      ).toBeTrue();
+      expect(imageService['images'].get(imgInput))
+        .withContext(
+          'img should appear in map after imageLoading call - first call'
+        )
+        .toBeTruthy();
+      expect(imageService['images'].get(imgInput)?.get(Preloaders.TEXTS))
+        .withContext(
+          'img should not be loading for Preloaders.TEXTS - first call'
+        )
+        .not.toBeTruthy();
+      expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
+        .withContext('img should be loading for Preloaders.MAIN - first call')
+        .toBeTrue();
 
       imageService.imageLoading(imgInput, loadersInput);
 
-      expect(imageService['images'].get(imgInput)).toBeTruthy();
-      expect(
-        imageService['images'].get(imgInput)?.get(Preloaders.TEXTS)
-      ).not.toBeTruthy();
-      expect(
-        imageService['images'].get(imgInput)?.get(Preloaders.MAIN)
-      ).toBeTrue();
+      expect(imageService['images'].get(imgInput))
+        .withContext(
+          'img should appear in map after imageLoading call - second call'
+        )
+        .toBeTruthy();
+      expect(imageService['images'].get(imgInput)?.get(Preloaders.TEXTS))
+        .withContext(
+          'img should not be loading for Preloaders.TEXTS - second call'
+        )
+        .not.toBeTruthy();
+      expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
+        .withContext('img should be loading for Preloaders.MAIN - second call')
+        .toBeTrue();
 
       // assume it laters changes and map is updated : the preloader has loaded
       // should be done by imageLoadedOrError method
@@ -105,13 +123,19 @@ describe('ImageService', () => {
 
       imageService.imageLoading(imgInput, loadersInput);
 
-      expect(imageService['images'].get(imgInput)).toBeTruthy();
-      expect(
-        imageService['images'].get(imgInput)?.get(Preloaders.TEXTS)
-      ).not.toBeTruthy();
-      expect(
-        imageService['images'].get(imgInput)?.get(Preloaders.MAIN)
-      ).toBeTrue();
+      expect(imageService['images'].get(imgInput))
+        .withContext(
+          'img should appear in map after imageLoading call - third call'
+        )
+        .toBeTruthy();
+      expect(imageService['images'].get(imgInput)?.get(Preloaders.TEXTS))
+        .withContext(
+          'img should not be loading for Preloaders.TEXTS - third call'
+        )
+        .not.toBeTruthy();
+      expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
+        .withContext('img should be loading for Preloaders.MAIN - third call')
+        .toBeTrue();
     };
 
     const shouldNotifyPreloadersIfNotAlreadyLoadingExpectation =
@@ -124,10 +148,11 @@ describe('ImageService', () => {
 
       imageService.imageLoading(imgInput, loadersInput);
 
-      expect(preloaderService.toLoad).toHaveBeenCalledOnceWith(
-        Preloaders.MAIN,
-        1
-      );
+      expect(preloaderService.toLoad)
+        .withContext(
+          'toLoad should have been called with proper arguments - first time'
+        )
+        .toHaveBeenCalledOnceWith(Preloaders.MAIN, 1);
 
       // assume it laters changes and map is updated : the preloader has loaded
       // should be done by imageLoadedOrError method
@@ -135,8 +160,14 @@ describe('ImageService', () => {
 
       imageService.imageLoading(imgInput, [Preloaders.MAIN, Preloaders.TEXTS]);
 
-      expect(preloaderService.toLoad).toHaveBeenCalledWith(Preloaders.TEXTS, 1);
-      expect(preloaderService.toLoad).toHaveBeenCalledTimes(2);
+      expect(preloaderService.toLoad)
+        .withContext(
+          'toLoad should have been called with proper arguments - second time'
+        )
+        .toHaveBeenCalledWith(Preloaders.TEXTS, 1);
+      expect(preloaderService.toLoad)
+        .withContext('toLoad should have been called twice')
+        .toHaveBeenCalledTimes(2);
     };
 
     const shouldNotNotifyPreloadersIfAlreadyLoadingExpectation =
@@ -151,14 +182,18 @@ describe('ImageService', () => {
 
       imageService.imageLoading(imgInput, loadersInput);
 
-      expect(preloaderService.toLoad).toHaveBeenCalledTimes(1);
+      expect(preloaderService.toLoad)
+        .withContext('toLoad should have been called once - first time')
+        .toHaveBeenCalledTimes(1);
 
       // assume it laters changes and map is updated : the preloader has loaded
       // should be done by imageLoading method
       imageService['images'].get(imgInput)?.set(Preloaders.TEXTS, true);
       imageService.imageLoading(imgInput, [Preloaders.MAIN, Preloaders.TEXTS]);
 
-      expect(preloaderService.toLoad).toHaveBeenCalledTimes(1);
+      expect(preloaderService.toLoad)
+        .withContext('toLoad should have been called once - second time')
+        .toHaveBeenCalledTimes(1);
     };
 
     describe('in dev environment', () => {
@@ -236,9 +271,9 @@ describe('ImageService', () => {
 
       imageService.imageLoadedOrError(imgInput, loadersInput);
 
-      expect(
-        imageService['images'].get(imgInput)?.get(Preloaders.MAIN)
-      ).toBeFalse();
+      expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
+        .withContext('img should not be loading for Preloaders.MAIN')
+        .toBeFalse();
     };
 
     const shouldNotifyPreloadersIfNotAlreadyDoneExpectation =
@@ -253,10 +288,11 @@ describe('ImageService', () => {
 
       imageService.imageLoadedOrError(imgInput, loadersInput);
 
-      expect(preloaderService.loaded).toHaveBeenCalledOnceWith(
-        Preloaders.MAIN,
-        1
-      );
+      expect(preloaderService.loaded)
+        .withContext(
+          'loaded should have been called with proper arguments - first time'
+        )
+        .toHaveBeenCalledOnceWith(Preloaders.MAIN, 1);
 
       // assume it laters changes and map is updated : the preloader has loaded
       // should be done by imageLoading method
@@ -267,8 +303,14 @@ describe('ImageService', () => {
         Preloaders.TEXTS,
       ]);
 
-      expect(preloaderService.loaded).toHaveBeenCalledWith(Preloaders.TEXTS, 1);
-      expect(preloaderService.loaded).toHaveBeenCalledTimes(2);
+      expect(preloaderService.loaded)
+        .withContext(
+          'loaded should have been called with proper arguments - second time'
+        )
+        .toHaveBeenCalledWith(Preloaders.TEXTS, 1);
+      expect(preloaderService.loaded)
+        .withContext('loaded should have been called twice')
+        .toHaveBeenCalledTimes(2);
     };
 
     const shouldNotNotifyPreloadersIfAlreadyDoneExpectation =
@@ -294,7 +336,9 @@ describe('ImageService', () => {
 
       imageService.imageLoadedOrError(imgInput, [Preloaders.TEXTS]);
 
-      expect(preloaderService.loaded).toHaveBeenCalledTimes(1);
+      expect(preloaderService.loaded)
+        .withContext('loaded should have been called once')
+        .toHaveBeenCalledTimes(1);
     };
 
     describe('in dev environment', () => {

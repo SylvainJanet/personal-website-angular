@@ -35,7 +35,9 @@ describe('XsrfInterceptor - integration', () => {
 
     const req = httpTestingController.expectOne(testUrl);
 
-    expect(req.request.method).toEqual('GET');
+    expect(req.request.method)
+      .withContext('method should not be changed')
+      .toEqual('GET');
   });
 
   it('should not change the url', () => {
@@ -43,7 +45,9 @@ describe('XsrfInterceptor - integration', () => {
 
     const req = httpTestingController.expectOne(testUrl);
 
-    expect(req.request.url).toEqual(testUrl);
+    expect(req.request.url)
+      .withContext('url should not be changed')
+      .toEqual(testUrl);
   });
 
   it('should add xsrf token in headers', () => {
@@ -51,20 +55,24 @@ describe('XsrfInterceptor - integration', () => {
 
     const req = httpTestingController.expectOne(testUrl);
 
-    expect(req.request).toSatisfy(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (r: HttpRequest<any>) => r.headers.has('X-XSRF-TOKEN')
-    );
+    expect(req.request)
+      .withContext('xsrf token should be in headers')
+      .toSatisfy(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (r: HttpRequest<any>) => r.headers.has('X-XSRF-TOKEN')
+      );
   });
 
   it('should add with credentials true', () => {
     httpClient.get(testUrl).subscribe({});
 
     const req = httpTestingController.expectOne(testUrl);
-    expect(req.request).toSatisfy(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (r: HttpRequest<any>) => r.withCredentials
-    );
+    expect(req.request)
+      .withContext('withCredentials should be true')
+      .toSatisfy(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (r: HttpRequest<any>) => r.withCredentials
+      );
   });
 
   it('should add the correct xsrf token in headers', () => {
@@ -74,17 +82,21 @@ describe('XsrfInterceptor - integration', () => {
 
     const req = httpTestingController.expectOne(testUrl);
 
-    expect(req.request).toSatisfy(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (r: HttpRequest<any>) => r.headers.has('X-XSRF-TOKEN')
-    );
+    expect(req.request)
+      .withContext('xsrf token should be in headers')
+      .toSatisfy(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (r: HttpRequest<any>) => r.headers.has('X-XSRF-TOKEN')
+      );
 
-    expect(req.request).toSatisfy(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (r: HttpRequest<any>) =>
-        r.headers.get('X-XSRF-TOKEN') ===
-        ((tokenExtractor.getToken() as string) ?? 'null')
-    );
+    expect(req.request)
+      .withContext('the correct xsrf token should be in headers')
+      .toSatisfy(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (r: HttpRequest<any>) =>
+          r.headers.get('X-XSRF-TOKEN') ===
+          ((tokenExtractor.getToken() as string) ?? 'null')
+      );
   });
 
   afterEach(() => {

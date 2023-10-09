@@ -51,12 +51,16 @@ describe('LinkBarOnHoverComponent - dom integration', () => {
       aDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).not.toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should not be 0')
+        .not.toBe('0%');
 
       aDebugEl.triggerEventHandler('click');
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be 0')
+        .toBe('0%');
     });
     it('should make the line disappear on touchend event', () => {
       const expectedEvent = new Event('mouseenter');
@@ -66,12 +70,16 @@ describe('LinkBarOnHoverComponent - dom integration', () => {
       aDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).not.toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should not be 0')
+        .not.toBe('0%');
 
       aDebugEl.triggerEventHandler('touchend');
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be 0')
+        .toBe('0%');
     });
     it('should make the line disappear on mouseleave event', () => {
       const expectedEvent = new Event('mouseenter');
@@ -81,18 +89,24 @@ describe('LinkBarOnHoverComponent - dom integration', () => {
       aDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).not.toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should not be 0')
+        .not.toBe('0%');
 
       aDebugEl.triggerEventHandler('mouseleave');
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be 0')
+        .toBe('0%');
     });
     it('should make the line appear on touchstart event', () => {
       aDebugEl.triggerEventHandler('click');
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be 0')
+        .toBe('0%');
 
       const expectedEvent = new Event('touchstart');
       const length = 200;
@@ -102,13 +116,17 @@ describe('LinkBarOnHoverComponent - dom integration', () => {
       aDebugEl.triggerEventHandler('touchstart', expectedEvent);
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe(expectedLength + 'px');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be defined')
+        .toBe(expectedLength + 'px');
     });
     it('should make the line appear on mouseenter event', () => {
       aDebugEl.triggerEventHandler('click');
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be 0')
+        .toBe('0%');
 
       const expectedEvent = new Event('mouseenter');
       const length = 200;
@@ -118,7 +136,9 @@ describe('LinkBarOnHoverComponent - dom integration', () => {
       aDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe(expectedLength + 'px');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be defined')
+        .toBe(expectedLength + 'px');
     });
   });
 });

@@ -54,12 +54,16 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
       buttonDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).not.toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should not be 0')
+        .not.toBe('0%');
 
       buttonDebugEl.triggerEventHandler('click');
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be 0')
+        .toBe('0%');
     });
     it('should make the line disappear on touchend event', () => {
       const expectedEvent = new Event('mouseenter');
@@ -69,12 +73,16 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
       buttonDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).not.toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should not be 0')
+        .not.toBe('0%');
 
       buttonDebugEl.triggerEventHandler('touchend');
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be 0')
+        .toBe('0%');
     });
     it('should make the line disappear on mouseleave event', () => {
       const expectedEvent = new Event('mouseenter');
@@ -84,18 +92,24 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
       buttonDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).not.toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should not be 0')
+        .not.toBe('0%');
 
       buttonDebugEl.triggerEventHandler('mouseleave');
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be 0')
+        .toBe('0%');
     });
     it('should make the line appear on touchstart event', () => {
       buttonDebugEl.triggerEventHandler('click');
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be 0')
+        .toBe('0%');
 
       const expectedEvent = new Event('touchstart');
       const length = 200;
@@ -105,13 +119,17 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
       buttonDebugEl.triggerEventHandler('touchstart', expectedEvent);
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe(expectedLength + 'px');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be defined')
+        .toBe(expectedLength + 'px');
     });
     it('should make the line appear on mouseenter event', () => {
       buttonDebugEl.triggerEventHandler('click');
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe('0%');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be 0')
+        .toBe('0%');
 
       const expectedEvent = new Event('mouseenter');
       const length = 200;
@@ -121,7 +139,9 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
       buttonDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
-      expect(lineDebugEl.styles['width']).toBe(expectedLength + 'px');
+      expect(lineDebugEl.styles['width'])
+        .withContext('width should be defined')
+        .toBe(expectedLength + 'px');
     });
     it('should emit press event on click event', () => {
       const expectedEvent = new Event('click');
@@ -133,7 +153,9 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
 
       buttonDebugEl.triggerEventHandler('click', expectedEvent);
 
-      expect(emitted).toBe(expectedEvent);
+      expect(emitted)
+        .withContext('event should be emitted')
+        .toBe(expectedEvent);
     });
   });
 });

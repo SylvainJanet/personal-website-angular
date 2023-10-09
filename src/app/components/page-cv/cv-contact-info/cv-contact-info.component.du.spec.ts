@@ -16,7 +16,7 @@ describe('CvContactInfoComponent - dom unit', () => {
   const expectedFsDev = 'test fsDev';
   const expectedEmail = 'test email';
   const expectedPhone = 'test phone';
-  const expectedEmailAdress = 'contact@sylvainjanet.fr';
+  const expectedEmailAddress = 'contact@sylvainjanet.fr';
   const expectedPhoneNumber = '06&nbsp;62&nbsp;02&nbsp;14&nbsp;12';
 
   beforeEach(waitForAsync(() => {
@@ -56,43 +56,80 @@ describe('CvContactInfoComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   it('should have proper dom structure', () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is DIV')
+      .toBe('DIV');
 
     const firstDivEl: DebugElement = debugEl.children[0];
 
-    expect(firstDivEl.children.length).toBe(4);
-    expect(firstDivEl.children[0].nativeElement.tagName).toBe('P');
-    expect(firstDivEl.children[1].nativeElement.tagName).toBe('P');
-    expect(firstDivEl.children[2].nativeElement.tagName).toBe('P');
-    expect(firstDivEl.children[3].nativeElement.tagName).toBe('P');
+    expect(firstDivEl.children.length)
+      .withContext('div should have 4 children')
+      .toBe(4);
+    expect(firstDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of div should be P')
+      .toBe('P');
+    expect(firstDivEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of div should be P')
+      .toBe('P');
+    expect(firstDivEl.children[2].nativeElement.tagName)
+      .withContext('child 3 of div should be P')
+      .toBe('P');
+    expect(firstDivEl.children[3].nativeElement.tagName)
+      .withContext('child 4 of div should be P')
+      .toBe('P');
 
     let pEl: DebugElement = firstDivEl.children[0];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.tagName).toBe('STRONG');
-    expect(pEl.children[1].nativeElement.tagName).toBe('SPAN');
+    expect(pEl.children.length)
+      .withContext('P 1 should have 2 children')
+      .toBe(2);
+    expect(pEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of P 1 should have be STRONG')
+      .toBe('STRONG');
+    expect(pEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of P 1 should have be SPAN')
+      .toBe('SPAN');
 
     pEl = firstDivEl.children[1];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.tagName).toBe('STRONG');
-    expect(pEl.children[1].nativeElement.tagName).toBe('SPAN');
+    expect(pEl.children.length)
+      .withContext('P 2 should have 2 children')
+      .toBe(2);
+    expect(pEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of P 2 should have be STRONG')
+      .toBe('STRONG');
+    expect(pEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of P 2 should have be SPAN')
+      .toBe('SPAN');
 
     pEl = firstDivEl.children[2];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.tagName).toBe('STRONG');
-    expect(pEl.children[1].nativeElement.tagName).toBe('A');
+    expect(pEl.children.length)
+      .withContext('P 3 should have 2 children')
+      .toBe(2);
+    expect(pEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of P 3 should have be STRONG')
+      .toBe('STRONG');
+    expect(pEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of P 3 should have be A')
+      .toBe('A');
 
     pEl = firstDivEl.children[3];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.tagName).toBe('STRONG');
-    expect(pEl.children[1].nativeElement.tagName).toBe('SPAN');
+    expect(pEl.children.length)
+      .withContext('P 4 should have 2 children')
+      .toBe(2);
+    expect(pEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of P 4 should have be STRONG')
+      .toBe('STRONG');
+    expect(pEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of P 4 should have be SPAN')
+      .toBe('SPAN');
   });
 
   it('should have content set by textService', () => {
@@ -101,25 +138,35 @@ describe('CvContactInfoComponent - dom unit', () => {
     const firstDivEl: DebugElement = debugEl.children[0];
 
     let pEl: DebugElement = firstDivEl.children[0];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.innerHTML).toBe(expectedName + ': ');
-    expect(pEl.children[1].nativeElement.innerHTML).toBe(expectedSj);
+    expect(pEl.children[0].nativeElement.innerHTML)
+      .withContext('name should be set')
+      .toBe(expectedName + ': ');
+    expect(pEl.children[1].nativeElement.innerHTML)
+      .withContext('sj should be set')
+      .toBe(expectedSj);
 
     pEl = firstDivEl.children[1];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.innerHTML).toBe(
-      expectedProfile + ': '
-    );
-    expect(pEl.children[1].nativeElement.innerHTML).toBe(expectedFsDev);
+    expect(pEl.children[0].nativeElement.innerHTML)
+      .withContext('profile should be set')
+      .toBe(expectedProfile + ': ');
+    expect(pEl.children[1].nativeElement.innerHTML)
+      .withContext('fsdev should be set')
+      .toBe(expectedFsDev);
 
     pEl = firstDivEl.children[2];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.innerHTML).toBe(expectedEmail + ': ');
-    expect(pEl.children[1].nativeElement.innerHTML).toBe(expectedEmailAdress);
+    expect(pEl.children[0].nativeElement.innerHTML)
+      .withContext('email should be set')
+      .toBe(expectedEmail + ': ');
+    expect(pEl.children[1].nativeElement.innerHTML)
+      .withContext('email address should be set')
+      .toBe(expectedEmailAddress);
 
     pEl = firstDivEl.children[3];
-    expect(pEl.children.length).toBe(2);
-    expect(pEl.children[0].nativeElement.innerHTML).toBe(expectedPhone + ': ');
-    expect(pEl.children[1].nativeElement.innerHTML).toBe(expectedPhoneNumber);
+    expect(pEl.children[0].nativeElement.innerHTML)
+      .withContext('phone should be set')
+      .toBe(expectedPhone + ': ');
+    expect(pEl.children[1].nativeElement.innerHTML)
+      .withContext('phone number should be set')
+      .toBe(expectedPhoneNumber);
   });
 });

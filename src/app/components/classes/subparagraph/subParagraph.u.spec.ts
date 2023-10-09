@@ -1,7 +1,7 @@
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { SubParagraph } from './subParagraph';
 
-describe('Paragraph', () => {
+describe('SubParagraph', () => {
   describe('constructor', () => {
     const rootToTest = SubParagraphRoot.STRONG_EM;
     const contentToTest = 'this is a test';
@@ -14,7 +14,9 @@ describe('Paragraph', () => {
         assetHrefToTest
       );
 
-      expect(subParagraph.root).toBe(rootToTest);
+      expect(subParagraph.root)
+        .withContext('root should be set')
+        .toBe(rootToTest);
     });
     it('should set content', () => {
       subParagraph = new SubParagraph(
@@ -23,7 +25,9 @@ describe('Paragraph', () => {
         assetHrefToTest
       );
 
-      expect(subParagraph.content).toBe(contentToTest);
+      expect(subParagraph.content)
+        .withContext('content should be set')
+        .toBe(contentToTest);
     });
     it('should set assetHref', () => {
       subParagraph = new SubParagraph(
@@ -32,12 +36,16 @@ describe('Paragraph', () => {
         assetHrefToTest
       );
 
-      expect(subParagraph.assetHref).toBe(assetHrefToTest);
+      expect(subParagraph.assetHref)
+        .withContext('assetHref should be set')
+        .toBe(assetHrefToTest);
     });
     it('should set assetHref to empty string by default', () => {
       subParagraph = new SubParagraph(rootToTest, contentToTest);
 
-      expect(subParagraph.assetHref).toBe('');
+      expect(subParagraph.assetHref)
+        .withContext('assetHref should be set to an empty string by default')
+        .toBe('');
     });
   });
 });
