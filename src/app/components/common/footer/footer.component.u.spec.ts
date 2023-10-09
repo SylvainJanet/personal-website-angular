@@ -41,39 +41,51 @@ describe('FooterComponent - unit', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(footerComponent).toBeTruthy();
+      expect(footerComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     };
 
     const shouldSetDefaultValuesExpectation = 'should set default values';
     const shouldSetDefaultValues = () => {
-      expect(footerComponent).toBeTruthy();
-      expect(footerComponent.preloaders).toEqual([Preloaders.MAIN]);
+      expect(footerComponent)
+        .withContext('component should create')
+        .toBeTruthy();
+      expect(footerComponent.preloaders)
+        .withContext('preloaders should be set')
+        .toEqual([Preloaders.MAIN]);
 
-      expect(footerComponent.doubleImgDisplay).toBe('block');
+      expect(footerComponent.doubleImgDisplay)
+        .withContext('doubleImgDisplay should be set')
+        .toBe('block');
       footerComponent.footerText.subscribe((s) => {
-        expect(s).toBe('');
+        expect(s).withContext('footerText should be set').toBe('');
       });
       footerComponent.footerLink.subscribe((s) => {
-        expect(s).toBe('');
+        expect(s).withContext('footerLink should be set').toBe('');
       });
       footerComponent.footerHref.subscribe((s) => {
-        expect(s).toBe('');
+        expect(s).withContext('footerHref should be set').toBe('');
       });
 
-      expect(footerComponent.footerSrc).toEqual(expectedBannerUrl);
+      expect(footerComponent.footerSrc)
+        .withContext('footerSrc should be set')
+        .toEqual(expectedBannerUrl);
     };
 
     const shouldSubscribeToLanguageServiceExpectation =
       'should subscribe to the languageService';
     const shouldSubscribeToLanguageService = () => {
-      expect(languageServiceSpy.subscribe).toHaveBeenCalledOnceWith(
-        footerComponent
-      );
+      expect(languageServiceSpy.subscribe)
+        .withContext('subscribe should have been called')
+        .toHaveBeenCalledOnceWith(footerComponent);
     };
 
     const shouldUpdateTheTextsExpectation = 'should update the texts';
     const shouldUpdateTheTexts = () => {
-      expect(footerComponent.updateTexts).toHaveBeenCalledTimes(1);
+      expect(footerComponent.updateTexts)
+        .withContext('updateTexts should have been called')
+        .toHaveBeenCalledTimes(1);
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -143,9 +155,15 @@ describe('FooterComponent - unit', () => {
   describe('updateTexts', () => {
     const shouldCallTextServiceExpectation = 'should call the textService';
     const shouldCallTextService = () => {
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(2);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(footerTextSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(footerLinkSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called 2 times')
+        .toHaveBeenCalledTimes(2);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 1')
+        .toHaveBeenCalledWith(footerTextSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 2')
+        .toHaveBeenCalledWith(footerLinkSelector);
     };
 
     const shouldSetPropertiesToTextServiceResultExpectation =
@@ -156,13 +174,19 @@ describe('FooterComponent - unit', () => {
       const actualFooterHref = footerComponent.footerHref;
 
       actualFooterText.subscribe((s) => {
-        expect(s).toBe(expectedFooterText);
+        expect(s)
+          .withContext('footerText should be set')
+          .toBe(expectedFooterText);
       });
       actualFooterLink.subscribe((s) => {
-        expect(s).toBe(expectedFooterLink);
+        expect(s)
+          .withContext('footerLink should be set')
+          .toBe(expectedFooterLink);
       });
       actualFooterHref.subscribe((s) => {
-        expect(s).toBe(expectedFooterHref);
+        expect(s)
+          .withContext('footerHref should be set')
+          .toBe(expectedFooterHref);
       });
     };
     describe('in dev environment', () => {
@@ -226,9 +250,9 @@ describe('FooterComponent - unit', () => {
       'should unsubscribe from the languageService';
     const shouldUnsubscribeFromLanguageService = () => {
       footerComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe).toHaveBeenCalledOnceWith(
-        footerComponent
-      );
+      expect(languageServiceSpy.unsubscribe)
+        .withContext('unsubscribe should have been called')
+        .toHaveBeenCalledOnceWith(footerComponent);
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -289,7 +313,9 @@ describe('FooterComponent - unit', () => {
     const shouldSetDoubleImgDisplayToNone = () => {
       footerComponent.onDoubleImgLoad();
 
-      expect(footerComponent.doubleImgDisplay).toBe('none');
+      expect(footerComponent.doubleImgDisplay)
+        .withContext("doubleImgDisplay should be 'none'")
+        .toBe('none');
     };
     describe('in dev environment', () => {
       beforeEach(() => {

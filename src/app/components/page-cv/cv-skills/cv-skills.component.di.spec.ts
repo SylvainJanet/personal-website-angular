@@ -53,8 +53,9 @@ describe('CvSkillsComponent - dom integration', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveContentSetByServiceExpectation =
@@ -66,71 +67,93 @@ describe('CvSkillsComponent - dom integration', () => {
 
     let childEl: DebugElement = firstDivEl.children[0];
     const actualSkills = childEl.nativeElement.innerHTML;
-    expect(actualSkills).toBe(expectedSkills);
+    expect(actualSkills)
+      .withContext('skills should be set')
+      .toBe(expectedSkills);
 
     childEl = firstDivEl.children[1];
     let actualSkillName = (childEl.componentInstance as CvSkillBarComponent)
       .skillName;
     actualSkillName.subscribe((s) => {
-      expect(s).toBe(expectedJava);
+      expect(s).withContext('skill name java should be set').toBe(expectedJava);
     });
     let actualPercent = (childEl.componentInstance as CvSkillBarComponent)
       .percent;
-    expect(actualPercent).toBe(90);
+    expect(actualPercent)
+      .withContext('skill percent java should be set')
+      .toBe(90);
 
     childEl = firstDivEl.children[2];
     actualSkillName = (childEl.componentInstance as CvSkillBarComponent)
       .skillName;
     actualSkillName.subscribe((s) => {
-      expect(s).toBe(expectedCsharp);
+      expect(s)
+        .withContext('skill name csharp should be set')
+        .toBe(expectedCsharp);
     });
     actualPercent = (childEl.componentInstance as CvSkillBarComponent).percent;
-    expect(actualPercent).toBe(90);
+    expect(actualPercent)
+      .withContext('skill percent csharp should be set')
+      .toBe(90);
 
     childEl = firstDivEl.children[3];
     actualSkillName = (childEl.componentInstance as CvSkillBarComponent)
       .skillName;
     actualSkillName.subscribe((s) => {
-      expect(s).toBe(expectedPython);
+      expect(s)
+        .withContext('skill name python should be set')
+        .toBe(expectedPython);
     });
     actualPercent = (childEl.componentInstance as CvSkillBarComponent).percent;
-    expect(actualPercent).toBe(85);
+    expect(actualPercent)
+      .withContext('skill percent python should be set')
+      .toBe(85);
 
     childEl = firstDivEl.children[4];
     actualSkillName = (childEl.componentInstance as CvSkillBarComponent)
       .skillName;
     actualSkillName.subscribe((s) => {
-      expect(s).toBe(expectedJsts);
+      expect(s).withContext('skill name jsts should be set').toBe(expectedJsts);
     });
     actualPercent = (childEl.componentInstance as CvSkillBarComponent).percent;
-    expect(actualPercent).toBe(85);
+    expect(actualPercent)
+      .withContext('skill percent jsts should be set')
+      .toBe(85);
 
     childEl = firstDivEl.children[5];
     actualSkillName = (childEl.componentInstance as CvSkillBarComponent)
       .skillName;
     actualSkillName.subscribe((s) => {
-      expect(s).toBe(expectedSql);
+      expect(s).withContext('skill name sql should be set').toBe(expectedSql);
     });
     actualPercent = (childEl.componentInstance as CvSkillBarComponent).percent;
-    expect(actualPercent).toBe(80);
+    expect(actualPercent)
+      .withContext('skill percent sql should be set')
+      .toBe(80);
 
     childEl = firstDivEl.children[6];
     actualSkillName = (childEl.componentInstance as CvSkillBarComponent)
       .skillName;
     actualSkillName.subscribe((s) => {
-      expect(s).toBe(expectedHtml);
+      expect(s).withContext('skill name html should be set').toBe(expectedHtml);
     });
     actualPercent = (childEl.componentInstance as CvSkillBarComponent).percent;
-    expect(actualPercent).toBe(75);
+    expect(actualPercent)
+      .withContext('skill percent html should be set')
+      .toBe(75);
 
     childEl = firstDivEl.children[7];
     actualSkillName = (childEl.componentInstance as CvSkillBarComponent)
       .skillName;
     actualSkillName.subscribe((s) => {
-      expect(s).toBe(expectedLatex);
+      expect(s)
+        .withContext('skill name latex should be set')
+        .toBe(expectedLatex);
     });
     actualPercent = (childEl.componentInstance as CvSkillBarComponent).percent;
-    expect(actualPercent).toBe(65);
+    expect(actualPercent)
+      .withContext('skill percent latex should be set')
+      .toBe(65);
   };
 
   describe('in dev environment', () => {

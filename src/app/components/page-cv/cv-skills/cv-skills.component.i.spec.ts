@@ -51,7 +51,9 @@ describe('CvSkillsComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvSkillsComponent).toBeTruthy();
+      expect(cvSkillsComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -123,28 +125,28 @@ describe('CvSkillsComponent - integration', () => {
       const actualLatexObs = cvSkillsComponent.latex;
 
       actualSkillsObs.subscribe((s) => {
-        expect(s).toBe(expectedSkills);
+        expect(s).withContext('skills should be set').toBe(expectedSkills);
       });
       actualJavaObs.subscribe((s) => {
-        expect(s).toBe(expectedJava);
+        expect(s).withContext('java should be set').toBe(expectedJava);
       });
       actualCsharpObs.subscribe((s) => {
-        expect(s).toBe(expectedCsharp);
+        expect(s).withContext('csharp should be set').toBe(expectedCsharp);
       });
       actualPythonDevObs.subscribe((s) => {
-        expect(s).toBe(expectedPython);
+        expect(s).withContext('python should be set').toBe(expectedPython);
       });
       actualJstsObs.subscribe((s) => {
-        expect(s).toBe(expectedJsts);
+        expect(s).withContext('jsts should be set').toBe(expectedJsts);
       });
       actualSqlObs.subscribe((s) => {
-        expect(s).toBe(expectedSql);
+        expect(s).withContext('sql should be set').toBe(expectedSql);
       });
       actualHtmlObs.subscribe((s) => {
-        expect(s).toBe(expectedHtml);
+        expect(s).withContext('html should be set').toBe(expectedHtml);
       });
       actualLatexObs.subscribe((s) => {
-        expect(s).toBe(expectedLatex);
+        expect(s).withContext('latex should be set').toBe(expectedLatex);
       });
     };
     describe('in dev environment', () => {

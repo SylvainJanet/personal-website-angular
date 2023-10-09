@@ -23,8 +23,9 @@ describe('TextParagraphComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   describe('should have proper dom structure', () => {
@@ -34,10 +35,14 @@ describe('TextParagraphComponent - dom unit', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(1);
-      expect(debugEl.children[0].nativeElement.tagName).toBe('P');
+      expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+      expect(debugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 at root is P')
+        .toBe('P');
 
-      expect(debugEl.children[0].children.length).toBe(0);
+      expect(debugEl.children[0].children.length)
+        .withContext('p should have no children')
+        .toBe(0);
     });
     it('with full subParagraph', () => {
       componentInstance.paragraph = new Paragraph([
@@ -54,22 +59,26 @@ describe('TextParagraphComponent - dom unit', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(1);
-      expect(debugEl.children[0].nativeElement.tagName).toBe('P');
+      expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+      expect(debugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 at root is P')
+        .toBe('P');
 
-      expect(debugEl.children[0].children.length).toBe(4);
-      expect(debugEl.children[0].children[0].nativeElement.tagName).toBe(
-        'APP-TEXT-SUB-PARAGRAPH'
-      );
-      expect(debugEl.children[0].children[1].nativeElement.tagName).toBe(
-        'APP-TEXT-SUB-PARAGRAPH'
-      );
-      expect(debugEl.children[0].children[2].nativeElement.tagName).toBe(
-        'APP-TEXT-SUB-PARAGRAPH'
-      );
-      expect(debugEl.children[0].children[3].nativeElement.tagName).toBe(
-        'APP-TEXT-SUB-PARAGRAPH'
-      );
+      expect(debugEl.children[0].children.length)
+        .withContext('p should have 4 children')
+        .toBe(4);
+      expect(debugEl.children[0].children[0].nativeElement.tagName)
+        .withContext('child 1 of p should be APP-TEXT-SUB-PARAGRAPH')
+        .toBe('APP-TEXT-SUB-PARAGRAPH');
+      expect(debugEl.children[0].children[1].nativeElement.tagName)
+        .withContext('child 2 of p should be APP-TEXT-SUB-PARAGRAPH')
+        .toBe('APP-TEXT-SUB-PARAGRAPH');
+      expect(debugEl.children[0].children[2].nativeElement.tagName)
+        .withContext('child 3 of p should be APP-TEXT-SUB-PARAGRAPH')
+        .toBe('APP-TEXT-SUB-PARAGRAPH');
+      expect(debugEl.children[0].children[3].nativeElement.tagName)
+        .withContext('child 4 of p should be APP-TEXT-SUB-PARAGRAPH')
+        .toBe('APP-TEXT-SUB-PARAGRAPH');
     });
   });
   it('should have proper cssClass', () => {
@@ -81,6 +90,6 @@ describe('TextParagraphComponent - dom unit', () => {
 
     const actual = debugEl.children[0].classes[expectedClass];
 
-    expect(actual).toBe(true);
+    expect(actual).withContext('cssClass should be set').toBe(true);
   });
 });

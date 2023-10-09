@@ -20,7 +20,7 @@ describe('DatasourceService', () => {
     const expected = env.api;
     const actual = datasourceService.URL;
 
-    expect(actual).toBe(expected);
+    expect(actual).withContext('url should be set').toBe(expected);
   };
   describe('in dev environment', () => {
     beforeEach(() => {
@@ -51,10 +51,12 @@ describe('DatasourceService', () => {
 
       datasourceService.get(pathToTest, paramsToTest);
 
-      expect(httpClientSpy.get).toHaveBeenCalledOnceWith(env.api + pathToTest, {
-        responseType: 'json',
-        params: paramsToTest,
-      });
+      expect(httpClientSpy.get)
+        .withContext('get should have been called')
+        .toHaveBeenCalledOnceWith(env.api + pathToTest, {
+          responseType: 'json',
+          params: paramsToTest,
+        });
     };
     const shouldMakeHttpCallNoHttpParamsExpectation =
       'should make correct http call without http params';
@@ -63,10 +65,12 @@ describe('DatasourceService', () => {
 
       datasourceService.get(pathToTest);
 
-      expect(httpClientSpy.get).toHaveBeenCalledOnceWith(env.api + pathToTest, {
-        responseType: 'json',
-        params: jasmine.any(HttpParams),
-      });
+      expect(httpClientSpy.get)
+        .withContext('get should have been called')
+        .toHaveBeenCalledOnceWith(env.api + pathToTest, {
+          responseType: 'json',
+          params: jasmine.any(HttpParams),
+        });
     };
     const shouldReturnStringDtoExpectation =
       'should return expected string dto';
@@ -81,13 +85,17 @@ describe('DatasourceService', () => {
 
       datasourceService.get<StringDto>(pathToTest, paramsToTest).subscribe({
         next: (response) => {
-          expect(response).toEqual(expectedDto);
+          expect(response)
+            .withContext('response should be the dto')
+            .toEqual(expectedDto);
           done();
         },
         error: done.fail,
       });
 
-      expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
+      expect(httpClientSpy.get)
+        .withContext('get should have been called')
+        .toHaveBeenCalledTimes(1);
     };
 
     describe('in dev environment', () => {

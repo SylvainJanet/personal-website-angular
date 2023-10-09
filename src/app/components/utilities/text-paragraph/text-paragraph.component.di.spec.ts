@@ -23,8 +23,9 @@ describe('TextParagraphComponent - dom integration', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   describe('should have proper dom structure', () => {
@@ -34,10 +35,14 @@ describe('TextParagraphComponent - dom integration', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(1);
-      expect(debugEl.children[0].nativeElement.tagName).toBe('P');
+      expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+      expect(debugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 at root is P')
+        .toBe('P');
 
-      expect(debugEl.children[0].children.length).toBe(0);
+      expect(debugEl.children[0].children.length)
+        .withContext('p should have no children')
+        .toBe(0);
     });
     it('with full subParagraph', () => {
       const expectedAText = 'this is a test';
@@ -58,48 +63,70 @@ describe('TextParagraphComponent - dom integration', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(1);
-      expect(debugEl.children[0].nativeElement.tagName).toBe('P');
+      expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+      expect(debugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 at root is P')
+        .toBe('P');
 
-      expect(debugEl.children[0].children.length).toBe(4);
-      expect(debugEl.children[0].children[0].nativeElement.tagName).toBe(
-        'APP-TEXT-SUB-PARAGRAPH'
-      );
-      expect(debugEl.children[0].children[1].nativeElement.tagName).toBe(
-        'APP-TEXT-SUB-PARAGRAPH'
-      );
-      expect(debugEl.children[0].children[2].nativeElement.tagName).toBe(
-        'APP-TEXT-SUB-PARAGRAPH'
-      );
-      expect(debugEl.children[0].children[3].nativeElement.tagName).toBe(
-        'APP-TEXT-SUB-PARAGRAPH'
-      );
+      expect(debugEl.children[0].children.length)
+        .withContext('p should have 4 children')
+        .toBe(4);
+      expect(debugEl.children[0].children[0].nativeElement.tagName)
+        .withContext('child 1 of p should be APP-TEXT-SUB-PARAGRAPH')
+        .toBe('APP-TEXT-SUB-PARAGRAPH');
+      expect(debugEl.children[0].children[1].nativeElement.tagName)
+        .withContext('child 2 of p should be APP-TEXT-SUB-PARAGRAPH')
+        .toBe('APP-TEXT-SUB-PARAGRAPH');
+      expect(debugEl.children[0].children[2].nativeElement.tagName)
+        .withContext('child 3 of p should be APP-TEXT-SUB-PARAGRAPH')
+        .toBe('APP-TEXT-SUB-PARAGRAPH');
+      expect(debugEl.children[0].children[3].nativeElement.tagName)
+        .withContext('child 4 of p should be APP-TEXT-SUB-PARAGRAPH')
+        .toBe('APP-TEXT-SUB-PARAGRAPH');
 
       // 1st el
       let childDebugEl = debugEl.children[0].children[0];
-      expect(childDebugEl.children.length).toBe(1);
-      expect(childDebugEl.children[0].nativeElement.tagName).toBe('BR');
+      expect(childDebugEl.children.length)
+        .withContext('el 1 should have 1 child')
+        .toBe(1);
+      expect(childDebugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 of el 1 should be BR')
+        .toBe('BR');
 
       // 2nd el
       childDebugEl = debugEl.children[0].children[1];
-      expect(childDebugEl.children.length).toBe(1);
-      expect(childDebugEl.children[0].nativeElement.tagName).toBe('A');
+      expect(childDebugEl.children.length)
+        .withContext('el 2 should have 1 child')
+        .toBe(1);
+      expect(childDebugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 of el 2 should be A')
+        .toBe('A');
       const actualAText = childDebugEl.children[0].nativeElement.innerHTML;
 
-      expect(actualAText).toBe(expectedAText);
+      expect(actualAText)
+        .withContext('a text should be set')
+        .toBe(expectedAText);
 
       const expectedAHref = 'assets/' + expectedAHrefParam;
       const actualAHref = childDebugEl.children[0].properties['href'];
 
-      expect(actualAHref).toBe(expectedAHref);
+      expect(actualAHref)
+        .withContext('a href should be set')
+        .toBe(expectedAHref);
 
       // 3rd el
       childDebugEl = debugEl.children[0].children[2];
-      expect(childDebugEl.children.length).toBe(1);
-      expect(childDebugEl.children[0].nativeElement.tagName).toBe('SPAN');
+      expect(childDebugEl.children.length)
+        .withContext('el 3 should have 1 child')
+        .toBe(1);
+      expect(childDebugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 of el 3 should be SPAN')
+        .toBe('SPAN');
       const actualSpanText = childDebugEl.children[0].nativeElement.innerHTML;
 
-      expect(actualSpanText).toBe(expectedSpanText);
+      expect(actualSpanText)
+        .withContext('span text should be set')
+        .toBe(expectedSpanText);
 
       // 4th el
       childDebugEl = debugEl.children[0].children[3];
@@ -107,7 +134,9 @@ describe('TextParagraphComponent - dom integration', () => {
       const actualStrongEmText =
         childDebugEl.children[0].nativeElement.innerHTML;
 
-      expect(actualStrongEmText).toBe(expectedStrongEmText);
+      expect(actualStrongEmText)
+        .withContext('strong em text should be set')
+        .toBe(expectedStrongEmText);
     });
   });
 });

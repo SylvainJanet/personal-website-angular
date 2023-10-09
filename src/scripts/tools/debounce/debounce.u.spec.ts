@@ -28,7 +28,9 @@ describe('debounce decorator - unit', () => {
     });
     it('should work with default values', () => {
       testObj.action();
-      expect(actionSpy).toHaveBeenCalledOnceWith();
+      expect(actionSpy)
+        .withContext('decorated function should be called')
+        .toHaveBeenCalledOnceWith();
     });
   });
 
@@ -52,32 +54,40 @@ describe('debounce decorator - unit', () => {
 
     it('should create timeout property', () => {
       testObj.action();
-      expect(testObj[`${timeOutPrefix}action`]).toBeTruthy();
-      expect(testObj[`${timeOutPrefix}action`]).toBeInstanceOf(Number);
+      expect(testObj[`${timeOutPrefix}action`])
+        .withContext('timeout property should exist')
+        .toBeTruthy();
+      expect(testObj[`${timeOutPrefix}action`])
+        .withContext('timeout property should be a number')
+        .toBeInstanceOf(Number);
     });
 
     it('should create timeout timeStarted property', () => {
       testObj.action();
-      expect(
-        testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`]
-      ).toBeTruthy();
-      expect(
-        testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`]
-      ).toBeInstanceOf(Boolean);
+      expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
+        .withContext('timeout timeStarted property should exist')
+        .toBeTruthy();
+      expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
+        .withContext('timeout timeStarted property should be a boolean')
+        .toBeInstanceOf(Boolean);
     });
 
     it('should call immediate function', () => {
       spyOn(exportedForTesting, 'immediate');
       testObj.action();
 
-      expect(exportedForTesting.immediate).toHaveBeenCalledOnceWith(
-        testObj,
-        `${timeOutPrefix}action`,
-        `${timeOutPrefix}action${timeOutStartedSuffix}`,
-        jasmine.any(Function),
-        delayTest,
-        []
-      );
+      expect(exportedForTesting.immediate)
+        .withContext(
+          'immediate function should be called with the proper parameters'
+        )
+        .toHaveBeenCalledOnceWith(
+          testObj,
+          `${timeOutPrefix}action`,
+          `${timeOutPrefix}action${timeOutStartedSuffix}`,
+          jasmine.any(Function),
+          delayTest,
+          []
+        );
     });
   });
 
@@ -101,22 +111,28 @@ describe('debounce decorator - unit', () => {
 
     it('should create timeout property', () => {
       testObj.action();
-      expect(testObj[`${timeOutPrefix}action`]).toBeTruthy();
-      expect(testObj[`${timeOutPrefix}action`]).toBeInstanceOf(Number);
+      expect(testObj[`${timeOutPrefix}action`])
+        .withContext('timeout property should exist')
+        .toBeTruthy();
+      expect(testObj[`${timeOutPrefix}action`])
+        .withContext('timeout property should be a number')
+        .toBeInstanceOf(Number);
     });
 
     it('should call end function', () => {
       spyOn(exportedForTesting, 'end');
       testObj.action();
 
-      expect(exportedForTesting.end).toHaveBeenCalledOnceWith(
-        testObj,
-        `${timeOutPrefix}action`,
-        `${timeOutPrefix}action${timeOutStartedSuffix}`,
-        jasmine.any(Function),
-        delayTest,
-        []
-      );
+      expect(exportedForTesting.end)
+        .withContext('end function should be called with the proper parameters')
+        .toHaveBeenCalledOnceWith(
+          testObj,
+          `${timeOutPrefix}action`,
+          `${timeOutPrefix}action${timeOutStartedSuffix}`,
+          jasmine.any(Function),
+          delayTest,
+          []
+        );
     });
   });
 
@@ -140,32 +156,40 @@ describe('debounce decorator - unit', () => {
 
     it('should create timeout property', () => {
       testObj.action();
-      expect(testObj[`${timeOutPrefix}action`]).toBeTruthy();
-      expect(testObj[`${timeOutPrefix}action`]).toBeInstanceOf(Number);
+      expect(testObj[`${timeOutPrefix}action`])
+        .withContext('timeout property should exist')
+        .toBeTruthy();
+      expect(testObj[`${timeOutPrefix}action`])
+        .withContext('timeout property should be a number')
+        .toBeInstanceOf(Number);
     });
 
     it('should create timeout timeStarted property', () => {
       testObj.action();
-      expect(
-        testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`]
-      ).toBeTruthy();
-      expect(
-        testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`]
-      ).toBeInstanceOf(Boolean);
+      expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
+        .withContext('timeout timeStarted property should exist')
+        .toBeTruthy();
+      expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
+        .withContext('timeout timeStarted property should be a boolean')
+        .toBeInstanceOf(Boolean);
     });
 
     it('should call both function', () => {
       spyOn(exportedForTesting, 'both');
       testObj.action();
 
-      expect(exportedForTesting.both).toHaveBeenCalledOnceWith(
-        testObj,
-        `${timeOutPrefix}action`,
-        `${timeOutPrefix}action${timeOutStartedSuffix}`,
-        jasmine.any(Function),
-        delayTest,
-        []
-      );
+      expect(exportedForTesting.both)
+        .withContext(
+          'both function should be called with the proper parameters'
+        )
+        .toHaveBeenCalledOnceWith(
+          testObj,
+          `${timeOutPrefix}action`,
+          `${timeOutPrefix}action${timeOutStartedSuffix}`,
+          jasmine.any(Function),
+          delayTest,
+          []
+        );
     });
   });
 
@@ -189,32 +213,40 @@ describe('debounce decorator - unit', () => {
 
     it('should create timeout property', () => {
       testObj.action();
-      expect(testObj[`${timeOutPrefix}action`]).toBeTruthy();
-      expect(testObj[`${timeOutPrefix}action`]).toBeInstanceOf(Number);
+      expect(testObj[`${timeOutPrefix}action`])
+        .withContext('timeout property should exist')
+        .toBeTruthy();
+      expect(testObj[`${timeOutPrefix}action`])
+        .withContext('timeout property should be a number')
+        .toBeInstanceOf(Number);
     });
 
     it('should create timeout timeStarted property', () => {
       testObj.action();
-      expect(
-        testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`]
-      ).toBeTruthy();
-      expect(
-        testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`]
-      ).toBeInstanceOf(Boolean);
+      expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
+        .withContext('timeout timeStarted property should exist')
+        .toBeTruthy();
+      expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
+        .withContext('timeout timeStarted property should be a boolean')
+        .toBeInstanceOf(Boolean);
     });
 
     it('should call periodic function', () => {
       spyOn(exportedForTesting, 'periodic');
       testObj.action();
 
-      expect(exportedForTesting.periodic).toHaveBeenCalledOnceWith(
-        testObj,
-        `${timeOutPrefix}action`,
-        `${timeOutPrefix}action${timeOutStartedSuffix}`,
-        jasmine.any(Function),
-        delayTest,
-        []
-      );
+      expect(exportedForTesting.periodic)
+        .withContext(
+          'periodic function should be called with the proper parameters'
+        )
+        .toHaveBeenCalledOnceWith(
+          testObj,
+          `${timeOutPrefix}action`,
+          `${timeOutPrefix}action${timeOutStartedSuffix}`,
+          jasmine.any(Function),
+          delayTest,
+          []
+        );
     });
   });
 
@@ -241,7 +273,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext('should call the original method with the arguments')
+        .toHaveBeenCalledOnceWith(...args);
     });
     it('should immediately set the timeStarted property', () => {
       exportedForTesting.immediate(
@@ -253,7 +287,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(target.keyTimeStarted).toBeTrue();
+      expect(target.keyTimeStarted)
+        .withContext('keyTimeStarted should be true')
+        .toBeTrue();
     });
     it('should immediately set the timeOut property', () => {
       exportedForTesting.immediate(
@@ -265,7 +301,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(target.key).toBeGreaterThan(1);
+      expect(target.key)
+        .withContext('timeOut should be greater than 1')
+        .toBeGreaterThan(1);
     });
     it('should not call the method again until a delay has passed without a call', fakeAsync(() => {
       exportedForTesting.immediate(
@@ -276,7 +314,11 @@ describe('debounce decorator - unit', () => {
         delayTest,
         args
       );
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments - 1'
+        )
+        .toHaveBeenCalledOnceWith(...args);
       exportedForTesting.immediate(
         target,
         key,
@@ -285,7 +327,11 @@ describe('debounce decorator - unit', () => {
         delayTest,
         args
       );
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments - 2'
+        )
+        .toHaveBeenCalledOnceWith(...args);
       exportedForTesting.immediate(
         target,
         key,
@@ -294,8 +340,14 @@ describe('debounce decorator - unit', () => {
         delayTest,
         args
       );
-      expect(original).toHaveBeenCalledOnceWith(...args);
-      expect(original).toHaveBeenCalledTimes(1);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments - 3'
+        )
+        .toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext('original should have been called once')
+        .toHaveBeenCalledTimes(1);
 
       tick(delayTest * 1.2);
 
@@ -307,7 +359,11 @@ describe('debounce decorator - unit', () => {
         delayTest,
         args
       );
-      expect(original).toHaveBeenCalledTimes(2);
+      expect(original)
+        .withContext(
+          'original should have been called twice with proper arguments'
+        )
+        .toHaveBeenCalledTimes(2);
 
       tick(delayTest * 1.2);
     }));
@@ -336,7 +392,11 @@ describe('debounce decorator - unit', () => {
       );
 
       tick(delayTest * 1.2);
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(...args);
     }));
     it('should immediately set the timeOut property', () => {
       exportedForTesting.end(
@@ -348,7 +408,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(target.key).toBeGreaterThan(1);
+      expect(target.key)
+        .withContext('timeOut property should be set')
+        .toBeGreaterThan(1);
     });
     it('should not call the method until a delay has passed without a call', fakeAsync(() => {
       exportedForTesting.end(
@@ -360,7 +422,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).not.toHaveBeenCalled();
+      expect(original)
+        .withContext('original should not have been called - 1')
+        .not.toHaveBeenCalled();
 
       exportedForTesting.end(
         target,
@@ -371,14 +435,22 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).not.toHaveBeenCalled();
+      expect(original)
+        .withContext('original should not have been called - 2')
+        .not.toHaveBeenCalled();
 
       tick(delayTest * 0.8);
 
-      expect(original).not.toHaveBeenCalled();
+      expect(original)
+        .withContext('original should not have been called - 3')
+        .not.toHaveBeenCalled();
 
       tick(delayTest * 1.2);
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(...args);
     }));
   });
   describe('both function', () => {
@@ -404,7 +476,11 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(...args);
     });
     it('should not call the method again until a delay has passed without a call', fakeAsync(() => {
       exportedForTesting.both(
@@ -415,7 +491,11 @@ describe('debounce decorator - unit', () => {
         delayTest,
         args
       );
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments - 1'
+        )
+        .toHaveBeenCalledOnceWith(...args);
       exportedForTesting.both(
         target,
         key,
@@ -424,7 +504,11 @@ describe('debounce decorator - unit', () => {
         delayTest,
         args
       );
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments - 2'
+        )
+        .toHaveBeenCalledOnceWith(...args);
       exportedForTesting.both(
         target,
         key,
@@ -433,12 +517,22 @@ describe('debounce decorator - unit', () => {
         delayTest,
         args
       );
-      expect(original).toHaveBeenCalledOnceWith(...args);
-      expect(original).toHaveBeenCalledTimes(1);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments - 3'
+        )
+        .toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments - 4'
+        )
+        .toHaveBeenCalledTimes(1);
 
       tick(delayTest * 1.2);
 
-      expect(original).toHaveBeenCalledTimes(2);
+      expect(original)
+        .withContext('original should have been called twice')
+        .toHaveBeenCalledTimes(2);
 
       exportedForTesting.both(
         target,
@@ -448,7 +542,9 @@ describe('debounce decorator - unit', () => {
         delayTest,
         args
       );
-      expect(original).toHaveBeenCalledTimes(3);
+      expect(original)
+        .withContext('original should have been called three times')
+        .toHaveBeenCalledTimes(3);
 
       tick(delayTest * 1.2);
     }));
@@ -462,7 +558,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(target.keyTimeStarted).toBeTrue();
+      expect(target.keyTimeStarted)
+        .withContext('timeStarted property should be set')
+        .toBeTrue();
     });
     it('should immediately set the timeOut property', () => {
       exportedForTesting.both(
@@ -474,7 +572,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(target.key).toBeGreaterThan(1);
+      expect(target.key)
+        .withContext('timeOut property should be set')
+        .toBeGreaterThan(1);
     });
     it('should call the method once the delay has passed without a call', fakeAsync(() => {
       exportedForTesting.both(
@@ -487,8 +587,12 @@ describe('debounce decorator - unit', () => {
       );
 
       tick(delayTest * 1.2);
-      expect(original).toHaveBeenCalledWith(...args);
-      expect(original).toHaveBeenCalledTimes(2);
+      expect(original)
+        .withContext('original should have been called with proper arguments')
+        .toHaveBeenCalledWith(...args);
+      expect(original)
+        .withContext('original should have been called twice')
+        .toHaveBeenCalledTimes(2);
     }));
     it('should not call the method until a delay has passed without a call', fakeAsync(() => {
       exportedForTesting.both(
@@ -500,8 +604,14 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).toHaveBeenCalledOnceWith(...args);
-      expect(original).toHaveBeenCalledTimes(1);
+      expect(original)
+        .withContext(
+          'original should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext('original should have been called once - 1')
+        .toHaveBeenCalledTimes(1);
 
       exportedForTesting.both(
         target,
@@ -512,13 +622,19 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).toHaveBeenCalledTimes(1);
+      expect(original)
+        .withContext('original should have been called once - 2')
+        .toHaveBeenCalledTimes(1);
 
       tick(delayTest * 0.8);
-      expect(original).toHaveBeenCalledTimes(1);
+      expect(original)
+        .withContext('original should have been called once - 3')
+        .toHaveBeenCalledTimes(1);
 
       tick(delayTest * 1.2);
-      expect(original).toHaveBeenCalledTimes(2);
+      expect(original)
+        .withContext('original should have been called twice')
+        .toHaveBeenCalledTimes(2);
     }));
   });
   describe('periodic function', () => {
@@ -545,7 +661,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(target.keyTimeStarted).toBeTrue();
+      expect(target.keyTimeStarted)
+        .withContext('timeStarted property should be set')
+        .toBeTrue();
     });
     it('should immediately set the timeOut property', () => {
       exportedForTesting.periodic(
@@ -557,7 +675,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(target.key).toBeGreaterThan(1);
+      expect(target.key)
+        .withContext('timeOut property should be set')
+        .toBeGreaterThan(1);
     });
     it('should immediately call the method', () => {
       exportedForTesting.periodic(
@@ -569,7 +689,11 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with the proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(...args);
     });
     it('should not call the method again until a delay has passed', () => {
       exportedForTesting.periodic(
@@ -581,7 +705,11 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with the proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(...args);
 
       exportedForTesting.periodic(
         target,
@@ -592,7 +720,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).toHaveBeenCalledTimes(1);
+      expect(original)
+        .withContext('original should have been called once - 1')
+        .toHaveBeenCalledTimes(1);
 
       exportedForTesting.periodic(
         target,
@@ -603,7 +733,9 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).toHaveBeenCalledTimes(1);
+      expect(original)
+        .withContext('original should have been called once - 2')
+        .toHaveBeenCalledTimes(1);
     });
     it('should call the method again once a delay has passed', fakeAsync(() => {
       exportedForTesting.periodic(
@@ -615,11 +747,17 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).toHaveBeenCalledOnceWith(...args);
+      expect(original)
+        .withContext(
+          'original should have been called once with the proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(...args);
 
       tick(delayTest * 0.8);
 
-      expect(original).toHaveBeenCalledTimes(1);
+      expect(original)
+        .withContext('original should have been called once - 1')
+        .toHaveBeenCalledTimes(1);
 
       exportedForTesting.periodic(
         target,
@@ -630,10 +768,14 @@ describe('debounce decorator - unit', () => {
         args
       );
 
-      expect(original).toHaveBeenCalledTimes(1);
+      expect(original)
+        .withContext('original should have been called once - 2')
+        .toHaveBeenCalledTimes(1);
 
       tick(delayTest * 0.4);
-      expect(original).toHaveBeenCalledTimes(2);
+      expect(original)
+        .withContext('original should have been called twice')
+        .toHaveBeenCalledTimes(2);
 
       exportedForTesting.periodic(
         target,
@@ -643,10 +785,14 @@ describe('debounce decorator - unit', () => {
         delayTest,
         args
       );
-      expect(original).toHaveBeenCalledTimes(3);
+      expect(original)
+        .withContext('original should have been called three times')
+        .toHaveBeenCalledTimes(3);
 
       tick(delayTest * 1);
-      expect(original).toHaveBeenCalledTimes(4);
+      expect(original)
+        .withContext('original should have been called four times')
+        .toHaveBeenCalledTimes(4);
     }));
   });
 });

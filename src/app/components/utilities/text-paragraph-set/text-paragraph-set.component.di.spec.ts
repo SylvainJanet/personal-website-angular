@@ -28,8 +28,9 @@ describe('TextParagraphComponent - dom integration', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   describe('should have proper dom structure', () => {
@@ -39,7 +40,9 @@ describe('TextParagraphComponent - dom integration', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(0);
+      expect(debugEl.children.length)
+        .withContext('there should be no element')
+        .toBe(0);
     });
     it('with full subParagraph', () => {
       const expectedAText = 'this is a test';
@@ -72,46 +75,72 @@ describe('TextParagraphComponent - dom integration', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(2);
-      expect(debugEl.children[0].nativeElement.tagName).toBe(
-        'APP-TEXT-PARAGRAPH'
-      );
-      expect(debugEl.children[1].nativeElement.tagName).toBe(
-        'APP-TEXT-PARAGRAPH'
-      );
+      expect(debugEl.children.length)
+        .withContext('there should be 2 elements')
+        .toBe(2);
+      expect(debugEl.children[0].nativeElement.tagName)
+        .withContext('el 1 should be APP-TEXT-PARAGRAPH')
+        .toBe('APP-TEXT-PARAGRAPH');
+      expect(debugEl.children[1].nativeElement.tagName)
+        .withContext('el 2 should be APP-TEXT-PARAGRAPH')
+        .toBe('APP-TEXT-PARAGRAPH');
 
       // 1st paragraph
 
       let paragraphDebugEl = debugEl.children[0];
-      expect(paragraphDebugEl.children.length).toBe(1);
-      expect(paragraphDebugEl.children[0].nativeElement.tagName).toBe('P');
-      expect(paragraphDebugEl.children[0].children.length).toBe(4);
+      expect(paragraphDebugEl.children.length)
+        .withContext('paragraph 1 should have 1 child')
+        .toBe(1);
+      expect(paragraphDebugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 of paragraph 1 should be P')
+        .toBe('P');
+      expect(paragraphDebugEl.children[0].children.length)
+        .withContext('p should have 4 children')
+        .toBe(4);
 
       // 1st el
       let childDebugEl = paragraphDebugEl.children[0].children[0];
-      expect(childDebugEl.children.length).toBe(1);
-      expect(childDebugEl.children[0].nativeElement.tagName).toBe('BR');
+      expect(childDebugEl.children.length)
+        .withContext('el 1 should have 1 child')
+        .toBe(1);
+      expect(childDebugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 of el 1 should be BR')
+        .toBe('BR');
 
       // 2nd el
       childDebugEl = paragraphDebugEl.children[0].children[1];
-      expect(childDebugEl.children.length).toBe(1);
-      expect(childDebugEl.children[0].nativeElement.tagName).toBe('A');
+      expect(childDebugEl.children.length)
+        .withContext('el 2 should have 1 child')
+        .toBe(1);
+      expect(childDebugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 of el 2 should be A')
+        .toBe('A');
       const actualAText = childDebugEl.children[0].nativeElement.innerHTML;
 
-      expect(actualAText).toBe(expectedAText);
+      expect(actualAText)
+        .withContext('a text should be set')
+        .toBe(expectedAText);
 
       const expectedAHref = 'assets/' + expectedAHrefParam;
       const actualAHref = childDebugEl.children[0].properties['href'];
 
-      expect(actualAHref).toBe(expectedAHref);
+      expect(actualAHref)
+        .withContext('a href should be set')
+        .toBe(expectedAHref);
 
       // 3rd el
       childDebugEl = paragraphDebugEl.children[0].children[2];
-      expect(childDebugEl.children.length).toBe(1);
-      expect(childDebugEl.children[0].nativeElement.tagName).toBe('SPAN');
+      expect(childDebugEl.children.length)
+        .withContext('el 3 should have 1 child')
+        .toBe(1);
+      expect(childDebugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 of el 3 should be SPAN')
+        .toBe('SPAN');
       const actualSpanText = childDebugEl.children[0].nativeElement.innerHTML;
 
-      expect(actualSpanText).toBe(expectedSpanText);
+      expect(actualSpanText)
+        .withContext('span text should be set')
+        .toBe(expectedSpanText);
 
       // 4th el
       childDebugEl = paragraphDebugEl.children[0].children[3];
@@ -119,23 +148,37 @@ describe('TextParagraphComponent - dom integration', () => {
       const actualStrongEmText =
         childDebugEl.children[0].nativeElement.innerHTML;
 
-      expect(actualStrongEmText).toBe(expectedStrongEmText);
+      expect(actualStrongEmText)
+        .withContext('strong em text should be set')
+        .toBe(expectedStrongEmText);
 
       // 2nd paragraph
 
       paragraphDebugEl = debugEl.children[1];
-      expect(paragraphDebugEl.children.length).toBe(1);
-      expect(paragraphDebugEl.children[0].nativeElement.tagName).toBe('P');
-      expect(paragraphDebugEl.children[0].children.length).toBe(1);
+      expect(paragraphDebugEl.children.length)
+        .withContext('paragraph 2 should have 1 child')
+        .toBe(1);
+      expect(paragraphDebugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 of paragraph 2 should be P')
+        .toBe('P');
+      expect(paragraphDebugEl.children[0].children.length)
+        .withContext('p of paragraph 2 should have 1 child')
+        .toBe(1);
 
       // 1st el
       childDebugEl = paragraphDebugEl.children[0].children[0];
-      expect(childDebugEl.children.length).toBe(1);
-      expect(childDebugEl.children[0].nativeElement.tagName).toBe('SPAN');
+      expect(childDebugEl.children.length)
+        .withContext('first p of paragraph 2 should have 1 child')
+        .toBe(1);
+      expect(childDebugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 of first p of paragraph 2 should be SPAN')
+        .toBe('SPAN');
       const actualLastParagraphSpanText =
         childDebugEl.children[0].nativeElement.innerHTML;
 
-      expect(actualLastParagraphSpanText).toBe(expectedLastParagraphSpanText);
+      expect(actualLastParagraphSpanText)
+        .withContext('last paragraph span text should be set')
+        .toBe(expectedLastParagraphSpanText);
     });
   });
 });

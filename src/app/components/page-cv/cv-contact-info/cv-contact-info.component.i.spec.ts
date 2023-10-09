@@ -45,7 +45,9 @@ describe('CvContactInfoComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvContactInfoComponent).toBeTruthy();
+      expect(cvContactInfoComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -115,22 +117,22 @@ describe('CvContactInfoComponent - integration', () => {
       const actualPhoneObs = cvContactInfoComponent.phone;
 
       actualNameObs.subscribe((s) => {
-        expect(s).toBe(expectedName);
+        expect(s).withContext('name should be set').toBe(expectedName);
       });
       actualSjObs.subscribe((s) => {
-        expect(s).toBe(expectedSj);
+        expect(s).withContext('sj should be set').toBe(expectedSj);
       });
       actualProfileObs.subscribe((s) => {
-        expect(s).toBe(expectedProfile);
+        expect(s).withContext('profile should be set').toBe(expectedProfile);
       });
       actualFsDevObs.subscribe((s) => {
-        expect(s).toBe(expectedFsDev);
+        expect(s).withContext('fsDev should be set').toBe(expectedFsDev);
       });
       actualEmailObs.subscribe((s) => {
-        expect(s).toBe(expectedEmail);
+        expect(s).withContext('email should be set').toBe(expectedEmail);
       });
       actualPhoneObs.subscribe((s) => {
-        expect(s).toBe(expectedPhone);
+        expect(s).withContext('phone should be set').toBe(expectedPhone);
       });
     };
     describe('in dev environment', () => {

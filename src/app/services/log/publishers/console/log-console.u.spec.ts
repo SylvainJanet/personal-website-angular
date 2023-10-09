@@ -22,9 +22,9 @@ describe('LogConsole', () => {
 
     result.subscribe({
       next: () => {
-        expect(window.console.log).toHaveBeenCalledOnceWith(
-          entry.buildLogString()
-        );
+        expect(window.console.log)
+          .withContext('log should have been called once')
+          .toHaveBeenCalledOnceWith(entry.buildLogString());
         done();
       },
       error: (e) => done.fail('log entry failed - ' + e),
@@ -38,7 +38,7 @@ describe('LogConsole', () => {
 
     result.subscribe({
       next: (actual) => {
-        expect(actual).toBe(expected);
+        expect(actual).withContext('should return true').toBe(expected);
         done();
       },
       error: (e) => done.fail('log entry failed - ' + e),
@@ -100,7 +100,9 @@ describe('LogConsole', () => {
 
       result.subscribe({
         next: () => {
-          expect(window.console.clear).toHaveBeenCalledTimes(1);
+          expect(window.console.clear)
+            .withContext('clear should have been called once')
+            .toHaveBeenCalledTimes(1);
           done();
         },
         error: (e) => done.fail('log clear failed - ' + e),
@@ -113,7 +115,7 @@ describe('LogConsole', () => {
 
       result.subscribe({
         next: (actual) => {
-          expect(actual).toBe(expected);
+          expect(actual).withContext('should return true').toBe(expected);
           done();
         },
         error: (e) => done.fail('log clear failed - ' + e),

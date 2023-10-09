@@ -96,8 +96,9 @@ describe('CvAboutMeComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   describe('onResize method', () => {
@@ -106,7 +107,9 @@ describe('CvAboutMeComponent - dom unit', () => {
 
       window.dispatchEvent(new Event('resize'));
 
-      expect(componentInstance.onResize).toHaveBeenCalledTimes(1);
+      expect(componentInstance.onResize)
+        .withContext('onResize should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
   describe('onScroll method', () => {
@@ -115,7 +118,9 @@ describe('CvAboutMeComponent - dom unit', () => {
 
       window.dispatchEvent(new Event('scroll'));
 
-      expect(componentInstance.onScroll).toHaveBeenCalledTimes(1);
+      expect(componentInstance.onScroll)
+        .withContext('onScroll should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -130,48 +135,72 @@ describe('CvAboutMeComponent - dom unit', () => {
       const actualPosElementMin = componentInstance.posElementMin;
       const actualPosElementMax = componentInstance.posElementMax;
 
-      //   expect(actualPosElementMin).toBe(expectedPosElementMin);
-      //   expect(actualPosElementMax).toBe(expectedPosElementMax);
+      //   expect.(actualPosElementMin).toBe(expectedPosElementMin);
+      //   expect.(actualPosElementMax).toBe(expectedPosElementMax);
 
-      expect(actualPosElementMax > actualPosElementMin).toBeTrue();
+      expect(actualPosElementMax > actualPosElementMin)
+        .withContext('min < max')
+        .toBeTrue();
     });
   });
 
   it('should have proper dom structure', () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is DIV')
+      .toBe('DIV');
 
     const firstDivEl: DebugElement = debugEl.children[0];
 
-    expect(firstDivEl.children.length).toBe(2);
-    expect(firstDivEl.children[0].nativeElement.tagName).toBe('DIV');
-    expect(firstDivEl.children[1].nativeElement.tagName).toBe(
-      'APP-TEXT-PARAGRAPH-SET'
-    );
+    expect(firstDivEl.children.length)
+      .withContext('child 1 at root should have 2 children')
+      .toBe(2);
+    expect(firstDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of child 1 at root should be DIV')
+      .toBe('DIV');
+    expect(firstDivEl.children[1].nativeElement.tagName)
+      .withContext(
+        'child 2 of child 1 at root should be APP-TEXT-PARAGRAPH-SET'
+      )
+      .toBe('APP-TEXT-PARAGRAPH-SET');
 
     // title
     let secondDivEl: DebugElement = firstDivEl.children[0];
-    expect(secondDivEl.children.length).toBe(1);
-    expect(secondDivEl.children[0].nativeElement.tagName).toBe('DIV');
-    expect(secondDivEl.children[0].children.length).toBe(2);
+    expect(secondDivEl.children.length)
+      .withContext('title div should have 1 child')
+      .toBe(1);
+    expect(secondDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of title div should be DIV')
+      .toBe('DIV');
+    expect(secondDivEl.children[0].children.length)
+      .withContext('child 1 of title div should have 2 children')
+      .toBe(2);
 
-    expect(secondDivEl.children[0].children[0].nativeElement.tagName).toBe(
-      'H2'
-    );
-    expect(secondDivEl.children[0].children[0].children.length).toBe(0);
-    expect(secondDivEl.children[0].children[1].nativeElement.tagName).toBe(
-      'SPAN'
-    );
-    expect(secondDivEl.children[0].children[1].children.length).toBe(0);
+    expect(secondDivEl.children[0].children[0].nativeElement.tagName)
+      .withContext('child 1 of child 1 of title div should be H2')
+      .toBe('H2');
+    expect(secondDivEl.children[0].children[0].children.length)
+      .withContext('child 1 of title H2 should have no children')
+      .toBe(0);
+    expect(secondDivEl.children[0].children[1].nativeElement.tagName)
+      .withContext('child 2 of child 1 of title div should be SPAN')
+      .toBe('SPAN');
+    expect(secondDivEl.children[0].children[1].children.length)
+      .withContext('child 2 of title H2 should have no children')
+      .toBe(0);
 
     // content
     secondDivEl = firstDivEl.children[1];
-    expect(secondDivEl.children.length).toBe(8);
+    expect(secondDivEl.children.length)
+      .withContext('paragraphs div should have 8 children')
+      .toBe(8);
     expect(
       (secondDivEl.componentInstance as TextParagraphSetComponent).paragraphs
-    ).toBe(expectedParagraphs);
+    )
+      .withContext('paragraphs should be set')
+      .toBe(expectedParagraphs);
   });
 
   it('should set title', () => {
@@ -183,7 +212,7 @@ describe('CvAboutMeComponent - dom unit', () => {
 
     const actual = titleH2El.nativeElement.innerHTML;
 
-    expect(actual).toBe(expectedTitle);
+    expect(actual).withContext('title should be set').toBe(expectedTitle);
   });
 
   it('should display paragraphs', () => {
@@ -191,9 +220,9 @@ describe('CvAboutMeComponent - dom unit', () => {
 
     const firstDivEl: DebugElement = debugEl.children[0];
     const secondEl: DebugElement = firstDivEl.children[1];
-    expect(
-      (secondEl.componentInstance as TextParagraphSetComponent).paragraphs
-    ).toBe(expectedParagraphs);
+    expect((secondEl.componentInstance as TextParagraphSetComponent).paragraphs)
+      .withContext('paragraphs should be set')
+      .toBe(expectedParagraphs);
   });
 
   it('should set bar width', () => {
@@ -209,8 +238,8 @@ describe('CvAboutMeComponent - dom unit', () => {
 
     const actual = barDivEl.styles['width'];
 
-    expect(actual).toBe(
-      widthProperty.endsWith('%') ? widthProperty : widthProperty + 'px'
-    );
+    expect(actual)
+      .withContext('width should be set')
+      .toBe(widthProperty.endsWith('%') ? widthProperty : widthProperty + 'px');
   });
 });

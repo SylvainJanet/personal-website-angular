@@ -62,32 +62,51 @@ describe('TextService - unit', () => {
 
       textService['getText'](selectorToTest, languageToTest);
 
-      expect(datasourceServiceSpy.get).toHaveBeenCalledOnceWith(
-        API_TEXT_PATH,
-        jasmine.any(Object)
-      );
+      expect(datasourceServiceSpy.get)
+        .withContext('get should have been called')
+        .toHaveBeenCalledOnceWith(API_TEXT_PATH, jasmine.any(Object));
 
-      expect(datasourceServiceSpy.get.calls.mostRecent().args[1]).toBeTruthy();
+      expect(datasourceServiceSpy.get.calls.mostRecent().args[1])
+        .withContext(
+          'get should have been called with the proper arguments - 1'
+        )
+        .toBeTruthy();
       expect(
         datasourceServiceSpy.get.calls
           .mostRecent()
           .args[1]?.get(API_SELECTOR_PARAM)
-      ).toBeTruthy();
+      )
+        .withContext(
+          'get should have been called with the proper arguments - 2'
+        )
+        .toBeTruthy();
       expect(
         datasourceServiceSpy.get.calls
           .mostRecent()
           .args[1]?.get(API_SELECTOR_PARAM)
-      ).toBe(selectorToTest);
+      )
+        .withContext(
+          'get should have been called with the proper arguments - 3'
+        )
+        .toBe(selectorToTest);
       expect(
         datasourceServiceSpy.get.calls
           .mostRecent()
           .args[1]?.get(API_LANGUAGE_PARAM)
-      ).toBeTruthy();
+      )
+        .withContext(
+          'get should have been called with the proper arguments - 4'
+        )
+        .toBeTruthy();
       expect(
         datasourceServiceSpy.get.calls
           .mostRecent()
           .args[1]?.get(API_LANGUAGE_PARAM)
-      ).toBe(Languages[languageToTest]);
+      )
+        .withContext(
+          'get should have been called with the proper arguments - 5'
+        )
+        .toBe(Languages[languageToTest]);
     });
     it('should return an observable of the message', (done: DoneFn) => {
       const selectorToTest = 'test-selector';
@@ -100,7 +119,9 @@ describe('TextService - unit', () => {
 
       textService['getText'](selectorToTest, languageToTest).subscribe({
         next: (actual) => {
-          expect(actual).toBe(expectedMessage);
+          expect(actual)
+            .withContext('message should be as expected')
+            .toBe(expectedMessage);
           done();
         },
         error: done.fail,
@@ -117,10 +138,9 @@ describe('TextService - unit', () => {
 
       textService.get(selectorToTest).subscribe();
 
-      expect(preloaderServiceSpy.toLoad).toHaveBeenCalledOnceWith(
-        Preloaders.TEXTS,
-        1
-      );
+      expect(preloaderServiceSpy.toLoad)
+        .withContext('toLoad should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
     });
     it('should not notify the TEXTS preloader that a text has to load without subscribers', () => {
       const selectorToTest = 'test-selector';
@@ -130,7 +150,9 @@ describe('TextService - unit', () => {
 
       textService.get(selectorToTest);
 
-      expect(preloaderServiceSpy.toLoad).not.toHaveBeenCalled();
+      expect(preloaderServiceSpy.toLoad)
+        .withContext('toLoad should not have been called')
+        .not.toHaveBeenCalled();
     });
     it('should call getText method', () => {
       const selectorToTest = 'test-selector';
@@ -140,10 +162,9 @@ describe('TextService - unit', () => {
 
       textService.get(selectorToTest);
 
-      expect(textService['getText']).toHaveBeenCalledOnceWith(
-        selectorToTest,
-        languageServiceSpy.current()
-      );
+      expect(textService['getText'])
+        .withContext('getText should have been called')
+        .toHaveBeenCalledOnceWith(selectorToTest, languageServiceSpy.current());
     });
     it('should notify the TEXTS preloader that a text has loaded', () => {
       const selectorToTest = 'test-selector';
@@ -153,10 +174,9 @@ describe('TextService - unit', () => {
 
       textService.get(selectorToTest).subscribe();
 
-      expect(preloaderServiceSpy.loaded).toHaveBeenCalledOnceWith(
-        Preloaders.TEXTS,
-        1
-      );
+      expect(preloaderServiceSpy.loaded)
+        .withContext('loaded should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
     });
     it('should notify the TEXTS preloader that a text has loaded on error', () => {
       const selectorToTest = 'test-selector';
@@ -168,10 +188,9 @@ describe('TextService - unit', () => {
 
       textService.get(selectorToTest).subscribe();
 
-      expect(preloaderServiceSpy.loaded).toHaveBeenCalledOnceWith(
-        Preloaders.TEXTS,
-        1
-      );
+      expect(preloaderServiceSpy.loaded)
+        .withContext('loaded should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
     });
     it('should return an error message on error', (done: DoneFn) => {
       const selectorToTest = 'test-selector';
@@ -183,7 +202,9 @@ describe('TextService - unit', () => {
 
       textService.get(selectorToTest).subscribe({
         next: (actual) => {
-          expect(actual).toBe(EXPECTED_TEXT_ERROR_MESSAGE);
+          expect(actual)
+            .withContext('error message should be as expected')
+            .toBe(EXPECTED_TEXT_ERROR_MESSAGE);
           done();
         },
         error: done.fail,
@@ -198,7 +219,9 @@ describe('TextService - unit', () => {
 
       textService.get(selectorToTest).subscribe({
         next: (actual) => {
-          expect(actual).toBe(expectedMessage);
+          expect(actual)
+            .withContext('text should be as expected')
+            .toBe(expectedMessage);
           done();
         },
         error: done.fail,
@@ -214,10 +237,12 @@ describe('TextService - unit', () => {
 
       textService.getOtherLanguage();
 
-      expect(textService['getText']).toHaveBeenCalledOnceWith(
-        ENGLISH_LANGUAGE_NAME_SELECTOR,
-        Languages.ENGLISH
-      );
+      expect(textService['getText'])
+        .withContext('getText should have been called')
+        .toHaveBeenCalledOnceWith(
+          ENGLISH_LANGUAGE_NAME_SELECTOR,
+          Languages.ENGLISH
+        );
     });
     it('should call getText correctly when the current language is ENGLISH', () => {
       languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
@@ -226,10 +251,12 @@ describe('TextService - unit', () => {
 
       textService.getOtherLanguage();
 
-      expect(textService['getText']).toHaveBeenCalledOnceWith(
-        FRENCH_LANGUAGE_NAME_SELECTOR,
-        Languages.FRENCH
-      );
+      expect(textService['getText'])
+        .withContext('getText should have been called')
+        .toHaveBeenCalledOnceWith(
+          FRENCH_LANGUAGE_NAME_SELECTOR,
+          Languages.FRENCH
+        );
     });
     it('should return the other language when the current language is FRENCH', (done: DoneFn) => {
       const expectedText = 'this is a test';
@@ -239,7 +266,9 @@ describe('TextService - unit', () => {
 
       textService.getOtherLanguage().subscribe({
         next: (actual) => {
-          expect(actual).toBe(expectedText);
+          expect(actual)
+            .withContext('other language should be as expected')
+            .toBe(expectedText);
           done();
         },
         error: done.fail,
@@ -253,7 +282,9 @@ describe('TextService - unit', () => {
 
       textService.getOtherLanguage().subscribe({
         next: (actual) => {
-          expect(actual).toBe(expectedText);
+          expect(actual)
+            .withContext('other language should be as expected')
+            .toBe(expectedText);
           done();
         },
         error: done.fail,
@@ -291,10 +322,9 @@ describe('TextService - unit', () => {
 
       textService.getSplit(selectorToTest).subscribe();
 
-      expect(preloaderServiceSpy.toLoad).toHaveBeenCalledOnceWith(
-        Preloaders.TEXTS,
-        1
-      );
+      expect(preloaderServiceSpy.toLoad)
+        .withContext('toLoad should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
     });
     it('should not notify the TEXTS preloader that a text has to load without subscribers', () => {
       const selectorToTest = 'test-selector';
@@ -324,7 +354,9 @@ describe('TextService - unit', () => {
 
       textService.getSplit(selectorToTest);
 
-      expect(preloaderServiceSpy.toLoad).not.toHaveBeenCalled();
+      expect(preloaderServiceSpy.toLoad)
+        .withContext('toLoad should not have been called')
+        .not.toHaveBeenCalled();
     });
     it('should call getText method', () => {
       const selectorToTest = 'test-selector';
@@ -354,10 +386,9 @@ describe('TextService - unit', () => {
 
       textService.getSplit(selectorToTest);
 
-      expect(textService['getText']).toHaveBeenCalledOnceWith(
-        selectorToTest,
-        languageServiceSpy.current()
-      );
+      expect(textService['getText'])
+        .withContext('getText should have been called')
+        .toHaveBeenCalledOnceWith(selectorToTest, languageServiceSpy.current());
     });
     it('should notify the TEXTS preloader that a text has loaded', () => {
       const selectorToTest = 'test-selector';
@@ -387,10 +418,9 @@ describe('TextService - unit', () => {
 
       textService.getSplit(selectorToTest).subscribe();
 
-      expect(preloaderServiceSpy.loaded).toHaveBeenCalledOnceWith(
-        Preloaders.TEXTS,
-        1
-      );
+      expect(preloaderServiceSpy.loaded)
+        .withContext('loaded should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
     });
     it('should notify the TEXTS preloader that a text has loaded on error', () => {
       const selectorToTest = 'test-selector';
@@ -402,10 +432,9 @@ describe('TextService - unit', () => {
 
       textService.getSplit(selectorToTest).subscribe();
 
-      expect(preloaderServiceSpy.loaded).toHaveBeenCalledOnceWith(
-        Preloaders.TEXTS,
-        1
-      );
+      expect(preloaderServiceSpy.loaded)
+        .withContext('loaded should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
     });
     it('should return an error message on error', (done: DoneFn) => {
       const selectorToTest = 'test-selector';
@@ -422,14 +451,16 @@ describe('TextService - unit', () => {
 
       textService.getSplit(selectorToTest).subscribe({
         next: (actual) => {
-          expect(actual).toEqual([
-            new Paragraph([
-              new SubParagraph(
-                SubParagraphRoot.SPAN,
-                EXPECTED_TEXT_ERROR_MESSAGE
-              ),
-            ]),
-          ]);
+          expect(actual)
+            .withContext('error message should be as expected')
+            .toEqual([
+              new Paragraph([
+                new SubParagraph(
+                  SubParagraphRoot.SPAN,
+                  EXPECTED_TEXT_ERROR_MESSAGE
+                ),
+              ]),
+            ]);
           done();
         },
         error: done.fail,
@@ -512,7 +543,9 @@ describe('TextService - unit', () => {
 
       textService.getSplit(selectorToTest).subscribe({
         next: (actual) => {
-          expect(actual).toEqual(expected);
+          expect(actual)
+            .withContext('paragraphs should be as expected')
+            .toEqual(expected);
           done();
         },
         error: done.fail,
@@ -547,9 +580,9 @@ describe('TextService - unit', () => {
 
       textService.getSplit(selectorToTest).subscribe({
         next: () => {
-          expect(paragraphDecoderServiceSpy.decode).toHaveBeenCalledOnceWith(
-            text
-          );
+          expect(paragraphDecoderServiceSpy.decode)
+            .withContext('decode should have been called')
+            .toHaveBeenCalledOnceWith(text);
         },
       });
     });

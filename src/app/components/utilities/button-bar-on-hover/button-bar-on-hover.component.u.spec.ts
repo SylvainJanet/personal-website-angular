@@ -38,39 +38,61 @@ describe('LinkBarOnHoverComponent - unit', () => {
       buttonBarOnHoverComponent = TestBed.inject(ButtonBarOnHoverComponent);
     });
     it('should create', () => {
-      expect(buttonBarOnHoverComponent).toBeTruthy();
-      expect(buttonBarOnHoverComponent.logger).toBe(logServiceSpy);
+      expect(buttonBarOnHoverComponent)
+        .withContext('component should create')
+        .toBeTruthy();
+      expect(buttonBarOnHoverComponent.logger)
+        .withContext('logger should be set')
+        .toBe(logServiceSpy);
     });
 
     it('should set default values', () => {
-      expect(buttonBarOnHoverComponent).toBeTruthy();
+      expect(buttonBarOnHoverComponent)
+        .withContext('component should create')
+        .toBeTruthy();
 
-      expect(buttonBarOnHoverComponent.lineWidth).toBe('0%');
-      expect(buttonBarOnHoverComponent.textColor).toBe('white');
-      expect(buttonBarOnHoverComponent.lineColor).toBe('white');
-      expect(buttonBarOnHoverComponent.press).toBeTruthy();
-      expect(buttonBarOnHoverComponent.press).toBeInstanceOf(
-        EventEmitter<Event>
-      );
+      expect(buttonBarOnHoverComponent.lineWidth)
+        .withContext('lineWidth should be set')
+        .toBe('0%');
+      expect(buttonBarOnHoverComponent.textColor)
+        .withContext('textColor should be set')
+        .toBe('white');
+      expect(buttonBarOnHoverComponent.lineColor)
+        .withContext('lineColor should be set')
+        .toBe('white');
+      expect(buttonBarOnHoverComponent.press)
+        .withContext('press should be defined')
+        .toBeTruthy();
+      expect(buttonBarOnHoverComponent.press)
+        .withContext('press should be an event emitter')
+        .toBeInstanceOf(EventEmitter<Event>);
       buttonBarOnHoverComponent.text.subscribe({
         next: (t) => {
-          expect(t).toBe('Action');
+          expect(t).withContext('text should be set').toBe('Action');
         },
       });
-      expect(buttonBarOnHoverComponent.buttonStyle).toBe('');
-      expect(buttonBarOnHoverComponent.lineStyle).toBe('');
-      expect(buttonBarOnHoverComponent.globalStyle).toBe('');
+      expect(buttonBarOnHoverComponent.buttonStyle)
+        .withContext('buttonStyle should be set')
+        .toBe('');
+      expect(buttonBarOnHoverComponent.lineStyle)
+        .withContext('lineStyle should be set')
+        .toBe('');
+      expect(buttonBarOnHoverComponent.globalStyle)
+        .withContext('globalStyle should be set')
+        .toBe('');
     });
 
     it('should set proper logger', () => {
       const expected = 'ButtonBarOnHoverComponent';
-      expect(logServiceGlobalSpy.withClassName).toHaveBeenCalledOnceWith(
-        expected
-      );
+      expect(logServiceGlobalSpy.withClassName)
+        .withContext('withClassName should be defined')
+        .toHaveBeenCalledOnceWith(expected);
     });
 
     it('should make the line disappear on creation', () => {
-      expect(buttonBarOnHoverComponent.lineDisappears).toHaveBeenCalledTimes(1);
+      expect(buttonBarOnHoverComponent.lineDisappears)
+        .withContext('lineDisappears should be defined')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -107,7 +129,9 @@ describe('LinkBarOnHoverComponent - unit', () => {
 
       buttonBarOnHoverComponent.lineAppears(eventSpy);
 
-      expect(buttonBarOnHoverComponent.lineWidth).toBe(expectedLength + 'px');
+      expect(buttonBarOnHoverComponent.lineWidth)
+        .withContext('lineWidth should be set')
+        .toBe(expectedLength + 'px');
     });
   });
 
@@ -145,7 +169,9 @@ describe('LinkBarOnHoverComponent - unit', () => {
 
       buttonBarOnHoverComponent.lineDisappears();
 
-      expect(buttonBarOnHoverComponent.lineWidth).toBe('0%');
+      expect(buttonBarOnHoverComponent.lineWidth)
+        .withContext('lineWidth should be set')
+        .toBe('0%');
     });
   });
 
@@ -177,7 +203,9 @@ describe('LinkBarOnHoverComponent - unit', () => {
 
       buttonBarOnHoverComponent.doAction(expectedEvent);
 
-      expect(buttonBarOnHoverComponent.lineDisappears).toHaveBeenCalledTimes(1);
+      expect(buttonBarOnHoverComponent.lineDisappears)
+        .withContext('lineDisappears should have been called')
+        .toHaveBeenCalledTimes(1);
     });
     it('should emit press event', () => {
       const pressSpy = jasmine.createSpyObj('EventEmitter', ['emit']);
@@ -187,7 +215,9 @@ describe('LinkBarOnHoverComponent - unit', () => {
 
       buttonBarOnHoverComponent.doAction(expectedEvent);
 
-      expect(pressSpy.emit).toHaveBeenCalledOnceWith(expectedEvent);
+      expect(pressSpy.emit)
+        .withContext('emit should have been called')
+        .toHaveBeenCalledOnceWith(expectedEvent);
     });
   });
 });

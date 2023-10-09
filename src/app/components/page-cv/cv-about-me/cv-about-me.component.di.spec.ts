@@ -75,8 +75,9 @@ describe('CvAboutMeComponent - dom integration', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveContentSetByServiceExpectation =
@@ -90,12 +91,12 @@ describe('CvAboutMeComponent - dom integration', () => {
 
     const actual = titleH2El.nativeElement.innerHTML;
 
-    expect(actual).toBe(expectedTitle);
+    expect(actual).withContext('title should be set').toBe(expectedTitle);
 
     const secondEl: DebugElement = firstDivEl.children[1];
-    expect(
-      (secondEl.componentInstance as TextParagraphSetComponent).paragraphs
-    ).toEqual(expectedParagraphs);
+    expect((secondEl.componentInstance as TextParagraphSetComponent).paragraphs)
+      .withContext('paragraphs should be set')
+      .toEqual(expectedParagraphs);
   };
 
   describe('in dev environment', () => {

@@ -46,8 +46,9 @@ describe('BannerComponent - dom integration', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveContentSetByServiceExpectation =
@@ -66,7 +67,7 @@ describe('BannerComponent - dom integration', () => {
 
     const actualTitle = bannerSpan.nativeElement.innerHTML;
 
-    expect(actualTitle).toBe(expectedTitle);
+    expect(actualTitle).withContext('title should be set').toBe(expectedTitle);
 
     const bannerTypedAnimatedText = bannerH2Div.children[1];
 
@@ -74,18 +75,28 @@ describe('BannerComponent - dom integration', () => {
       bannerTypedAnimatedText.componentInstance;
     const actualMessages = instance.inputArray;
 
-    expect(actualMessages.length).toBe(4);
+    expect(actualMessages.length)
+      .withContext('there should be 4 messages')
+      .toBe(4);
     actualMessages[0].subscribe((s) => {
-      expect(s).toBe(expectedFsDev);
+      expect(s)
+        .withContext('message should be the correct one - 1')
+        .toBe(expectedFsDev);
     });
     actualMessages[1].subscribe((s) => {
-      expect(s).toBe(expectedTrainer);
+      expect(s)
+        .withContext('message should be the correct one - 2')
+        .toBe(expectedTrainer);
     });
     actualMessages[2].subscribe((s) => {
-      expect(s).toBe(expectedMath);
+      expect(s)
+        .withContext('message should be the correct one - 3')
+        .toBe(expectedMath);
     });
     actualMessages[3].subscribe((s) => {
-      expect(s).toBe(expectedMusic);
+      expect(s)
+        .withContext('message should be the correct one - 4')
+        .toBe(expectedMusic);
     });
   };
 

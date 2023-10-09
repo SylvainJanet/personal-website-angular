@@ -14,22 +14,32 @@ describe('TextSubParagraphComponent - unit', () => {
   });
 
   it('should have SubParagraphRoot property', () => {
-    expect(textSubParagraphComponent.SubParagraphRoot).toBeTruthy();
-    expect(textSubParagraphComponent.SubParagraphRoot).toBe(SubParagraphRoot);
+    expect(textSubParagraphComponent.SubParagraphRoot)
+      .withContext('SubParagraphRoot should be defined')
+      .toBeTruthy();
+    expect(textSubParagraphComponent.SubParagraphRoot)
+      .withContext('SubParagraphRoot should be the correct value')
+      .toBe(SubParagraphRoot);
   });
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(textSubParagraphComponent).toBeTruthy();
+      expect(textSubParagraphComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(textSubParagraphComponent).toBeTruthy();
+      expect(textSubParagraphComponent)
+        .withContext('component should create')
+        .toBeTruthy();
 
-      expect(textSubParagraphComponent.subPar).toBeTruthy();
-      expect(textSubParagraphComponent.subPar).toEqual(
-        new SubParagraph(SubParagraphRoot.BR, '')
-      );
+      expect(textSubParagraphComponent.subPar)
+        .withContext('subPar should be defined')
+        .toBeTruthy();
+      expect(textSubParagraphComponent.subPar)
+        .withContext('subPar should be empty BR')
+        .toEqual(new SubParagraph(SubParagraphRoot.BR, ''));
     });
   });
 });

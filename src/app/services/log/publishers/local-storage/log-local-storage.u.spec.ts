@@ -26,7 +26,7 @@ describe('LogLocalStorage', () => {
   const hasLoggingLocation = () => {
     const expected = expectedLoggingLocation;
     const actual = logLocalStorage.location;
-    expect(actual).toBe(expected);
+    expect(actual).withContext('location should be set').toBe(expected);
   };
 
   // environment specific tests that can be factored
@@ -35,7 +35,9 @@ describe('LogLocalStorage', () => {
   const hasMaxSize = (nbr: number) => {
     const expected = nbr;
     const actual = logLocalStorage.maxSize;
-    expect(actual).toBe(expected);
+    expect(actual)
+      .withContext('should have maxSize as expected')
+      .toBe(expected);
   };
 
   // tests suites for each environment
@@ -95,14 +97,20 @@ describe('LogLocalStorage', () => {
 
       const expected_length = maxSize;
       const actual_length = input.length;
-      expect(actual_length).toBe(expected_length);
+      expect(actual_length)
+        .withContext('length should be as expected')
+        .toBe(expected_length);
 
       for (let i = 0; i < maxSize - 1; i++) {
-        expect(input[i]).toBe(input_before[i]);
+        expect(input[i])
+          .withContext('element' + i + 'should be as expected')
+          .toBe(input_before[i]);
       }
 
       const pushed = input[input.length - 1];
-      expect(pushed).toBe(to_push);
+      expect(pushed)
+        .withContext('last element should be as expected')
+        .toBe(to_push);
     };
 
     const pushOrShiftShouldShiftExpectation = (maxSize: number) =>
@@ -123,14 +131,20 @@ describe('LogLocalStorage', () => {
 
       const expected_length = maxSize;
       const actual_length = input.length;
-      expect(actual_length).toBe(expected_length);
+      expect(actual_length)
+        .withContext('length should be as expected')
+        .toBe(expected_length);
 
       for (let i = 0; i < maxSize - 1; i++) {
-        expect(input[i]).toBe(input_before[i + 1]);
+        expect(input[i])
+          .withContext('element' + i + 'should be as expected')
+          .toBe(input_before[i + 1]);
       }
 
       const pushed = input[input.length - 1];
-      expect(pushed).toBe(to_push);
+      expect(pushed)
+        .withContext('last element should be as expected')
+        .toBe(to_push);
     };
 
     describe('in dev environment', () => {
@@ -186,9 +200,11 @@ describe('LogLocalStorage', () => {
       'should clear the localStorage at expected location';
     const clearLocalStorage = () => {
       logLocalStorage.clear();
-      expect(localStorage.removeItem).toHaveBeenCalledOnceWith(
-        logLocalStorage.location
-      );
+      expect(localStorage.removeItem)
+        .withContext(
+          'removeItem should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(logLocalStorage.location);
     };
 
     const returnTrueAfterClearingExpectation =
@@ -199,7 +215,7 @@ describe('LogLocalStorage', () => {
 
       result.subscribe({
         next: (actual) => {
-          expect(actual).toBe(expected);
+          expect(actual).withContext('should return true').toBe(expected);
           done();
         },
         error: (e) => done.fail('log clear failed - ' + e),
@@ -247,10 +263,11 @@ describe('LogLocalStorage', () => {
 
       logLocalStorage.log(input);
 
-      expect(localStorage.setItem).toHaveBeenCalledWith(
-        expectedLoggingLocation,
-        jasmine.any(String)
-      );
+      expect(localStorage.setItem)
+        .withContext(
+          'setItem should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledWith(expectedLoggingLocation, jasmine.any(String));
     };
     const shouldSetNewItemExpectation =
       'should set Item in local storage at the appropriate location when the localStorage has no value';
@@ -263,10 +280,11 @@ describe('LogLocalStorage', () => {
 
       logLocalStorage.log(input);
 
-      expect(localStorage.setItem).toHaveBeenCalledWith(
-        expectedLoggingLocation,
-        jasmine.any(String)
-      );
+      expect(localStorage.setItem)
+        .withContext(
+          'setItem should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledWith(expectedLoggingLocation, jasmine.any(String));
     };
 
     const shouldPushOrShiftExpectation =
@@ -277,10 +295,11 @@ describe('LogLocalStorage', () => {
 
       logLocalStorage.log(input);
 
-      expect(logLocalStorage.pushOrShift).toHaveBeenCalledOnceWith(
-        jasmine.any(Array),
-        input
-      );
+      expect(logLocalStorage.pushOrShift)
+        .withContext(
+          'pushOrShift should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(jasmine.any(Array), input);
     };
 
     const shouldReturnTrueExpectation = 'should return true after logging';
@@ -293,7 +312,7 @@ describe('LogLocalStorage', () => {
 
       result.subscribe({
         next: (actual) => {
-          expect(actual).toBe(expected);
+          expect(actual).withContext('should return true').toBe(expected);
           done();
         },
         error: (e) => done.fail('log clear failed - ' + e),
@@ -311,9 +330,9 @@ describe('LogLocalStorage', () => {
 
       logLocalStorage.log(input);
 
-      expect(window.console.log).toHaveBeenCalledOnceWith(
-        new Error('Test error')
-      );
+      expect(window.console.log)
+        .withContext('log should have been called once with proper arguments')
+        .toHaveBeenCalledOnceWith(new Error('Test error'));
     };
 
     const shouldReturnFalseWhenExceptonExpectation =
@@ -330,7 +349,7 @@ describe('LogLocalStorage', () => {
 
       result.subscribe({
         next: (actual) => {
-          expect(actual).toBe(expected);
+          expect(actual).withContext('should return false').toBe(expected);
           done();
         },
         error: (e) => done.fail('log clear failed - ' + e),

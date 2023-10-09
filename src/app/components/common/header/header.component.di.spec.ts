@@ -43,8 +43,9 @@ describe('HeaderComponent - dom integration', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveContentSetByServiceExpectation =
@@ -64,7 +65,9 @@ describe('HeaderComponent - dom integration', () => {
 
     const leftLinkComp: LinkBarOnHoverComponent = leftLinkEl.componentInstance;
     leftLinkComp.text.subscribe((s) => {
-      expect(s).toBe(expectedName);
+      expect(s)
+        .withContext('left link text should be set - name')
+        .toBe(expectedName);
     });
 
     // collapsed-header
@@ -84,7 +87,9 @@ describe('HeaderComponent - dom integration', () => {
     const collapsedLink1Comp: LinkBarOnHoverComponent =
       collapsedLink1El.componentInstance;
     collapsedLink1Comp.text.subscribe((s) => {
-      expect(s).toBe(expectedName);
+      expect(s)
+        .withContext('collapsed link text should be set - name')
+        .toBe(expectedName);
     });
 
     // otherLanguage
@@ -96,7 +101,9 @@ describe('HeaderComponent - dom integration', () => {
     const rightLinkComp: LinkBarOnHoverComponent =
       rightLinkEl.componentInstance;
     rightLinkComp.text.subscribe((s) => {
-      expect(s).toBe(expectedOtherLanguage);
+      expect(s)
+        .withContext('right link text should be set - other language')
+        .toBe(expectedOtherLanguage);
     });
 
     // collapsed-header deroulant ul li 2
@@ -107,7 +114,9 @@ describe('HeaderComponent - dom integration', () => {
     const collapsedLink2Comp: LinkBarOnHoverComponent =
       collapsedLink2El.componentInstance;
     collapsedLink2Comp.text.subscribe((s) => {
-      expect(s).toBe(expectedOtherLanguage);
+      expect(s)
+        .withContext('collapsed link text should be set - other language')
+        .toBe(expectedOtherLanguage);
     });
   };
 

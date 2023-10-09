@@ -26,19 +26,27 @@ describe('AppComponent - unit', () => {
       appComponent = TestBed.inject(AppComponent);
     });
     it('should create', () => {
-      expect(appComponent).toBeTruthy();
+      expect(appComponent).withContext('component should create').toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(appComponent).toBeTruthy();
-      expect(appComponent.mainLoader).toEqual(Preloaders.MAIN);
-      expect(appComponent.loaderTexts).toEqual(Preloaders.TEXTS);
+      expect(appComponent).withContext('component should create').toBeTruthy();
+      expect(appComponent.mainLoader)
+        .withContext('mainLoader should be set')
+        .toEqual(Preloaders.MAIN);
+      expect(appComponent.loaderTexts)
+        .withContext('loaderTexts should be set')
+        .toEqual(Preloaders.TEXTS);
 
-      expect(appComponent.opacity).toBe(0);
+      expect(appComponent.opacity).withContext('opacity should be set').toBe(0);
     });
 
     it('should call increaseOpacity method', () => {
-      expect(appComponent.increaseOpacity).toHaveBeenCalledOnceWith(0, 10, 10);
+      expect(appComponent.increaseOpacity)
+        .withContext(
+          'increaseOpacity should have been called once with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith(0, 10, 10);
     });
   });
 
@@ -52,10 +60,14 @@ describe('AppComponent - unit', () => {
       const after =
         document.documentElement.style.getPropertyValue('--scroll-bar-width');
 
-      expect(after).toMatch(/^[0-9]+px$/);
+      expect(after)
+        .withContext('width should be set in the correct format')
+        .toMatch(/^[0-9]+px$/);
 
       const value = window.innerWidth - document.body.clientWidth;
-      expect(after).toBe(value + 'px');
+      expect(after)
+        .withContext('width should be set with the correct value')
+        .toBe(value + 'px');
     });
   });
 
@@ -68,19 +80,25 @@ describe('AppComponent - unit', () => {
       const testStepsDuration = 20;
 
       const opacityBefore = appComponent.opacity;
-      expect(opacityBefore).toBe(0);
+      expect(opacityBefore)
+        .withContext('opacity should be set to 0 at first')
+        .toBe(0);
 
       appComponent.increaseOpacity(0, testStepsNumber, testStepsDuration);
 
       for (let i = 0; i < testStepsNumber; i++) {
         tick(testStepsDuration);
         const opacityDuring = appComponent.opacity;
-        expect(opacityDuring).toBe((i + 1) / testStepsNumber);
+        expect(opacityDuring)
+          .withContext('opacity should be incremented - step ' + i)
+          .toBe((i + 1) / testStepsNumber);
       }
 
       tick(testStepsNumber * testStepsDuration);
       const opacityAfter = appComponent.opacity;
-      expect(opacityAfter).toBe(1);
+      expect(opacityAfter)
+        .withContext('opacity should be set to 1 at the end')
+        .toBe(1);
     }));
   });
 });

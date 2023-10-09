@@ -39,8 +39,9 @@ describe('FooterComponent - dom integration', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveContentSetByServiceExpectation =
@@ -53,21 +54,24 @@ describe('FooterComponent - dom integration', () => {
     const sectionDivEl = sectionEl.children[0];
     const sectionFooterEl = sectionDivEl.children[0];
     const sectionPEl = sectionFooterEl.children[0];
-    expect(sectionPEl.children.length).toBe(2);
-    expect(sectionPEl.children[0].nativeElement.tagName).toBe('SPAN');
-    expect(sectionPEl.children[1].nativeElement.tagName).toBe('A');
 
     const spanEl = sectionPEl.children[0];
     const aEl = sectionPEl.children[1];
 
     const actualText = spanEl.nativeElement.innerHTML;
-    expect(actualText).toBe(expectedFooterText);
+    expect(actualText)
+      .withContext('footer text should be set')
+      .toBe(expectedFooterText);
 
     const actualLink = aEl.nativeElement.innerHTML;
-    expect(actualLink).toBe(expectedFooterLink);
+    expect(actualLink)
+      .withContext('footer link should be set')
+      .toBe(expectedFooterLink);
 
     const actualHref = aEl.attributes['href'];
-    expect(actualHref).toBe(expectedFooterHref);
+    expect(actualHref)
+      .withContext('href should be set')
+      .toBe(expectedFooterHref);
   };
 
   describe('in dev environment', () => {

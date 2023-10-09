@@ -45,20 +45,27 @@ describe('CvImgComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   it('should have proper dom structure', () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is DIV')
+      .toBe('DIV');
 
     const firstDivEl: DebugElement = debugEl.children[0];
 
-    expect(firstDivEl.children.length).toBe(1);
-    expect(firstDivEl.children[0].nativeElement.tagName).toBe('IMG');
+    expect(firstDivEl.children.length)
+      .withContext('div should have 1 child')
+      .toBe(1);
+    expect(firstDivEl.children[0].nativeElement.tagName)
+      .withContext('div child should be IMG')
+      .toBe('IMG');
   });
 
   it('should have proper class', () => {
@@ -67,7 +74,7 @@ describe('CvImgComponent - dom unit', () => {
     const firstDivEl: DebugElement = debugEl.children[0];
 
     const actual = firstDivEl.classes['about-img'];
-    expect(actual).toBe(true);
+    expect(actual).withContext('about-img should be set').toBe(true);
   });
   it('should have proper src', () => {
     const debugEl: DebugElement = fixture.debugElement;
@@ -77,7 +84,9 @@ describe('CvImgComponent - dom unit', () => {
     const imgEl: DebugElement = firstDivEl.children[0];
 
     const actual = imgEl.properties['src'] as string;
-    expect(actual.endsWith('assets/img/cv-pic.jpg')).toBe(true);
+    expect(actual.endsWith('assets/img/cv-pic.jpg'))
+      .withContext('src should be set')
+      .toBe(true);
   });
   it('should use appImgLoad directive with preloaders', () => {
     const debugEl: DebugElement = fixture.debugElement;
@@ -87,7 +96,9 @@ describe('CvImgComponent - dom unit', () => {
     const imgEl: DebugElement = firstDivEl.children[0];
 
     const dir = imgEl.injector.get(ImgLoadDirective);
-    expect(dir.appImgLoad).toEqual(componentInstance.preloaders);
+    expect(dir.appImgLoad)
+      .withContext('appImgLoad should be set')
+      .toEqual(componentInstance.preloaders);
   });
 
   it('should have altText set by textService', () => {
@@ -98,6 +109,6 @@ describe('CvImgComponent - dom unit', () => {
     const imgEl: DebugElement = firstDivEl.children[0];
 
     const actual = imgEl.properties['alt'];
-    expect(actual).toBe(expectedAltText);
+    expect(actual).withContext('alt should be set').toBe(expectedAltText);
   });
 });

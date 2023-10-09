@@ -20,9 +20,15 @@ describe('LogService - integration', () => {
   const publishersSetByService = () => {
     const actual = logService.publishers;
 
-    expect(actual[0]).toBeInstanceOf(LogConsole);
-    expect(actual[1]).toBeInstanceOf(LogLocalStorage);
-    expect(actual.length).toBe(2);
+    expect(actual.length)
+      .withContext('there shoud be the expected amount of publishers')
+      .toBe(2);
+    expect(actual[0])
+      .withContext('first publisher should be LogConsole')
+      .toBeInstanceOf(LogConsole);
+    expect(actual[1])
+      .withContext('second publisher should be LogLocalStorage')
+      .toBeInstanceOf(LogLocalStorage);
   };
 
   describe('in dev environment', () => {
@@ -55,9 +61,15 @@ describe('LogService - integration', () => {
 
       const actual = result.publishers;
 
-      expect(actual[0]).toBeInstanceOf(LogConsole);
-      expect(actual[1]).toBeInstanceOf(LogLocalStorage);
-      expect(actual.length).toBe(2);
+      expect(actual.length)
+        .withContext('there shoud be the expected amount of publishers')
+        .toBe(2);
+      expect(actual[0])
+        .withContext('first publisher should be LogConsole')
+        .toBeInstanceOf(LogConsole);
+      expect(actual[1])
+        .withContext('second publisher should be LogLocalStorage')
+        .toBeInstanceOf(LogLocalStorage);
     };
 
     describe('in dev environment', () => {
@@ -129,8 +141,12 @@ describe('LogService - integration', () => {
     }
 
     if (level < env.logLevel || env.logLevel === LogLevel.Off) {
-      expect(window.console.log).not.toHaveBeenCalled();
-      expect(Storage.prototype.setItem).not.toHaveBeenCalled();
+      expect(window.console.log)
+        .withContext('log should not have been called')
+        .not.toHaveBeenCalled();
+      expect(Storage.prototype.setItem)
+        .withContext('setItem should not have been called')
+        .not.toHaveBeenCalled();
     }
     expect().nothing();
     done();
@@ -173,8 +189,12 @@ describe('LogService - integration', () => {
     }
 
     if (!(level < env.logLevel || env.logLevel === LogLevel.Off)) {
-      expect(window.console.log).toHaveBeenCalledTimes(1);
-      expect(Storage.prototype.setItem).toHaveBeenCalledTimes(1);
+      expect(window.console.log)
+        .withContext('log should have been called once')
+        .toHaveBeenCalledTimes(1);
+      expect(Storage.prototype.setItem)
+        .withContext('setItem should have been called once')
+        .toHaveBeenCalledTimes(1);
     }
     expect().nothing();
     done();

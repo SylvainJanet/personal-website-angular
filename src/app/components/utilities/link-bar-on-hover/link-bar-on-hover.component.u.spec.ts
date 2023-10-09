@@ -37,36 +37,58 @@ describe('LinkBarOnHoverComponent - unit', () => {
       linkBarOnHoverComponent = TestBed.inject(LinkBarOnHoverComponent);
     });
     it('should create', () => {
-      expect(linkBarOnHoverComponent).toBeTruthy();
-      expect(linkBarOnHoverComponent.logger).toBe(logServiceSpy);
+      expect(linkBarOnHoverComponent)
+        .withContext('component should create')
+        .toBeTruthy();
+      expect(linkBarOnHoverComponent.logger)
+        .withContext('logger should be set')
+        .toBe(logServiceSpy);
     });
 
     it('should set default values', () => {
-      expect(linkBarOnHoverComponent).toBeTruthy();
+      expect(linkBarOnHoverComponent)
+        .withContext('component should create')
+        .toBeTruthy();
 
-      expect(linkBarOnHoverComponent.lineWidth).toBe('0%');
-      expect(linkBarOnHoverComponent.textColor).toBe('white');
-      expect(linkBarOnHoverComponent.lineColor).toBe('white');
-      expect(linkBarOnHoverComponent.link).toBe('https://sylvainjanet.fr');
+      expect(linkBarOnHoverComponent.lineWidth)
+        .withContext('lineWidth should be set')
+        .toBe('0%');
+      expect(linkBarOnHoverComponent.textColor)
+        .withContext('textColor should be set')
+        .toBe('white');
+      expect(linkBarOnHoverComponent.lineColor)
+        .withContext('lineColor should be set')
+        .toBe('white');
+      expect(linkBarOnHoverComponent.link)
+        .withContext('link should be set')
+        .toBe('https://sylvainjanet.fr');
       linkBarOnHoverComponent.text.subscribe({
         next: (t) => {
-          expect(t).toBe('Sylvain Janet');
+          expect(t).withContext('text should be set').toBe('Sylvain Janet');
         },
       });
-      expect(linkBarOnHoverComponent.aStyle).toBe('');
-      expect(linkBarOnHoverComponent.lineStyle).toBe('');
-      expect(linkBarOnHoverComponent.globalStyle).toBe('');
+      expect(linkBarOnHoverComponent.aStyle)
+        .withContext('aStyle should be set')
+        .toBe('');
+      expect(linkBarOnHoverComponent.lineStyle)
+        .withContext('lineStyle should be set')
+        .toBe('');
+      expect(linkBarOnHoverComponent.globalStyle)
+        .withContext('globalStyle should be set')
+        .toBe('');
     });
 
     it('should set proper logger', () => {
       const expected = 'LinkBarOnHoverComponent';
-      expect(logServiceGlobalSpy.withClassName).toHaveBeenCalledOnceWith(
-        expected
-      );
+      expect(logServiceGlobalSpy.withClassName)
+        .withContext('withClassName should have been called')
+        .toHaveBeenCalledOnceWith(expected);
     });
 
     it('should make the line disappear on creation', () => {
-      expect(linkBarOnHoverComponent.lineDisappears).toHaveBeenCalledTimes(1);
+      expect(linkBarOnHoverComponent.lineDisappears)
+        .withContext('lineDisappears should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -103,7 +125,9 @@ describe('LinkBarOnHoverComponent - unit', () => {
 
       linkBarOnHoverComponent.lineAppears(eventSpy);
 
-      expect(linkBarOnHoverComponent.lineWidth).toBe(expectedLength + 'px');
+      expect(linkBarOnHoverComponent.lineWidth)
+        .withContext('lineWidth should be set')
+        .toBe(expectedLength + 'px');
     });
   });
 
@@ -141,7 +165,9 @@ describe('LinkBarOnHoverComponent - unit', () => {
 
       linkBarOnHoverComponent.lineDisappears();
 
-      expect(linkBarOnHoverComponent.lineWidth).toBe('0%');
+      expect(linkBarOnHoverComponent.lineWidth)
+        .withContext('lineWidth should be set')
+        .toBe('0%');
     });
   });
 });

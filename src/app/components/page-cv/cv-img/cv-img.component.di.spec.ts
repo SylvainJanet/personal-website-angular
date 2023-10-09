@@ -30,8 +30,9 @@ describe('CvImgComponent - dom integration', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveContentSetByServiceExpectation =
@@ -42,7 +43,9 @@ describe('CvImgComponent - dom integration', () => {
     const firstDivEl: DebugElement = debugEl.children[0];
 
     const imgEl: DebugElement = firstDivEl.children[0];
-    expect(imgEl.properties['alt']).toBe(expectedAltText);
+    expect(imgEl.properties['alt'])
+      .withContext('alt should be set')
+      .toBe(expectedAltText);
   };
 
   describe('in dev environment', () => {

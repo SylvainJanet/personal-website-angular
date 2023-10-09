@@ -34,8 +34,9 @@ describe('PageContentComponent - dom unit', () => {
 
   const shouldCreateExpectation = 'should create';
   const shouldCreate = () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   };
 
   const shouldHaveProperDomStructureExpectation =
@@ -43,79 +44,131 @@ describe('PageContentComponent - dom unit', () => {
   const shouldHaveProperDomStructure = () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('SECTION');
+    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is SECTION')
+      .toBe('SECTION');
 
     const sectionEl = debugEl.children[0];
-    expect(sectionEl.children.length).toBe(1);
-    expect(sectionEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(sectionEl.children.length)
+      .withContext('section should have 1 child')
+      .toBe(1);
+    expect(sectionEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of section should be DIV')
+      .toBe('DIV');
 
     const firstDivEl = sectionEl.children[0];
-    expect(firstDivEl.children.length).toBe(1);
-    expect(firstDivEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(firstDivEl.children.length)
+      .withContext('section - div should have 1 child')
+      .toBe(1);
+    expect(firstDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of section - div should be DIV')
+      .toBe('DIV');
 
     const secondDivEl = firstDivEl.children[0];
-    expect(secondDivEl.children.length).toBe(1);
-    expect(secondDivEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(secondDivEl.children.length)
+      .withContext('section - div - div should have 1 child')
+      .toBe(1);
+    expect(secondDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of section - div - div should be DIV')
+      .toBe('DIV');
 
     const thirdDivEl = secondDivEl.children[0];
-    expect(thirdDivEl.children.length).toBe(1);
-    expect(thirdDivEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(thirdDivEl.children.length)
+      .withContext('section - div - div - div should have 1 child')
+      .toBe(1);
+    expect(thirdDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of section - div - div - div should be DIV')
+      .toBe('DIV');
 
     const rowEl = thirdDivEl.children[0];
-    expect(rowEl.children.length).toBe(2);
-    expect(rowEl.children[0].nativeElement.tagName).toBe('DIV');
-    expect(rowEl.children[1].nativeElement.tagName).toBe('DIV');
+    expect(rowEl.children.length)
+      .withContext('row should have 2 children')
+      .toBe(2);
+    expect(rowEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of row should be DIV')
+      .toBe('DIV');
+    expect(rowEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of row should be DIV')
+      .toBe('DIV');
 
     // first col
 
     const firstColEl = rowEl.children[0];
-    expect(firstColEl.children.length).toBe(1);
-    expect(firstColEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(firstColEl.children.length)
+      .withContext('first col should have 1 child')
+      .toBe(1);
+    expect(firstColEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of first col should be DIV')
+      .toBe('DIV');
 
     const firstColSecondEl = firstColEl.children[0];
-    expect(firstColSecondEl.children.length).toBe(2);
-    expect(firstColSecondEl.children[0].nativeElement.tagName).toBe('DIV');
-    expect(firstColSecondEl.children[1].nativeElement.tagName).toBe('DIV');
+    expect(firstColSecondEl.children.length)
+      .withContext('child 1 of first col should have 2 children')
+      .toBe(2);
+    expect(firstColSecondEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of child 1 of first col should be DIV')
+      .toBe('DIV');
+    expect(firstColSecondEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of child 1 of first col should be DIV')
+      .toBe('DIV');
 
     // cv img and contact info row
 
     const imgAndContactInfoRowEl = firstColSecondEl.children[0];
-    expect(imgAndContactInfoRowEl.children.length).toBe(2);
-    expect(imgAndContactInfoRowEl.children[0].nativeElement.tagName).toBe(
-      'DIV'
-    );
+    expect(imgAndContactInfoRowEl.children.length)
+      .withContext('img and contact info should have 2 children')
+      .toBe(2);
+    expect(imgAndContactInfoRowEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of img and contact info should be DIV')
+      .toBe('DIV');
     const cvImgParentDivEl = imgAndContactInfoRowEl.children[0];
-    expect(cvImgParentDivEl.children.length).toBe(1);
-    expect(cvImgParentDivEl.children[0].nativeElement.tagName).toBe(
-      'APP-CV-IMG'
-    );
+    expect(cvImgParentDivEl.children.length)
+      .withContext('child 1 of img and contact info should have 1 child')
+      .toBe(1);
+    expect(cvImgParentDivEl.children[0].nativeElement.tagName)
+      .withContext(
+        'child 1 of child 1 of img and contact info should be APP-CV-IMG'
+      )
+      .toBe('APP-CV-IMG');
 
-    expect(imgAndContactInfoRowEl.children[1].nativeElement.tagName).toBe(
-      'DIV'
-    );
+    expect(imgAndContactInfoRowEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of img and contact info should be DIV')
+      .toBe('DIV');
     const cvContactInfoParentDivEl = imgAndContactInfoRowEl.children[1];
-    expect(cvContactInfoParentDivEl.children.length).toBe(1);
-    expect(cvContactInfoParentDivEl.children[0].nativeElement.tagName).toBe(
-      'APP-CV-CONTACT-INFO'
-    );
+    expect(cvContactInfoParentDivEl.children.length)
+      .withContext('child 2 of img and contact info should have 1 child')
+      .toBe(1);
+    expect(cvContactInfoParentDivEl.children[0].nativeElement.tagName)
+      .withContext(
+        'child 1 of child 2 of img and contact info should be APP-CV-CONTACT-INFO'
+      )
+      .toBe('APP-CV-CONTACT-INFO');
 
     // skills row
 
     const skillsRowEl = firstColSecondEl.children[1];
-    expect(skillsRowEl.children.length).toBe(1);
-    expect(skillsRowEl.children[0].nativeElement.tagName).toBe('APP-CV-SKILLS');
+    expect(skillsRowEl.children.length)
+      .withContext('skills row should have 1 child')
+      .toBe(1);
+    expect(skillsRowEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of skills row should have be APP-CV-SKILLS')
+      .toBe('APP-CV-SKILLS');
 
     // second col
 
     const secondColEl = rowEl.children[1];
-    expect(secondColEl.children.length).toBe(1);
-    expect(secondColEl.children[0].nativeElement.tagName).toBe(
-      'APP-CV-ABOUT-ME'
-    );
+    expect(secondColEl.children.length)
+      .withContext('second col should have 1 child')
+      .toBe(1);
+    expect(secondColEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of second col should be APP-CV-ABOUT-ME')
+      .toBe('APP-CV-ABOUT-ME');
 
     const aboutMeEl = secondColEl.children[0];
-    expect(aboutMeEl.componentInstance as CvAboutMeComponent).toBeTruthy();
+    expect(aboutMeEl.componentInstance as CvAboutMeComponent)
+      .withContext('CvAboutMeComponent should create')
+      .toBeTruthy();
   };
 
   describe('in dev environment', () => {

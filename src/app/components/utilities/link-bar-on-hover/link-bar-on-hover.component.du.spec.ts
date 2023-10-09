@@ -33,8 +33,9 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   it('should have input textColor', () => {
@@ -46,7 +47,9 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
 
     const linkDebugEl = debugEl.query(By.css('div')).query(By.css('a'));
 
-    expect(linkDebugEl.styles['color']).toBe(expected);
+    expect(linkDebugEl.styles['color'])
+      .withContext('color should be set')
+      .toBe(expected);
   });
   it('should have input lineColor', () => {
     const expected = 'red';
@@ -57,7 +60,9 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
 
     const linkDebugEl = debugEl.query(By.css('div')).query(By.css('div'));
 
-    expect(linkDebugEl.styles['background-color']).toBe(expected);
+    expect(linkDebugEl.styles['background-color'])
+      .withContext('background-color should be set')
+      .toBe(expected);
   });
   it('should have input link', () => {
     const expected = 'this.is.a.test.com';
@@ -68,7 +73,9 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
 
     const linkDebugEl = debugEl.query(By.css('div')).query(By.css('a'));
 
-    expect(linkDebugEl.properties['href']).toBe(expected);
+    expect(linkDebugEl.properties['href'])
+      .withContext('href should be set')
+      .toBe(expected);
   });
   it('should have input text', () => {
     const expected = 'this is a test';
@@ -79,7 +86,9 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
 
     const linkDebugEl = debugEl.query(By.css('div')).query(By.css('a'));
 
-    expect(linkDebugEl.nativeElement.textContent.trim()).toBe(expected);
+    expect(linkDebugEl.nativeElement.textContent.trim())
+      .withContext('text should be set')
+      .toBe(expected);
   });
   it('should have input aStyle', () => {
     const expectedBgColor = 'blue';
@@ -92,8 +101,12 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
 
     const linkDebugEl = debugEl.query(By.css('div')).query(By.css('a'));
 
-    expect(linkDebugEl.styles['background-color']).toBe(expectedBgColor);
-    expect(linkDebugEl.styles['text-decoration']).toBe(expectedTxtDecoration);
+    expect(linkDebugEl.styles['background-color'])
+      .withContext('background-color should be set')
+      .toBe(expectedBgColor);
+    expect(linkDebugEl.styles['text-decoration'])
+      .withContext('text-decoration should be set')
+      .toBe(expectedTxtDecoration);
   });
   it('should have input lineStyle', () => {
     const expectedBgColor = 'blue';
@@ -106,8 +119,12 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
 
     const linkDebugEl = debugEl.query(By.css('div')).query(By.css('div'));
 
-    expect(linkDebugEl.styles['background-color']).toBe(expectedBgColor);
-    expect(linkDebugEl.styles['text-decoration']).toBe(expectedTxtDecoration);
+    expect(linkDebugEl.styles['background-color'])
+      .withContext('background-color should be set')
+      .toBe(expectedBgColor);
+    expect(linkDebugEl.styles['text-decoration'])
+      .withContext('text-decoration should be set')
+      .toBe(expectedTxtDecoration);
   });
   it('should have input globalStyle', () => {
     const expectedBgColor = 'blue';
@@ -120,20 +137,32 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
 
     const linkDebugEl = debugEl.query(By.css('div'));
 
-    expect(linkDebugEl.styles['background-color']).toBe(expectedBgColor);
-    expect(linkDebugEl.styles['text-decoration']).toBe(expectedTxtDecoration);
+    expect(linkDebugEl.styles['background-color'])
+      .withContext('background-color should be set')
+      .toBe(expectedBgColor);
+    expect(linkDebugEl.styles['text-decoration'])
+      .withContext('text-decoration should be set')
+      .toBe(expectedTxtDecoration);
   });
   it('should have proper dom structure', () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is DIV')
+      .toBe('DIV');
 
     const firstDivEl: DebugElement = debugEl.children[0];
 
-    expect(firstDivEl.children.length).toBe(2);
-    expect(firstDivEl.children[0].nativeElement.tagName).toBe('A');
-    expect(firstDivEl.children[1].nativeElement.tagName).toBe('DIV');
+    expect(firstDivEl.children.length)
+      .withContext('div should have 2 children')
+      .toBe(2);
+    expect(firstDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of div should be A')
+      .toBe('A');
+    expect(firstDivEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of div should be DIV')
+      .toBe('DIV');
   });
 
   describe('a element', () => {
@@ -146,33 +175,39 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
     it('should call lineDisappears on click event', () => {
       aDebugEl.triggerEventHandler('click');
 
-      expect(componentInstance.lineDisappears).toHaveBeenCalledTimes(1);
+      expect(componentInstance.lineDisappears)
+        .withContext('lineDisappears should have been called')
+        .toHaveBeenCalledTimes(1);
     });
     it('should call lineDisappears on touchend event', () => {
       aDebugEl.triggerEventHandler('touchend');
 
-      expect(componentInstance.lineDisappears).toHaveBeenCalledTimes(1);
+      expect(componentInstance.lineDisappears)
+        .withContext('lineDisappears should have been called')
+        .toHaveBeenCalledTimes(1);
     });
     it('should call lineDisappears on mouseleave event', () => {
       aDebugEl.triggerEventHandler('mouseleave');
 
-      expect(componentInstance.lineDisappears).toHaveBeenCalledTimes(1);
+      expect(componentInstance.lineDisappears)
+        .withContext('lineDisappears should have been called')
+        .toHaveBeenCalledTimes(1);
     });
     it('should call lineAppears on touchstart event', () => {
       const expectedEvent = new Event('touchstart');
       aDebugEl.triggerEventHandler('touchstart', expectedEvent);
 
-      expect(componentInstance.lineAppears).toHaveBeenCalledOnceWith(
-        expectedEvent
-      );
+      expect(componentInstance.lineAppears)
+        .withContext('lineAppears should have been called')
+        .toHaveBeenCalledOnceWith(expectedEvent);
     });
     it('should call lineAppears on mouseenter event', () => {
       const expectedEvent = new Event('mouseenter');
       aDebugEl.triggerEventHandler('mouseenter', expectedEvent);
 
-      expect(componentInstance.lineAppears).toHaveBeenCalledOnceWith(
-        expectedEvent
-      );
+      expect(componentInstance.lineAppears)
+        .withContext('lineAppears should have been called')
+        .toHaveBeenCalledOnceWith(expectedEvent);
     });
   });
 });

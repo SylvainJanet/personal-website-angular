@@ -18,14 +18,18 @@ describe('ParagraphDecoderService - integration', () => {
         textInput
       );
 
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('should decode a span subparagraph - position 0')
+        .toEqual(expected);
 
       const otherActual = paragraphDecoderService['decodeSubParagraph'](
         4,
         textInput
       );
 
-      expect(otherActual).toEqual(expected);
+      expect(otherActual)
+        .withContext('should decode a span subparagraph - position 4')
+        .toEqual(expected);
     });
     it('should decode a br subparagraph, at odd positions', () => {
       const input = 'br';
@@ -33,14 +37,18 @@ describe('ParagraphDecoderService - integration', () => {
 
       const actual = paragraphDecoderService['decodeSubParagraph'](1, input);
 
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('should decode a br subparagraph - position 1')
+        .toEqual(expected);
 
       const otherActual = paragraphDecoderService['decodeSubParagraph'](
         5,
         input
       );
 
-      expect(otherActual).toEqual(expected);
+      expect(otherActual)
+        .withContext('should decode a br subparagraph - position 5')
+        .toEqual(expected);
     });
     it('should decode an a link for assets subparagraph, at odd positions', () => {
       const linkToAsset = 'link to asset text, some other text';
@@ -52,14 +60,18 @@ describe('ParagraphDecoderService - integration', () => {
         textInput
       );
 
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('should decode a link to asset subparagraph - position 1')
+        .toEqual(expected);
 
       const otherActual = paragraphDecoderService['decodeSubParagraph'](
         5,
         textInput
       );
 
-      expect(otherActual).toEqual(expected);
+      expect(otherActual)
+        .withContext('should decode a link to asset subparagraph - position 5')
+        .toEqual(expected);
     });
     it('should decode a strong em subparagraph, at odd positions', () => {
       const content = 'this is a test, some other text';
@@ -71,14 +83,18 @@ describe('ParagraphDecoderService - integration', () => {
         textInput
       );
 
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('should decode a strong em subparagraph - position 1')
+        .toEqual(expected);
 
       const otherActual = paragraphDecoderService['decodeSubParagraph'](
         5,
         textInput
       );
 
-      expect(otherActual).toEqual(expected);
+      expect(otherActual)
+        .withContext('should decode a strong em subparagraph - position 5')
+        .toEqual(expected);
     });
   });
 
@@ -142,12 +158,14 @@ describe('ParagraphDecoderService - integration', () => {
       ]);
 
       const actual = paragraphDecoderService['decodeParagraph'](input);
-      expect(actual).toEqual(expectedPar);
+      expect(actual)
+        .withContext('paragraph should be decoded')
+        .toEqual(expectedPar);
     });
   });
 
   describe('decode method', () => {
-    it('should use the private methode decodeParagraph', () => {
+    it('should return the decoded paragraphs', () => {
       const spanContent1 = 'This is a test';
       const spanContent2 = 'this should be decoded';
       const spanContent3 = 'and this should be';
@@ -219,7 +237,9 @@ describe('ParagraphDecoderService - integration', () => {
 
       const actual = paragraphDecoderService.decode(input);
 
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('paragraphs should be decoded')
+        .toEqual(expected);
     });
   });
 });

@@ -15,7 +15,9 @@ describe('CvSkillsComponent - unit', () => {
       pageContentComponent = TestBed.inject(PageContentComponent);
     });
     it('should create', () => {
-      expect(pageContentComponent).toBeTruthy();
+      expect(pageContentComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
   });
 });

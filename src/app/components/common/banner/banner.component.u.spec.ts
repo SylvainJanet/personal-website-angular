@@ -51,29 +51,43 @@ describe('BannerComponent - unit', () => {
       bannerComponent = TestBed.inject(BannerComponent);
     });
     it('should create', () => {
-      expect(bannerComponent).toBeTruthy();
+      expect(bannerComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     });
 
     it('should set default values', () => {
-      expect(bannerComponent).toBeTruthy();
-      expect(bannerComponent.preloaders).toEqual([Preloaders.MAIN]);
+      expect(bannerComponent)
+        .withContext('component should create')
+        .toBeTruthy();
+      expect(bannerComponent.preloaders)
+        .withContext('preloaders should be set')
+        .toEqual([Preloaders.MAIN]);
 
-      expect(bannerComponent.bannerSrc).toBe(expectedBannerUrl);
-      expect(bannerComponent.messages).toEqual([]);
+      expect(bannerComponent.bannerSrc)
+        .withContext('bannerSrc should be set')
+        .toBe(expectedBannerUrl);
+      expect(bannerComponent.messages)
+        .withContext('messages should be set')
+        .toEqual([]);
       bannerComponent.iAmMe.subscribe((s) => {
-        expect(s).toBe('');
+        expect(s).withContext('iAmMe should be set').toBe('');
       });
-      expect(bannerComponent.doubleImgDisplay).toBe('block');
+      expect(bannerComponent.doubleImgDisplay)
+        .withContext('doubleImgDisplay should be set')
+        .toBe('block');
     });
 
     it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe).toHaveBeenCalledOnceWith(
-        bannerComponent
-      );
+      expect(languageServiceSpy.subscribe)
+        .withContext('subscribe should have been called')
+        .toHaveBeenCalledOnceWith(bannerComponent);
     });
 
     it('should update the texts', () => {
-      expect(bannerComponent.updateTexts).toHaveBeenCalledTimes(1);
+      expect(bannerComponent.updateTexts)
+        .withContext('updateTexts should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -82,33 +96,55 @@ describe('BannerComponent - unit', () => {
       bannerComponent = TestBed.inject(BannerComponent);
     });
     it('should call the textService', () => {
-      expect(textServiceSpy.get).toHaveBeenCalledTimes(5);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(fsDevSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(trainerSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(mathSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(musicSelector);
-      expect(textServiceSpy.get).toHaveBeenCalledWith(titleSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called 5 times')
+        .toHaveBeenCalledTimes(5);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 1')
+        .toHaveBeenCalledWith(fsDevSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 2')
+        .toHaveBeenCalledWith(trainerSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 3')
+        .toHaveBeenCalledWith(mathSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 4')
+        .toHaveBeenCalledWith(musicSelector);
+      expect(textServiceSpy.get)
+        .withContext('get should have been called with proper arguments - 5')
+        .toHaveBeenCalledWith(titleSelector);
     });
     it('should set the properties to the textService result', () => {
       const actualMessages = bannerComponent.messages;
       const actualIAmMe = bannerComponent.iAmMe;
 
-      expect(actualMessages.length).toBe(4);
+      expect(actualMessages.length)
+        .withContext('there should be 4 messages')
+        .toBe(4);
 
       actualMessages[0].subscribe((s) => {
-        expect(s).toBe(expectedFsDev);
+        expect(s)
+          .withContext('message should be the correct one - 1')
+          .toBe(expectedFsDev);
       });
       actualMessages[1].subscribe((s) => {
-        expect(s).toBe(expectedTrainer);
+        expect(s)
+          .withContext('message should be the correct one - 2')
+          .toBe(expectedTrainer);
       });
       actualMessages[2].subscribe((s) => {
-        expect(s).toBe(expectedMath);
+        expect(s)
+          .withContext('message should be the correct one - 3')
+          .toBe(expectedMath);
       });
       actualMessages[3].subscribe((s) => {
-        expect(s).toBe(expectedMusic);
+        expect(s)
+          .withContext('message should be the correct one - 4')
+          .toBe(expectedMusic);
       });
       actualIAmMe.subscribe((s) => {
-        expect(s).toBe(expectedTitle);
+        expect(s).withContext('iAmMe should be set').toBe(expectedTitle);
       });
     });
   });
@@ -119,9 +155,9 @@ describe('BannerComponent - unit', () => {
     });
     it('should unsubscribe from the languageService', () => {
       bannerComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe).toHaveBeenCalledOnceWith(
-        bannerComponent
-      );
+      expect(languageServiceSpy.unsubscribe)
+        .withContext('unsubscribe should have been called')
+        .toHaveBeenCalledOnceWith(bannerComponent);
     });
   });
 
@@ -132,7 +168,9 @@ describe('BannerComponent - unit', () => {
     it("shouldset doubleImgDisplay to 'none'", () => {
       bannerComponent.onDoubleImgLoad();
 
-      expect(bannerComponent.doubleImgDisplay).toBe('none');
+      expect(bannerComponent.doubleImgDisplay)
+        .withContext("doubleImgDisplay should be 'none'")
+        .toBe('none');
     });
   });
 });

@@ -56,49 +56,84 @@ describe('BannerComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   it('should have proper dom structure', () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is DIV')
+      .toBe('DIV');
 
     const firstDivEl: DebugElement = debugEl.children[0];
 
-    expect(firstDivEl.children.length).toBe(2);
-    expect(firstDivEl.children[0].nativeElement.tagName).toBe('DIV');
-    expect(firstDivEl.children[1].nativeElement.tagName).toBe('DIV');
+    expect(firstDivEl.children.length)
+      .withContext('main DIV should have 2 children')
+      .toBe(2);
+    expect(firstDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of main DIV is DIV')
+      .toBe('DIV');
+    expect(firstDivEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of main DIV is DIV')
+      .toBe('DIV');
 
     // img
     const imgDivEl = firstDivEl.children[0];
-    expect(imgDivEl.children.length).toBe(1);
-    expect(imgDivEl.children[0].nativeElement.tagName).toBe('IMG');
+    expect(imgDivEl.children.length)
+      .withContext('main DIV - first DIV child - should have 1 child')
+      .toBe(1);
+    expect(imgDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of main DIV - first DIV child - is IMG')
+      .toBe('IMG');
 
     // banner
     const bannerDiv = firstDivEl.children[1];
-    expect(bannerDiv.children.length).toBe(1);
-    expect(bannerDiv.children[0].nativeElement.tagName).toBe('DIV');
+    expect(bannerDiv.children.length)
+      .withContext('main DIV - second DIV child - should have 1 child')
+      .toBe(1);
+    expect(bannerDiv.children[0].nativeElement.tagName)
+      .withContext('child 1 of main DIV - second DIV child - is DIV')
+      .toBe('DIV');
     const bannerContainerDiv = bannerDiv.children[0];
-    expect(bannerContainerDiv.children.length).toBe(1);
-    expect(bannerContainerDiv.children[0].nativeElement.tagName).toBe('DIV');
+    expect(bannerContainerDiv.children.length)
+      .withContext('bannerContainerDiv should have 1 child')
+      .toBe(1);
+    expect(bannerContainerDiv.children[0].nativeElement.tagName)
+      .withContext('child 1 of bannerContainerDiv is DIV')
+      .toBe('DIV');
     const bannerPageTitleDiv = bannerContainerDiv.children[0];
-    expect(bannerPageTitleDiv.children.length).toBe(1);
-    expect(bannerPageTitleDiv.children[0].nativeElement.tagName).toBe('DIV');
+    expect(bannerPageTitleDiv.children.length)
+      .withContext('bannerPageTitleDiv should have 1 child')
+      .toBe(1);
+    expect(bannerPageTitleDiv.children[0].nativeElement.tagName)
+      .withContext('child 1 of bannerPageTitleDiv is DIV')
+      .toBe('DIV');
     const bannerPageTitleDivDiv = bannerPageTitleDiv.children[0];
-    expect(bannerPageTitleDivDiv.children.length).toBe(1);
-    expect(bannerPageTitleDivDiv.children[0].nativeElement.tagName).toBe('H2');
+    expect(bannerPageTitleDivDiv.children.length)
+      .withContext('bannerPageTitleDivDiv should have 1 child')
+      .toBe(1);
+    expect(bannerPageTitleDivDiv.children[0].nativeElement.tagName)
+      .withContext('child 1 of bannerPageTitleDivDiv is H2')
+      .toBe('H2');
     const bannerH2Div = bannerPageTitleDivDiv.children[0];
-    expect(bannerH2Div.children.length).toBe(2);
-    expect(bannerH2Div.children[0].nativeElement.tagName).toBe('SPAN');
-    expect(bannerH2Div.children[1].nativeElement.tagName).toBe(
-      'APP-TYPED-ANIMATED-TEXT'
-    );
+    expect(bannerH2Div.children.length)
+      .withContext('bannerH2Div should have 2 children')
+      .toBe(2);
+    expect(bannerH2Div.children[0].nativeElement.tagName)
+      .withContext('child 1 of bannerH2Div is SPAN')
+      .toBe('SPAN');
+    expect(bannerH2Div.children[1].nativeElement.tagName)
+      .withContext('child 2 of bannerH2Div is APP-TYPED-ANIMATED-TEXT')
+      .toBe('APP-TYPED-ANIMATED-TEXT');
 
     const bannerSpan = bannerH2Div.children[0];
-    expect(bannerSpan.children.length).toBe(0);
+    expect(bannerSpan.children.length)
+      .withContext('bannerSpan should have 0 children')
+      .toBe(0);
   });
 
   it('should set title', () => {
@@ -115,7 +150,7 @@ describe('BannerComponent - dom unit', () => {
 
     const actual = bannerSpan.nativeElement.innerHTML;
 
-    expect(actual).toBe(expectedTitle);
+    expect(actual).withContext('title should be set').toBe(expectedTitle);
   });
 
   it('should set messages', () => {
@@ -134,18 +169,26 @@ describe('BannerComponent - dom unit', () => {
       bannerTypedAnimatedText.componentInstance;
     const actual = instance.inputArray;
 
-    expect(actual.length).toBe(4);
+    expect(actual.length).withContext('there should be 4 messages').toBe(4);
     actual[0].subscribe((s) => {
-      expect(s).toBe(expectedFsDev);
+      expect(s)
+        .withContext('message should be the correct one - 1')
+        .toBe(expectedFsDev);
     });
     actual[1].subscribe((s) => {
-      expect(s).toBe(expectedTrainer);
+      expect(s)
+        .withContext('message should be the correct one - 2')
+        .toBe(expectedTrainer);
     });
     actual[2].subscribe((s) => {
-      expect(s).toBe(expectedMath);
+      expect(s)
+        .withContext('message should be the correct one - 3')
+        .toBe(expectedMath);
     });
     actual[3].subscribe((s) => {
-      expect(s).toBe(expectedMusic);
+      expect(s)
+        .withContext('message should be the correct one - 4')
+        .toBe(expectedMusic);
     });
   });
 
@@ -155,7 +198,7 @@ describe('BannerComponent - dom unit', () => {
     const imgDivEl = firstDivEl.children[0];
 
     const actual = imgDivEl.styles['display'];
-    expect(actual).toBe('block');
+    expect(actual).withContext("display should be 'block'").toBe('block');
   });
 
   it('should call onDoubleImgLoad when img is loaded', () => {
@@ -167,7 +210,9 @@ describe('BannerComponent - dom unit', () => {
     spyOn(componentInstance, 'onDoubleImgLoad');
     imgEl.triggerEventHandler('load');
 
-    expect(componentInstance.onDoubleImgLoad).toHaveBeenCalled();
+    expect(componentInstance.onDoubleImgLoad)
+      .withContext('onDoubleImgLoad should have been called')
+      .toHaveBeenCalled();
   });
 
   it('should hide img once loaded', () => {
@@ -180,6 +225,6 @@ describe('BannerComponent - dom unit', () => {
     fixture.detectChanges();
 
     const actual = imgDivEl.styles['display'];
-    expect(actual).toBe('none');
+    expect(actual).withContext("display should be 'none'").toBe('none');
   });
 });

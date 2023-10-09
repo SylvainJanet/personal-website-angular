@@ -41,7 +41,9 @@ describe('BannerComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(bannerComponent).toBeTruthy();
+      expect(bannerComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     };
 
     describe('in dev environment', () => {
@@ -97,22 +99,32 @@ describe('BannerComponent - integration', () => {
       const actualMessages = bannerComponent.messages;
       const actualIAmMe = bannerComponent.iAmMe;
 
-      expect(actualMessages.length).toBe(4);
+      expect(actualMessages.length)
+        .withContext('there should be 4 messages')
+        .toBe(4);
 
       actualMessages[0].subscribe((s) => {
-        expect(s).toBe(expectedFsDev);
+        expect(s)
+          .withContext('message should be the correct one - 1')
+          .toBe(expectedFsDev);
       });
       actualMessages[1].subscribe((s) => {
-        expect(s).toBe(expectedTrainer);
+        expect(s)
+          .withContext('message should be the correct one - 2')
+          .toBe(expectedTrainer);
       });
       actualMessages[2].subscribe((s) => {
-        expect(s).toBe(expectedMath);
+        expect(s)
+          .withContext('message should be the correct one - 3')
+          .toBe(expectedMath);
       });
       actualMessages[3].subscribe((s) => {
-        expect(s).toBe(expectedMusic);
+        expect(s)
+          .withContext('message should be the correct one - 4')
+          .toBe(expectedMusic);
       });
       actualIAmMe.subscribe((s) => {
-        expect(s).toBe(expectedTitle);
+        expect(s).withContext('iAmMe should be set').toBe(expectedTitle);
       });
     };
     describe('in dev environment', () => {

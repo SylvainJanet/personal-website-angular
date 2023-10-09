@@ -8,7 +8,9 @@ describe('ifFirst', () => {
     const pipedObs = testObs.pipe(ifFirst(predicateToTest));
 
     pipedObs.subscribe();
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
   });
   it('should run the error predicate on first emission when error', () => {
     const testObs = throwError(() => new Error('test error'));
@@ -20,7 +22,9 @@ describe('ifFirst', () => {
     );
 
     pipedObs.subscribe();
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
   });
   it('should run the next predicate on error if none is specified', () => {
     const testObs = throwError(() => new Error('test error'));
@@ -31,7 +35,9 @@ describe('ifFirst', () => {
     );
 
     pipedObs.subscribe();
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
   });
   it('should run the next predicate only on first emission', () => {
     const testObs = of(1, 2, 3);
@@ -41,7 +47,9 @@ describe('ifFirst', () => {
     pipedObs.subscribe();
     pipedObs.subscribe();
     pipedObs.subscribe();
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
   });
   it('should run the error predicate only on first emission when error', () => {
     const testObs = throwError(() => new Error('test error'));
@@ -55,7 +63,9 @@ describe('ifFirst', () => {
     pipedObs.subscribe();
     pipedObs.subscribe();
     pipedObs.subscribe();
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
   });
   it('should run the next predicate only on error if none is specified', () => {
     const testObs = throwError(() => new Error('test error'));
@@ -68,7 +78,9 @@ describe('ifFirst', () => {
     pipedObs.subscribe();
     pipedObs.subscribe();
     pipedObs.subscribe();
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
   });
 
   it('should run the next predicate on first emission with subscription', () => {
@@ -82,8 +94,12 @@ describe('ifFirst', () => {
         actionMethod(value);
       },
     });
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
-    expect(actionMethod).toHaveBeenCalledTimes(3);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
+    expect(actionMethod)
+      .withContext('action should have been called 3 times')
+      .toHaveBeenCalledTimes(3);
   });
   it('should run the error predicate on first emission when error with subscription', () => {
     const testObs = throwError(() => new Error('test error'));
@@ -101,8 +117,12 @@ describe('ifFirst', () => {
         errorMethod(e);
       },
     });
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
-    expect(errorMethod).toHaveBeenCalledTimes(1);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
+    expect(errorMethod)
+      .withContext('error method should have been called')
+      .toHaveBeenCalledTimes(1);
   });
   it('should run the next predicate on error if none is specified with subscription', () => {
     const testObs = throwError(() => new Error('test error'));
@@ -119,8 +139,12 @@ describe('ifFirst', () => {
         errorMethod(e);
       },
     });
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
-    expect(errorMethod).toHaveBeenCalledTimes(1);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
+    expect(errorMethod)
+      .withContext('error method should have been called')
+      .toHaveBeenCalledTimes(1);
   });
   it('should run the next predicate only on first emission with subscription', () => {
     const testObs = of(1, 2, 3);
@@ -143,8 +167,12 @@ describe('ifFirst', () => {
         actionMethod(value);
       },
     });
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
-    expect(actionMethod).toHaveBeenCalledTimes(3 * 3);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
+    expect(actionMethod)
+      .withContext('action should have been called')
+      .toHaveBeenCalledTimes(3 * 3);
   });
   it('should run the error predicate only on first emission when error with subscription', () => {
     const testObs = throwError(() => new Error('test error'));
@@ -178,8 +206,12 @@ describe('ifFirst', () => {
         errorMethod(e);
       },
     });
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
-    expect(errorMethod).toHaveBeenCalledTimes(1 * 3);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
+    expect(errorMethod)
+      .withContext('error method should have been called')
+      .toHaveBeenCalledTimes(1 * 3);
   });
   it('should run the next predicate only on error if none is specified with subscription', () => {
     const testObs = throwError(() => new Error('test error'));
@@ -212,7 +244,11 @@ describe('ifFirst', () => {
         errorMethod(e);
       },
     });
-    expect(predicateToTest).toHaveBeenCalledTimes(1);
-    expect(errorMethod).toHaveBeenCalledTimes(1 * 3);
+    expect(predicateToTest)
+      .withContext('predicate should have been called')
+      .toHaveBeenCalledTimes(1);
+    expect(errorMethod)
+      .withContext('error method should have been called')
+      .toHaveBeenCalledTimes(1 * 3);
   });
 });

@@ -21,8 +21,9 @@ describe('TypedAnimatedTextComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   describe('textElement', () => {
@@ -36,7 +37,9 @@ describe('TypedAnimatedTextComponent - dom unit', () => {
 
       const linkDebugEl = debugEl.query(By.css('div')).query(By.css('span'));
 
-      expect(linkDebugEl.styles['color']).toBe(expected);
+      expect(linkDebugEl.styles['color'])
+        .withContext('color should be set')
+        .toBe(expected);
     });
     it('should have font-size', () => {
       const expected = '2em';
@@ -48,7 +51,9 @@ describe('TypedAnimatedTextComponent - dom unit', () => {
 
       const linkDebugEl = debugEl.query(By.css('div')).query(By.css('span'));
 
-      expect(linkDebugEl.styles['font-size']).toBe(expected);
+      expect(linkDebugEl.styles['font-size'])
+        .withContext('font-size should be set')
+        .toBe(expected);
     });
     it('should have padding', () => {
       const expected = '0.1em';
@@ -59,7 +64,9 @@ describe('TypedAnimatedTextComponent - dom unit', () => {
 
       const linkDebugEl = debugEl.query(By.css('div')).query(By.css('span'));
 
-      expect(linkDebugEl.styles['padding']).toBe(expected);
+      expect(linkDebugEl.styles['padding'])
+        .withContext('padding should be set')
+        .toBe(expected);
     });
   });
 
@@ -76,7 +83,9 @@ describe('TypedAnimatedTextComponent - dom unit', () => {
         .query(By.css('div'))
         .queryAll(By.css('span'))[1];
 
-      expect(linkDebugEl.styles['border-right-width']).toBe(expected);
+      expect(linkDebugEl.styles['border-right-width'])
+        .withContext('border-right-width should be set')
+        .toBe(expected);
     });
     it('should have border-right-color', () => {
       const expected = 'red';
@@ -90,7 +99,9 @@ describe('TypedAnimatedTextComponent - dom unit', () => {
         .query(By.css('div'))
         .queryAll(By.css('span'))[1];
 
-      expect(linkDebugEl.styles['border-right-color']).toBe(expected);
+      expect(linkDebugEl.styles['border-right-color'])
+        .withContext('border-right-color should be set')
+        .toBe(expected);
     });
     it('should have font-size', () => {
       const expected = '2em';
@@ -104,20 +115,30 @@ describe('TypedAnimatedTextComponent - dom unit', () => {
         .query(By.css('div'))
         .queryAll(By.css('span'))[1];
 
-      expect(linkDebugEl.styles['font-size']).toBe(expected);
+      expect(linkDebugEl.styles['font-size'])
+        .withContext('font-size should be set')
+        .toBe(expected);
     });
   });
 
   it('should have proper dom structure', () => {
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children.length).toBe(1);
-    expect(debugEl.children[0].nativeElement.tagName).toBe('DIV');
+    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is DIV')
+      .toBe('DIV');
 
     const firstDivEl: DebugElement = debugEl.children[0];
 
-    expect(firstDivEl.children.length).toBe(2);
-    expect(firstDivEl.children[0].nativeElement.tagName).toBe('SPAN');
-    expect(firstDivEl.children[1].nativeElement.tagName).toBe('SPAN');
+    expect(firstDivEl.children.length)
+      .withContext('div should have 2 children')
+      .toBe(2);
+    expect(firstDivEl.children[0].nativeElement.tagName)
+      .withContext('child 1 of div should be SPAN')
+      .toBe('SPAN');
+    expect(firstDivEl.children[1].nativeElement.tagName)
+      .withContext('child 2 of div should be SPAN')
+      .toBe('SPAN');
   });
 });

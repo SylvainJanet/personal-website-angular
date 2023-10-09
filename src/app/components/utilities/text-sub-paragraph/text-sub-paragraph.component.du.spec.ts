@@ -21,8 +21,9 @@ describe('TextSubParagraphComponent - dom unit', () => {
   });
 
   it('should create', () => {
-    expect(componentInstance).toBeDefined();
-    expect(componentInstance).toBeTruthy();
+    expect(componentInstance)
+      .withContext('component should create')
+      .toBeTruthy();
   });
 
   describe('should have proper dom structure', () => {
@@ -35,8 +36,10 @@ describe('TextSubParagraphComponent - dom unit', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(1);
-      expect(debugEl.children[0].nativeElement.tagName).toBe('SPAN');
+      expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+      expect(debugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 at root is SPAN')
+        .toBe('SPAN');
     });
     it('with BR subParagraph', () => {
       componentInstance.subPar = new SubParagraph(SubParagraphRoot.BR, '');
@@ -44,8 +47,10 @@ describe('TextSubParagraphComponent - dom unit', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(1);
-      expect(debugEl.children[0].nativeElement.tagName).toBe('BR');
+      expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+      expect(debugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 at root is BR')
+        .toBe('BR');
     });
     it('with STRONG_EM subParagraph', () => {
       componentInstance.subPar = new SubParagraph(
@@ -56,11 +61,17 @@ describe('TextSubParagraphComponent - dom unit', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(1);
-      expect(debugEl.children[0].nativeElement.tagName).toBe('STRONG');
+      expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+      expect(debugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 at root is STRONG')
+        .toBe('STRONG');
 
-      expect(debugEl.children[0].children.length).toBe(1);
-      expect(debugEl.children[0].children[0].nativeElement.tagName).toBe('EM');
+      expect(debugEl.children[0].children.length)
+        .withContext('strong should have 1 child')
+        .toBe(1);
+      expect(debugEl.children[0].children[0].nativeElement.tagName)
+        .withContext('child 1 of strong is EM')
+        .toBe('EM');
     });
     it('with A_ASSET subParagraph', () => {
       componentInstance.subPar = new SubParagraph(
@@ -72,8 +83,10 @@ describe('TextSubParagraphComponent - dom unit', () => {
 
       const debugEl: DebugElement = fixture.debugElement;
 
-      expect(debugEl.children.length).toBe(1);
-      expect(debugEl.children[0].nativeElement.tagName).toBe('A');
+      expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+      expect(debugEl.children[0].nativeElement.tagName)
+        .withContext('child 1 at root is A')
+        .toBe('A');
     });
   });
   it('should have proper SPAN subParagraph', () => {
@@ -88,7 +101,7 @@ describe('TextSubParagraphComponent - dom unit', () => {
 
     const actual = debugEl.children[0].nativeElement.innerHTML;
 
-    expect(actual).toBe(expected);
+    expect(actual).withContext('span should be set').toBe(expected);
   });
   it('should have proper BR subParagraph', () => {
     componentInstance.subPar = new SubParagraph(SubParagraphRoot.BR, '');
@@ -96,7 +109,9 @@ describe('TextSubParagraphComponent - dom unit', () => {
 
     const debugEl: DebugElement = fixture.debugElement;
 
-    expect(debugEl.children[0].nativeElement.tagName).toBe('BR');
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('element should be BR')
+      .toBe('BR');
   });
   it('should have proper STRONG_EM subParagraph', () => {
     const expectedText = 'this is a test';
@@ -111,7 +126,7 @@ describe('TextSubParagraphComponent - dom unit', () => {
     const expected = '<em>' + expectedText + '</em>';
     const actual = debugEl.children[0].nativeElement.innerHTML;
 
-    expect(actual).toBe(expected);
+    expect(actual).withContext('content should be set').toBe(expected);
   });
   it('should have proper A_ASSET subParagraph', () => {
     const expectedText = 'this is a test';
@@ -127,11 +142,11 @@ describe('TextSubParagraphComponent - dom unit', () => {
 
     const actualText = debugEl.children[0].nativeElement.innerHTML;
 
-    expect(actualText).toBe(expectedText);
+    expect(actualText).withContext('text should be set').toBe(expectedText);
 
     const expectedHref = 'assets/' + expectedAssetHref;
     const actualHref = debugEl.children[0].properties['href'];
 
-    expect(actualHref).toBe(expectedHref);
+    expect(actualHref).withContext('href should be set').toBe(expectedHref);
   });
 });

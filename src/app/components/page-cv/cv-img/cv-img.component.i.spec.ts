@@ -28,7 +28,9 @@ describe('CvImgComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvImgComponent).toBeTruthy();
+      expect(cvImgComponent)
+        .withContext('component should create')
+        .toBeTruthy();
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -93,7 +95,7 @@ describe('CvImgComponent - integration', () => {
       const actualAltTextObs = cvImgComponent.altTxt;
 
       actualAltTextObs.subscribe((s) => {
-        expect(s).toBe(expectedAltText);
+        expect(s).withContext('altTxt should be set').toBe(expectedAltText);
       });
     };
     describe('in dev environment', () => {
