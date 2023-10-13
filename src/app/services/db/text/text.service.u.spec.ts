@@ -672,4 +672,120 @@ describe('TextService - unit', () => {
       });
     });
   });
+
+  describe('getMulti method', () => {
+    it('should notify the TEXTS preloader that a text has to load on subscription', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of(['this is a test', 'this is another test'])
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService.getMulti(selectorsToTest).subscribe();
+
+      expect(preloaderServiceSpy.toLoad)
+        .withContext('toLoad should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
+    });
+    it('should not notify the TEXTS preloader that a text has to load without subscribers', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of(['this is a test', 'this is another test'])
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService.getMulti(selectorsToTest);
+
+      expect(preloaderServiceSpy.toLoad)
+        .withContext('toLoad should not have been called')
+        .not.toHaveBeenCalled();
+    });
+    it('should call getText method', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of(['this is a test', 'this is another test'])
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService.getMulti(selectorsToTest);
+
+      expect(textService['getMultiText'])
+        .withContext('getMultiText should have been called')
+        .toHaveBeenCalledOnceWith(
+          selectorsToTest,
+          languageServiceSpy.current()
+        );
+    });
+    it('should notify the TEXTS preloader that a text has loaded', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of(['this is a test', 'this is another test'])
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService.getMulti(selectorsToTest).subscribe();
+
+      expect(preloaderServiceSpy.loaded)
+        .withContext('loaded should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
+    });
+    it('should notify the TEXTS preloader that a text has loaded on error', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        throwError(() => new Error('this is a test error'))
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService.getMulti(selectorsToTest).subscribe();
+
+      expect(preloaderServiceSpy.loaded)
+        .withContext('loaded should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
+    });
+    it('should return an error message on error', (done: DoneFn) => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        throwError(() => new Error('this is a test error'))
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService.getMulti(selectorsToTest).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('error message should be as expected')
+            .toEqual([
+              EXPECTED_TEXT_ERROR_MESSAGE,
+              EXPECTED_TEXT_ERROR_MESSAGE,
+            ]);
+          done();
+        },
+        error: done.fail,
+      });
+    });
+    it('should return the text', (done: DoneFn) => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const expectedMessages = ['this is a test', 'this is another test'];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of(expectedMessages)
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService.getMulti(selectorsToTest).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('text should be as expected')
+            .toEqual(expectedMessages);
+          done();
+        },
+        error: done.fail,
+      });
+    });
+  });
 });

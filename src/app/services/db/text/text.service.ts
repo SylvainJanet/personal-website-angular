@@ -97,6 +97,40 @@ export class TextService {
   }
 
   /**
+   * Get a text for multiple selectors. Uses {@link getMultiText} and the
+   * {@link LanguageService} to get the current language. Notifies the TEXTS
+   * {@link Preloaders} that a text is loading, as well as when the text is
+   * loaded.
+   *
+   * @param selectors The selectors
+   * @returns An observable of the texts
+   */
+  getMulti(selectors: string[]): Observable<string[]> {
+    const initLoad = of(['']).pipe(
+      ifFirst(() => {
+        this.preloaderService.toLoad(Preloaders.TEXTS, 1);
+      }),
+      skip(1)
+    );
+    const getTextRes = this.getMultiText(
+      selectors,
+      this.langageService.current()
+    ).pipe(
+      ifFirst(() => {
+        this.preloaderService.loaded(Preloaders.TEXTS, 1);
+      }),
+      catchError(() => {
+        const res = [];
+        for (let index = 0; index < selectors.length; index++) {
+          res.push('error');
+        }
+        return [res];
+      })
+    );
+    return concat(initLoad, getTextRes);
+  }
+
+  /**
    * Get the other language (as in, the language that the app is not currently
    * in) name in its own language.
    *

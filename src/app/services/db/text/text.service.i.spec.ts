@@ -112,7 +112,7 @@ describe('TextService - integration', () => {
       'should return an error message on error';
     const shouldReturnErrorMessage = (done: DoneFn) => {
       const selectorToTest = 'test-selector';
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       httpClientSpy.get.and.returnValue(
         throwError(() => new Error('this is a test error'))
       );
@@ -133,7 +133,7 @@ describe('TextService - integration', () => {
     const shouldReturnMessage = (done: DoneFn) => {
       const selectorToTest = 'test-selector';
       const expectedMessage = 'this is a test';
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       httpClientSpy.get.and.returnValue(
         of<StringDto>({ message: expectedMessage })
       );
@@ -601,6 +601,123 @@ describe('TextService - integration', () => {
 
         textService = TestBed.inject(TextService);
       });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+  });
+
+  describe('getMulti method', () => {
+    const shouldReturnErrorMessageExpectation =
+      'should return an error message on error';
+    const shouldReturnErrorMessage = (done: DoneFn) => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+
+      httpClientSpy.get.and.returnValue(
+        throwError(() => new Error('this is a test error'))
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService.getMulti(selectorsToTest).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('message should be as expected')
+            .toEqual([
+              EXPECTED_TEXT_ERROR_MESSAGE,
+              EXPECTED_TEXT_ERROR_MESSAGE,
+            ]);
+          done();
+        },
+        error: done.fail,
+      });
+    };
+
+    const shouldReturnMessageExpectation = 'should return the text';
+    const shouldReturnMessage = (done: DoneFn) => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const expectedMessages = ['this is a test', 'this is another test'];
+
+      httpClientSpy.get.and.returnValue(
+        of<ListStringDto>({ messages: expectedMessages })
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService.getMulti(selectorsToTest).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('message should be as expected')
+            .toEqual(expectedMessages);
+          done();
+        },
+        error: done.fail,
+      });
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        languageServiceSpy = jasmine.createSpyObj('LanguageService', [
+          'current',
+        ]);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            { provide: LanguageService, useValue: languageServiceSpy },
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        languageServiceSpy = jasmine.createSpyObj('LanguageService', [
+          'current',
+        ]);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            { provide: LanguageService, useValue: languageServiceSpy },
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        languageServiceSpy = jasmine.createSpyObj('LanguageService', [
+          'current',
+        ]);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            { provide: LanguageService, useValue: languageServiceSpy },
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
   });
