@@ -15,6 +15,7 @@ import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { environment as developmentEnvironment } from 'src/environments/environment';
 import { environment as stagingEnvironment } from 'src/environments/environment.staging';
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
+import { ListStringDto } from 'src/app/interfaces/ListStringDto';
 
 let textService: TextService;
 let httpClientSpy: jasmine.SpyObj<HttpClient>;
@@ -518,6 +519,89 @@ describe('TextService - integration', () => {
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
+    });
+  });
+
+  describe('getMultiText method', () => {
+    const shouldReturnMessageExpectation =
+      'should return an observable of the messages';
+    const shouldReturnMessage = (done: DoneFn) => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const languageToTest = Languages.ENGLISH;
+      const expectedMessages = ['this is a test', 'this is another test'];
+
+      httpClientSpy.get.and.returnValue(
+        of<ListStringDto>({
+          messages: expectedMessages,
+        })
+      );
+
+      textService['getMultiText'](selectorsToTest, languageToTest).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('message should be as expected')
+            .toBe(expectedMessages);
+          done();
+        },
+        error: done.fail,
+      });
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            LanguageService,
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            LanguageService,
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            LanguageService,
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
   });
 });

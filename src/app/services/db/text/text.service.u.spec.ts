@@ -11,6 +11,7 @@ import { SubParagraph } from 'src/app/components/classes/subparagraph/subParagra
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { Paragraph } from 'src/app/components/classes/paragraph/paragraph';
 import { ParagraphDecoderService } from '../../paragraphdecoder/paragraph-decoder.service';
+import { ListStringDto } from 'src/app/interfaces/ListStringDto';
 
 let textService: TextService;
 let datasourceServiceSpy: jasmine.SpyObj<DatasourceService>;
@@ -18,7 +19,9 @@ let languageServiceSpy: jasmine.SpyObj<LanguageService>;
 let preloaderServiceSpy: jasmine.SpyObj<PreloaderService>;
 let paragraphDecoderServiceSpy: jasmine.SpyObj<ParagraphDecoderService>;
 const API_TEXT_PATH = 'text';
+const API_MULTI_TEXT_PATH = 'multi-text';
 const API_SELECTOR_PARAM = 'selector';
+const API_MULTI_SELECTOR_PARAM = 'selectors';
 const API_LANGUAGE_PARAM = 'language';
 const EXPECTED_TEXT_ERROR_MESSAGE = 'error';
 const ENGLISH_LANGUAGE_NAME_SELECTOR = 'english-language-name';
@@ -584,6 +587,88 @@ describe('TextService - unit', () => {
             .withContext('decode should have been called')
             .toHaveBeenCalledOnceWith(text);
         },
+      });
+    });
+  });
+
+  describe('getMultiText method', () => {
+    it('should use the datasource correctly', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const languageToTest = Languages.ENGLISH;
+
+      datasourceServiceSpy.get.and.returnValue(
+        of<ListStringDto>({
+          messages: ['this is a test', 'this is another test'],
+        })
+      );
+
+      textService['getMultiText'](selectorsToTest, languageToTest);
+
+      expect(datasourceServiceSpy.get)
+        .withContext('get should have been called')
+        .toHaveBeenCalledOnceWith(API_MULTI_TEXT_PATH, jasmine.any(Object));
+
+      expect(datasourceServiceSpy.get.calls.mostRecent().args[1])
+        .withContext(
+          'get should have been called with the proper arguments - 1'
+        )
+        .toBeTruthy();
+      expect(
+        datasourceServiceSpy.get.calls
+          .mostRecent()
+          .args[1]?.getAll(API_MULTI_SELECTOR_PARAM)
+      )
+        .withContext(
+          'get should have been called with the proper arguments - 2'
+        )
+        .toBeTruthy();
+      expect(
+        datasourceServiceSpy.get.calls
+          .mostRecent()
+          .args[1]?.getAll(API_MULTI_SELECTOR_PARAM)
+      )
+        .withContext(
+          'get should have been called with the proper arguments - 3'
+        )
+        .toEqual(selectorsToTest);
+      expect(
+        datasourceServiceSpy.get.calls
+          .mostRecent()
+          .args[1]?.get(API_LANGUAGE_PARAM)
+      )
+        .withContext(
+          'get should have been called with the proper arguments - 4'
+        )
+        .toBeTruthy();
+      expect(
+        datasourceServiceSpy.get.calls
+          .mostRecent()
+          .args[1]?.get(API_LANGUAGE_PARAM)
+      )
+        .withContext(
+          'get should have been called with the proper arguments - 5'
+        )
+        .toBe(Languages[languageToTest]);
+    });
+    it('should return an observable of the message', (done: DoneFn) => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const languageToTest = Languages.ENGLISH;
+      const expectedMessages = ['this is a test', 'this is another test'];
+
+      datasourceServiceSpy.get.and.returnValue(
+        of<ListStringDto>({
+          messages: expectedMessages,
+        })
+      );
+
+      textService['getMultiText'](selectorsToTest, languageToTest).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('message should be as expected')
+            .toBe(expectedMessages);
+          done();
+        },
+        error: done.fail,
       });
     });
   });

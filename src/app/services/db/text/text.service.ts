@@ -10,6 +10,7 @@ import { StringDto } from 'src/app/interfaces/StringDto';
 import { Preloaders } from '../../preloader/preloaders/preloaders';
 import { ifFirst } from 'src/app/operators/ifFirst';
 import { ParagraphDecoderService } from '../../paragraphdecoder/paragraph-decoder.service';
+import { ListStringDto } from 'src/app/interfaces/ListStringDto';
 
 /** Text service. */
 @Injectable({
@@ -34,7 +35,7 @@ export class TextService {
   /**
    * Get text for a selector in a language
    *
-   * @param selector The selectore
+   * @param selector The selector
    * @param language The language
    * @returns An observable of the text
    */
@@ -45,6 +46,26 @@ export class TextService {
     return this.dataSource
       .get<StringDto>('text', params)
       .pipe(map((c) => c.message));
+  }
+
+  /**
+   * Get texts for multiple selectors in a language
+   *
+   * @param selectors The selectors
+   * @param language The language
+   * @returns An observable of the texts
+   */
+  private getMultiText(
+    selectors: string[],
+    language: Languages
+  ): Observable<string[]> {
+    let params = new HttpParams().set('language', Languages[language]);
+    for (const selector of selectors) {
+      params = params.append('selectors', selector);
+    }
+    return this.dataSource
+      .get<ListStringDto>('multi-text', params)
+      .pipe(map((dto) => dto.messages));
   }
 
   /**
