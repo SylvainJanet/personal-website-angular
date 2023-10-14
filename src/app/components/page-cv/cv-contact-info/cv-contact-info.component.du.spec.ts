@@ -24,22 +24,17 @@ describe('CvContactInfoComponent - dom unit', () => {
       'subscribe',
       'unsubscribe',
     ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+    textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
 
-    const nameObs = of(expectedName);
-    const sjObs = of(expectedSj);
-    const profileObs = of(expectedProfile);
-    const fsDevObs = of(expectedFsDev);
-    const emailObs = of(expectedEmail);
-    const phoneObs = of(expectedPhone);
-    textServiceSpy.get.and.returnValues(
-      nameObs,
-      sjObs,
-      profileObs,
-      fsDevObs,
-      emailObs,
-      phoneObs
-    );
+    const expectedMessages = of([
+      expectedName,
+      expectedSj,
+      expectedProfile,
+      expectedFsDev,
+      expectedEmail,
+      expectedPhone,
+    ]);
+    textServiceSpy.getMulti.and.returnValues(expectedMessages);
     TestBed.configureTestingModule({
       imports: [CvContactInfoComponent],
       providers: [

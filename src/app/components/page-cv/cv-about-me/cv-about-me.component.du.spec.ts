@@ -67,9 +67,10 @@ describe('CvAboutMeComponent - dom unit', () => {
       'subscribe',
       'unsubscribe',
     ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get', 'getSplit']);
-    textServiceSpy.get.and.returnValues(of(expectedTitle), of(expectedPdfName));
-    textServiceSpy.getSplit.and.returnValue(of(expectedParagraphs));
+    textServiceSpy = jasmine.createSpyObj('TextService', ['getMultiSomeSplit']);
+    textServiceSpy.getMultiSomeSplit.and.returnValue(
+      of([expectedTitle, expectedPdfName, expectedParagraphs])
+    );
     logServiceGlobalSpy = jasmine.createSpyObj('LogService', ['withClassName']);
     logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
     logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);

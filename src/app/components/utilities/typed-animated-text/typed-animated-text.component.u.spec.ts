@@ -71,7 +71,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
 
       expect(typedAnimatedTextComponent.textArray)
         .withContext('textArray should be set')
-        .toEqual(['']);
+        .toEqual([]);
       expect(typedAnimatedTextComponent.textColor)
         .withContext('textColor should be set')
         .toBe('black');
@@ -101,6 +101,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
       blinkElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
       typedAnimatedTextComponent.textElement = textElement;
       typedAnimatedTextComponent.blinkElement = blinkElement;
+      spyOn(typedAnimatedTextComponent, 'typingEffect');
     });
     it('should do nothing if the inputArray is not changed', () => {
       const oldValue = typedAnimatedTextComponent.textArray;
@@ -144,39 +145,6 @@ describe('TypedAnimatedTextComponent - unit', () => {
 
       expect(typedAnimatedTextComponent.initVariables)
         .withContext('initVariables should have been called')
-        .toHaveBeenCalledTimes(1);
-    });
-    it('should update the textArray', () => {
-      spyOn(typedAnimatedTextComponent, 'initVariables');
-      spyOn(typedAnimatedTextComponent, 'typingEffect');
-      typedAnimatedTextComponent.textArray = [];
-      typedAnimatedTextComponent.inputArray = [
-        of('this'),
-        of('is'),
-        of('a'),
-        of('test'),
-      ];
-      const expected = ['this', 'is', 'a', 'test'];
-
-      typedAnimatedTextComponent.ngAfterViewInit();
-      const actual = typedAnimatedTextComponent.textArray;
-
-      expect(actual).withContext('textArray should be set').toEqual(expected);
-    });
-    it('should initiate the typing effect once the textArray is updated', () => {
-      spyOn(typedAnimatedTextComponent, 'initVariables');
-      spyOn(typedAnimatedTextComponent, 'typingEffect');
-      typedAnimatedTextComponent.textArray = [];
-      typedAnimatedTextComponent.inputArray = [
-        of('this'),
-        of('is'),
-        of('a'),
-        of('test'),
-      ];
-      typedAnimatedTextComponent.ngAfterViewInit();
-
-      expect(typedAnimatedTextComponent.typingEffect)
-        .withContext('typingEffect should have been called')
         .toHaveBeenCalledTimes(1);
     });
   });

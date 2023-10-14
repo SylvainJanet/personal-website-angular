@@ -68,9 +68,10 @@ describe('CvAboutMeComponent - unit', () => {
       'subscribe',
       'unsubscribe',
     ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get', 'getSplit']);
-    textServiceSpy.get.and.returnValues(of(expectedTitle), of(expectedPdfName));
-    textServiceSpy.getSplit.and.returnValue(of(expectedParagraphs));
+    textServiceSpy = jasmine.createSpyObj('TextService', ['getMultiSomeSplit']);
+    textServiceSpy.getMultiSomeSplit.and.returnValue(
+      of([expectedTitle, expectedPdfName, expectedParagraphs])
+    );
     logServiceGlobalSpy = jasmine.createSpyObj('LogService', ['withClassName']);
     logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
     logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
@@ -150,27 +151,15 @@ describe('CvAboutMeComponent - unit', () => {
       cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
     });
     it('should call the textService', () => {
-      expect(textServiceSpy.get)
-        .withContext('get should have been called twice')
-        .toHaveBeenCalledTimes(2);
-      expect(textServiceSpy.get)
+      expect(textServiceSpy.getMultiSomeSplit)
         .withContext(
-          'get should have been called with the proper arguments - 1'
+          'getMultiSomeSplit should have been called 1 time with proper arguments'
         )
-        .toHaveBeenCalledWith(titleSelector);
-      expect(textServiceSpy.get)
-        .withContext(
-          'get should have been called with the proper arguments - 2'
-        )
-        .toHaveBeenCalledWith(cvFileNameSelector);
-      expect(textServiceSpy.getSplit)
-        .withContext('getSplit should have been called once')
-        .toHaveBeenCalledTimes(1);
-      expect(textServiceSpy.getSplit)
-        .withContext(
-          'getSplit should have been called with the proper arguments'
-        )
-        .toHaveBeenCalledWith(aboutMeContentSelector);
+        .toHaveBeenCalledOnceWith([
+          { selector: titleSelector, isSplit: false },
+          { selector: cvFileNameSelector, isSplit: false },
+          { selector: aboutMeContentSelector, isSplit: true },
+        ]);
     });
     it('should set the properties to the textService result', () => {
       const actualTitleObs = cvAboutMeComponent.aboutMe;

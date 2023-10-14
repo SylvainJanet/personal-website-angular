@@ -31,10 +31,9 @@ describe('FooterComponent - unit', () => {
       'subscribe',
       'unsubscribe',
     ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
-    textServiceSpy.get.and.returnValues(
-      of(retrievedFooterText),
-      of(expectedFooterLink)
+    textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+    textServiceSpy.getMulti.and.returnValues(
+      of([retrievedFooterText, expectedFooterLink])
     );
   });
 
@@ -155,15 +154,11 @@ describe('FooterComponent - unit', () => {
   describe('updateTexts', () => {
     const shouldCallTextServiceExpectation = 'should call the textService';
     const shouldCallTextService = () => {
-      expect(textServiceSpy.get)
-        .withContext('get should have been called 2 times')
-        .toHaveBeenCalledTimes(2);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 1')
-        .toHaveBeenCalledWith(footerTextSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 2')
-        .toHaveBeenCalledWith(footerLinkSelector);
+      expect(textServiceSpy.getMulti)
+        .withContext(
+          'getMulti should have been called 1 time with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith([footerTextSelector, footerLinkSelector]);
     };
 
     const shouldSetPropertiesToTextServiceResultExpectation =

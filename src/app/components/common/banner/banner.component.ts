@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { ApplicationRef, Component, OnDestroy } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
@@ -42,7 +42,8 @@ export class BannerComponent implements ComponentWithText, OnDestroy {
    */
   constructor(
     private languageService: LanguageService,
-    private textService: TextService
+    private textService: TextService,
+    private ref: ApplicationRef
   ) {
     this.bannerSrc = getComputedStyle(document.documentElement)
       .getPropertyValue('--banner-bg-image-url')
@@ -61,13 +62,18 @@ export class BannerComponent implements ComponentWithText, OnDestroy {
    * contents from the database.
    */
   updateTexts(): void {
-    this.messages = [
-      this.textService.get('occupation-fullstack-dev'),
-      this.textService.get('occupation-trainer'),
-      this.textService.get('occupation-mathematician'),
-      this.textService.get('occupation-musician'),
-    ];
-    this.iAmMe = this.textService.get('main-title');
+    this.textService
+      .getMulti([
+        'occupation-fullstack-dev',
+        'occupation-trainer',
+        'occupation-mathematician',
+        'occupation-musician',
+        'main-title',
+      ])
+      .subscribe((r) => {
+        this.messages = [of(r[0]), of(r[1]), of(r[2]), of(r[3])];
+        this.iAmMe = of(r[4]);
+      });
   }
 
   /**

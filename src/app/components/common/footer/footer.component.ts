@@ -63,11 +63,11 @@ export class FooterComponent implements ComponentWithText, OnDestroy {
    * contents from the database.
    */
   updateTexts(): void {
-    this.footerText = this.textService
-      .get('sylvain-janet')
-      .pipe(map((s) => s + ' - '));
-    this.footerLink = this.textService.get('website');
-    this.footerHref = this.footerLink.pipe(map((s) => 'https://www.' + s));
+    this.textService.getMulti(['sylvain-janet', 'website']).subscribe((r) => {
+      this.footerText = of(r[0] + ' - ');
+      this.footerLink = of(r[1]);
+      this.footerHref = this.footerLink.pipe(map((s) => 'https://www.' + s));
+    });
   }
 
   /**

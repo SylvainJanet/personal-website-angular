@@ -30,25 +30,20 @@ describe('CvSkillsComponent - dom integration', () => {
   const expectedHtml = 'test html';
   const expectedLatex = 'test latex';
   beforeEach(() => {
-    const expectedSkillsDto = of({ message: expectedSkills });
-    const expectedJavaDto = of({ message: expectedJava });
-    const expectedCsharpDto = of({ message: expectedCsharp });
-    const expectedPythonDto = of({ message: expectedPython });
-    const expectedJstsDto = of({ message: expectedJsts });
-    const expectedSqlDto = of({ message: expectedSql });
-    const expectedHtmlDto = of({ message: expectedHtml });
-    const expectedLatexDto = of({ message: expectedLatex });
+    const expectedMessagesDto = of({
+      messages: [
+        expectedSkills,
+        expectedJava,
+        expectedCsharp,
+        expectedPython,
+        expectedJsts,
+        expectedSql,
+        expectedHtml,
+        expectedLatex,
+      ],
+    });
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-    httpClientSpy.get.and.returnValues(
-      expectedSkillsDto,
-      expectedJavaDto,
-      expectedCsharpDto,
-      expectedPythonDto,
-      expectedJstsDto,
-      expectedSqlDto,
-      expectedHtmlDto,
-      expectedLatexDto
-    );
+    httpClientSpy.get.and.returnValues(expectedMessagesDto);
   });
 
   const shouldCreateExpectation = 'should create';

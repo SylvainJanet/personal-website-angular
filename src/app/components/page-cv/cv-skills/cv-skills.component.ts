@@ -57,14 +57,27 @@ export class CvSkillsComponent implements ComponentWithText, OnDestroy {
    * contents from the database.
    */
   updateTexts(): void {
-    this.skills = this.textService.get('skills-title');
-    this.java = this.textService.get('java-language');
-    this.csharp = this.textService.get('csharp-language');
-    this.python = this.textService.get('python-language');
-    this.jsts = this.textService.get('js-ts-language');
-    this.sql = this.textService.get('sql-language');
-    this.html = this.textService.get('html-language');
-    this.latex = this.textService.get('latex-language');
+    this.textService
+      .getMulti([
+        'skills-title',
+        'java-language',
+        'csharp-language',
+        'python-language',
+        'js-ts-language',
+        'sql-language',
+        'html-language',
+        'latex-language',
+      ])
+      .subscribe((r) => {
+        this.skills = of(r[0]);
+        this.java = of(r[1]);
+        this.csharp = of(r[2]);
+        this.python = of(r[3]);
+        this.jsts = of(r[4]);
+        this.sql = of(r[5]);
+        this.html = of(r[6]);
+        this.latex = of(r[7]);
+      });
   }
 
   /**

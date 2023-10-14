@@ -30,13 +30,15 @@ describe('BannerComponent - dom unit', () => {
       'imageLoading',
       'imageLoadedOrError',
     ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
-    textServiceSpy.get.and.returnValues(
-      of(expectedFsDev),
-      of(expectedTrainer),
-      of(expectedMath),
-      of(expectedMusic),
-      of(expectedTitle)
+    textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+    textServiceSpy.getMulti.and.returnValues(
+      of([
+        expectedFsDev,
+        expectedTrainer,
+        expectedMath,
+        expectedMusic,
+        expectedTitle,
+      ])
     );
 
     TestBed.configureTestingModule({

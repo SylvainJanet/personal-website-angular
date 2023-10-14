@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { Observable, of, zip } from 'rxjs';
+import { Observable, forkJoin, of } from 'rxjs';
 
 /**
  * Component used to display an array of strings with a typing animation, as if
@@ -60,27 +60,30 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
   /** Index of the current string being either displayed or erased */
   private i = 0;
 
+  /** Stores whether or not the animation has started */
+  private isTyping = false;
+
   /**
    * Typed animation text component constructor
    *
    * @param renderer The `Renderer`
    */
-  constructor(private renderer: Renderer2) {
-    zip(this.inputArray).subscribe({
-      next: (r) => (this.textArray = r),
-    });
-  }
+  constructor(private renderer: Renderer2) {}
 
   /**
-   * If the array of observable changes, the array of string has to be updted
+   * If the array of observable changes, the array of string has to be updated
    * too.
    */
   ngOnChanges(changes: SimpleChanges): void {
     const change = changes['inputArray'];
     if (change && change.currentValue != change.previousValue) {
-      zip(this.inputArray).subscribe({
+      forkJoin(this.inputArray).subscribe({
         next: (r) => {
           this.textArray = r;
+          if (!this.isTyping) {
+            this.typingEffect();
+            this.isTyping = true;
+          }
         },
       });
     }
@@ -91,16 +94,10 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
 
   /**
    * Once the view is init and every string of the array has been received,
-   * initialize the proper parameters and start the typing effect.
+   * initialize the proper parameters.
    */
   ngAfterViewInit(): void {
     this.initVariables();
-    zip(this.inputArray).subscribe({
-      next: (r) => {
-        this.textArray = r;
-        this.typingEffect();
-      },
-    });
   }
 
   /** Style setup. This could be done with binding in HTML */

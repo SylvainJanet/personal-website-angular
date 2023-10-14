@@ -26,22 +26,19 @@ describe('BannerComponent - dom integration', () => {
   const expectedMusic = 'test music';
   const expectedTitle = 'test title';
 
-  const expectedFsDevDto = of({ message: expectedFsDev });
-  const expectedTrainerDto = of({ message: expectedTrainer });
-  const expectedMathDto = of({ message: expectedMath });
-  const expectedMusicDto = of({ message: expectedMusic });
-  const expectedTitleDto = of({ message: expectedTitle });
+  const expectedMessagesDto = of({
+    messages: [
+      expectedFsDev,
+      expectedTrainer,
+      expectedMath,
+      expectedMusic,
+      expectedTitle,
+    ],
+  });
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-
-    httpClientSpy.get.and.returnValues(
-      expectedFsDevDto,
-      expectedTrainerDto,
-      expectedMathDto,
-      expectedMusicDto,
-      expectedTitleDto
-    );
+    httpClientSpy.get.and.returnValues(expectedMessagesDto);
   });
 
   const shouldCreateExpectation = 'should create';

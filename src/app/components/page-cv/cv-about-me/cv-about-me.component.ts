@@ -70,20 +70,21 @@ export class CvAboutMeComponent implements ComponentWithText, OnDestroy {
    * contents from the database.
    */
   updateTexts(): void {
-    this.aboutMe = this.textService.get('about-me-title');
-    this.textService.get('cv-file-name').subscribe({
-      next: (name) => {
-        this.linkToCv = 'pdf/' + name;
-        this.textService.getSplit('about-me-content').subscribe({
-          next: (r) => {
-            this.paragraphs = r;
-            this.paragraphs.splice(1, 0, new Paragraph([]));
-            this.paragraphs.forEach((p) => (p.cssClass = 'lead'));
-            this.paragraphs[6].els[1].assetHref = this.linkToCv;
-          },
-        });
-      },
-    });
+    this.textService
+      .getMultiSomeSplit([
+        { selector: 'about-me-title', isSplit: false },
+        { selector: 'cv-file-name', isSplit: false },
+        { selector: 'about-me-content', isSplit: true },
+      ])
+      .subscribe((r) => {
+        this.aboutMe = of(r[0] as string);
+        this.linkToCv = 'pdf/' + (r[1] as string);
+
+        this.paragraphs = r[2] as Paragraph[];
+        this.paragraphs.splice(1, 0, new Paragraph([]));
+        this.paragraphs.forEach((p) => (p.cssClass = 'lead'));
+        this.paragraphs[6].els[1].assetHref = this.linkToCv;
+      });
   }
 
   /**

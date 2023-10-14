@@ -28,13 +28,15 @@ describe('BannerComponent - unit', () => {
       'subscribe',
       'unsubscribe',
     ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
-    textServiceSpy.get.and.returnValues(
-      of(expectedFsDev),
-      of(expectedTrainer),
-      of(expectedMath),
-      of(expectedMusic),
-      of(expectedTitle)
+    textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+    textServiceSpy.getMulti.and.returnValues(
+      of([
+        expectedFsDev,
+        expectedTrainer,
+        expectedMath,
+        expectedMusic,
+        expectedTitle,
+      ])
     );
     TestBed.configureTestingModule({
       providers: [
@@ -96,24 +98,17 @@ describe('BannerComponent - unit', () => {
       bannerComponent = TestBed.inject(BannerComponent);
     });
     it('should call the textService', () => {
-      expect(textServiceSpy.get)
-        .withContext('get should have been called 5 times')
-        .toHaveBeenCalledTimes(5);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 1')
-        .toHaveBeenCalledWith(fsDevSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 2')
-        .toHaveBeenCalledWith(trainerSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 3')
-        .toHaveBeenCalledWith(mathSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 4')
-        .toHaveBeenCalledWith(musicSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 5')
-        .toHaveBeenCalledWith(titleSelector);
+      expect(textServiceSpy.getMulti)
+        .withContext(
+          'getMulti should have been called 1 time with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith([
+          fsDevSelector,
+          trainerSelector,
+          mathSelector,
+          musicSelector,
+          titleSelector,
+        ]);
     });
     it('should set the properties to the textService result', () => {
       const actualMessages = bannerComponent.messages;

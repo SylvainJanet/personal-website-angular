@@ -25,21 +25,18 @@ describe('CvContactInfoComponent - integration', () => {
   const expectedEmail = 'test email';
   const expectedPhone = 'test phone';
   beforeEach(() => {
-    const expectedNameDto = of({ message: expectedName });
-    const expectedSjDto = of({ message: expectedSj });
-    const expectedProfileDto = of({ message: expectedProfile });
-    const expectedFsDevDto = of({ message: expectedFsDev });
-    const expectedEmailDto = of({ message: expectedEmail });
-    const expectedPhoneDto = of({ message: expectedPhone });
+    const expectedMessagesDto = of({
+      messages: [
+        expectedName,
+        expectedSj,
+        expectedProfile,
+        expectedFsDev,
+        expectedEmail,
+        expectedPhone,
+      ],
+    });
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-    httpClientSpy.get.and.returnValues(
-      expectedNameDto,
-      expectedSjDto,
-      expectedProfileDto,
-      expectedFsDevDto,
-      expectedEmailDto,
-      expectedPhoneDto
-    );
+    httpClientSpy.get.and.returnValues(expectedMessagesDto);
   });
 
   describe('constructor', () => {
