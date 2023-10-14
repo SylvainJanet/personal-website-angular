@@ -125,7 +125,7 @@ export class TextService {
         selectors.forEach(() => {
           res.push('error');
         });
-        return [res];
+        return of(res);
       })
     );
     return concat(initLoad, getTextRes);
@@ -202,7 +202,7 @@ export class TextService {
    * @returns An observable of the {@link Paragraph}.
    */
   getMultiAllSplit(selectors: string[]): Observable<Paragraph[][]> {
-    const initLoad = of([]).pipe(
+    const initLoad = of([[]]).pipe(
       ifFirst(() => {
         this.preloaderService.toLoad(Preloaders.TEXTS, 1);
       }),
@@ -262,7 +262,7 @@ export class TextService {
         'Invalid parameters for getMultiSomeBooleanSplit - arrays should be of the same length'
       );
     }
-    const initLoad = of([]).pipe(
+    const initLoad = of(['']).pipe(
       ifFirst(() => {
         this.preloaderService.toLoad(Preloaders.TEXTS, 1);
       }),
