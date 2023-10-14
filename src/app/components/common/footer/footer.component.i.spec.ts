@@ -21,16 +21,13 @@ describe('FooterComponent - integration', () => {
   const expectedFooterLink = 'test footer link';
   const expectedFooterHref = 'https://www.' + expectedFooterLink;
 
-  const expectedFooterTextDto = of({ message: retrievedFooterText });
-  const expectedFooterLinkDto = of({ message: expectedFooterLink });
+  const expectedMessagesDto = of({
+    messages: [retrievedFooterText, expectedFooterLink],
+  });
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-
-    httpClientSpy.get.and.returnValues(
-      expectedFooterTextDto,
-      expectedFooterLinkDto
-    );
+    httpClientSpy.get.and.returnValues(expectedMessagesDto);
   });
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';

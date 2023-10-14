@@ -36,26 +36,19 @@ describe('CvSkillsComponent - dom unit', () => {
       'subscribe',
       'unsubscribe',
     ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+    textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
 
-    const skillsObs = of(expectedSkills);
-    const javaObs = of(expectedJava);
-    const csharpObs = of(expectedCsharp);
-    const pythonDevObs = of(expectedPython);
-    const jstsObs = of(expectedJsts);
-    const sqlObs = of(expectedSql);
-    const htmlObs = of(expectedHtml);
-    const latexObs = of(expectedLatex);
-    textServiceSpy.get.and.returnValues(
-      skillsObs,
-      javaObs,
-      csharpObs,
-      pythonDevObs,
-      jstsObs,
-      sqlObs,
-      htmlObs,
-      latexObs
-    );
+    const expectedMessages = of([
+      expectedSkills,
+      expectedJava,
+      expectedCsharp,
+      expectedPython,
+      expectedJsts,
+      expectedSql,
+      expectedHtml,
+      expectedLatex,
+    ]);
+    textServiceSpy.getMulti.and.returnValues(expectedMessages);
     TestBed.configureTestingModule({
       imports: [CvSkillsComponent, CvSkillBarComponent],
       providers: [

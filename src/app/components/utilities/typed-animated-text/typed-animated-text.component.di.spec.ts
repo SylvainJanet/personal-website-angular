@@ -7,7 +7,7 @@ import {
   waitForAsync,
 } from '@angular/core/testing';
 import { TypedAnimatedTextComponent } from './typed-animated-text.component';
-import { Renderer2 } from '@angular/core';
+import { Renderer2, SimpleChange, SimpleChanges } from '@angular/core';
 import { of } from 'rxjs';
 
 describe('TypedAnimatedTextComponent - dom integration', () => {
@@ -16,6 +16,7 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
   const typingSpeed = 8;
   const deleteSpeed = 3;
   const deleteDelay = 11;
+  const inputArrayPropName = 'inputArray';
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -36,12 +37,20 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
       componentInstance.deleteSpeed = deleteSpeed;
       componentInstance.deleteDelay = deleteDelay;
 
-      componentInstance.inputArray = [of('one'), of('test')];
       componentInstance['i'] = 0;
     });
     describe('should type the word letter by letter, and then call the deletingEffect method, then delete the word letter by letter, then repeat for the next word', () => {
       it('1 - type first letter - first word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
+
         spyOn(componentInstance, 'deletingEffect').and.returnValue();
 
         const actualInnerHtml =
@@ -50,7 +59,16 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('2 - type second letter - first word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
+
         spyOn(componentInstance, 'deletingEffect').and.returnValue();
 
         tick(typingSpeed / 2);
@@ -70,7 +88,16 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('3 - type third letter - first word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
+
         spyOn(componentInstance, 'deletingEffect').and.returnValue();
 
         tick((typingSpeed * 3) / 2);
@@ -90,7 +117,16 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('4 - call deletingEffect method - first word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
+
         spyOn(componentInstance, 'deletingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay / 2);
@@ -111,7 +147,16 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('5 - delete first letter - first word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
+
         spyOn(componentInstance, 'typingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay / 2);
@@ -131,7 +176,16 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('6 - delete second letter - first word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
+
         spyOn(componentInstance, 'typingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay + deleteSpeed / 2);
@@ -151,7 +205,16 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('7 - delete third letter - first word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
+
         spyOn(componentInstance, 'typingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay + (deleteSpeed * 3) / 2);
@@ -171,7 +234,16 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('8 - change index - first word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
+
         spyOn(componentInstance, 'typingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay + (deleteSpeed * 5) / 2);
@@ -186,7 +258,16 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('9 - call typingEffect method - first word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
+
         spyOn(componentInstance, 'typingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay + (deleteSpeed * 5) / 2);
@@ -203,7 +284,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('10 - type first letter - second word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(typingSpeed * 3 + deleteDelay + (deleteSpeed * 5) / 2);
 
@@ -224,7 +313,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('11 - type second letter - second word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(typingSpeed * 3 + deleteDelay + deleteSpeed * 3);
         spyOn(componentInstance, 'deletingEffect').and.returnValue();
@@ -247,7 +344,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('12 - type third letter - second word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(typingSpeed * 3 + deleteDelay + deleteSpeed * 3 + typingSpeed);
         spyOn(componentInstance, 'deletingEffect').and.returnValue();
@@ -270,7 +375,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('13 - type forth letter - second word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(typingSpeed * 3 + deleteDelay + deleteSpeed * 3 + typingSpeed * 2);
         spyOn(componentInstance, 'deletingEffect').and.returnValue();
@@ -293,7 +406,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('14 - call deletingEffect method - second word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(typingSpeed * 3 + deleteDelay + deleteSpeed * 3 + typingSpeed * 4);
         spyOn(componentInstance, 'deletingEffect').and.returnValue();
@@ -313,7 +434,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('15 - delete first letter - second word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(
           typingSpeed * 3 +
@@ -334,7 +463,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('16 - delete second letter - second word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(
           typingSpeed * 3 +
@@ -364,7 +501,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('17 - delete third letter - second word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(
           typingSpeed * 3 +
@@ -395,7 +540,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('18 - delete forth letter - second word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(
           typingSpeed * 3 +
@@ -426,7 +579,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('19 - change index - second word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(
           typingSpeed * 3 +
@@ -448,7 +609,15 @@ describe('TypedAnimatedTextComponent - dom integration', () => {
         flush();
       }));
       it('20 - call typingEffect method - first word', fakeAsync(() => {
-        componentInstance.ngAfterViewInit();
+        const value = componentInstance.inputArray;
+        const newValue = [of('one'), of('test')];
+        componentInstance.inputArray = newValue;
+
+        const change = new SimpleChange(value, newValue, false);
+        const changes: SimpleChanges = {};
+        changes[inputArrayPropName] = change;
+
+        componentInstance.ngOnChanges(changes);
 
         tick(
           typingSpeed * 3 +

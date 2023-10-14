@@ -20,7 +20,7 @@ describe('CvContactInfoComponent - unit', () => {
       'subscribe',
       'unsubscribe',
     ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+    textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
     TestBed.configureTestingModule({
       providers: [
         CvContactInfoComponent,
@@ -80,70 +80,49 @@ describe('CvContactInfoComponent - unit', () => {
   });
 
   describe('updateTexts', () => {
+    const name = 'test name';
+    const sj = 'test sj';
+    const profile = 'test profile';
+    const fsDev = 'test fsDev';
+    const email = 'test email';
+    const phone = 'test phone';
+
     beforeEach(() => {
+      textServiceSpy.getMulti.and.returnValues(
+        of([name, sj, profile, fsDev, email, phone])
+      );
       cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
     });
     it('should call the textService', () => {
-      expect(textServiceSpy.get)
-        .withContext('get should have been called 6 times')
-        .toHaveBeenCalledTimes(6);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 1')
-        .toHaveBeenCalledWith(nameSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 2')
-        .toHaveBeenCalledWith(sjSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 3')
-        .toHaveBeenCalledWith(profileSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 4')
-        .toHaveBeenCalledWith(fsDevSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 5')
-        .toHaveBeenCalledWith(emailSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 6')
-        .toHaveBeenCalledWith(phoneSelector);
-
-      cvContactInfoComponent.updateTexts();
-
-      expect(textServiceSpy.get)
-        .withContext('get should have been called 12 times')
-        .toHaveBeenCalledTimes(12);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 7')
-        .toHaveBeenCalledWith(nameSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 8')
-        .toHaveBeenCalledWith(sjSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 9')
-        .toHaveBeenCalledWith(profileSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 10')
-        .toHaveBeenCalledWith(fsDevSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 11')
-        .toHaveBeenCalledWith(emailSelector);
-      expect(textServiceSpy.get)
-        .withContext('get should have been called with proper arguments - 12')
-        .toHaveBeenCalledWith(phoneSelector);
+      expect(textServiceSpy.getMulti)
+        .withContext(
+          'getMulti should have been called 1 time with proper arguments'
+        )
+        .toHaveBeenCalledOnceWith([
+          nameSelector,
+          sjSelector,
+          profileSelector,
+          fsDevSelector,
+          emailSelector,
+          phoneSelector,
+        ]);
     });
     it('should set the properties to the textService result', () => {
-      const expectedNameObs = of('test name');
-      const expectedSjObs = of('test sj');
-      const expectedProfileObs = of('test profile');
-      const expectedFsDevObs = of('test fsDev');
-      const expectedEmailObs = of('test email');
-      const expectedPhoneObs = of('test phone');
-      textServiceSpy.get.and.returnValues(
-        expectedNameObs,
-        expectedSjObs,
-        expectedProfileObs,
-        expectedFsDevObs,
-        expectedEmailObs,
-        expectedPhoneObs
+      const expectedName = 'other test name';
+      const expectedSj = 'other test sj';
+      const expectedProfile = 'other test profile';
+      const expectedFsDev = 'other test fsDev';
+      const expectedEmail = 'other test email';
+      const expectedPhone = 'other test phone';
+      textServiceSpy.getMulti.and.returnValues(
+        of([
+          expectedName,
+          expectedSj,
+          expectedProfile,
+          expectedFsDev,
+          expectedEmail,
+          expectedPhone,
+        ])
       );
 
       cvContactInfoComponent.updateTexts();
@@ -155,29 +134,32 @@ describe('CvContactInfoComponent - unit', () => {
       const actualEmailObs = cvContactInfoComponent.email;
       const actualPhoneObs = cvContactInfoComponent.phone;
 
-      expect(actualNameObs)
-        .withContext('name obs should be set')
-        .toBe(expectedNameObs);
-      expect(actualSjObs)
-        .withContext('sj obs should be set')
-        .toBe(expectedSjObs);
-      expect(actualProfileObs)
-        .withContext('profile obs should be set')
-        .toBe(expectedProfileObs);
-      expect(actualFsDevObs)
-        .withContext('fsdev obs should be set')
-        .toBe(expectedFsDevObs);
-      expect(actualEmailObs)
-        .withContext('email obs should be set')
-        .toBe(expectedEmailObs);
-      expect(actualPhoneObs)
-        .withContext('phone obs should be set')
-        .toBe(expectedPhoneObs);
+      actualNameObs.subscribe((s) => {
+        expect(s).withContext('name should be set').toBe(expectedName);
+      });
+      actualSjObs.subscribe((s) => {
+        expect(s).withContext('sj should be set').toBe(expectedSj);
+      });
+      actualProfileObs.subscribe((s) => {
+        expect(s)
+          .withContext('expectedProfileObs should be set')
+          .toBe(expectedProfile);
+      });
+      actualFsDevObs.subscribe((s) => {
+        expect(s).withContext('fsdev should be set').toBe(expectedFsDev);
+      });
+      actualEmailObs.subscribe((s) => {
+        expect(s).withContext('email should be set').toBe(expectedEmail);
+      });
+      actualPhoneObs.subscribe((s) => {
+        expect(s).withContext('phone should be set').toBe(expectedPhone);
+      });
     });
   });
 
   describe('ngOnDestroy', () => {
     beforeEach(() => {
+      spyOn(CvContactInfoComponent.prototype, 'updateTexts');
       cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
     });
     it('should unsubscribe from the languageService', () => {

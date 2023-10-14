@@ -36,10 +36,9 @@ describe('FooterComponent - dom unit', () => {
       'imageLoading',
       'imageLoadedOrError',
     ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
-    textServiceSpy.get.and.returnValues(
-      of(retrievedFooterText),
-      of(expectedFooterLink)
+    textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+    textServiceSpy.getMulti.and.returnValues(
+      of([retrievedFooterText, expectedFooterLink])
     );
   }));
 

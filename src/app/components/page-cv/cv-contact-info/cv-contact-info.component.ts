@@ -52,12 +52,23 @@ export class CvContactInfoComponent implements ComponentWithText, OnDestroy {
    * contents from the database.
    */
   updateTexts(): void {
-    this.name = this.textService.get('about-name-field');
-    this.sj = this.textService.get('sylvain-janet');
-    this.profile = this.textService.get('about-profile-field');
-    this.fsDev = this.textService.get('occupation-fullstack-dev');
-    this.email = this.textService.get('about-email-field');
-    this.phone = this.textService.get('about-phone-field');
+    this.textService
+      .getMulti([
+        'about-name-field',
+        'sylvain-janet',
+        'about-profile-field',
+        'occupation-fullstack-dev',
+        'about-email-field',
+        'about-phone-field',
+      ])
+      .subscribe((r) => {
+        this.name = of(r[0]);
+        this.sj = of(r[1]);
+        this.profile = of(r[2]);
+        this.fsDev = of(r[3]);
+        this.email = of(r[4]);
+        this.phone = of(r[5]);
+      });
   }
 
   /**

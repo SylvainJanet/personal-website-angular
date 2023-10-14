@@ -48,27 +48,24 @@ describe('CvAboutMeComponent - integration', () => {
     ];
     elementRefSpy = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-    const expectedTitleDto = of({ message: expectedTitle });
-    const expectedPdfNameDto = of({ message: expectedPdfName });
-    const expectedParagraphsDto = of({
-      message:
+    const expectedMessagesDto = of({
+      messages: [
+        expectedTitle,
+        expectedPdfName,
         'Test' +
-        '[[]]' +
-        'Test' +
-        '[[]]' +
-        'Test' +
-        '[[]]' +
-        'Test' +
-        '[[]]' +
-        'Test' +
-        '[[]]' +
-        'Test[[a_asset,Test]]',
+          '[[]]' +
+          'Test' +
+          '[[]]' +
+          'Test' +
+          '[[]]' +
+          'Test' +
+          '[[]]' +
+          'Test' +
+          '[[]]' +
+          'Test[[a_asset,Test]]',
+      ],
     });
-    httpClientSpy.get.and.returnValues(
-      expectedTitleDto,
-      expectedPdfNameDto,
-      expectedParagraphsDto
-    );
+    httpClientSpy.get.and.returnValues(expectedMessagesDto);
   });
 
   describe('constructor', () => {
