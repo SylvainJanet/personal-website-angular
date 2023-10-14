@@ -120,10 +120,10 @@ export class TextService {
         this.preloaderService.loaded(Preloaders.TEXTS, 1);
       }),
       catchError(() => {
-        const res = [];
-        for (let index = 0; index < selectors.length; index++) {
+        const res: string[] = [];
+        selectors.forEach(() => {
           res.push('error');
-        }
+        });
         return [res];
       })
     );
