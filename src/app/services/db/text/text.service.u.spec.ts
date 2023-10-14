@@ -1133,4 +1133,448 @@ describe('TextService - unit', () => {
       });
     });
   });
+
+  describe('getMultiSomeBooleanSplit method', () => {
+    it('should notify the TEXTS preloader that a text has to load on subscription', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const spanContent1 = 'This is a test';
+      const spanContent2 = 'this should be decoded';
+      const spanContent3 = 'and this should be';
+      const spanContent4 = 'and this should be the end';
+      const br = 'br';
+      const aText = 'text of link, right here';
+      const a = `a_asset,${aText}`;
+      const strongEmText = 'in bold, in strong and em subparagraph';
+      const strongEm = `,${strongEmText}`;
+      const spanContent5 = 'This is a new paragraph';
+      const par1 =
+        spanContent1 +
+        `[[${br}]]` +
+        spanContent2 +
+        `[[${a}]]` +
+        spanContent3 +
+        `[[${strongEm}]]` +
+        spanContent4;
+      const par2 = spanContent5;
+      const text = par1 + '[[]]' + par2;
+      const text2 = 'this is for the second selector';
+      const isSplitInput = [true, false];
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of([text, text2])
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService['getMultiSomeBooleanSplit'](
+        selectorsToTest,
+        isSplitInput
+      ).subscribe();
+
+      expect(preloaderServiceSpy.toLoad)
+        .withContext('toLoad should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
+    });
+    it('should not notify the TEXTS preloader that a text has to load without subscribers', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const spanContent1 = 'This is a test';
+      const spanContent2 = 'this should be decoded';
+      const spanContent3 = 'and this should be';
+      const spanContent4 = 'and this should be the end';
+      const br = 'br';
+      const aText = 'text of link, right here';
+      const a = `a_asset,${aText}`;
+      const strongEmText = 'in bold, in strong and em subparagraph';
+      const strongEm = `,${strongEmText}`;
+      const spanContent5 = 'This is a new paragraph';
+      const par1 =
+        spanContent1 +
+        `[[${br}]]` +
+        spanContent2 +
+        `[[${a}]]` +
+        spanContent3 +
+        `[[${strongEm}]]` +
+        spanContent4;
+      const par2 = spanContent5;
+      const text = par1 + '[[]]' + par2;
+      const text2 = 'this is for the second selector';
+      const isSplitInput = [true, false];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of([text, text2])
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService['getMultiSomeBooleanSplit'](selectorsToTest, isSplitInput);
+
+      expect(preloaderServiceSpy.toLoad)
+        .withContext('toLoad should not have been called')
+        .not.toHaveBeenCalled();
+    });
+    it('should call getMultiText method', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const spanContent1 = 'This is a test';
+      const spanContent2 = 'this should be decoded';
+      const spanContent3 = 'and this should be';
+      const spanContent4 = 'and this should be the end';
+      const br = 'br';
+      const aText = 'text of link, right here';
+      const a = `a_asset,${aText}`;
+      const strongEmText = 'in bold, in strong and em subparagraph';
+      const strongEm = `,${strongEmText}`;
+      const spanContent5 = 'This is a new paragraph';
+      const par1 =
+        spanContent1 +
+        `[[${br}]]` +
+        spanContent2 +
+        `[[${a}]]` +
+        spanContent3 +
+        `[[${strongEm}]]` +
+        spanContent4;
+      const par2 = spanContent5;
+      const text = par1 + '[[]]' + par2;
+      const text2 = 'this is for the second selector';
+      const isSplitInput = [true, false];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of([text, text2])
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService['getMultiSomeBooleanSplit'](selectorsToTest, isSplitInput);
+
+      expect(textService['getMultiText'])
+        .withContext('getText should have been called')
+        .toHaveBeenCalledOnceWith(
+          selectorsToTest,
+          languageServiceSpy.current()
+        );
+    });
+    it('should notify the TEXTS preloader that a text has loaded', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const spanContent1 = 'This is a test';
+      const spanContent2 = 'this should be decoded';
+      const spanContent3 = 'and this should be';
+      const spanContent4 = 'and this should be the end';
+      const br = 'br';
+      const aText = 'text of link, right here';
+      const a = `a_asset,${aText}`;
+      const strongEmText = 'in bold, in strong and em subparagraph';
+      const strongEm = `,${strongEmText}`;
+      const spanContent5 = 'This is a new paragraph';
+      const par1 =
+        spanContent1 +
+        `[[${br}]]` +
+        spanContent2 +
+        `[[${a}]]` +
+        spanContent3 +
+        `[[${strongEm}]]` +
+        spanContent4;
+      const par2 = spanContent5;
+      const text = par1 + '[[]]' + par2;
+      const text2 = 'this is for the second selector';
+      const isSplitInput = [true, false];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of([text, text2])
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService['getMultiSomeBooleanSplit'](
+        selectorsToTest,
+        isSplitInput
+      ).subscribe();
+
+      expect(preloaderServiceSpy.loaded)
+        .withContext('loaded should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
+    });
+    it('should notify the TEXTS preloader that a text has loaded on error', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const isSplitInput = [true, false];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        throwError(() => new Error('this is a test error'))
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService['getMultiSomeBooleanSplit'](
+        selectorsToTest,
+        isSplitInput
+      ).subscribe();
+
+      expect(preloaderServiceSpy.loaded)
+        .withContext('loaded should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
+    });
+    it('should return an error message on error', (done: DoneFn) => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const isSplitInput = [true, false];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        throwError(() => new Error('this is a test error'))
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+      paragraphDecoderServiceSpy.decode.and.returnValue([
+        new Paragraph([
+          new SubParagraph(SubParagraphRoot.SPAN, EXPECTED_TEXT_ERROR_MESSAGE),
+        ]),
+      ]);
+
+      textService['getMultiSomeBooleanSplit'](
+        selectorsToTest,
+        isSplitInput
+      ).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('error message should be as expected')
+            .toEqual([
+              [
+                new Paragraph([
+                  new SubParagraph(
+                    SubParagraphRoot.SPAN,
+                    EXPECTED_TEXT_ERROR_MESSAGE
+                  ),
+                ]),
+              ],
+              EXPECTED_TEXT_ERROR_MESSAGE,
+            ]);
+          done();
+        },
+        error: done.fail,
+      });
+    });
+    it('should return the paragraphs', (done: DoneFn) => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const spanContent1 = 'This is a test';
+      const spanContent2 = 'this should be decoded';
+      const spanContent3 = 'and this should be';
+      const spanContent4 = 'and this should be the end';
+      const br = 'br';
+      const aText = 'text of link, right here';
+      const a = `a_asset,${aText}`;
+      const strongEmText = 'in bold, in strong and em subparagraph';
+      const strongEm = `,${strongEmText}`;
+      const spanContent5 = 'This is a new paragraph';
+      const par1 =
+        spanContent1 +
+        `[[${br}]]` +
+        spanContent2 +
+        `[[${a}]]` +
+        spanContent3 +
+        `[[${strongEm}]]` +
+        spanContent4;
+      const par2 = spanContent5;
+      const text = par1 + '[[]]' + par2;
+      const text2 = 'this is for the second selector';
+      const isSplitInput = [true, false];
+
+      const expectedSubPar1 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent1
+      );
+
+      const expectedSubPar2 = new SubParagraph(SubParagraphRoot.BR, '');
+
+      const expectedSubPar3 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent2
+      );
+
+      const expectedSubPar4 = new SubParagraph(SubParagraphRoot.A_ASSET, aText);
+
+      const expectedSubPar5 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent3
+      );
+
+      const expectedSubPar6 = new SubParagraph(
+        SubParagraphRoot.STRONG_EM,
+        strongEmText
+      );
+
+      const expectedSubPar7 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent4
+      );
+
+      const expectedPar1 = new Paragraph([
+        expectedSubPar1,
+        expectedSubPar2,
+        expectedSubPar3,
+        expectedSubPar4,
+        expectedSubPar5,
+        expectedSubPar6,
+        expectedSubPar7,
+      ]);
+
+      const expectedSubPar8 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent5
+      );
+
+      const expectedPar2 = new Paragraph([expectedSubPar8]);
+
+      const expected1 = [expectedPar1, expectedPar2];
+
+      const expected = [expected1, text2];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of([text, text2])
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+      paragraphDecoderServiceSpy.decode.and.returnValues(expected1);
+
+      textService['getMultiSomeBooleanSplit'](
+        selectorsToTest,
+        isSplitInput
+      ).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('paragraphs should be as expected')
+            .toEqual(expected);
+          done();
+        },
+        error: done.fail,
+      });
+    });
+    it('should use the paragraph decoder service', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const spanContent1 = 'This is a test';
+      const spanContent2 = 'this should be decoded';
+      const spanContent3 = 'and this should be';
+      const spanContent4 = 'and this should be the end';
+      const br = 'br';
+      const aText = 'text of link, right here';
+      const a = `a_asset,${aText}`;
+      const strongEmText = 'in bold, in strong and em subparagraph';
+      const strongEm = `,${strongEmText}`;
+      const spanContent5 = 'This is a new paragraph';
+      const par1 =
+        spanContent1 +
+        `[[${br}]]` +
+        spanContent2 +
+        `[[${a}]]` +
+        spanContent3 +
+        `[[${strongEm}]]` +
+        spanContent4;
+      const par2 = spanContent5;
+      const text = par1 + '[[]]' + par2;
+      const text2 = 'this is for the second selector';
+      const isSplitInput = [true, false];
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiText').and.returnValue(
+        of([text, text2])
+      );
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      textService['getMultiSomeBooleanSplit'](
+        selectorsToTest,
+        isSplitInput
+      ).subscribe({
+        next: () => {
+          expect(paragraphDecoderServiceSpy.decode)
+            .withContext('decode should have been called')
+            .toHaveBeenCalledTimes(1);
+          expect(paragraphDecoderServiceSpy.decode)
+            .withContext('decode should have been called with proper arguments')
+            .toHaveBeenCalledWith(text);
+        },
+      });
+    });
+
+    it('should throw error when the array length are different', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const isSplitInput = [true];
+
+      expect(() =>
+        textService['getMultiSomeBooleanSplit'](selectorsToTest, isSplitInput)
+      ).toThrow(
+        new Error(
+          'Invalid parameters for getMultiSomeBooleanSplit - arrays should be of the same length'
+        )
+      );
+    });
+  });
+
+  describe('getMultiSomeSplit method', () => {
+    it('should call getMultiSomeBooleanSplit method', () => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const spanContent1 = 'This is a test';
+      const spanContent2 = 'this should be decoded';
+      const spanContent3 = 'and this should be';
+      const spanContent4 = 'and this should be the end';
+      const aText = 'text of link, right here';
+      const strongEmText = 'in bold, in strong and em subparagraph';
+      const spanContent5 = 'This is a new paragraph';
+      const text2 = 'this is for the second selector';
+      const isSplitInput = [true, false];
+
+      const expectedSubPar1 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent1
+      );
+
+      const expectedSubPar2 = new SubParagraph(SubParagraphRoot.BR, '');
+
+      const expectedSubPar3 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent2
+      );
+
+      const expectedSubPar4 = new SubParagraph(SubParagraphRoot.A_ASSET, aText);
+
+      const expectedSubPar5 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent3
+      );
+
+      const expectedSubPar6 = new SubParagraph(
+        SubParagraphRoot.STRONG_EM,
+        strongEmText
+      );
+
+      const expectedSubPar7 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent4
+      );
+
+      const expectedPar1 = new Paragraph([
+        expectedSubPar1,
+        expectedSubPar2,
+        expectedSubPar3,
+        expectedSubPar4,
+        expectedSubPar5,
+        expectedSubPar6,
+        expectedSubPar7,
+      ]);
+
+      const expectedSubPar8 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent5
+      );
+
+      const expectedPar2 = new Paragraph([expectedSubPar8]);
+
+      const expected1 = [expectedPar1, expectedPar2];
+
+      const expected = [expected1, text2];
+
+      const input = [
+        { selector: selectorsToTest[0], isSplit: isSplitInput[0] },
+        { selector: selectorsToTest[1], isSplit: isSplitInput[1] },
+      ];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getMultiSomeBooleanSplit').and.returnValue(
+        of(expected)
+      );
+
+      textService.getMultiSomeSplit(input);
+
+      expect(textService['getMultiSomeBooleanSplit'])
+        .withContext('getText should have been called')
+        .toHaveBeenCalledOnceWith(selectorsToTest, isSplitInput);
+    });
+  });
 });

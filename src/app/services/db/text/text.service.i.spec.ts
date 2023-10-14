@@ -914,4 +914,378 @@ describe('TextService - integration', () => {
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
     });
   });
+
+  describe('getMultiSomeBooleanSplit method', () => {
+    const shouldReturnErrorMessageExpectation =
+      'should return an error message on error';
+    const shouldReturnErrorMessage = (done: DoneFn) => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const isSplitInput = [true, false];
+      httpClientSpy.get.and.returnValue(
+        throwError(() => new Error('this is a test error'))
+      );
+
+      textService['getMultiSomeBooleanSplit'](
+        selectorsToTest,
+        isSplitInput
+      ).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('error message should be as expected')
+            .toEqual([
+              [
+                new Paragraph([
+                  new SubParagraph(
+                    SubParagraphRoot.SPAN,
+                    EXPECTED_TEXT_ERROR_MESSAGE
+                  ),
+                ]),
+              ],
+              EXPECTED_TEXT_ERROR_MESSAGE,
+            ]);
+          done();
+        },
+        error: done.fail,
+      });
+    };
+    const shouldReturnParagraphsExpectation = 'should return the paragraphs';
+    const shouldReturnParagraphs = (done: DoneFn) => {
+      const selectorsToTest = ['test-selector', 'other-test-selector'];
+      const spanContent1 = 'This is a test';
+      const spanContent2 = 'this should be decoded';
+      const spanContent3 = 'and this should be';
+      const spanContent4 = 'and this should be the end';
+      const br = 'br';
+      const aText = 'text of link, right here';
+      const a = `a_asset,${aText}`;
+      const strongEmText = 'in bold, in strong and em subparagraph';
+      const strongEm = `,${strongEmText}`;
+      const spanContent5 = 'This is a new paragraph';
+      const par1 =
+        spanContent1 +
+        `[[${br}]]` +
+        spanContent2 +
+        `[[${a}]]` +
+        spanContent3 +
+        `[[${strongEm}]]` +
+        spanContent4;
+      const par2 = spanContent5;
+      const text = par1 + '[[]]' + par2;
+      const text2 = 'this is for the second selector';
+      const isSplitInput = [true, false];
+
+      const expectedSubPar1 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent1
+      );
+
+      const expectedSubPar2 = new SubParagraph(SubParagraphRoot.BR, '');
+
+      const expectedSubPar3 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent2
+      );
+
+      const expectedSubPar4 = new SubParagraph(SubParagraphRoot.A_ASSET, aText);
+
+      const expectedSubPar5 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent3
+      );
+
+      const expectedSubPar6 = new SubParagraph(
+        SubParagraphRoot.STRONG_EM,
+        strongEmText
+      );
+
+      const expectedSubPar7 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent4
+      );
+
+      const expectedPar1 = new Paragraph([
+        expectedSubPar1,
+        expectedSubPar2,
+        expectedSubPar3,
+        expectedSubPar4,
+        expectedSubPar5,
+        expectedSubPar6,
+        expectedSubPar7,
+      ]);
+
+      const expectedSubPar8 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent5
+      );
+
+      const expectedPar2 = new Paragraph([expectedSubPar8]);
+
+      const expected1 = [expectedPar1, expectedPar2];
+
+      const expected = [expected1, text2];
+      httpClientSpy.get.and.returnValue(
+        of<ListStringDto>({ messages: [text, text2] })
+      );
+
+      textService['getMultiSomeBooleanSplit'](
+        selectorsToTest,
+        isSplitInput
+      ).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('paragraphs should be as expected')
+            .toEqual(expected);
+          done();
+        },
+        error: done.fail,
+      });
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            LanguageService,
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            LanguageService,
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            LanguageService,
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
+    });
+  });
+
+  describe('getMultiSomeSplit method', () => {
+    const shouldReturnErrorMessageExpectation =
+      'should return an error message on error';
+    const shouldReturnErrorMessage = (done: DoneFn) => {
+      const input = [
+        { selector: 'test-selector', isSplit: true },
+        { selector: 'other-test-selector', isSplit: false },
+      ];
+      httpClientSpy.get.and.returnValue(
+        throwError(() => new Error('this is a test error'))
+      );
+
+      textService.getMultiSomeSplit(input).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('error message should be as expected')
+            .toEqual([
+              [
+                new Paragraph([
+                  new SubParagraph(
+                    SubParagraphRoot.SPAN,
+                    EXPECTED_TEXT_ERROR_MESSAGE
+                  ),
+                ]),
+              ],
+              EXPECTED_TEXT_ERROR_MESSAGE,
+            ]);
+          done();
+        },
+        error: done.fail,
+      });
+    };
+    const shouldReturnParagraphsExpectation = 'should return the paragraphs';
+    const shouldReturnParagraphs = (done: DoneFn) => {
+      const input = [
+        { selector: 'test-selector', isSplit: true },
+        { selector: 'other-test-selector', isSplit: false },
+      ];
+      const spanContent1 = 'This is a test';
+      const spanContent2 = 'this should be decoded';
+      const spanContent3 = 'and this should be';
+      const spanContent4 = 'and this should be the end';
+      const br = 'br';
+      const aText = 'text of link, right here';
+      const a = `a_asset,${aText}`;
+      const strongEmText = 'in bold, in strong and em subparagraph';
+      const strongEm = `,${strongEmText}`;
+      const spanContent5 = 'This is a new paragraph';
+      const par1 =
+        spanContent1 +
+        `[[${br}]]` +
+        spanContent2 +
+        `[[${a}]]` +
+        spanContent3 +
+        `[[${strongEm}]]` +
+        spanContent4;
+      const par2 = spanContent5;
+      const text = par1 + '[[]]' + par2;
+      const text2 = 'this is for the second selector';
+
+      const expectedSubPar1 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent1
+      );
+
+      const expectedSubPar2 = new SubParagraph(SubParagraphRoot.BR, '');
+
+      const expectedSubPar3 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent2
+      );
+
+      const expectedSubPar4 = new SubParagraph(SubParagraphRoot.A_ASSET, aText);
+
+      const expectedSubPar5 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent3
+      );
+
+      const expectedSubPar6 = new SubParagraph(
+        SubParagraphRoot.STRONG_EM,
+        strongEmText
+      );
+
+      const expectedSubPar7 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent4
+      );
+
+      const expectedPar1 = new Paragraph([
+        expectedSubPar1,
+        expectedSubPar2,
+        expectedSubPar3,
+        expectedSubPar4,
+        expectedSubPar5,
+        expectedSubPar6,
+        expectedSubPar7,
+      ]);
+
+      const expectedSubPar8 = new SubParagraph(
+        SubParagraphRoot.SPAN,
+        spanContent5
+      );
+
+      const expectedPar2 = new Paragraph([expectedSubPar8]);
+
+      const expected1 = [expectedPar1, expectedPar2];
+
+      const expected = [expected1, text2];
+      httpClientSpy.get.and.returnValue(
+        of<ListStringDto>({ messages: [text, text2] })
+      );
+
+      textService.getMultiSomeSplit(input).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('paragraphs should be as expected')
+            .toEqual(expected);
+          done();
+        },
+        error: done.fail,
+      });
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            LanguageService,
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            LanguageService,
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            LanguageService,
+            PreloaderService,
+            ParagraphDecoderService,
+            TextService,
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        textService = TestBed.inject(TextService);
+      });
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
+    });
+  });
 });

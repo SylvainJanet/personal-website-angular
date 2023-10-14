@@ -11,6 +11,7 @@ import { Preloaders } from '../../preloader/preloaders/preloaders';
 import { ifFirst } from 'src/app/operators/ifFirst';
 import { ParagraphDecoderService } from '../../paragraphdecoder/paragraph-decoder.service';
 import { ListStringDto } from 'src/app/interfaces/ListStringDto';
+import { SelectorSplitParam } from 'src/app/interfaces/SelectorSplitParam';
 
 /** Text service. */
 @Injectable({
@@ -223,7 +224,6 @@ export class TextService {
       }),
       map((output) => {
         const res: Paragraph[][] = [];
-
         output.forEach((s) => {
           res.push(this.paragraphDecoderService.decode(s));
         });
@@ -231,5 +231,103 @@ export class TextService {
       })
     );
     return concat(initLoad, getTextRes);
+  }
+
+  /**
+   * Get strings for multiple selectors, but splits the result for some of them
+   * to get an array of {@link Paragraph} using the
+   * {@link ParagraphDecoderService}.
+   *
+   * In the text, use `[[]]` to create new paragraph, use `[[br]]` to create a
+   * `<br>` element, use `[[a_asset, link/to/asset.jpg]]` to create an `<a>`
+   * with href to assets/link/to/asset.jpg (see
+   * {@link TextSubParagraphComponent}), use `[[, some text]]` to create
+   * `<strong><em>some text</em></strong>`
+   *
+   * Do note that those elements are designed with the existence of code
+   * injection in mind and/or malicious content in mind. For instance, `<a\>`
+   * links are designed to be always prefixed by the asset folder path and hence
+   * avoid any kind of attacks and injection of link to another domain (or even
+   * the same domain but with an unexpected path).
+   *
+   * @param selectors The selectors
+   * @returns An observable of the {@link Paragraph}.
+   */
+  private getMultiSomeBooleanSplit(
+    selectors: string[],
+    isSplit: boolean[]
+  ): Observable<(Paragraph[] | string)[]> {
+    if (selectors.length != isSplit.length) {
+      throw new Error(
+        'Invalid parameters for getMultiSomeBooleanSplit - arrays should be of the same length'
+      );
+    }
+    const initLoad = of([]).pipe(
+      ifFirst(() => {
+        this.preloaderService.toLoad(Preloaders.TEXTS, 1);
+      }),
+      skip(1)
+    );
+    const getTextRes = this.getMultiText(
+      selectors,
+      this.langageService.current()
+    ).pipe(
+      ifFirst(() => {
+        this.preloaderService.loaded(Preloaders.TEXTS, 1);
+      }),
+      catchError(() => {
+        const res: string[] = [];
+        selectors.forEach(() => {
+          res.push('error');
+        });
+        return [res];
+      }),
+      map((output) => {
+        const res: (Paragraph[] | string)[] = [];
+        output.forEach((s, i) => {
+          if (isSplit[i]) {
+            res.push(this.paragraphDecoderService.decode(s));
+          } else {
+            res.push(s);
+          }
+        });
+        return res;
+      })
+    );
+    return concat(initLoad, getTextRes);
+  }
+
+  /**
+   * Get strings for multiple selectors, but splits the result for some of them
+   * to get an array of {@link Paragraph} using the
+   * {@link ParagraphDecoderService}. Uses {@link}
+   *
+   * In the text, use `[[]]` to create new paragraph, use `[[br]]` to create a
+   * `<br>` element, use `[[a_asset, link/to/asset.jpg]]` to create an `<a>`
+   * with href to assets/link/to/asset.jpg (see
+   * {@link TextSubParagraphComponent}), use `[[, some text]]` to create
+   * `<strong><em>some text</em></strong>`
+   *
+   * Do note that those elements are designed with the existence of code
+   * injection in mind and/or malicious content in mind. For instance, `<a\>`
+   * links are designed to be always prefixed by the asset folder path and hence
+   * avoid any kind of attacks and injection of link to another domain (or even
+   * the same domain but with an unexpected path).
+   *
+   * @param selectors The selectors
+   * @returns An observable of the {@link Paragraph}.
+   */
+  getMultiSomeSplit(
+    selectorsSplits: SelectorSplitParam[]
+  ): Observable<(Paragraph[] | string)[]> {
+    const selectors: string[] = [];
+    const isSplit: boolean[] = [];
+
+    selectorsSplits.forEach((ss) => {
+      selectors.push(ss.selector);
+      isSplit.push(ss.isSplit);
+    });
+
+    return this.getMultiSomeBooleanSplit(selectors, isSplit);
   }
 }
