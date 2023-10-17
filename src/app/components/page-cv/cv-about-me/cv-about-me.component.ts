@@ -1,8 +1,14 @@
-import { Component, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnChanges,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { of } from 'rxjs';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
@@ -10,6 +16,9 @@ import { debounce } from 'src/scripts/tools/debounce/debounce';
 import { Paragraph } from '../../classes/paragraph/paragraph';
 import { CommonModule } from '@angular/common';
 import { TextParagraphSetComponent } from '../../utilities/text-paragraph-set/text-paragraph-set.component';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
+import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 /** Component used to display About Me information. */
 @Component({
@@ -17,9 +26,13 @@ import { TextParagraphSetComponent } from '../../utilities/text-paragraph-set/te
   templateUrl: './cv-about-me.component.html',
   styleUrls: ['./cv-about-me.component.css'],
   standalone: true,
-  imports: [CommonModule, TextParagraphSetComponent],
+  imports: [CommonModule, TextParagraphSetComponent, MatProgressSpinnerModule],
 })
-export class CvAboutMeComponent implements ComponentWithText, OnDestroy {
+export class CvAboutMeComponent
+  implements ComponentWithText, OnDestroy, OnChanges
+{
+  /** The main div element of the component. */
+  @ViewChild('mainDiv') mainDiv!: ElementRef<HTMLElement>;
   /**
    * Width of the bar underneath the title. It will be animated when the bar
    * enter/exits the client's view.
@@ -40,34 +53,45 @@ export class CvAboutMeComponent implements ComponentWithText, OnDestroy {
    * section. Will be retrieved by the {@link TextService}.
    */
   paragraphs: Paragraph[] = [];
+  /** Preloader for texts. */
+  loaderTexts = Preloaders.TEXTS;
 
   /**
    * About me component constructor
    *
    * @param preloader The {@link PreloaderService}
-   * @param element The `ElementRef`
+   * @param elementRef The `ElementRef`
    * @param logService The {@link LogService}
    * @param languageService The {@link LanguageService}
    * @param textService The {@link TextService}
+   * @param visibleToLoadTextService The {@link VisibleToLoadTextService}
    */
   constructor(
-    private preloader: PreloaderService,
-    private element: ElementRef,
+    public preloader: PreloaderService,
+    private elementRef: ElementRef,
     logService: LogService,
-    private languageService: LanguageService,
-    private textService: TextService
+    private textService: TextService,
+    public visibleToLoadTextService: VisibleToLoadTextService
   ) {
     this.logger = logService.withClassName('CvAboutMeComponent');
-    this.languageService.subscribe(this);
-    this.updateTexts();
+    this.visibleToLoadTextService.subscribe(this);
+  }
+
+  /**
+   * If the input changes, the position has to be computed again and the width
+   * has to be updated again.
+   */
+  ngOnChanges() {
+    this.getElPos();
+    this.updateWidth();
   }
 
   /**
    * Update the component's texts when the language is updated. See
-   * {@link LanguageService}. The subscriber design pattern is used and this
-   * function is used when the service notifies its subscribers to update the
-   * text contents after a language change. Uses {@link TextService} to get those
-   * contents from the database.
+   * {@link VisibleToLoadTextService}. The subscriber design pattern is used and
+   * this function is used when the service notifies its subscribers to update
+   * the text contents after a language change. Uses {@link TextService} to get
+   * those contents from the database.
    */
   updateTexts(): void {
     this.textService
@@ -84,16 +108,18 @@ export class CvAboutMeComponent implements ComponentWithText, OnDestroy {
         this.paragraphs.splice(1, 0, new Paragraph([]));
         this.paragraphs.forEach((p) => (p.cssClass = 'lead'));
         this.paragraphs[6].els[1].assetHref = this.linkToCv;
+
+        this.visibleToLoadTextService.textLoaded(this);
       });
   }
 
   /**
    * On destroy, the component has to be unsubscribed rom the
-   * {@link LanguageService} to avoid having the service try to notify a
+   * {@link VisibleToLoadTextService} to avoid having the service try to notify a
    * destroyed subscriber.
    */
   ngOnDestroy(): void {
-    this.languageService.unsubscribe(this);
+    this.visibleToLoadTextService.unsubscribe(this);
   }
 
   /**
@@ -101,10 +127,16 @@ export class CvAboutMeComponent implements ComponentWithText, OnDestroy {
    * the animation triggers exactly as the bar enters or leaves the viewport.
    */
   getElPos() {
+    if (
+      this.elementRef.nativeElement.firstElementChild.tagName ==
+      'MAT-PROGRESS-SPINNER'
+    ) {
+      return;
+    }
     const posViewPort =
-      this.element.nativeElement.firstElementChild.firstElementChild.firstElementChild.getBoundingClientRect()
+      this.elementRef.nativeElement.firstElementChild.firstElementChild.firstElementChild.getBoundingClientRect()
         .y +
-      this.element.nativeElement.firstElementChild.firstElementChild.firstElementChild.firstElementChild.getBoundingClientRect()
+      this.elementRef.nativeElement.firstElementChild.firstElementChild.firstElementChild.firstElementChild.getBoundingClientRect()
         .height;
     const viewPortOffset = scrollY;
     const viewPortHeight = window.innerHeight;
@@ -116,7 +148,7 @@ export class CvAboutMeComponent implements ComponentWithText, OnDestroy {
         .split('px')[0]
     );
     this.posElementMax +=
-      this.element.nativeElement.firstElementChild.firstElementChild.firstElementChild.firstElementChild.nextElementSibling.getBoundingClientRect().height;
+      this.elementRef.nativeElement.firstElementChild.firstElementChild.firstElementChild.firstElementChild.nextElementSibling.getBoundingClientRect().height;
   }
 
   /**
@@ -169,5 +201,14 @@ export class CvAboutMeComponent implements ComponentWithText, OnDestroy {
         }
       },
     });
+  }
+
+  /**
+   * Get the main component element.
+   *
+   * @returns The element.
+   */
+  getElement(): ElementRef<HTMLElement> {
+    return this.mainDiv;
   }
 }

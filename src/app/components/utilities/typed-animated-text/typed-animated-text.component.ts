@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Input,
@@ -24,7 +23,7 @@ import { Observable, forkJoin, of } from 'rxjs';
   styleUrls: ['./typed-animated-text.component.css'],
   standalone: true,
 })
-export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
+export class TypedAnimatedTextComponent implements OnChanges {
   /** The text element */
   @ViewChild('textElement') textElement!: ElementRef;
   /** The line element that will blink as the cursor at the end of the line does */
@@ -68,7 +67,11 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
    *
    * @param renderer The `Renderer`
    */
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2) {
+    setTimeout(() => {
+      this.initVariables();
+    }, 0);
+  }
 
   /**
    * If the array of observable changes, the array of string has to be updated
@@ -90,14 +93,6 @@ export class TypedAnimatedTextComponent implements AfterViewInit, OnChanges {
     if (this.textElement) {
       this.initVariables();
     }
-  }
-
-  /**
-   * Once the view is init and every string of the array has been received,
-   * initialize the proper parameters.
-   */
-  ngAfterViewInit(): void {
-    this.initVariables();
   }
 
   /** Style setup. This could be done with binding in HTML */

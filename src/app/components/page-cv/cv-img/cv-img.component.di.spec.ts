@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { of } from 'rxjs';
 import { DebugElement } from '@angular/core';
@@ -32,12 +31,15 @@ describe('CvImgComponent - dom integration', () => {
   const shouldCreate = () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   };
 
   const shouldHaveContentSetByServiceExpectation =
     'should have altText set by textService';
   const shouldHaveContentSetByService = () => {
+    componentInstance.updateTexts();
+    fixture.detectChanges();
+
     const debugEl: DebugElement = fixture.debugElement;
 
     const firstDivEl: DebugElement = debugEl.children[0];
@@ -53,7 +55,6 @@ describe('CvImgComponent - dom integration', () => {
       TestBed.configureTestingModule({
         imports: [CvImgComponent, ImgLoadDirective],
         providers: [
-          LanguageService,
           TextService,
           { provide: HttpClient, useValue: httpClientSpy },
           DatasourceService,
@@ -78,7 +79,6 @@ describe('CvImgComponent - dom integration', () => {
       TestBed.configureTestingModule({
         imports: [CvImgComponent, ImgLoadDirective],
         providers: [
-          LanguageService,
           TextService,
           { provide: HttpClient, useValue: httpClientSpy },
           DatasourceService,
@@ -103,7 +103,6 @@ describe('CvImgComponent - dom integration', () => {
       TestBed.configureTestingModule({
         imports: [CvImgComponent, ImgLoadDirective],
         providers: [
-          LanguageService,
           TextService,
           { provide: HttpClient, useValue: httpClientSpy },
           DatasourceService,

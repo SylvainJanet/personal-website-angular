@@ -17,7 +17,7 @@ describe('CvSkillsComponent - unit', () => {
     it('should create', () => {
       expect(pageContentComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     });
   });
 });

@@ -18,50 +18,84 @@ describe('TypedAnimatedTextComponent - unit', () => {
   const deleteSpeed = 3;
   const deleteDelay = 11;
 
-  beforeEach(() => {
+  afterEach(() => {
+    TypedAnimatedTextComponent.prototype.textElement = new ElementRef(
+      document.createElement('div')
+    );
+    TypedAnimatedTextComponent.prototype.blinkElement = new ElementRef(
+      document.createElement('div')
+    );
+  });
+
+  it('should have inputArray property', () => {
     renderer = jasmine.createSpyObj('Renderer2', ['setStyle']);
+
+    textElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
+    blinkElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
+    TypedAnimatedTextComponent.prototype.textElement = textElement;
+    TypedAnimatedTextComponent.prototype.blinkElement = blinkElement;
+
     TestBed.configureTestingModule({
       providers: [
         TypedAnimatedTextComponent,
         { provide: Renderer2, useValue: renderer },
       ],
     });
-    typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
-  });
 
-  it('should have inputArray property', () => {
+    typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+
     expect(typedAnimatedTextComponent[inputArrayPropName])
       .withContext('inputArray property should be defined')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   });
 
   describe('constructor', () => {
     beforeEach(() => {
+      renderer = jasmine.createSpyObj('Renderer2', ['setStyle']);
+
       textElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
       blinkElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
-      typedAnimatedTextComponent.textElement = textElement;
-      typedAnimatedTextComponent.blinkElement = blinkElement;
+      TypedAnimatedTextComponent.prototype.textElement = textElement;
+      TypedAnimatedTextComponent.prototype.blinkElement = blinkElement;
     });
     it('should create', () => {
+      TestBed.configureTestingModule({
+        providers: [
+          TypedAnimatedTextComponent,
+          { provide: Renderer2, useValue: renderer },
+        ],
+      });
+
+      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+
       expect(typedAnimatedTextComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
+      TestBed.configureTestingModule({
+        providers: [
+          TypedAnimatedTextComponent,
+          { provide: Renderer2, useValue: renderer },
+        ],
+      });
+
+      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+
       expect(typedAnimatedTextComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
 
       expect(typedAnimatedTextComponent.textElement)
         .withContext('textElement should be set')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(typedAnimatedTextComponent.blinkElement)
         .withContext('blinkElement should be set')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(typedAnimatedTextComponent.inputArray)
         .withContext('inputArray should be set')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(typedAnimatedTextComponent.inputArray.length)
         .withContext('inputArray should be non empty')
         .toBe(1);
@@ -94,9 +128,46 @@ describe('TypedAnimatedTextComponent - unit', () => {
         .withContext('deleteDelay should be set')
         .toBe(1100);
     });
+
+    it('should call initVariables', (done: DoneFn) => {
+      spyOn(TypedAnimatedTextComponent.prototype, 'initVariables');
+
+      TestBed.configureTestingModule({
+        providers: [
+          TypedAnimatedTextComponent,
+          { provide: Renderer2, useValue: renderer },
+        ],
+      });
+
+      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+
+      setTimeout(() => {
+        expect(typedAnimatedTextComponent.initVariables)
+          .withContext('should have been called')
+          .toHaveBeenCalled();
+
+        done();
+      });
+    });
   });
   describe('ngOnChanges', () => {
     beforeEach(() => {
+      renderer = jasmine.createSpyObj('Renderer2', ['setStyle']);
+
+      textElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
+      blinkElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
+      TypedAnimatedTextComponent.prototype.textElement = textElement;
+      TypedAnimatedTextComponent.prototype.blinkElement = blinkElement;
+
+      TestBed.configureTestingModule({
+        providers: [
+          TypedAnimatedTextComponent,
+          { provide: Renderer2, useValue: renderer },
+        ],
+      });
+
+      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+
       textElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
       blinkElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
       typedAnimatedTextComponent.textElement = textElement;
@@ -136,20 +207,25 @@ describe('TypedAnimatedTextComponent - unit', () => {
         .toEqual(expected);
     });
   });
-  describe('ngAfterViewInit', () => {
-    it('should call the initVariables method', () => {
-      spyOn(typedAnimatedTextComponent, 'initVariables');
-      spyOn(typedAnimatedTextComponent, 'typingEffect');
 
-      typedAnimatedTextComponent.ngAfterViewInit();
-
-      expect(typedAnimatedTextComponent.initVariables)
-        .withContext('initVariables should have been called')
-        .toHaveBeenCalledTimes(1);
-    });
-  });
   describe('initVariables', () => {
     beforeEach(() => {
+      renderer = jasmine.createSpyObj('Renderer2', ['setStyle']);
+
+      textElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
+      blinkElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
+      TypedAnimatedTextComponent.prototype.textElement = textElement;
+      TypedAnimatedTextComponent.prototype.blinkElement = blinkElement;
+
+      TestBed.configureTestingModule({
+        providers: [
+          TypedAnimatedTextComponent,
+          { provide: Renderer2, useValue: renderer },
+        ],
+      });
+
+      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+
       textElement = jasmine.createSpyObj(
         'ElementRef',
         {},
@@ -257,8 +333,25 @@ describe('TypedAnimatedTextComponent - unit', () => {
         );
     });
   });
+
   describe('typingEffect', () => {
     beforeEach(() => {
+      renderer = jasmine.createSpyObj('Renderer2', ['setStyle']);
+
+      textElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
+      blinkElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
+      TypedAnimatedTextComponent.prototype.textElement = textElement;
+      TypedAnimatedTextComponent.prototype.blinkElement = blinkElement;
+
+      TestBed.configureTestingModule({
+        providers: [
+          TypedAnimatedTextComponent,
+          { provide: Renderer2, useValue: renderer },
+        ],
+      });
+
+      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+
       textElement = jasmine.createSpyObj(
         'ElementRef',
         {},
@@ -345,8 +438,25 @@ describe('TypedAnimatedTextComponent - unit', () => {
       }));
     });
   });
+
   describe('deletingEffect', () => {
     beforeEach(() => {
+      renderer = jasmine.createSpyObj('Renderer2', ['setStyle']);
+
+      textElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
+      blinkElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
+      TypedAnimatedTextComponent.prototype.textElement = textElement;
+      TypedAnimatedTextComponent.prototype.blinkElement = blinkElement;
+
+      TestBed.configureTestingModule({
+        providers: [
+          TypedAnimatedTextComponent,
+          { provide: Renderer2, useValue: renderer },
+        ],
+      });
+
+      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+
       textElement = jasmine.createSpyObj(
         'ElementRef',
         {},

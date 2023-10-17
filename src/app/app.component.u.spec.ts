@@ -26,11 +26,15 @@ describe('AppComponent - unit', () => {
       appComponent = TestBed.inject(AppComponent);
     });
     it('should create', () => {
-      expect(appComponent).withContext('component should create').toBeTruthy();
+      expect(appComponent)
+        .withContext('component should create')
+        .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
-      expect(appComponent).withContext('component should create').toBeTruthy();
+      expect(appComponent)
+        .withContext('component should create')
+        .toEqual(jasmine.anything());
       expect(appComponent.mainLoader)
         .withContext('mainLoader should be set')
         .toEqual(Preloaders.MAIN);
@@ -46,7 +50,7 @@ describe('AppComponent - unit', () => {
         .withContext(
           'increaseOpacity should have been called once with proper arguments'
         )
-        .toHaveBeenCalledOnceWith(0, 10, 10);
+        .toHaveBeenCalledOnceWith(0, 40, 10);
     });
   });
 

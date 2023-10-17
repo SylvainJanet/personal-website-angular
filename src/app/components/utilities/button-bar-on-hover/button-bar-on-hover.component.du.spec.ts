@@ -35,7 +35,7 @@ describe('ButtonBarOnHoverComponent - dom unit', () => {
   it('should create', () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   });
 
   it('should have input textColor', () => {

@@ -1,4 +1,11 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { scriptVar } from '../../../../scripts/template/tools/setUp';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
@@ -10,6 +17,11 @@ import { Languages } from 'src/app/enums/languages';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { ButtonBarOnHoverComponent } from '../../utilities/button-bar-on-hover/button-bar-on-hover.component';
 import { LinkBarOnHoverComponent } from '../../utilities/link-bar-on-hover/link-bar-on-hover.component';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
+import { PreloaderService } from 'src/app/services/preloader/preloader.service';
+import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CommonModule } from '@angular/common';
 
 /**
  * Header component, displaying either a link back home to the left and a button
@@ -22,9 +34,16 @@ import { LinkBarOnHoverComponent } from '../../utilities/link-bar-on-hover/link-
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
   standalone: true,
-  imports: [ButtonBarOnHoverComponent, LinkBarOnHoverComponent],
+  imports: [
+    ButtonBarOnHoverComponent,
+    LinkBarOnHoverComponent,
+    MatProgressSpinnerModule,
+    CommonModule,
+  ],
 })
 export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
+  /** The main div element of the component. */
+  @ViewChild('mainDiv') mainDiv!: ElementRef<HTMLElement>;
   /**
    * Scroll trigger value for header to change color.
    *
@@ -42,6 +61,8 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
   myName: Observable<string> = of('');
   /** Text containing the other language on the button used to switch language. */
   otherLanguage: Observable<string> = of('');
+  /** Preloader for texts. */
+  loaderTexts = Preloaders.TEXTS;
 
   /**
    * Header component constructor.
@@ -50,38 +71,46 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
    * @param logService The {@link LogService}
    * @param textService The {@link TextService}
    * @param languageService The {@link LanguageService}
+   * @param visibleToLoadTextService The {@link VisibleToLoadTextService}
+   * @param preloader The {@link PreloaderService}
    */
   constructor(
     private domcomputation: DOMComputationService,
     logService: LogService,
     private textService: TextService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    public visibleToLoadTextService: VisibleToLoadTextService,
+    public preloader: PreloaderService
   ) {
     this.trigger = 0;
     this.headerState = '';
     this.logger = logService.withClassName(this.constructor.name);
-    this.languageService.subscribe(this);
-    this.updateTexts();
+    setTimeout(() => {
+      this.visibleToLoadTextService.subscribe(this);
+    }, 0);
   }
 
   /**
-   * On destroy, the component has to be unsubscribed rom the
-   * {@link LanguageService} to avoid having the service try to notify a
+   * On destroy, the component has to be unsubscribed from the
+   * {@link VisibleToLoadTextService} to avoid having the service try to notify a
    * destroyed subscriber.
    */
   ngOnDestroy(): void {
-    this.languageService.unsubscribe(this);
+    this.visibleToLoadTextService.unsubscribe(this);
   }
 
   /**
    * Update the component's texts when the language is updated. See
-   * {@link LanguageService}. The subscriber design pattern is used and this
-   * function is used when the service notifies its subscribers to update the
-   * text contents after a language change. Uses {@link TextService} to get those
-   * contents from the database.
+   * {@link VisibleToLoadTextService}. The subscriber design pattern is used and
+   * this function is used when the service notifies its subscribers to update
+   * the text contents after a language change. Uses {@link TextService} to get
+   * those contents from the database.
    */
   updateTexts(): void {
-    this.myName = this.textService.get('sylvain-janet');
+    this.textService.get('sylvain-janet').subscribe((v) => {
+      this.myName = of(v);
+      this.visibleToLoadTextService.textLoaded(this);
+    });
     this.otherLanguage = this.textService.getOtherLanguage();
   }
 
@@ -113,6 +142,7 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
    * making the actual changes
    */
   updateTrigger(event: Event) {
+    if (!event.currentTarget) return;
     this.trigger = this.domcomputation.getActualHeight(
       document.getElementsByClassName('banner').item(0)
     );
@@ -203,5 +233,14 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
     } else {
       this.languageService.set(Languages.ENGLISH);
     }
+  }
+
+  /**
+   * Get the main component element.
+   *
+   * @returns The element.
+   */
+  getElement(): ElementRef<HTMLElement> {
+    return this.mainDiv;
   }
 }

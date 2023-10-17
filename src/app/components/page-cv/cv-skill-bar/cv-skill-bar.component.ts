@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, Input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnChanges,
+} from '@angular/core';
 import { of } from 'rxjs';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
@@ -16,7 +22,7 @@ import { debounce } from 'src/scripts/tools/debounce/debounce';
   standalone: true,
   imports: [CommonModule],
 })
-export class CvSkillBarComponent {
+export class CvSkillBarComponent implements OnChanges {
   /**
    * An input containinf the name of the skill to be displayed as an
    * `Observable<string>`.
@@ -48,6 +54,14 @@ export class CvSkillBarComponent {
     private element: ElementRef
   ) {}
 
+  /**
+   * If the input changes, the position has to be computed again and the width
+   * has to be updated again.
+   */
+  ngOnChanges() {
+    this.getElPos();
+    this.updateWidth();
+  }
   /**
    * Computes the position precise position of the element in the page so that
    * the animation triggers exactly as the bar enters or leaves the viewport.

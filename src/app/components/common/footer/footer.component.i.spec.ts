@@ -4,10 +4,10 @@ import { environment as productionEnvironment } from 'src/environments/environme
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { FooterComponent } from './footer.component';
+
 describe('FooterComponent - integration', () => {
   let footerComponent: FooterComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
@@ -34,7 +34,7 @@ describe('FooterComponent - integration', () => {
     const shouldCreate = () => {
       expect(footerComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     };
 
     describe('in dev environment', () => {
@@ -42,7 +42,6 @@ describe('FooterComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: devEnv },
@@ -57,7 +56,6 @@ describe('FooterComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: stagingEnv },
@@ -72,7 +70,6 @@ describe('FooterComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: prodEnv },
@@ -87,6 +84,8 @@ describe('FooterComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
+      footerComponent.updateTexts();
+
       const actualText = footerComponent.footerText;
       const actualLink = footerComponent.footerLink;
       const actualFooterHref = footerComponent.footerHref;
@@ -112,7 +111,6 @@ describe('FooterComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: devEnv },
@@ -130,7 +128,6 @@ describe('FooterComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: stagingEnv },
@@ -148,7 +145,6 @@ describe('FooterComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: prodEnv },

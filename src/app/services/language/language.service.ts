@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Languages } from 'src/app/enums/languages';
-import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
+import { VisibleToLoadTextService } from '../visibletoloadtext/visible-to-load-text.service';
+import { PreloaderService } from '../preloader/preloader.service';
 
 /**
  * Language service. The current language is stored in the client's local
@@ -12,15 +13,12 @@ import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 export class LanguageService {
   /** The current language of the application. */
   language: Languages = Languages.ENGLISH;
-  /**
-   * Uses the Observer design pattern to notify every components implementing
-   * {@link ComponentWithText} that has text to update the text content when the
-   * language of the app is changed.
-   */
-  subscribers: ComponentWithText[] = [];
 
   /** Language service. */
-  constructor() {
+  constructor(
+    private visibleToLoadTextService: VisibleToLoadTextService,
+    private preloaderService: PreloaderService
+  ) {
     if (localStorage.getItem('language') != null) {
       this.language =
         Languages[localStorage.getItem('language') as keyof typeof Languages];
@@ -47,30 +45,7 @@ export class LanguageService {
   set(language: Languages) {
     this.language = language;
     localStorage.setItem('language', Languages[language]);
-    this.subscribers.forEach((s) => {
-      s.updateTexts();
-    });
-  }
-
-  /**
-   * Let a {@link ComponentWithText} subscribe to this observer to be notified of
-   * a language change.
-   *
-   * @param s The {@link ComponentWithText}
-   */
-  subscribe(s: ComponentWithText) {
-    this.subscribers.push(s);
-  }
-
-  /**
-   * Let a {@link ComponentWithText} unsubscribe to this observer.
-   *
-   * @param s The {@link ComponentWithText}
-   */
-  unsubscribe(s: ComponentWithText) {
-    const index = this.subscribers.indexOf(s);
-    if (index > -1) {
-      this.subscribers.splice(index, 1);
-    }
+    this.preloaderService.isMainLoad = true;
+    this.visibleToLoadTextService.languageChange();
   }
 }

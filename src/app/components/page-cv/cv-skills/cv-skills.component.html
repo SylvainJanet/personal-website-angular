@@ -1,10 +1,188 @@
-<div class="skill-mf">
-  <strong class="title-s">{{ skills | async }}</strong>
-  <app-cv-skill-bar [skillName]="java" [percent]="90"></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="csharp" [percent]="90"></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="python" [percent]="85"></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="jsts" [percent]="85"></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="sql" [percent]="80"></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="html" [percent]="75"></app-cv-skill-bar>
-  <app-cv-skill-bar [skillName]="latex" [percent]="65"></app-cv-skill-bar>
+<div #mainDiv class="skill-mf">
+  <mat-progress-spinner
+    class="title-s"
+    [mode]="'indeterminate'"
+    style="flex: none; height: 1em; width: 50px"
+    *ngIf="
+      preloader.isLoading(loaderTexts) &&
+      !visibleToLoadTextService.hasTextLoaded(this)
+    "
+  ></mat-progress-spinner>
+  <strong
+    class="title-s"
+    [ngClass]="{
+      hide:
+        preloader.isLoading(loaderTexts) &&
+        !visibleToLoadTextService.hasTextLoaded(this)
+    }"
+    >{{ skills | async }}</strong
+  >
+  <mat-progress-spinner
+    [mode]="'indeterminate'"
+    style="
+      flex: none;
+      height: 1em;
+      width: 50px;
+      margin: auto;
+      margin-top: calc(2 * var(--default-padding));
+      margin-bottom: calc(2 * var(--default-padding));
+    "
+    *ngIf="
+      preloader.isLoading(loaderTexts) &&
+      !visibleToLoadTextService.hasTextLoaded(this)
+    "
+  ></mat-progress-spinner>
+  <app-cv-skill-bar
+    [skillName]="java"
+    [percent]="90"
+    [ngClass]="{
+      hide:
+        preloader.isLoading(loaderTexts) &&
+        !visibleToLoadTextService.hasTextLoaded(this)
+    }"
+  ></app-cv-skill-bar>
+  <mat-progress-spinner
+    [mode]="'indeterminate'"
+    style="
+      flex: none;
+      height: 1em;
+      width: 50px;
+      margin: auto;
+      margin-top: calc(2 * var(--default-padding));
+      margin-bottom: calc(2 * var(--default-padding));
+    "
+    *ngIf="
+      preloader.isLoading(loaderTexts) &&
+      !visibleToLoadTextService.hasTextLoaded(this)
+    "
+  ></mat-progress-spinner>
+  <app-cv-skill-bar
+    [skillName]="csharp"
+    [percent]="90"
+    [ngClass]="{
+      hide:
+        preloader.isLoading(loaderTexts) &&
+        !visibleToLoadTextService.hasTextLoaded(this)
+    }"
+  ></app-cv-skill-bar>
+  <mat-progress-spinner
+    [mode]="'indeterminate'"
+    style="
+      flex: none;
+      height: 1em;
+      width: 50px;
+      margin: auto;
+      margin-top: calc(2 * var(--default-padding));
+      margin-bottom: calc(2 * var(--default-padding));
+    "
+    *ngIf="
+      preloader.isLoading(loaderTexts) &&
+      !visibleToLoadTextService.hasTextLoaded(this)
+    "
+  ></mat-progress-spinner>
+  <app-cv-skill-bar
+    [skillName]="python"
+    [percent]="85"
+    [ngClass]="{
+      hide:
+        preloader.isLoading(loaderTexts) &&
+        !visibleToLoadTextService.hasTextLoaded(this)
+    }"
+  ></app-cv-skill-bar>
+  <mat-progress-spinner
+    [mode]="'indeterminate'"
+    style="
+      flex: none;
+      height: 1em;
+      width: 50px;
+      margin: auto;
+      margin-top: calc(2 * var(--default-padding));
+      margin-bottom: calc(2 * var(--default-padding));
+    "
+    *ngIf="
+      preloader.isLoading(loaderTexts) &&
+      !visibleToLoadTextService.hasTextLoaded(this)
+    "
+  ></mat-progress-spinner>
+  <app-cv-skill-bar
+    [skillName]="jsts"
+    [percent]="85"
+    [ngClass]="{
+      hide:
+        preloader.isLoading(loaderTexts) &&
+        !visibleToLoadTextService.hasTextLoaded(this)
+    }"
+  ></app-cv-skill-bar>
+  <mat-progress-spinner
+    [mode]="'indeterminate'"
+    style="
+      flex: none;
+      height: 1em;
+      width: 50px;
+      margin: auto;
+      margin-top: calc(2 * var(--default-padding));
+      margin-bottom: calc(2 * var(--default-padding));
+    "
+    *ngIf="
+      preloader.isLoading(loaderTexts) &&
+      !visibleToLoadTextService.hasTextLoaded(this)
+    "
+  ></mat-progress-spinner>
+  <app-cv-skill-bar
+    [skillName]="sql"
+    [percent]="80"
+    [ngClass]="{
+      hide:
+        preloader.isLoading(loaderTexts) &&
+        !visibleToLoadTextService.hasTextLoaded(this)
+    }"
+  ></app-cv-skill-bar>
+  <mat-progress-spinner
+    [mode]="'indeterminate'"
+    style="
+      flex: none;
+      height: 1em;
+      width: 50px;
+      margin: auto;
+      margin-top: calc(2 * var(--default-padding));
+      margin-bottom: calc(2 * var(--default-padding));
+    "
+    *ngIf="
+      preloader.isLoading(loaderTexts) &&
+      !visibleToLoadTextService.hasTextLoaded(this)
+    "
+  ></mat-progress-spinner>
+  <app-cv-skill-bar
+    [skillName]="html"
+    [percent]="75"
+    [ngClass]="{
+      hide:
+        preloader.isLoading(loaderTexts) &&
+        !visibleToLoadTextService.hasTextLoaded(this)
+    }"
+  ></app-cv-skill-bar>
+  <mat-progress-spinner
+    [mode]="'indeterminate'"
+    style="
+      flex: none;
+      height: 1em;
+      width: 50px;
+      margin: auto;
+      margin-top: calc(2 * var(--default-padding));
+      margin-bottom: calc(2 * var(--default-padding));
+    "
+    *ngIf="
+      preloader.isLoading(loaderTexts) &&
+      !visibleToLoadTextService.hasTextLoaded(this)
+    "
+  ></mat-progress-spinner>
+  <app-cv-skill-bar
+    [skillName]="latex"
+    [percent]="65"
+    [ngClass]="{
+      hide:
+        preloader.isLoading(loaderTexts) &&
+        !visibleToLoadTextService.hasTextLoaded(this)
+    }"
+  ></app-cv-skill-bar>
 </div>

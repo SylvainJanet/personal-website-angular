@@ -1,1 +1,7 @@
 @import "src/css/template/styles/header.css";
+.spinner-dark {
+  --mdc-circular-progress-active-indicator-color: var(--dark-header-color);
+}
+.hide {
+  display: none;
+}

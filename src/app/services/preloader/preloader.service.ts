@@ -39,6 +39,11 @@ export class PreloaderService {
   maxQty: Map<Preloaders, number> = new Map<Preloaders, number>();
 
   /**
+   * Whether or not the entire app is loading. Usefull when first loading the
+   * app, but also on language change for instance.
+   */
+  isMainLoad = true;
+  /**
    * Preloader service constructor.
    *
    * @param logService The {@link LogService}
@@ -108,6 +113,7 @@ export class PreloaderService {
     this.statusLoading.get(loader)?.next(false);
 
     if (!this.isAnyLoading()) {
+      this.isMainLoad = false;
       this.statusAnyLoading.next(false);
     }
   }
@@ -119,6 +125,7 @@ export class PreloaderService {
    * @returns If he {@link Preloaders} is loading
    */
   isLoading(loader: Preloaders) {
+    if (this.isMainLoad) return true;
     return this.info.get(loader)?.isLoading as boolean;
   }
 
@@ -137,6 +144,7 @@ export class PreloaderService {
       }
       return false;
     } else {
+      if (this.isMainLoad) return true;
       for (const loader of loaders) {
         if (this.info.get(loader)?.isLoading) return true;
       }
@@ -200,6 +208,7 @@ export class PreloaderService {
    */
   getProgressionPercent(...loaders: Preloaders[]) {
     const maxElToLoad = this.getTotalMaxElToLoad(...loaders);
+    if (maxElToLoad === 0 && this.isMainLoad) return 0;
     if (maxElToLoad === 0) return 100;
 
     const res = (this.getTotalElToLoad(...loaders) / maxElToLoad) * 100;

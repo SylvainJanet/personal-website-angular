@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { ElementRef } from '@angular/core';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { CvAboutMeComponent } from './cv-about-me.component';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { Paragraph } from '../../classes/paragraph/paragraph';
@@ -73,7 +72,7 @@ describe('CvAboutMeComponent - integration', () => {
     const shouldCreate = () => {
       expect(cvAboutMeComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -81,7 +80,6 @@ describe('CvAboutMeComponent - integration', () => {
           providers: [
             CvAboutMeComponent,
             PreloaderService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },
@@ -99,7 +97,6 @@ describe('CvAboutMeComponent - integration', () => {
           providers: [
             CvAboutMeComponent,
             PreloaderService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },
@@ -117,7 +114,6 @@ describe('CvAboutMeComponent - integration', () => {
           providers: [
             CvAboutMeComponent,
             PreloaderService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },
@@ -135,6 +131,8 @@ describe('CvAboutMeComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
+      cvAboutMeComponent.updateTexts();
+
       const actualTitleObs = cvAboutMeComponent.aboutMe;
       const actualPdfLink = cvAboutMeComponent.linkToCv;
       const actualParagraphs = cvAboutMeComponent.paragraphs;
@@ -155,7 +153,6 @@ describe('CvAboutMeComponent - integration', () => {
           providers: [
             CvAboutMeComponent,
             PreloaderService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },
@@ -176,7 +173,6 @@ describe('CvAboutMeComponent - integration', () => {
           providers: [
             CvAboutMeComponent,
             PreloaderService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },
@@ -197,7 +193,6 @@ describe('CvAboutMeComponent - integration', () => {
           providers: [
             CvAboutMeComponent,
             PreloaderService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },

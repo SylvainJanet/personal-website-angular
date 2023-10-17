@@ -1,14 +1,23 @@
-import { LanguageService } from 'src/app/services/language/language.service';
 import { BannerComponent } from './banner.component';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
+import { environment as developmentEnvironment } from 'src/environments/environment';
+import { environment as stagingEnvironment } from 'src/environments/environment.staging';
+import { environment as productionEnvironment } from 'src/environments/environment.prod';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
+import { ElementRef } from '@angular/core';
 
 describe('BannerComponent - unit', () => {
   let bannerComponent: BannerComponent;
-  let languageServiceSpy: jasmine.SpyObj<LanguageService>;
+  let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
+
+  const devEnv = developmentEnvironment;
+  const stagingEnv = stagingEnvironment;
+  const prodEnv = productionEnvironment;
 
   const expectedBannerUrl = '/assets/img/intro-bg2.jpg';
   const expectedFsDev = 'test fs dev';
@@ -23,45 +32,19 @@ describe('BannerComponent - unit', () => {
   const musicSelector = 'occupation-musician';
   const titleSelector = 'main-title';
 
-  beforeEach(() => {
-    languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-      'subscribe',
-      'unsubscribe',
-    ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
-    textServiceSpy.getMulti.and.returnValues(
-      of([
-        expectedFsDev,
-        expectedTrainer,
-        expectedMath,
-        expectedMusic,
-        expectedTitle,
-      ])
-    );
-    TestBed.configureTestingModule({
-      providers: [
-        BannerComponent,
-        { provide: LanguageService, useValue: languageServiceSpy },
-        { provide: TextService, useValue: textServiceSpy },
-      ],
-    });
-  });
-
   describe('constructor', () => {
-    beforeEach(() => {
-      spyOn(BannerComponent.prototype, 'updateTexts');
-      bannerComponent = TestBed.inject(BannerComponent);
-    });
-    it('should create', () => {
+    const shouldCreateExpectation = 'should create';
+    const shouldCreate = () => {
       expect(bannerComponent)
         .withContext('component should create')
-        .toBeTruthy();
-    });
+        .toEqual(jasmine.anything());
+    };
 
-    it('should set default values', () => {
+    const shouldSetDefaultValuesExpectation = 'should set default values';
+    const shouldSetDefaultValues = () => {
       expect(bannerComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(bannerComponent.preloaders)
         .withContext('preloaders should be set')
         .toEqual([Preloaders.MAIN]);
@@ -78,26 +61,137 @@ describe('BannerComponent - unit', () => {
       expect(bannerComponent.doubleImgDisplay)
         .withContext('doubleImgDisplay should be set')
         .toBe('block');
-    });
+    };
 
-    it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe)
-        .withContext('subscribe should have been called')
-        .toHaveBeenCalledOnceWith(bannerComponent);
-    });
+    const shouldSubscribeToVisibleToLoadTextServiceExpectation =
+      'should subscribe to the visibleToLoadTextService';
+    const shouldSubscribeToVisibleToLoadTextService = (done: DoneFn) => {
+      setTimeout(() => {
+        expect(visibleToLoadTextServiceSpy.subscribe)
+          .withContext('subscribe should have been called')
+          .toHaveBeenCalledOnceWith(bannerComponent);
+        done();
+      });
+    };
 
-    it('should update the texts', () => {
-      expect(bannerComponent.updateTexts)
-        .withContext('updateTexts should have been called')
-        .toHaveBeenCalledTimes(1);
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
     });
   });
 
   describe('updateTexts', () => {
-    beforeEach(() => {
-      bannerComponent = TestBed.inject(BannerComponent);
-    });
-    it('should call the textService', () => {
+    const shouldCallTextServiceExpectation = 'should call the textService';
+    const shouldCallTextService = () => {
+      bannerComponent.updateTexts();
+
       expect(textServiceSpy.getMulti)
         .withContext(
           'getMulti should have been called 1 time with proper arguments'
@@ -109,8 +203,12 @@ describe('BannerComponent - unit', () => {
           musicSelector,
           titleSelector,
         ]);
-    });
-    it('should set the properties to the textService result', () => {
+    };
+    const shouldSetPropertiesToTheServiceResultExpectation =
+      'should set the properties to the textService result';
+    const shouldSetPropertiesToTheServiceResult = () => {
+      bannerComponent.updateTexts();
+
       const actualMessages = bannerComponent.messages;
       const actualIAmMe = bannerComponent.iAmMe;
 
@@ -141,31 +239,423 @@ describe('BannerComponent - unit', () => {
       actualIAmMe.subscribe((s) => {
         expect(s).withContext('iAmMe should be set').toBe(expectedTitle);
       });
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
     });
   });
 
   describe('ngOnDestroy', () => {
-    beforeEach(() => {
-      bannerComponent = TestBed.inject(BannerComponent);
-    });
-    it('should unsubscribe from the languageService', () => {
+    const shouldUnsubscribeExpectation =
+      'should unsubscribe from the visibleToLoadTextService';
+    const shouldUnsubscribe = () => {
       bannerComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe)
+      expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
         .toHaveBeenCalledOnceWith(bannerComponent);
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
   });
 
   describe('onDoubleImgLoad method', () => {
-    beforeEach(() => {
-      bannerComponent = TestBed.inject(BannerComponent);
-    });
-    it("shouldset doubleImgDisplay to 'none'", () => {
+    const shouldSetDoublieImgDisplayToNoneExpectation =
+      "should set doubleImgDisplay to 'none'";
+    const shouldSetDoublieImgDisplayToNone = () => {
       bannerComponent.onDoubleImgLoad();
 
       expect(bannerComponent.doubleImgDisplay)
         .withContext("doubleImgDisplay should be 'none'")
         .toBe('none');
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(
+        shouldSetDoublieImgDisplayToNoneExpectation,
+        shouldSetDoublieImgDisplayToNone
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(
+        shouldSetDoublieImgDisplayToNoneExpectation,
+        shouldSetDoublieImgDisplayToNone
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([
+            expectedFsDev,
+            expectedTrainer,
+            expectedMath,
+            expectedMusic,
+            expectedTitle,
+          ])
+        );
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(
+        shouldSetDoublieImgDisplayToNoneExpectation,
+        shouldSetDoublieImgDisplayToNone
+      );
+    });
+  });
+
+  describe('getElement', () => {
+    const shouldReturnElementExpectation = 'should return the element';
+    const shouldReturnElement = () => {
+      const expected = new ElementRef(document.createElement('div'));
+      bannerComponent.mainDiv = expected;
+
+      const actual = bannerComponent.getElement();
+
+      expect(actual).toEqual(jasmine.anything());
+      expect(actual).toEqual(expected);
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            BannerComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        bannerComponent = TestBed.inject(BannerComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
     });
   });
 });

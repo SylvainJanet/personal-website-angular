@@ -13,12 +13,27 @@
   />
 </div>
 <section
+  #mainSection
   [style.background-image]="'url(' + footerSrc + ')'"
   [style.background-position]="'center'"
 >
   <div>
     <footer>
-      <p>
+      <mat-progress-spinner
+        [mode]="'indeterminate'"
+        style="height: 1em; width: 50px; margin: auto; flex: none"
+        *ngIf="
+          preloader.isLoading(loaderTexts) &&
+          !visibleToLoadTextService.hasTextLoaded(this)
+        "
+      ></mat-progress-spinner>
+      <p
+        [ngClass]="{
+          hide:
+            preloader.isLoading(loaderTexts) &&
+            !visibleToLoadTextService.hasTextLoaded(this)
+        }"
+      >
         <span>{{ footerText | async }}</span
         ><a [href]="footerHref | async">{{ footerLink | async }}</a>
       </p>

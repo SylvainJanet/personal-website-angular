@@ -34,13 +34,13 @@ describe('CvSkillBarComponent - unit', () => {
     it('should create', () => {
       expect(cvSkillBarComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
       expect(cvSkillBarComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
 
       cvSkillBarComponent.skillName.subscribe((s) => {
         expect(s).withContext('skill name should be set').toBe('SKILL');
@@ -58,6 +58,29 @@ describe('CvSkillBarComponent - unit', () => {
       expect(cvSkillBarComponent.posElementMax)
         .withContext('posElementMax should be set')
         .toBe(0);
+    });
+  });
+
+  describe('ngOnChanges method', () => {
+    it('should call getElPos method', () => {
+      spyOn(cvSkillBarComponent, 'getElPos');
+      spyOn(cvSkillBarComponent, 'updateWidth');
+
+      cvSkillBarComponent.ngOnChanges();
+
+      expect(cvSkillBarComponent.getElPos)
+        .withContext('getElPos should have been called')
+        .toHaveBeenCalledTimes(1);
+    });
+    it('should call updateWidth method', () => {
+      spyOn(cvSkillBarComponent, 'getElPos');
+      spyOn(cvSkillBarComponent, 'updateWidth');
+
+      cvSkillBarComponent.ngOnChanges();
+
+      expect(cvSkillBarComponent.updateWidth)
+        .withContext('updateWidth should have been called')
+        .toHaveBeenCalledTimes(1);
     });
   });
 

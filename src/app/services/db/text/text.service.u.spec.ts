@@ -73,7 +73,7 @@ describe('TextService - unit', () => {
         .withContext(
           'get should have been called with the proper arguments - 1'
         )
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(
         datasourceServiceSpy.get.calls
           .mostRecent()
@@ -82,7 +82,7 @@ describe('TextService - unit', () => {
         .withContext(
           'get should have been called with the proper arguments - 2'
         )
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(
         datasourceServiceSpy.get.calls
           .mostRecent()
@@ -100,7 +100,7 @@ describe('TextService - unit', () => {
         .withContext(
           'get should have been called with the proper arguments - 4'
         )
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(
         datasourceServiceSpy.get.calls
           .mostRecent()
@@ -612,7 +612,7 @@ describe('TextService - unit', () => {
         .withContext(
           'get should have been called with the proper arguments - 1'
         )
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(
         datasourceServiceSpy.get.calls
           .mostRecent()
@@ -621,7 +621,7 @@ describe('TextService - unit', () => {
         .withContext(
           'get should have been called with the proper arguments - 2'
         )
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(
         datasourceServiceSpy.get.calls
           .mostRecent()
@@ -639,7 +639,7 @@ describe('TextService - unit', () => {
         .withContext(
           'get should have been called with the proper arguments - 4'
         )
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(
         datasourceServiceSpy.get.calls
           .mostRecent()
@@ -1490,11 +1490,13 @@ describe('TextService - unit', () => {
 
       expect(() =>
         textService['getMultiSomeBooleanSplit'](selectorsToTest, isSplitInput)
-      ).toThrow(
-        new Error(
-          'Invalid parameters for getMultiSomeBooleanSplit - arrays should be of the same length'
-        )
-      );
+      )
+        .withContext('should throw error')
+        .toThrow(
+          new Error(
+            'Invalid parameters for getMultiSomeBooleanSplit - arrays should be of the same length'
+          )
+        );
     });
   });
 

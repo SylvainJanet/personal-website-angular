@@ -1,3 +1,4 @@
+import { ElementRef } from '@angular/core';
 import { DOMComputationService } from './domcomputation.service';
 
 let domComputationService: DOMComputationService;
@@ -53,6 +54,346 @@ describe('DOMComputationService', () => {
 
       const actual2 = domComputationService.getActualHeight(elToTest);
       expect(actual2).withContext('width should be correct - 2').toBe(expected);
+    });
+  });
+  describe('isIntoView method', () => {
+    it('should return false if the element is falsy', () => {
+      const actual = domComputationService.isIntoView(
+        {} as ElementRef<HTMLElement>
+      );
+
+      expect(actual).withContext('should be false').toBeFalse();
+    });
+    it("should return false if the element's nativeElement is null or undefined", () => {
+      const actual = domComputationService.isIntoView({
+        nativeElement: null,
+      } as unknown as ElementRef<HTMLElement>);
+
+      expect(actual).withContext('should be false').toBeFalse();
+    });
+    it('should return true if the top is shown and the left is shown, without buffers', () => {
+      const elementSpy = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
+      const nativeElementSpy = jasmine.createSpyObj('HTMLElement', [
+        'getBoundingClientRect',
+      ]);
+      (
+        Object.getOwnPropertyDescriptor(elementSpy, 'nativeElement')
+          ?.get as jasmine.Spy<() => HTMLElement>
+      ).and.returnValue(nativeElementSpy);
+
+      const rectTop = 100;
+      const rectBottom = 300;
+      const rectLeft = 50;
+      const rectRight = 200;
+
+      const oldHeight = window.innerHeight;
+      const oldWidth = window.innerWidth;
+
+      window.innerHeight = 200;
+      window.innerWidth = 100;
+      nativeElementSpy.getBoundingClientRect.and.returnValue({
+        top: rectTop,
+        bottom: rectBottom,
+        left: rectLeft,
+        right: rectRight,
+      });
+
+      const actual = domComputationService.isIntoView(elementSpy);
+      expect(actual).withContext('should be true').toBeTrue();
+
+      window.innerHeight = oldHeight;
+      window.innerWidth = oldWidth;
+    });
+    it('should return true if the top is shown and the right is shown, without buffers', () => {
+      const elementSpy = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
+      const nativeElementSpy = jasmine.createSpyObj('HTMLElement', [
+        'getBoundingClientRect',
+      ]);
+      (
+        Object.getOwnPropertyDescriptor(elementSpy, 'nativeElement')
+          ?.get as jasmine.Spy<() => HTMLElement>
+      ).and.returnValue(nativeElementSpy);
+
+      const rectTop = 100;
+      const rectBottom = 300;
+      const rectLeft = -50;
+      const rectRight = 50;
+
+      const oldHeight = window.innerHeight;
+      const oldWidth = window.innerWidth;
+
+      window.innerHeight = 200;
+      window.innerWidth = 100;
+      nativeElementSpy.getBoundingClientRect.and.returnValue({
+        top: rectTop,
+        bottom: rectBottom,
+        left: rectLeft,
+        right: rectRight,
+      });
+
+      const actual = domComputationService.isIntoView(elementSpy);
+      expect(actual).withContext('should be true').toBeTrue();
+
+      window.innerHeight = oldHeight;
+      window.innerWidth = oldWidth;
+    });
+    it('should return true if the bottom is shown and the left is shown, without buffers', () => {
+      const elementSpy = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
+      const nativeElementSpy = jasmine.createSpyObj('HTMLElement', [
+        'getBoundingClientRect',
+      ]);
+      (
+        Object.getOwnPropertyDescriptor(elementSpy, 'nativeElement')
+          ?.get as jasmine.Spy<() => HTMLElement>
+      ).and.returnValue(nativeElementSpy);
+
+      const rectTop = -100;
+      const rectBottom = 100;
+      const rectLeft = 50;
+      const rectRight = 200;
+
+      const oldHeight = window.innerHeight;
+      const oldWidth = window.innerWidth;
+
+      window.innerHeight = 200;
+      window.innerWidth = 100;
+      nativeElementSpy.getBoundingClientRect.and.returnValue({
+        top: rectTop,
+        bottom: rectBottom,
+        left: rectLeft,
+        right: rectRight,
+      });
+
+      const actual = domComputationService.isIntoView(elementSpy);
+      expect(actual).withContext('should be true').toBeTrue();
+
+      window.innerHeight = oldHeight;
+      window.innerWidth = oldWidth;
+    });
+    it('should return true if the bottom is shown and the right is shown, without buffers', () => {
+      const elementSpy = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
+      const nativeElementSpy = jasmine.createSpyObj('HTMLElement', [
+        'getBoundingClientRect',
+      ]);
+      (
+        Object.getOwnPropertyDescriptor(elementSpy, 'nativeElement')
+          ?.get as jasmine.Spy<() => HTMLElement>
+      ).and.returnValue(nativeElementSpy);
+
+      const rectTop = -100;
+      const rectBottom = 100;
+      const rectLeft = -50;
+      const rectRight = 50;
+
+      const oldHeight = window.innerHeight;
+      const oldWidth = window.innerWidth;
+
+      window.innerHeight = 200;
+      window.innerWidth = 100;
+      nativeElementSpy.getBoundingClientRect.and.returnValue({
+        top: rectTop,
+        bottom: rectBottom,
+        left: rectLeft,
+        right: rectRight,
+      });
+
+      const actual = domComputationService.isIntoView(elementSpy);
+      expect(actual).withContext('should be true').toBeTrue();
+
+      window.innerHeight = oldHeight;
+      window.innerWidth = oldWidth;
+    });
+    it('should return true if the top is shown and the left is shown, with buffers', () => {
+      const elementSpy = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
+      const nativeElementSpy = jasmine.createSpyObj('HTMLElement', [
+        'getBoundingClientRect',
+      ]);
+      (
+        Object.getOwnPropertyDescriptor(elementSpy, 'nativeElement')
+          ?.get as jasmine.Spy<() => HTMLElement>
+      ).and.returnValue(nativeElementSpy);
+
+      const rectTop = -100;
+      const rectBottom = 300;
+      const rectLeft = 150;
+      const rectRight = 300;
+
+      const bufferHeight = 2;
+      const bufferWidth = 1;
+
+      const oldHeight = window.innerHeight;
+      const oldWidth = window.innerWidth;
+
+      window.innerHeight = 200;
+      window.innerWidth = 100;
+      nativeElementSpy.getBoundingClientRect.and.returnValue({
+        top: rectTop,
+        bottom: rectBottom,
+        left: rectLeft,
+        right: rectRight,
+      });
+
+      const actual = domComputationService.isIntoView(
+        elementSpy,
+        bufferHeight,
+        bufferWidth
+      );
+      expect(actual).withContext('should be true').toBeTrue();
+
+      window.innerHeight = oldHeight;
+      window.innerWidth = oldWidth;
+    });
+    it('should return true if the top is shown and the right is shown, with buffers', () => {
+      const elementSpy = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
+      const nativeElementSpy = jasmine.createSpyObj('HTMLElement', [
+        'getBoundingClientRect',
+      ]);
+      (
+        Object.getOwnPropertyDescriptor(elementSpy, 'nativeElement')
+          ?.get as jasmine.Spy<() => HTMLElement>
+      ).and.returnValue(nativeElementSpy);
+
+      const rectTop = -100;
+      const rectBottom = 300;
+      const rectLeft = -150;
+      const rectRight = 150;
+
+      const bufferHeight = 2;
+      const bufferWidth = 1;
+
+      const oldHeight = window.innerHeight;
+      const oldWidth = window.innerWidth;
+
+      window.innerHeight = 200;
+      window.innerWidth = 100;
+      nativeElementSpy.getBoundingClientRect.and.returnValue({
+        top: rectTop,
+        bottom: rectBottom,
+        left: rectLeft,
+        right: rectRight,
+      });
+
+      const actual = domComputationService.isIntoView(
+        elementSpy,
+        bufferHeight,
+        bufferWidth
+      );
+      expect(actual).withContext('should be true').toBeTrue();
+
+      window.innerHeight = oldHeight;
+      window.innerWidth = oldWidth;
+    });
+    it('should return true if the bottom is shown and the left is shown, with buffers', () => {
+      const elementSpy = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
+      const nativeElementSpy = jasmine.createSpyObj('HTMLElement', [
+        'getBoundingClientRect',
+      ]);
+      (
+        Object.getOwnPropertyDescriptor(elementSpy, 'nativeElement')
+          ?.get as jasmine.Spy<() => HTMLElement>
+      ).and.returnValue(nativeElementSpy);
+
+      const rectTop = -500;
+      const rectBottom = 500;
+      const rectLeft = 150;
+      const rectRight = 300;
+
+      const bufferHeight = 2;
+      const bufferWidth = 1;
+
+      const oldHeight = window.innerHeight;
+      const oldWidth = window.innerWidth;
+
+      window.innerHeight = 200;
+      window.innerWidth = 100;
+      nativeElementSpy.getBoundingClientRect.and.returnValue({
+        top: rectTop,
+        bottom: rectBottom,
+        left: rectLeft,
+        right: rectRight,
+      });
+
+      const actual = domComputationService.isIntoView(
+        elementSpy,
+        bufferHeight,
+        bufferWidth
+      );
+      expect(actual).withContext('should be true').toBeTrue();
+
+      window.innerHeight = oldHeight;
+      window.innerWidth = oldWidth;
+    });
+    it('should return true if the bottom is shown and the right is shown, with buffers', () => {
+      const elementSpy = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
+      const nativeElementSpy = jasmine.createSpyObj('HTMLElement', [
+        'getBoundingClientRect',
+      ]);
+      (
+        Object.getOwnPropertyDescriptor(elementSpy, 'nativeElement')
+          ?.get as jasmine.Spy<() => HTMLElement>
+      ).and.returnValue(nativeElementSpy);
+
+      const rectTop = -500;
+      const rectBottom = 500;
+      const rectLeft = -150;
+      const rectRight = 150;
+
+      const bufferHeight = 2;
+      const bufferWidth = 1;
+
+      const oldHeight = window.innerHeight;
+      const oldWidth = window.innerWidth;
+
+      window.innerHeight = 200;
+      window.innerWidth = 100;
+      nativeElementSpy.getBoundingClientRect.and.returnValue({
+        top: rectTop,
+        bottom: rectBottom,
+        left: rectLeft,
+        right: rectRight,
+      });
+
+      const actual = domComputationService.isIntoView(
+        elementSpy,
+        bufferHeight,
+        bufferWidth
+      );
+      expect(actual).withContext('should be true').toBeTrue();
+
+      window.innerHeight = oldHeight;
+      window.innerWidth = oldWidth;
     });
   });
 });

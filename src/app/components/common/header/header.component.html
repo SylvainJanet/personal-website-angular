@@ -1,7 +1,25 @@
-<div class="header sticky dark-header">
+<div #mainDiv class="header sticky dark-header">
   <div class="header-container">
     <div class="left-header">
+      <mat-progress-spinner
+        [class.spinner-dark]="headerState === 'dark'"
+        [mode]="'indeterminate'"
+        style="
+          height: 1em;
+          width: 50px;
+          transition-timing-function: unset;
+          flex: none;
+        "
+        *ngIf="
+          preloader.isLoading(loaderTexts) &&
+          !visibleToLoadTextService.hasTextLoaded(this)
+        "
+      ></mat-progress-spinner>
       <app-link-bar-on-hover
+        [class.hide]="
+          preloader.isLoading(loaderTexts) &&
+          !visibleToLoadTextService.hasTextLoaded(this)
+        "
         [textColor]="
           headerState === 'dark'
             ? 'var(--dark-header-color)'
@@ -23,7 +41,25 @@
       ></app-link-bar-on-hover>
     </div>
     <div class="right-header">
+      <mat-progress-spinner
+        [class.spinner-dark]="headerState === 'dark'"
+        [mode]="'indeterminate'"
+        style="
+          height: 1em;
+          width: 50px;
+          transition-timing-function: unset;
+          flex: none;
+        "
+        *ngIf="
+          preloader.isLoading(loaderTexts) &&
+          !visibleToLoadTextService.hasTextLoaded(this)
+        "
+      ></mat-progress-spinner>
       <app-button-bar-on-hover
+        [class.hide]="
+          preloader.isLoading(loaderTexts) &&
+          !visibleToLoadTextService.hasTextLoaded(this)
+        "
         [textColor]="
           headerState === 'dark'
             ? 'var(--dark-header-color)'
@@ -57,7 +93,29 @@
         </div>
         <ul class="sous">
           <li>
+            <mat-progress-spinner
+              [class.spinner-dark]="headerState === 'dark'"
+              [mode]="'indeterminate'"
+              style="
+                height: 1em;
+                width: 50px;
+                margin-top: var(--collapsed-header-item-padding);
+                margin-bottom: var(--collapsed-header-item-padding);
+                margin-left: var(--collapsed-header-item-padding);
+                margin-right: var(--collapsed-header-item-padding);
+                transition-timing-function: unset;
+                flex: none;
+              "
+              *ngIf="
+                preloader.isLoading(loaderTexts) &&
+                !visibleToLoadTextService.hasTextLoaded(this)
+              "
+            ></mat-progress-spinner>
             <app-link-bar-on-hover
+              [class.hide]="
+                preloader.isLoading(loaderTexts) &&
+                !visibleToLoadTextService.hasTextLoaded(this)
+              "
               [textColor]="
                 headerState === 'dark'
                   ? 'var(--dark-header-color)'
@@ -82,7 +140,29 @@
             ></app-link-bar-on-hover>
           </li>
           <li>
+            <mat-progress-spinner
+              [class.spinner-dark]="headerState === 'dark'"
+              [mode]="'indeterminate'"
+              style="
+                height: 1em;
+                width: 50px;
+                margin-top: var(--collapsed-header-item-padding);
+                margin-bottom: var(--collapsed-header-item-padding);
+                margin-left: var(--collapsed-header-item-padding);
+                margin-right: var(--collapsed-header-item-padding);
+                transition-timing-function: unset;
+                flex: none;
+              "
+              *ngIf="
+                preloader.isLoading(loaderTexts) &&
+                !visibleToLoadTextService.hasTextLoaded(this)
+              "
+            ></mat-progress-spinner>
             <app-button-bar-on-hover
+              [class.hide]="
+                preloader.isLoading(loaderTexts) &&
+                !visibleToLoadTextService.hasTextLoaded(this)
+              "
               [textColor]="
                 headerState === 'dark'
                   ? 'var(--dark-header-color)'

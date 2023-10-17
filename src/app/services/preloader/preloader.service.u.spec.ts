@@ -24,7 +24,7 @@ describe('PreloaderService', () => {
   const shouldHaveProperLogger = () => {
     expect(preloaderService.logger)
       .withContext('logger should be set')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
 
     const expected = 'PreloaderService';
     const actual = preloaderService.logger.className;
@@ -33,14 +33,14 @@ describe('PreloaderService', () => {
   };
 
   const shouldHaveProperlyDefinedInfoMapExpectation =
-    'should properly define info map';
+    'should properly defined info map';
   const shouldHaveProperlyDefinedInfoMap = () => {
     const actual = preloaderService.info;
 
     Object.keys(Preloaders).forEach((element) => {
       expect(actual.get(element as Preloaders))
         .withContext('element ' + element + ' should be defined in the map')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(actual.get(element as Preloaders)?.qtyToLoad)
         .withContext('element ' + element + ' should be defined with qtyToLoad')
         .toBe(0);
@@ -51,14 +51,14 @@ describe('PreloaderService', () => {
   };
 
   const shouldHaveProperlyDefinedStatusLoadingMapExpectation =
-    'should properly define status loading map';
+    'should properly defined status loading map';
   const shouldHaveProperlyDefinedStatusLoadingMap = () => {
     const actual = preloaderService.statusLoading;
 
     Object.keys(Preloaders).forEach((element) => {
       expect(actual.get(element as Preloaders))
         .withContext('element ' + element + ' should be defined in the map')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       actual.get(element as Preloaders)?.subscribe({
         next: (value) => {
           expect(value)
@@ -70,7 +70,7 @@ describe('PreloaderService', () => {
   };
 
   const shouldHaveProperlyDefinedStatusAnyLoadingExpectation =
-    'should properly define status any loading map';
+    'should properly defined status any loading map';
   const shouldHaveProperlyDefinedStatusAnyLoading = () => {
     const actual = preloaderService.statusAnyLoading;
 
@@ -82,7 +82,7 @@ describe('PreloaderService', () => {
   };
 
   const shouldHaveProperlyDefinedMaxQtyExpectation =
-    'should properly define max quantity map';
+    'should properly defined max quantity map';
   const shouldHaveProperlyDefinedMaxQty = () => {
     const actual = preloaderService.maxQty;
 
@@ -91,6 +91,14 @@ describe('PreloaderService', () => {
         .withContext('element ' + element + ' should be defined in the map')
         .toBe(0);
     });
+  };
+
+  const shouldHaveProperlyDefinedIsMainLoadExpectation =
+    'should properly definedisMainLoad';
+  const shouldHaveProperlyDefinedIsMainLoad = () => {
+    const actual = preloaderService.isMainLoad;
+
+    expect(actual).withContext('should be defined').toBeTrue();
   };
 
   describe('in dev environment', () => {
@@ -118,6 +126,10 @@ describe('PreloaderService', () => {
     it(
       shouldHaveProperlyDefinedMaxQtyExpectation,
       shouldHaveProperlyDefinedMaxQty
+    );
+    it(
+      shouldHaveProperlyDefinedIsMainLoadExpectation,
+      shouldHaveProperlyDefinedIsMainLoad
     );
   });
 
@@ -147,6 +159,10 @@ describe('PreloaderService', () => {
       shouldHaveProperlyDefinedMaxQtyExpectation,
       shouldHaveProperlyDefinedMaxQty
     );
+    it(
+      shouldHaveProperlyDefinedIsMainLoadExpectation,
+      shouldHaveProperlyDefinedIsMainLoad
+    );
   });
 
   describe('in prod environment', () => {
@@ -174,6 +190,10 @@ describe('PreloaderService', () => {
     it(
       shouldHaveProperlyDefinedMaxQtyExpectation,
       shouldHaveProperlyDefinedMaxQty
+    );
+    it(
+      shouldHaveProperlyDefinedIsMainLoadExpectation,
+      shouldHaveProperlyDefinedIsMainLoad
     );
   });
 
@@ -624,6 +644,38 @@ describe('PreloaderService', () => {
       });
     };
 
+    const shouldChangeIsMainLoadZeroExpectation =
+      'should change isMainLoad if there is no more to load in any loader';
+    const shouldChangeIsMainLoadZero = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const otherPreloader = Preloaders.TEXTS;
+      const qtyToTest = 2;
+
+      preloaderService.toLoad(preloaderToTest, qtyToTest);
+
+      expect(preloaderService.isMainLoad)
+        .withContext('isMainLoad should be true at first')
+        .toBeTrue();
+
+      preloaderService.toLoad(otherPreloader, qtyToTest);
+
+      expect(preloaderService.isMainLoad)
+        .withContext('isMainLoad should be true after incomplete loaded - 1')
+        .toBeTrue();
+
+      preloaderService.loaded(otherPreloader, qtyToTest);
+
+      expect(preloaderService.isMainLoad)
+        .withContext('isMainLoad should be true after incomplete loaded - 2')
+        .toBeTrue();
+
+      preloaderService.loaded(preloaderToTest, qtyToTest);
+
+      expect(preloaderService.isMainLoad)
+        .withContext('isMainLoad should be false after complete loaded')
+        .toBeFalse();
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         const logService = new LogService(
@@ -644,6 +696,7 @@ describe('PreloaderService', () => {
       it(shouldNotEmitStatusLoadingExpectation, shouldNotEmitStatusLoading);
       it(shouldNotEmitAnyLoadingExpectation, shouldNotEmitAnyLoading);
       it(shouldEmitAnyLoadingZeroExpectation, shouldEmitAnyLoadingZero);
+      it(shouldChangeIsMainLoadZeroExpectation, shouldChangeIsMainLoadZero);
     });
 
     describe('in staging environment', () => {
@@ -666,6 +719,7 @@ describe('PreloaderService', () => {
       it(shouldNotEmitStatusLoadingExpectation, shouldNotEmitStatusLoading);
       it(shouldNotEmitAnyLoadingExpectation, shouldNotEmitAnyLoading);
       it(shouldEmitAnyLoadingZeroExpectation, shouldEmitAnyLoadingZero);
+      it(shouldChangeIsMainLoadZeroExpectation, shouldChangeIsMainLoadZero);
     });
 
     describe('in prod environment', () => {
@@ -688,6 +742,7 @@ describe('PreloaderService', () => {
       it(shouldNotEmitStatusLoadingExpectation, shouldNotEmitStatusLoading);
       it(shouldNotEmitAnyLoadingExpectation, shouldNotEmitAnyLoading);
       it(shouldEmitAnyLoadingZeroExpectation, shouldEmitAnyLoadingZero);
+      it(shouldChangeIsMainLoadZeroExpectation, shouldChangeIsMainLoadZero);
     });
   });
 
@@ -709,6 +764,7 @@ describe('PreloaderService', () => {
       const preloaderToTest = Preloaders.MAIN;
       const otherPreloader = Preloaders.TEXTS;
       const qtyToTest = 2;
+      preloaderService.isMainLoad = false;
 
       const actualBefore = preloaderService.isLoading(preloaderToTest);
       expect(actualBefore)
@@ -727,6 +783,31 @@ describe('PreloaderService', () => {
       const actualAfter = preloaderService.isLoading(preloaderToTest);
       expect(actualAfter).withContext('should return false after').toBeFalse();
     };
+
+    const shouldReturnTrueIfMainLoadExpectation =
+      'should return true if isMainLoad is true';
+    const shouldReturnTrueIfMainLoad = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const otherPreloader = Preloaders.TEXTS;
+      const qtyToTest = 2;
+
+      const actualBefore = preloaderService.isLoading(preloaderToTest);
+      expect(actualBefore).withContext('should return true before').toBeTrue();
+
+      preloaderService.toLoad(preloaderToTest, qtyToTest);
+
+      const actualDuring = preloaderService.isLoading(otherPreloader);
+      expect(actualDuring).withContext('should return true during').toBeTrue();
+
+      preloaderService.loaded(preloaderToTest, qtyToTest);
+
+      const actualAfter = preloaderService.isLoading(preloaderToTest);
+      expect(actualAfter)
+        .withContext(
+          'should return false after, since isMainLoad should have been updated'
+        )
+        .toBeFalse();
+    };
     describe('in dev environment', () => {
       beforeEach(() => {
         const logService = new LogService(
@@ -737,6 +818,7 @@ describe('PreloaderService', () => {
       });
       it(shouldReturnInfoTrueExpectation, shouldReturnInfoTrue);
       it(shouldReturnInfoFalseExpectation, shouldReturnInfoFalse);
+      it(shouldReturnTrueIfMainLoadExpectation, shouldReturnTrueIfMainLoad);
     });
 
     describe('in staging environment', () => {
@@ -749,6 +831,7 @@ describe('PreloaderService', () => {
       });
       it(shouldReturnInfoTrueExpectation, shouldReturnInfoTrue);
       it(shouldReturnInfoFalseExpectation, shouldReturnInfoFalse);
+      it(shouldReturnTrueIfMainLoadExpectation, shouldReturnTrueIfMainLoad);
     });
 
     describe('in prod environment', () => {
@@ -761,6 +844,7 @@ describe('PreloaderService', () => {
       });
       it(shouldReturnInfoTrueExpectation, shouldReturnInfoTrue);
       it(shouldReturnInfoFalseExpectation, shouldReturnInfoFalse);
+      it(shouldReturnTrueIfMainLoadExpectation, shouldReturnTrueIfMainLoad);
     });
   });
 
@@ -797,6 +881,7 @@ describe('PreloaderService', () => {
       const preloaderToTest = Preloaders.MAIN;
       const otherPreloader = Preloaders.TEXTS;
       const qtyToTest = 2;
+      preloaderService.isMainLoad = false;
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
 
@@ -823,6 +908,7 @@ describe('PreloaderService', () => {
       const preloaderToTest = Preloaders.MAIN;
       const otherPreloader = Preloaders.TEXTS;
       const qtyToTest = 2;
+      preloaderService.isMainLoad = false;
 
       preloaderService.toLoad(preloaderToTest, qtyToTest);
       preloaderService.toLoad(otherPreloader, qtyToTest);
@@ -842,6 +928,32 @@ describe('PreloaderService', () => {
         otherPreloader
       );
       expect(lastActual).withContext('should return false - 3').toBeFalse();
+    };
+    const shouldReturnTrueIfMainLoadWithParamsExpectation =
+      'should return true with params and isMainLoad is true';
+    const shouldReturnTrueIfMainLoadWithParams = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const otherPreloader = Preloaders.TEXTS;
+      const qtyToTest = 2;
+
+      preloaderService.toLoad(preloaderToTest, qtyToTest);
+
+      const actual = preloaderService.isAnyLoading(preloaderToTest);
+
+      expect(actual).withContext('should return true - 1').toBeTrue();
+
+      preloaderService.toLoad(otherPreloader, qtyToTest);
+
+      const otherActual = preloaderService.isAnyLoading(otherPreloader);
+
+      expect(otherActual).withContext('should return true - 2').toBeTrue();
+
+      const lastActual = preloaderService.isAnyLoading(
+        preloaderToTest,
+        otherPreloader
+      );
+
+      expect(lastActual).withContext('should return true - 3').toBeTrue();
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -866,6 +978,10 @@ describe('PreloaderService', () => {
       it(
         shouldReturnFalseIfNoneLoadingWithParamsExpectation,
         shouldReturnFalseIfNoneLoadingWithParams
+      );
+      it(
+        shouldReturnTrueIfMainLoadWithParamsExpectation,
+        shouldReturnTrueIfMainLoadWithParams
       );
     });
 
@@ -893,6 +1009,10 @@ describe('PreloaderService', () => {
         shouldReturnFalseIfNoneLoadingWithParamsExpectation,
         shouldReturnFalseIfNoneLoadingWithParams
       );
+      it(
+        shouldReturnTrueIfMainLoadWithParamsExpectation,
+        shouldReturnTrueIfMainLoadWithParams
+      );
     });
 
     describe('in prod environment', () => {
@@ -918,6 +1038,10 @@ describe('PreloaderService', () => {
       it(
         shouldReturnFalseIfNoneLoadingWithParamsExpectation,
         shouldReturnFalseIfNoneLoadingWithParams
+      );
+      it(
+        shouldReturnTrueIfMainLoadWithParamsExpectation,
+        shouldReturnTrueIfMainLoadWithParams
       );
     });
   });
@@ -1376,6 +1500,7 @@ describe('PreloaderService', () => {
     const shouldReturn100NoElToLoadEmptyParams = () => {
       const preloaderToTest = Preloaders.MAIN;
       const qtyToTest = 2;
+      preloaderService.isMainLoad = false;
 
       const actual = preloaderService.getProgressionPercent();
 
@@ -1427,6 +1552,7 @@ describe('PreloaderService', () => {
       const preloaderToTest = Preloaders.MAIN;
       const otherPreloader = Preloaders.TEXTS;
       const qtyToTest = 2;
+      preloaderService.isMainLoad = false;
 
       const actual = preloaderService.getProgressionPercent(preloaderToTest);
 
@@ -1505,6 +1631,27 @@ describe('PreloaderService', () => {
 
       expect(lastActual).withContext('should return 0 - 4').toBe(0);
     };
+    const shouldRetur0NoElToLoadEmptyParamsAndMainLoadExpectation =
+      'should return 0 when empty params and nothing has to load and is main load';
+    const shouldRetur0NoElToLoadEmptyParamsAndMainLoad = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const qtyToTest = 2;
+
+      const actual = preloaderService.getProgressionPercent();
+
+      expect(actual).withContext('should return 0 before').toBe(0);
+
+      preloaderService.toLoad(preloaderToTest, qtyToTest);
+      preloaderService.loaded(preloaderToTest, qtyToTest);
+
+      const otherActual = preloaderService.getProgressionPercent();
+
+      expect(otherActual)
+        .withContext(
+          'should return 100 after, since isMainLoad has been set to true'
+        )
+        .toBe(100);
+    };
     describe('in dev environment', () => {
       beforeEach(() => {
         const logService = new LogService(
@@ -1528,6 +1675,10 @@ describe('PreloaderService', () => {
       it(
         shouldReturnProgressToLoadWithParamsExpectation,
         shouldReturnProgressToLoadWithParams
+      );
+      it(
+        shouldRetur0NoElToLoadEmptyParamsAndMainLoadExpectation,
+        shouldRetur0NoElToLoadEmptyParamsAndMainLoad
       );
     });
 
@@ -1555,6 +1706,10 @@ describe('PreloaderService', () => {
         shouldReturnProgressToLoadWithParamsExpectation,
         shouldReturnProgressToLoadWithParams
       );
+      it(
+        shouldRetur0NoElToLoadEmptyParamsAndMainLoadExpectation,
+        shouldRetur0NoElToLoadEmptyParamsAndMainLoad
+      );
     });
 
     describe('in prod environment', () => {
@@ -1580,6 +1735,10 @@ describe('PreloaderService', () => {
       it(
         shouldReturnProgressToLoadWithParamsExpectation,
         shouldReturnProgressToLoadWithParams
+      );
+      it(
+        shouldRetur0NoElToLoadEmptyParamsAndMainLoadExpectation,
+        shouldRetur0NoElToLoadEmptyParamsAndMainLoad
       );
     });
   });

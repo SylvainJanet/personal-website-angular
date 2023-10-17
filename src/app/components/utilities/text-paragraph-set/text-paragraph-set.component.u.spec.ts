@@ -15,17 +15,17 @@ describe('TextParagraphSetComponent - unit', () => {
     it('should create', () => {
       expect(textParagraphSetComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
       expect(textParagraphSetComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
 
       expect(textParagraphSetComponent.paragraphs)
         .withContext('paragraphs should be defined')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(textParagraphSetComponent.paragraphs)
         .withContext('paragraphs should be empty')
         .toEqual([]);

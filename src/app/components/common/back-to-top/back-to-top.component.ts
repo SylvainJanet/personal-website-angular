@@ -1,11 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { of } from 'rxjs';
 import { ImgLoadDirective } from 'src/app/directives/imgLoad/img-load.directive';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { TextService } from 'src/app/services/db/text/text.service';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
 
 /** Component for the back to top icon. */
@@ -17,6 +23,8 @@ import { scriptVar } from 'src/scripts/template/tools/setUp';
   imports: [ImgLoadDirective, CommonModule],
 })
 export class BackToTopComponent implements ComponentWithText, OnDestroy {
+  /** The main a element of the component. */
+  @ViewChild('mainA') mainA!: ElementRef<HTMLElement>;
   /**
    * Scroll trigger value for the icon to appear.
    *
@@ -59,33 +67,38 @@ export class BackToTopComponent implements ComponentWithText, OnDestroy {
    *
    * @param languageService The {@link LanguageService}
    * @param textService The {@link TextService}
+   * @param visibleToLoadTextService The {@link VisibleToLoadTextService}
    */
   constructor(
-    private languageService: LanguageService,
-    private textService: TextService
+    private textService: TextService,
+    public visibleToLoadTextService: VisibleToLoadTextService
   ) {
-    this.languageService.subscribe(this);
-    this.updateTexts();
+    setTimeout(() => {
+      this.visibleToLoadTextService.subscribe(this);
+    }, 0);
   }
 
   /**
    * Update the component's texts when the language is updated. See
-   * {@link LanguageService}. The subscriber design pattern is used and this
-   * function is used when the service notifies its subscribers to update the
-   * text contents after a language change. Uses {@link TextService} to get those
-   * contents from the database.
+   * {@link VisibleToLoadTextService}. The subscriber design pattern is used and
+   * this function is used when the service notifies its subscribers to update
+   * the text contents after a language change. Uses {@link TextService} to get
+   * those contents from the database.
    */
   updateTexts(): void {
-    this.altTxt = this.textService.get('back-to-top-alt');
+    this.textService.get('back-to-top-alt').subscribe((v) => {
+      this.altTxt = of(v);
+      this.visibleToLoadTextService.textLoaded(this);
+    });
   }
 
   /**
    * On destroy, the component has to be unsubscribed rom the
-   * {@link LanguageService} to avoid having the service try to notify a
+   * {@link VisibleToLoadTextService} to avoid having the service try to notify a
    * destroyed subscriber.
    */
   ngOnDestroy(): void {
-    this.languageService.unsubscribe(this);
+    this.visibleToLoadTextService.unsubscribe(this);
   }
 
   /**
@@ -134,5 +147,14 @@ export class BackToTopComponent implements ComponentWithText, OnDestroy {
       this.iconOpacity = '1';
       this.iconPointerEvent = 'all';
     }
+  }
+
+  /**
+   * Get the main component element.
+   *
+   * @returns The element.
+   */
+  getElement(): ElementRef<HTMLElement> {
+    return this.mainA;
   }
 }

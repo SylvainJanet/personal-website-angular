@@ -23,7 +23,7 @@ describe('TypedAnimatedTextComponent - dom unit', () => {
   it('should create', () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   });
 
   describe('textElement', () => {

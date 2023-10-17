@@ -38,3 +38,7 @@
   display: block;
   overflow: hidden;
 }
+
+.hide {
+  display: none;
+}

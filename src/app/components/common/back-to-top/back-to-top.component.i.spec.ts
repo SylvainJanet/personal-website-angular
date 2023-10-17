@@ -5,7 +5,6 @@ import { environment as productionEnvironment } from 'src/environments/environme
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { BackToTopComponent } from './back-to-top.component';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
 
@@ -28,14 +27,13 @@ describe('BackToTopComponent - integration', () => {
     const shouldCreate = () => {
       expect(backToTopComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     };
     describe('in dev environment', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
           providers: [
             BackToTopComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: devEnv },
@@ -50,7 +48,6 @@ describe('BackToTopComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BackToTopComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: stagingEnv },
@@ -65,7 +62,6 @@ describe('BackToTopComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BackToTopComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: prodEnv },
@@ -81,6 +77,8 @@ describe('BackToTopComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
+      backToTopComponent.updateTexts();
+
       const actualAltTxtObs = backToTopComponent.altTxt;
 
       actualAltTxtObs.subscribe((s) => {
@@ -94,7 +92,6 @@ describe('BackToTopComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BackToTopComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: devEnv },
@@ -112,7 +109,6 @@ describe('BackToTopComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BackToTopComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: stagingEnv },
@@ -130,7 +126,6 @@ describe('BackToTopComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BackToTopComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: prodEnv },

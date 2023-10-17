@@ -1,4 +1,3 @@
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
@@ -8,6 +7,8 @@ import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { environment as developmentEnvironment } from 'src/environments/environment';
 import { environment as stagingEnvironment } from 'src/environments/environment.staging';
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
+import { ElementRef } from '@angular/core';
 
 const devEnv = developmentEnvironment;
 const stagingEnv = stagingEnvironment;
@@ -15,7 +16,7 @@ const prodEnv = productionEnvironment;
 
 describe('FooterComponent - unit', () => {
   let footerComponent: FooterComponent;
-  let languageServiceSpy: jasmine.SpyObj<LanguageService>;
+  let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
 
   const expectedBannerUrl = '/assets/img/overlay-bg.jpg';
@@ -26,30 +27,20 @@ describe('FooterComponent - unit', () => {
 
   const footerTextSelector = 'sylvain-janet';
   const footerLinkSelector = 'website';
-  beforeEach(() => {
-    languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-      'subscribe',
-      'unsubscribe',
-    ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
-    textServiceSpy.getMulti.and.returnValues(
-      of([retrievedFooterText, expectedFooterLink])
-    );
-  });
 
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
       expect(footerComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     };
 
     const shouldSetDefaultValuesExpectation = 'should set default values';
     const shouldSetDefaultValues = () => {
       expect(footerComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(footerComponent.preloaders)
         .withContext('preloaders should be set')
         .toEqual([Preloaders.MAIN]);
@@ -72,27 +63,35 @@ describe('FooterComponent - unit', () => {
         .toEqual(expectedBannerUrl);
     };
 
-    const shouldSubscribeToLanguageServiceExpectation =
+    const shouldSubscribeToVisibleToLoadTextServiceExpectation =
       'should subscribe to the languageService';
-    const shouldSubscribeToLanguageService = () => {
-      expect(languageServiceSpy.subscribe)
-        .withContext('subscribe should have been called')
-        .toHaveBeenCalledOnceWith(footerComponent);
+    const shouldSubscribeToVisibleToLoadTextService = (done: DoneFn) => {
+      setTimeout(() => {
+        expect(visibleToLoadTextServiceSpy.subscribe)
+          .withContext('subscribe should have been called')
+          .toHaveBeenCalledOnceWith(footerComponent);
+        done();
+      });
     };
 
-    const shouldUpdateTheTextsExpectation = 'should update the texts';
-    const shouldUpdateTheTexts = () => {
-      expect(footerComponent.updateTexts)
-        .withContext('updateTexts should have been called')
-        .toHaveBeenCalledTimes(1);
-    };
     describe('in dev environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         spyOn(FooterComponent.prototype, 'updateTexts');
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: devEnv },
           ],
@@ -102,18 +101,28 @@ describe('FooterComponent - unit', () => {
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
       it(
-        shouldSubscribeToLanguageServiceExpectation,
-        shouldSubscribeToLanguageService
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
       );
-      it(shouldUpdateTheTextsExpectation, shouldUpdateTheTexts);
     });
     describe('in staging environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         spyOn(FooterComponent.prototype, 'updateTexts');
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: stagingEnv },
           ],
@@ -123,18 +132,28 @@ describe('FooterComponent - unit', () => {
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
       it(
-        shouldSubscribeToLanguageServiceExpectation,
-        shouldSubscribeToLanguageService
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
       );
-      it(shouldUpdateTheTextsExpectation, shouldUpdateTheTexts);
     });
     describe('in prod environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         spyOn(FooterComponent.prototype, 'updateTexts');
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: prodEnv },
           ],
@@ -144,16 +163,17 @@ describe('FooterComponent - unit', () => {
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
       it(
-        shouldSubscribeToLanguageServiceExpectation,
-        shouldSubscribeToLanguageService
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
       );
-      it(shouldUpdateTheTextsExpectation, shouldUpdateTheTexts);
     });
   });
 
   describe('updateTexts', () => {
     const shouldCallTextServiceExpectation = 'should call the textService';
     const shouldCallTextService = () => {
+      footerComponent.updateTexts();
+
       expect(textServiceSpy.getMulti)
         .withContext(
           'getMulti should have been called 1 time with proper arguments'
@@ -164,6 +184,8 @@ describe('FooterComponent - unit', () => {
     const shouldSetPropertiesToTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesToTextServiceResult = () => {
+      footerComponent.updateTexts();
+
       const actualFooterText = footerComponent.footerText;
       const actualFooterLink = footerComponent.footerLink;
       const actualFooterHref = footerComponent.footerHref;
@@ -186,10 +208,21 @@ describe('FooterComponent - unit', () => {
     };
     describe('in dev environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: devEnv },
           ],
@@ -204,10 +237,21 @@ describe('FooterComponent - unit', () => {
     });
     describe('in staging environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: stagingEnv },
           ],
@@ -222,10 +266,21 @@ describe('FooterComponent - unit', () => {
     });
     describe('in prod environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: prodEnv },
           ],
@@ -245,16 +300,27 @@ describe('FooterComponent - unit', () => {
       'should unsubscribe from the languageService';
     const shouldUnsubscribeFromLanguageService = () => {
       footerComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe)
+      expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
         .toHaveBeenCalledOnceWith(footerComponent);
     };
     describe('in dev environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: devEnv },
           ],
@@ -268,10 +334,21 @@ describe('FooterComponent - unit', () => {
     });
     describe('in staging environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: stagingEnv },
           ],
@@ -285,10 +362,21 @@ describe('FooterComponent - unit', () => {
     });
     describe('in prod environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: prodEnv },
           ],
@@ -314,10 +402,21 @@ describe('FooterComponent - unit', () => {
     };
     describe('in dev environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: devEnv },
           ],
@@ -331,10 +430,21 @@ describe('FooterComponent - unit', () => {
     });
     describe('in staging environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: stagingEnv },
           ],
@@ -348,10 +458,21 @@ describe('FooterComponent - unit', () => {
     });
     describe('in prod environment', () => {
       beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        textServiceSpy.getMulti.and.returnValues(
+          of([retrievedFooterText, expectedFooterLink])
+        );
         TestBed.configureTestingModule({
           providers: [
             FooterComponent,
-            { provide: LanguageService, useValue: languageServiceSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
             { provide: TextService, useValue: textServiceSpy },
             { provide: ENV, useValue: prodEnv },
           ],
@@ -362,6 +483,88 @@ describe('FooterComponent - unit', () => {
         shouldSetDoubleImgDisplayToNoneExpectation,
         shouldSetDoubleImgDisplayToNone
       );
+    });
+  });
+
+  describe('getElement', () => {
+    const shouldReturnElementExpectation = 'should return the element';
+    const shouldReturnElement = () => {
+      const expected = new ElementRef(document.createElement('section'));
+      footerComponent.mainSection = expected;
+
+      const actual = footerComponent.getElement();
+
+      expect(actual).toEqual(jasmine.anything());
+      expect(actual).toEqual(expected);
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            FooterComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        footerComponent = TestBed.inject(FooterComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            FooterComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        footerComponent = TestBed.inject(FooterComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            FooterComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        footerComponent = TestBed.inject(FooterComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
     });
   });
 });
