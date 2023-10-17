@@ -69,7 +69,7 @@ export class DOMComputationService {
     bufferFactorHeight = 0,
     bufferFactorWidth = 0
   ) {
-    if (!element || !element.nativeElement) {
+    if (!element?.nativeElement) {
       return false;
     }
 

@@ -60,7 +60,7 @@ export class CvAboutMeComponent
    * About me component constructor
    *
    * @param preloader The {@link PreloaderService}
-   * @param element The `ElementRef`
+   * @param elementRef The `ElementRef`
    * @param logService The {@link LogService}
    * @param languageService The {@link LanguageService}
    * @param textService The {@link TextService}
@@ -68,7 +68,7 @@ export class CvAboutMeComponent
    */
   constructor(
     public preloader: PreloaderService,
-    private element: ElementRef,
+    private elementRef: ElementRef,
     logService: LogService,
     private textService: TextService,
     public visibleToLoadTextService: VisibleToLoadTextService
@@ -128,15 +128,15 @@ export class CvAboutMeComponent
    */
   getElPos() {
     if (
-      this.element.nativeElement.firstElementChild.tagName ==
+      this.elementRef.nativeElement.firstElementChild.tagName ==
       'MAT-PROGRESS-SPINNER'
     ) {
       return;
     }
     const posViewPort =
-      this.element.nativeElement.firstElementChild.firstElementChild.firstElementChild.getBoundingClientRect()
+      this.elementRef.nativeElement.firstElementChild.firstElementChild.firstElementChild.getBoundingClientRect()
         .y +
-      this.element.nativeElement.firstElementChild.firstElementChild.firstElementChild.firstElementChild.getBoundingClientRect()
+      this.elementRef.nativeElement.firstElementChild.firstElementChild.firstElementChild.firstElementChild.getBoundingClientRect()
         .height;
     const viewPortOffset = scrollY;
     const viewPortHeight = window.innerHeight;
@@ -148,7 +148,7 @@ export class CvAboutMeComponent
         .split('px')[0]
     );
     this.posElementMax +=
-      this.element.nativeElement.firstElementChild.firstElementChild.firstElementChild.firstElementChild.nextElementSibling.getBoundingClientRect().height;
+      this.elementRef.nativeElement.firstElementChild.firstElementChild.firstElementChild.firstElementChild.nextElementSibling.getBoundingClientRect().height;
   }
 
   /**
