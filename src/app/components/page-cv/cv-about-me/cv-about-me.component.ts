@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnChanges,
   OnDestroy,
   ViewChild,
 } from '@angular/core';
@@ -27,7 +28,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   standalone: true,
   imports: [CommonModule, TextParagraphSetComponent, MatProgressSpinnerModule],
 })
-export class CvAboutMeComponent implements ComponentWithText, OnDestroy {
+export class CvAboutMeComponent
+  implements ComponentWithText, OnDestroy, OnChanges
+{
   /** The main div element of the component. */
   @ViewChild('mainDiv') mainDiv!: ElementRef<HTMLElement>;
   /**
@@ -72,6 +75,15 @@ export class CvAboutMeComponent implements ComponentWithText, OnDestroy {
   ) {
     this.logger = logService.withClassName('CvAboutMeComponent');
     this.visibleToLoadTextService.subscribe(this);
+  }
+
+  /**
+   * If the input changes, the position has to be computed again and the width
+   * has to be updated again.
+   */
+  ngOnChanges() {
+    this.getElPos();
+    this.updateWidth();
   }
 
   /**

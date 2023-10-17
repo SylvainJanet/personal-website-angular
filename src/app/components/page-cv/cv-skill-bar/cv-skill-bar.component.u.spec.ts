@@ -61,6 +61,29 @@ describe('CvSkillBarComponent - unit', () => {
     });
   });
 
+  describe('ngOnChanges method', () => {
+    it('should call getElPos method', () => {
+      spyOn(cvSkillBarComponent, 'getElPos');
+      spyOn(cvSkillBarComponent, 'updateWidth');
+
+      cvSkillBarComponent.ngOnChanges();
+
+      expect(cvSkillBarComponent.getElPos)
+        .withContext('getElPos should have been called')
+        .toHaveBeenCalledTimes(1);
+    });
+    it('should call updateWidth method', () => {
+      spyOn(cvSkillBarComponent, 'getElPos');
+      spyOn(cvSkillBarComponent, 'updateWidth');
+
+      cvSkillBarComponent.ngOnChanges();
+
+      expect(cvSkillBarComponent.updateWidth)
+        .withContext('updateWidth should have been called')
+        .toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('onResize method', () => {
     it('should call updateAfterLoaded method', () => {
       spyOn(cvSkillBarComponent, 'updateAfterLoaded');
