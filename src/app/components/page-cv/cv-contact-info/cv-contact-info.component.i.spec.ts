@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { CvContactInfoComponent } from './cv-contact-info.component';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -44,14 +43,13 @@ describe('CvContactInfoComponent - integration', () => {
     const shouldCreate = () => {
       expect(cvContactInfoComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     };
     describe('in dev environment', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
           providers: [
             CvContactInfoComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,
@@ -69,7 +67,6 @@ describe('CvContactInfoComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             CvContactInfoComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,
@@ -87,7 +84,6 @@ describe('CvContactInfoComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             CvContactInfoComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,
@@ -106,6 +102,8 @@ describe('CvContactInfoComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
+      cvContactInfoComponent.updateTexts();
+
       const actualNameObs = cvContactInfoComponent.name;
       const actualSjObs = cvContactInfoComponent.sj;
       const actualProfileObs = cvContactInfoComponent.profile;
@@ -137,7 +135,6 @@ describe('CvContactInfoComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             CvContactInfoComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,
@@ -158,7 +155,6 @@ describe('CvContactInfoComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             CvContactInfoComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,
@@ -179,7 +175,6 @@ describe('CvContactInfoComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             CvContactInfoComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,

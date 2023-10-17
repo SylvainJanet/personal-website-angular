@@ -31,3 +31,7 @@
   margin-top: calc(var(--default-padding) / 2);
   margin-bottom: calc(var(--default-padding) / 2);
 }
+
+.hide {
+  visibility: hidden;
+}

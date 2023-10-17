@@ -40,7 +40,7 @@ describe('LinkBarOnHoverComponent - unit', () => {
     it('should create', () => {
       expect(buttonBarOnHoverComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(buttonBarOnHoverComponent.logger)
         .withContext('logger should be set')
         .toBe(logServiceSpy);
@@ -49,7 +49,7 @@ describe('LinkBarOnHoverComponent - unit', () => {
     it('should set default values', () => {
       expect(buttonBarOnHoverComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
 
       expect(buttonBarOnHoverComponent.lineWidth)
         .withContext('lineWidth should be set')
@@ -62,7 +62,7 @@ describe('LinkBarOnHoverComponent - unit', () => {
         .toBe('white');
       expect(buttonBarOnHoverComponent.press)
         .withContext('press should be defined')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(buttonBarOnHoverComponent.press)
         .withContext('press should be an event emitter')
         .toBeInstanceOf(EventEmitter<Event>);

@@ -34,13 +34,13 @@ describe('CvSkillBarComponent - unit', () => {
     it('should create', () => {
       expect(cvSkillBarComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
       expect(cvSkillBarComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
 
       cvSkillBarComponent.skillName.subscribe((s) => {
         expect(s).withContext('skill name should be set').toBe('SKILL');

@@ -6,7 +6,6 @@ import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
@@ -38,7 +37,7 @@ describe('HeaderComponent - integration', () => {
     const shouldCreate = () => {
       expect(headerComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -46,7 +45,6 @@ describe('HeaderComponent - integration', () => {
           providers: [
             HeaderComponent,
             DOMComputationService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },
@@ -63,7 +61,6 @@ describe('HeaderComponent - integration', () => {
           providers: [
             HeaderComponent,
             DOMComputationService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },
@@ -80,7 +77,6 @@ describe('HeaderComponent - integration', () => {
           providers: [
             HeaderComponent,
             DOMComputationService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },
@@ -97,6 +93,8 @@ describe('HeaderComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
+      headerComponent.updateTexts();
+
       const actualMyNameObs = headerComponent.myName;
       const actualOtherLanguageObs = headerComponent.otherLanguage;
 
@@ -115,7 +113,6 @@ describe('HeaderComponent - integration', () => {
           providers: [
             HeaderComponent,
             DOMComputationService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },
@@ -135,7 +132,6 @@ describe('HeaderComponent - integration', () => {
           providers: [
             HeaderComponent,
             DOMComputationService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },
@@ -155,7 +151,6 @@ describe('HeaderComponent - integration', () => {
           providers: [
             HeaderComponent,
             DOMComputationService,
-            LanguageService,
             TextService,
             LogService,
             { provide: HttpClient, useValue: httpClientSpy },

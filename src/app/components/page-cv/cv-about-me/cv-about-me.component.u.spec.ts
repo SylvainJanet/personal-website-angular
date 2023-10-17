@@ -3,27 +3,36 @@ import { ElementRef } from '@angular/core';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { BehaviorSubject, of } from 'rxjs';
 import { CvAboutMeComponent } from './cv-about-me.component';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { Paragraph } from '../../classes/paragraph/paragraph';
 import { SubParagraph } from '../../classes/subparagraph/subParagraph';
 import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
+import { environment as developmentEnvironment } from 'src/environments/environment';
+import { environment as stagingEnvironment } from 'src/environments/environment.staging';
+import { environment as productionEnvironment } from 'src/environments/environment.prod';
 
 describe('CvAboutMeComponent - unit', () => {
   let cvAboutMeComponent: CvAboutMeComponent;
   let preloaderServiceSpy: jasmine.SpyObj<PreloaderService>;
-  let languageServiceSpy: jasmine.SpyObj<LanguageService>;
+  let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
   let elementRefSpy: jasmine.SpyObj<ElementRef>;
   let logServiceGlobalSpy: jasmine.SpyObj<LogService>;
   let logServiceSpy: jasmine.SpyObj<LogService>;
+
+  const devEnv = developmentEnvironment;
+  const stagingEnv = stagingEnvironment;
+  const prodEnv = productionEnvironment;
+
   const titleSelector = 'about-me-title';
   const cvFileNameSelector = 'cv-file-name';
   const aboutMeContentSelector = 'about-me-content';
   const expectedTitle = 'test title';
   const expectedPdfName = 'this.is.a.test.pdf';
-  let expectedParagraphs: Paragraph[] = [];
+  let expectedParagraphs: Paragraph[];
 
   beforeEach(() => {
     expectedParagraphs = [
@@ -53,55 +62,21 @@ describe('CvAboutMeComponent - unit', () => {
         new SubParagraph(SubParagraphRoot.STRONG_EM, 'test strong em'),
       ]),
     ];
-
-    preloaderServiceSpy = jasmine.createSpyObj(
-      'PreloaderService',
-      [],
-      ['statusAnyLoading']
-    );
-    (
-      Object.getOwnPropertyDescriptor(preloaderServiceSpy, 'statusAnyLoading')
-        ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
-    ).and.returnValue(new BehaviorSubject<boolean | null>(null));
-    elementRefSpy = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
-    languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-      'subscribe',
-      'unsubscribe',
-    ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['getMultiSomeSplit']);
-    textServiceSpy.getMultiSomeSplit.and.returnValue(
-      of([expectedTitle, expectedPdfName, expectedParagraphs])
-    );
-    logServiceGlobalSpy = jasmine.createSpyObj('LogService', ['withClassName']);
-    logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
-    logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
-    TestBed.configureTestingModule({
-      providers: [
-        CvAboutMeComponent,
-        { provide: PreloaderService, useValue: preloaderServiceSpy },
-        { provide: LanguageService, useValue: languageServiceSpy },
-        { provide: TextService, useValue: textServiceSpy },
-        { provide: ElementRef, useValue: elementRefSpy },
-        { provide: LogService, useValue: logServiceGlobalSpy },
-      ],
-    });
   });
 
   describe('constructor', () => {
-    beforeEach(() => {
-      spyOn(CvAboutMeComponent.prototype, 'updateTexts');
-      cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
-    });
-    it('should create', () => {
+    const shouldCreateExpectation = 'should create';
+    const shouldCreate = () => {
       expect(cvAboutMeComponent)
         .withContext('component should create')
-        .toBeTruthy();
-    });
+        .toEqual(jasmine.anything());
+    };
 
-    it('should set default values', () => {
+    const shouldSetDefaultValuesExpectation = 'should set default values';
+    const shouldSetDefaultValues = () => {
       expect(cvAboutMeComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(cvAboutMeComponent.logger)
         .withContext('logger should be set')
         .toBe(logServiceSpy);
@@ -124,33 +99,216 @@ describe('CvAboutMeComponent - unit', () => {
       expect(cvAboutMeComponent.paragraphs)
         .withContext('paragraphs should be set')
         .toEqual([]);
-    });
+    };
 
-    it('should set proper logger', () => {
+    const shouldSetProperLoggerExpectation = 'should set proper logger';
+    const shouldSetProperLogger = () => {
       const expected = 'CvAboutMeComponent';
       expect(logServiceGlobalSpy.withClassName)
         .withContext('withClassName should have been called')
         .toHaveBeenCalledOnceWith(expected);
-    });
+    };
 
-    it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe)
-        .withContext('subscribe should have been called')
-        .toHaveBeenCalledOnceWith(cvAboutMeComponent);
-    });
+    const shouldSubscribeToVisibleToLoadTextServiceExpectation =
+      'should subscribe to the visibleToLoadTextService';
+    const shouldSubscribeToVisibleToLoadTextService = (done: DoneFn) => {
+      setTimeout(() => {
+        expect(visibleToLoadTextServiceSpy.subscribe)
+          .withContext('subscribe should have been called')
+          .toHaveBeenCalledOnceWith(cvAboutMeComponent);
+        done();
+      });
+    };
 
-    it('should update the texts', () => {
-      expect(cvAboutMeComponent.updateTexts)
-        .withContext('updateTexts should have been called')
-        .toHaveBeenCalledTimes(1);
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(shouldSetProperLoggerExpectation, shouldSetProperLogger);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(shouldSetProperLoggerExpectation, shouldSetProperLogger);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(shouldSetProperLoggerExpectation, shouldSetProperLogger);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
     });
   });
 
   describe('updateTexts', () => {
-    beforeEach(() => {
-      cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
-    });
-    it('should call the textService', () => {
+    const shouldCallTextServiceExpectation = 'should call the textService';
+    const shouldCallTextService = () => {
+      cvAboutMeComponent.updateTexts();
       expect(textServiceSpy.getMultiSomeSplit)
         .withContext(
           'getMultiSomeSplit should have been called 1 time with proper arguments'
@@ -160,8 +318,13 @@ describe('CvAboutMeComponent - unit', () => {
           { selector: cvFileNameSelector, isSplit: false },
           { selector: aboutMeContentSelector, isSplit: true },
         ]);
-    });
-    it('should set the properties to the textService result', () => {
+    };
+
+    const shouldSetPropertiesToTheServiceResultExpectation =
+      'should set the properties to the textService result';
+    const shouldSetPropertiesToTheServiceResult = () => {
+      cvAboutMeComponent.updateTexts();
+
       const actualTitleObs = cvAboutMeComponent.aboutMe;
       const actualCvFileName = cvAboutMeComponent.linkToCv;
       const actualAboutMeContent = cvAboutMeComponent.paragraphs;
@@ -175,46 +338,433 @@ describe('CvAboutMeComponent - unit', () => {
       expect(actualAboutMeContent)
         .withContext('about me content should be set')
         .toBe(expectedParagraphs);
-    });
-    it('should insert a new paragraph at index 1', () => {
+    };
+
+    const shouldInsertNewParagraphAtIndex1Expectation =
+      'should insert a new paragraph at index 1';
+    const shouldInsertNewParagraphAtIndex1 = () => {
+      cvAboutMeComponent.updateTexts();
+
       const actualAboutMeContent = cvAboutMeComponent.paragraphs;
       expect(actualAboutMeContent[1].els.length)
         .withContext('first paragraph should have no elements')
         .toBe(0);
-    });
-    it('should add cssClass to all paragraphs', () => {
+    };
+
+    const shouldAddCssClassToParagraphsExpectation =
+      'should add cssClass to all paragraphs';
+    const shouldAddCssClassToParagraphs = () => {
+      cvAboutMeComponent.updateTexts();
+
       const actualAboutMeContent = cvAboutMeComponent.paragraphs;
+      expect(actualAboutMeContent.length)
+        .withContext('there should be paragraphs')
+        .not.toBe(0);
       actualAboutMeContent.forEach((p) => {
         expect(p.cssClass)
           .withContext("cssClass should be 'lead'")
           .toBe('lead');
       });
-    });
-    it('should add link to cv to the proper paragraph', () => {
+    };
+
+    const shouldAddLinkToCvExpectation =
+      'should add link to cv to the proper paragraph';
+    const shouldAddLinkToCv = () => {
+      cvAboutMeComponent.updateTexts();
+
       const actualAboutMeContent = cvAboutMeComponent.paragraphs;
       expect(actualAboutMeContent[6].els[1].assetHref)
         .withContext('assetHref should be set')
         .toBe('pdf/' + expectedPdfName);
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldInsertNewParagraphAtIndex1Expectation,
+        shouldInsertNewParagraphAtIndex1
+      );
+      it(
+        shouldAddCssClassToParagraphsExpectation,
+        shouldAddCssClassToParagraphs
+      );
+      it(shouldAddLinkToCvExpectation, shouldAddLinkToCv);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldInsertNewParagraphAtIndex1Expectation,
+        shouldInsertNewParagraphAtIndex1
+      );
+      it(
+        shouldAddCssClassToParagraphsExpectation,
+        shouldAddCssClassToParagraphs
+      );
+      it(shouldAddLinkToCvExpectation, shouldAddLinkToCv);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldInsertNewParagraphAtIndex1Expectation,
+        shouldInsertNewParagraphAtIndex1
+      );
+      it(
+        shouldAddCssClassToParagraphsExpectation,
+        shouldAddCssClassToParagraphs
+      );
+      it(shouldAddLinkToCvExpectation, shouldAddLinkToCv);
     });
   });
 
   describe('ngOnDestroy', () => {
-    beforeEach(() => {
-      cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
-    });
-    it('should unsubscribe from the languageService', () => {
+    const shouldUnsubscribeExpectation =
+      'should unsubscribe from the visibleToLoadTextService';
+    const shouldUnsubscribe = () => {
       cvAboutMeComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe)
+      expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
         .toHaveBeenCalledOnceWith(cvAboutMeComponent);
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
   });
 
   describe('updateWidth method', () => {
-    beforeEach(() => {
-      cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
-    });
-    it('should set to 0 if scrollY is less than min', () => {
+    const shouldSetTo0IfScrollYLessThanMinExpectation =
+      'should set to 0 if scrollY is less than min';
+    const shouldSetTo0IfScrollYLessThanMin = () => {
       cvAboutMeComponent.posElementMin = 10;
       cvAboutMeComponent.posElementMax = 20;
 
@@ -224,8 +774,11 @@ describe('CvAboutMeComponent - unit', () => {
       expect(cvAboutMeComponent.width)
         .withContext('width should be set')
         .toBe('0');
-    });
-    it('should set to 0 if scrollY is more than max', () => {
+    };
+
+    const shouldSetTo0IfScrollYMoreThanMaxExpectation =
+      'should set to 0 if scrollY is more than max';
+    const shouldSetTo0IfScrollYMoreThanMax = () => {
       cvAboutMeComponent.posElementMin = 10;
       cvAboutMeComponent.posElementMax = 20;
 
@@ -235,8 +788,10 @@ describe('CvAboutMeComponent - unit', () => {
       expect(cvAboutMeComponent.width)
         .withContext('width should be set')
         .toBe('0');
-    });
-    it('should set to 75% if scrollY is between min and max', () => {
+    };
+    const shouldSetTo75IfScrollYBetweenMinMaxExpectation =
+      'should set to 75% if scrollY is between min and max';
+    const shouldSetTo75IfScrollYBetweenMinMax = () => {
       cvAboutMeComponent.posElementMin = 10;
       cvAboutMeComponent.posElementMax = 20;
 
@@ -246,14 +801,212 @@ describe('CvAboutMeComponent - unit', () => {
       expect(cvAboutMeComponent.width)
         .withContext('width should be set')
         .toBe('75%');
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(
+        shouldSetTo0IfScrollYLessThanMinExpectation,
+        shouldSetTo0IfScrollYLessThanMin
+      );
+      it(
+        shouldSetTo0IfScrollYMoreThanMaxExpectation,
+        shouldSetTo0IfScrollYMoreThanMax
+      );
+      it(
+        shouldSetTo75IfScrollYBetweenMinMaxExpectation,
+        shouldSetTo75IfScrollYBetweenMinMax
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(
+        shouldSetTo0IfScrollYLessThanMinExpectation,
+        shouldSetTo0IfScrollYLessThanMin
+      );
+      it(
+        shouldSetTo0IfScrollYMoreThanMaxExpectation,
+        shouldSetTo0IfScrollYMoreThanMax
+      );
+      it(
+        shouldSetTo75IfScrollYBetweenMinMaxExpectation,
+        shouldSetTo75IfScrollYBetweenMinMax
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(
+        shouldSetTo0IfScrollYLessThanMinExpectation,
+        shouldSetTo0IfScrollYLessThanMin
+      );
+      it(
+        shouldSetTo0IfScrollYMoreThanMaxExpectation,
+        shouldSetTo0IfScrollYMoreThanMax
+      );
+      it(
+        shouldSetTo75IfScrollYBetweenMinMaxExpectation,
+        shouldSetTo75IfScrollYBetweenMinMax
+      );
     });
   });
 
   describe('onResize method', () => {
-    beforeEach(() => {
-      cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
-    });
-    it('should call updateAfterLoaded method', () => {
+    const shouldCallUpdateAfterLoadedExpectation =
+      'should call updateAfterLoaded method';
+    const shouldCallUpdateAfterLoaded = () => {
       spyOn(cvAboutMeComponent, 'updateAfterLoaded');
 
       cvAboutMeComponent.onResize();
@@ -261,14 +1014,178 @@ describe('CvAboutMeComponent - unit', () => {
       expect(cvAboutMeComponent.updateAfterLoaded)
         .withContext('updateAfterLoaded should have been called')
         .toHaveBeenCalledTimes(1);
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
     });
   });
 
   describe('onScroll method', () => {
-    beforeEach(() => {
-      cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
-    });
-    it('should call updateAfterLoaded method', () => {
+    const shouldCallUpdateAfterLoadedExpectation =
+      'should call updateAfterLoaded method';
+    const shouldCallUpdateAfterLoaded = () => {
       spyOn(cvAboutMeComponent, 'updateAfterLoaded');
 
       cvAboutMeComponent.onScroll();
@@ -276,14 +1193,178 @@ describe('CvAboutMeComponent - unit', () => {
       expect(cvAboutMeComponent.updateAfterLoaded)
         .withContext('updateAfterLoaded should have been called')
         .toHaveBeenCalledTimes(1);
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
     });
   });
 
   describe('updateAfterLoaded method', () => {
-    beforeEach(() => {
-      cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
-    });
-    it('should call preloaderService', () => {
+    const shouldCallPreloaderServiceExpectation =
+      'should call preloaderService';
+    const shouldCallPreloaderService = () => {
       const bs = jasmine.createSpyObj('BehaviorSubject<boolean | null>', [
         'subscribe',
       ]);
@@ -297,8 +1378,10 @@ describe('CvAboutMeComponent - unit', () => {
       expect(preloaderServiceSpy.statusAnyLoading.subscribe)
         .withContext('subscribe should have been called')
         .toHaveBeenCalledTimes(1);
-    });
-    it('should call getElPos and UpdateWidth when all assets are loaded', () => {
+    };
+    const shouldCallMethodsWhenAssetsAreLoadedExpectation =
+      'should call getElPos and UpdateWidth when all assets are loaded';
+    const shouldCallMethodsWhenAssetsAreLoaded = () => {
       spyOn(cvAboutMeComponent, 'getElPos');
       spyOn(cvAboutMeComponent, 'updateWidth');
 
@@ -340,6 +1423,183 @@ describe('CvAboutMeComponent - unit', () => {
       expect(cvAboutMeComponent.updateWidth)
         .withContext('updateWidth should have been called twice')
         .toHaveBeenCalledTimes(2);
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallPreloaderServiceExpectation, shouldCallPreloaderService);
+      it(
+        shouldCallMethodsWhenAssetsAreLoadedExpectation,
+        shouldCallMethodsWhenAssetsAreLoaded
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallPreloaderServiceExpectation, shouldCallPreloaderService);
+      it(
+        shouldCallMethodsWhenAssetsAreLoadedExpectation,
+        shouldCallMethodsWhenAssetsAreLoaded
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        preloaderServiceSpy = jasmine.createSpyObj(
+          'PreloaderService',
+          [],
+          ['statusAnyLoading']
+        );
+        (
+          Object.getOwnPropertyDescriptor(
+            preloaderServiceSpy,
+            'statusAnyLoading'
+          )?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
+        ).and.returnValue(new BehaviorSubject<boolean | null>(null));
+        elementRefSpy = jasmine.createSpyObj(
+          'ElementRef',
+          [],
+          ['nativeElement']
+        );
+
+        textServiceSpy = jasmine.createSpyObj('TextService', [
+          'getMultiSomeSplit',
+        ]);
+        textServiceSpy.getMultiSomeSplit.and.returnValue(
+          of([expectedTitle, expectedPdfName, expectedParagraphs])
+        );
+        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
+          'withClassName',
+        ]);
+        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
+        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
+
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            { provide: PreloaderService, useValue: preloaderServiceSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: LogService, useValue: logServiceGlobalSpy },
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldCallPreloaderServiceExpectation, shouldCallPreloaderService);
+      it(
+        shouldCallMethodsWhenAssetsAreLoadedExpectation,
+        shouldCallMethodsWhenAssetsAreLoaded
+      );
     });
   });
 });

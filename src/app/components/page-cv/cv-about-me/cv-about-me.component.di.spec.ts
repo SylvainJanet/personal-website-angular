@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { of } from 'rxjs';
 import { DebugElement } from '@angular/core';
@@ -74,12 +73,15 @@ describe('CvAboutMeComponent - dom integration', () => {
   const shouldCreate = () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   };
 
   const shouldHaveContentSetByServiceExpectation =
     'should have content set by textService';
   const shouldHaveContentSetByService = () => {
+    componentInstance.updateTexts();
+    fixture.detectChanges();
+
     const debugEl: DebugElement = fixture.debugElement;
     const firstDivEl: DebugElement = debugEl.children[0];
     const secondDivEl: DebugElement = firstDivEl.children[0];
@@ -107,7 +109,6 @@ describe('CvAboutMeComponent - dom integration', () => {
         ],
         providers: [
           PreloaderService,
-          LanguageService,
           TextService,
           LogService,
           { provide: HttpClient, useValue: httpClientSpy },
@@ -137,7 +138,6 @@ describe('CvAboutMeComponent - dom integration', () => {
         ],
         providers: [
           PreloaderService,
-          LanguageService,
           TextService,
           LogService,
           { provide: HttpClient, useValue: httpClientSpy },
@@ -167,7 +167,6 @@ describe('CvAboutMeComponent - dom integration', () => {
         ],
         providers: [
           PreloaderService,
-          LanguageService,
           TextService,
           LogService,
           { provide: HttpClient, useValue: httpClientSpy },

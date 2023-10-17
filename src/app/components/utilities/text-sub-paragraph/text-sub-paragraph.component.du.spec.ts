@@ -23,7 +23,7 @@ describe('TextSubParagraphComponent - dom unit', () => {
   it('should create', () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   });
 
   describe('should have proper dom structure', () => {

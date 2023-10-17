@@ -20,11 +20,16 @@ describe('AppComponent - dom unit', () => {
   const prodEnv = productionEnvironment;
 
   beforeEach(() => {
-    preloaderServiceSpy = jasmine.createSpyObj('PreloaderService', [
-      'isAnyLoading',
-      'getProgressionPercent',
-      'toLoad',
-    ]);
+    preloaderServiceSpy = jasmine.createSpyObj(
+      'PreloaderService',
+      ['isAnyLoading', 'isLoading', 'getProgressionPercent', 'toLoad'],
+      ['isMainLoad']
+    );
+    (
+      Object.getOwnPropertyDescriptor(preloaderServiceSpy, 'isMainLoad')
+        ?.get as jasmine.Spy<() => boolean>
+    ).and.returnValue(true);
+
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
     httpClientSpy.get.and.returnValue(of({}));
   });
@@ -33,7 +38,7 @@ describe('AppComponent - dom unit', () => {
   const shouldCreate = () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   };
 
   const shouldHaveProperDomStructureExpectation =

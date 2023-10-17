@@ -7,7 +7,6 @@ import { environment as productionEnvironment } from 'src/environments/environme
 import { of } from 'rxjs';
 import { TypedAnimatedTextComponent } from '../../utilities/typed-animated-text/typed-animated-text.component';
 import { ImgLoadDirective } from 'src/app/directives/imgLoad/img-load.directive';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { DebugElement } from '@angular/core';
@@ -45,12 +44,15 @@ describe('BannerComponent - dom integration', () => {
   const shouldCreate = () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   };
 
   const shouldHaveContentSetByServiceExpectation =
     'should have content set by textService';
   const shouldHaveContentSetByService = () => {
+    componentInstance.updateTexts();
+    fixture.detectChanges();
+
     const debugEl: DebugElement = fixture.debugElement;
     const firstDivEl: DebugElement = debugEl.children[0];
 
@@ -106,7 +108,6 @@ describe('BannerComponent - dom integration', () => {
           ImgLoadDirective,
         ],
         providers: [
-          LanguageService,
           TextService,
           { provide: HttpClient, useValue: httpClientSpy },
           { provide: ENV, useValue: devEnv },
@@ -133,7 +134,6 @@ describe('BannerComponent - dom integration', () => {
           ImgLoadDirective,
         ],
         providers: [
-          LanguageService,
           TextService,
           { provide: HttpClient, useValue: httpClientSpy },
           { provide: ENV, useValue: stagingEnv },
@@ -160,7 +160,6 @@ describe('BannerComponent - dom integration', () => {
           ImgLoadDirective,
         ],
         providers: [
-          LanguageService,
           TextService,
           { provide: HttpClient, useValue: httpClientSpy },
           { provide: ENV, useValue: prodEnv },

@@ -1,53 +1,43 @@
-import { LanguageService } from 'src/app/services/language/language.service';
 import { BackToTopComponent } from './back-to-top.component';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
 import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
+import { environment as developmentEnvironment } from 'src/environments/environment';
+import { environment as stagingEnvironment } from 'src/environments/environment.staging';
+import { environment as productionEnvironment } from 'src/environments/environment.prod';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
 
 describe('BackToTopComponent - unit', () => {
   let backToTopComponent: BackToTopComponent;
-  let languageServiceSpy: jasmine.SpyObj<LanguageService>;
+  let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
+
+  const devEnv = developmentEnvironment;
+  const stagingEnv = stagingEnvironment;
+  const prodEnv = productionEnvironment;
+
   const backToTopAltSelector = 'back-to-top-alt';
   const expectedBackToTopAlt = 'this is a test';
 
   const visibleState = scriptVar.backToTopVisibleState;
   const invisibleState = scriptVar.backToTopInvisibleState;
 
-  beforeEach(() => {
-    languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-      'subscribe',
-      'unsubscribe',
-    ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
-    textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
-
-    TestBed.configureTestingModule({
-      providers: [
-        BackToTopComponent,
-        { provide: LanguageService, useValue: languageServiceSpy },
-        { provide: TextService, useValue: textServiceSpy },
-      ],
-    });
-  });
-
   describe('constructor', () => {
-    beforeEach(() => {
-      spyOn(BackToTopComponent.prototype, 'updateTexts');
-      backToTopComponent = TestBed.inject(BackToTopComponent);
-    });
-    it('should create', () => {
+    const shouldCreateExpectation = 'should create';
+    const shouldCreate = () => {
       expect(backToTopComponent)
         .withContext('component should create')
-        .toBeTruthy();
-    });
+        .toEqual(jasmine.anything());
+    };
 
-    it('should set default values', () => {
+    const shouldSetDefaultValuesExpectation = 'should set default values';
+    const shouldSetDefaultValues = () => {
       expect(backToTopComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(backToTopComponent.trigger)
         .withContext('trigger should be set')
         .toBeGreaterThan(0);
@@ -67,34 +57,128 @@ describe('BackToTopComponent - unit', () => {
       expect(backToTopComponent.preloaders)
         .withContext('preloaders should be set')
         .toEqual([Preloaders.MAIN]);
-    });
+    };
 
-    it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe)
-        .withContext('subscribe should have been called')
-        .toHaveBeenCalledOnceWith(backToTopComponent);
-    });
+    const shouldSubscribeToVisibleToLoadTextServiceExpectation =
+      'should subscribe to the visibleToLoadTextService';
+    const shouldSubscribeToVisibleToLoadTextService = (done: DoneFn) => {
+      setTimeout(() => {
+        expect(visibleToLoadTextServiceSpy.subscribe)
+          .withContext('subscribe should have been called')
+          .toHaveBeenCalledOnceWith(backToTopComponent);
+        done();
+      });
+    };
 
-    it('should update the texts', () => {
-      expect(backToTopComponent.updateTexts)
-        .withContext('updateTexts should have been called')
-        .toHaveBeenCalledTimes(1);
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
     });
   });
 
   describe('updateTexts', () => {
-    beforeEach(() => {
-      backToTopComponent = TestBed.inject(BackToTopComponent);
-    });
-    it('should call the textService', () => {
+    const shouldCallTextServiceExpectation = 'should call the textService';
+    const shouldCallTextService = () => {
+      backToTopComponent.updateTexts();
+
       expect(textServiceSpy.get)
         .withContext('get should have been called one time')
         .toHaveBeenCalledTimes(1);
       expect(textServiceSpy.get)
         .withContext('get should have been called with the correct arguments')
         .toHaveBeenCalledWith(backToTopAltSelector);
-    });
-    it('should set the properties to the textService result', () => {
+    };
+    const shouldSetPropertiesToTheServiceResultExpectation =
+      'should set the properties to the textService result';
+    const shouldSetPropertiesToTheServiceResult = () => {
+      backToTopComponent.updateTexts();
+
       const actualAltObs = backToTopComponent.altTxt;
 
       actualAltObs.subscribe((s) => {
@@ -102,26 +186,188 @@ describe('BackToTopComponent - unit', () => {
           .withContext('altTxt should be set')
           .toBe(expectedBackToTopAlt);
       });
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
     });
   });
 
   describe('ngOnDestroy', () => {
-    beforeEach(() => {
-      backToTopComponent = TestBed.inject(BackToTopComponent);
-    });
-    it('should unsubscribe from the languageService', () => {
+    const shouldUnsubscribeExpectation =
+      'should unsubscribe from the visibleToLoadTextService';
+    const shouldUnsubscribe = () => {
       backToTopComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe)
+      expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
         .toHaveBeenCalledOnceWith(backToTopComponent);
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
   });
 
   describe('onScroll method', () => {
-    beforeEach(() => {
-      backToTopComponent = TestBed.inject(BackToTopComponent);
-    });
-    it('should call updateAfterLoaded method from invisible to visible', () => {
+    const shouldCallUpdateFromInvisibleToVisibleExpectation =
+      'should call updateAfterLoaded method from invisible to visible';
+    const shouldCallUpdateFromInvisibleToVisible = () => {
       expect(backToTopComponent.backToTopState)
         .withContext('altTxt should be set')
         .toBe(invisibleState);
@@ -134,8 +380,11 @@ describe('BackToTopComponent - unit', () => {
       expect(backToTopComponent.updateBackToTop)
         .withContext('updateBackToTop should have been called')
         .toHaveBeenCalledTimes(1);
-    });
-    it('should call updateAfterLoaded method from visible to invisible', () => {
+    };
+
+    const shouldCallUpdateFromVisibleToInvisibleExpectation =
+      'should call updateAfterLoaded method from visible to invisible';
+    const shouldCallUpdateFromVisibleToInvisible = () => {
       spyOn(backToTopComponent, 'updateBackToTop');
 
       backToTopComponent.onScroll({
@@ -153,8 +402,11 @@ describe('BackToTopComponent - unit', () => {
       expect(backToTopComponent.updateBackToTop)
         .withContext('updateBackToTop should have been called - 2')
         .toHaveBeenCalledTimes(2);
-    });
-    it('should change from invisible to visible', () => {
+    };
+
+    const shouldChangeFromInvisibleToVisibleExpectation =
+      'should change from invisible to visible';
+    const shouldChangeFromInvisibleToVisible = () => {
       expect(backToTopComponent.backToTopState)
         .withContext('backToTopState should be invisible')
         .toBe(invisibleState);
@@ -167,8 +419,11 @@ describe('BackToTopComponent - unit', () => {
       expect(backToTopComponent.backToTopState)
         .withContext('backToTopState should be visible')
         .toBe(visibleState);
-    });
-    it('should change from visible to invisible', () => {
+    };
+
+    const shouldChangeFromVisibleToInvisibleExpectation =
+      'should change from visible to invisible';
+    const shouldChangeFromVisibleToInvisible = () => {
       spyOn(backToTopComponent, 'updateBackToTop');
 
       backToTopComponent.onScroll({
@@ -186,15 +441,134 @@ describe('BackToTopComponent - unit', () => {
       expect(backToTopComponent.backToTopState)
         .withContext('backToTopState should be invisible')
         .toBe(invisibleState);
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(
+        shouldCallUpdateFromInvisibleToVisibleExpectation,
+        shouldCallUpdateFromInvisibleToVisible
+      );
+      it(
+        shouldCallUpdateFromVisibleToInvisibleExpectation,
+        shouldCallUpdateFromVisibleToInvisible
+      );
+      it(
+        shouldChangeFromInvisibleToVisibleExpectation,
+        shouldChangeFromInvisibleToVisible
+      );
+      it(
+        shouldChangeFromVisibleToInvisibleExpectation,
+        shouldChangeFromVisibleToInvisible
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(
+        shouldCallUpdateFromInvisibleToVisibleExpectation,
+        shouldCallUpdateFromInvisibleToVisible
+      );
+      it(
+        shouldCallUpdateFromVisibleToInvisibleExpectation,
+        shouldCallUpdateFromVisibleToInvisible
+      );
+      it(
+        shouldChangeFromInvisibleToVisibleExpectation,
+        shouldChangeFromInvisibleToVisible
+      );
+      it(
+        shouldChangeFromVisibleToInvisibleExpectation,
+        shouldChangeFromVisibleToInvisible
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(
+        shouldCallUpdateFromInvisibleToVisibleExpectation,
+        shouldCallUpdateFromInvisibleToVisible
+      );
+      it(
+        shouldCallUpdateFromVisibleToInvisibleExpectation,
+        shouldCallUpdateFromVisibleToInvisible
+      );
+      it(
+        shouldChangeFromInvisibleToVisibleExpectation,
+        shouldChangeFromInvisibleToVisible
+      );
+      it(
+        shouldChangeFromVisibleToInvisibleExpectation,
+        shouldChangeFromVisibleToInvisible
+      );
     });
   });
 
   describe('onClick method', () => {
-    beforeEach(() => {
-      backToTopComponent = TestBed.inject(BackToTopComponent);
-    });
-    // it('should scroll to top smoothly', () => {});
-    it('should prevent default behaviour of the link', () => {
+    const shouldPreventDefaultBehaviourExpectation =
+      'should prevent default behaviour of the link';
+    const shouldPreventDefaultBehaviour = () => {
       const eventSpy: jasmine.SpyObj<Event> = jasmine.createSpyObj('Event', [
         'preventDefault',
       ]);
@@ -204,14 +578,98 @@ describe('BackToTopComponent - unit', () => {
       expect(eventSpy.preventDefault)
         .withContext('preventDefault should have been called')
         .toHaveBeenCalledOnceWith();
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(
+        shouldPreventDefaultBehaviourExpectation,
+        shouldPreventDefaultBehaviour
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(
+        shouldPreventDefaultBehaviourExpectation,
+        shouldPreventDefaultBehaviour
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(
+        shouldPreventDefaultBehaviourExpectation,
+        shouldPreventDefaultBehaviour
+      );
     });
   });
 
   describe('updateBackToTop', () => {
-    beforeEach(() => {
-      backToTopComponent = TestBed.inject(BackToTopComponent);
-    });
-    it('set icon opacity when invisible', () => {
+    const shouldSetIconOpacityWhenInvisibleExpectation =
+      'set icon opacity when invisible';
+    const shouldSetIconOpacityWhenInvisible = () => {
       const expected = '0';
 
       backToTopComponent.backToTopState = invisibleState;
@@ -220,8 +678,10 @@ describe('BackToTopComponent - unit', () => {
       const actual = backToTopComponent.iconOpacity;
 
       expect(actual).withContext('opacity should be set').toBe(expected);
-    });
-    it('set pointer event when invisible', () => {
+    };
+    const shouldSetPointerEventWhenInvisibleExpectation =
+      'set pointer event when invisible';
+    const shouldSetPointerEventWhenInvisible = () => {
       const expected = 'none';
 
       backToTopComponent.backToTopState = invisibleState;
@@ -230,8 +690,10 @@ describe('BackToTopComponent - unit', () => {
       const actual = backToTopComponent.iconPointerEvent;
 
       expect(actual).withContext('pointer event should be set').toBe(expected);
-    });
-    it('set icon opacity when visible', () => {
+    };
+    const shouldSetIconOpacityWhenVisibleExpectation =
+      'set icon opacity when visible';
+    const shouldSetIconOpacityWhenVisible = () => {
       const expected = '1';
 
       backToTopComponent.backToTopState = visibleState;
@@ -240,8 +702,10 @@ describe('BackToTopComponent - unit', () => {
       const actual = backToTopComponent.iconOpacity;
 
       expect(actual).withContext('opacity should be set').toBe(expected);
-    });
-    it('set pointer event when visible', () => {
+    };
+    const shouldSetPointerEventWhenVisibleExpectation =
+      'set pointer event when visible';
+    const shouldSetPointerEventWhenVisible = () => {
       const expected = 'all';
 
       backToTopComponent.backToTopState = visibleState;
@@ -250,6 +714,127 @@ describe('BackToTopComponent - unit', () => {
       const actual = backToTopComponent.iconPointerEvent;
 
       expect(actual).withContext('pointer event should be set').toBe(expected);
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(
+        shouldSetIconOpacityWhenInvisibleExpectation,
+        shouldSetIconOpacityWhenInvisible
+      );
+      it(
+        shouldSetPointerEventWhenInvisibleExpectation,
+        shouldSetPointerEventWhenInvisible
+      );
+      it(
+        shouldSetIconOpacityWhenVisibleExpectation,
+        shouldSetIconOpacityWhenVisible
+      );
+      it(
+        shouldSetPointerEventWhenVisibleExpectation,
+        shouldSetPointerEventWhenVisible
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(
+        shouldSetIconOpacityWhenInvisibleExpectation,
+        shouldSetIconOpacityWhenInvisible
+      );
+      it(
+        shouldSetPointerEventWhenInvisibleExpectation,
+        shouldSetPointerEventWhenInvisible
+      );
+      it(
+        shouldSetIconOpacityWhenVisibleExpectation,
+        shouldSetIconOpacityWhenVisible
+      );
+      it(
+        shouldSetPointerEventWhenVisibleExpectation,
+        shouldSetPointerEventWhenVisible
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        textServiceSpy.get.and.returnValues(of(expectedBackToTopAlt));
+
+        TestBed.configureTestingModule({
+          providers: [
+            BackToTopComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        backToTopComponent = TestBed.inject(BackToTopComponent);
+      });
+      it(
+        shouldSetIconOpacityWhenInvisibleExpectation,
+        shouldSetIconOpacityWhenInvisible
+      );
+      it(
+        shouldSetPointerEventWhenInvisibleExpectation,
+        shouldSetPointerEventWhenInvisible
+      );
+      it(
+        shouldSetIconOpacityWhenVisibleExpectation,
+        shouldSetIconOpacityWhenVisible
+      );
+      it(
+        shouldSetPointerEventWhenVisibleExpectation,
+        shouldSetPointerEventWhenVisible
+      );
     });
   });
 });

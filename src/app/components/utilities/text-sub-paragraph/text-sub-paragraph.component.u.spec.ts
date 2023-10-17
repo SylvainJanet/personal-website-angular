@@ -16,7 +16,7 @@ describe('TextSubParagraphComponent - unit', () => {
   it('should have SubParagraphRoot property', () => {
     expect(textSubParagraphComponent.SubParagraphRoot)
       .withContext('SubParagraphRoot should be defined')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
     expect(textSubParagraphComponent.SubParagraphRoot)
       .withContext('SubParagraphRoot should be the correct value')
       .toBe(SubParagraphRoot);
@@ -26,17 +26,17 @@ describe('TextSubParagraphComponent - unit', () => {
     it('should create', () => {
       expect(textSubParagraphComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
       expect(textSubParagraphComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
 
       expect(textSubParagraphComponent.subPar)
         .withContext('subPar should be defined')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(textSubParagraphComponent.subPar)
         .withContext('subPar should be empty BR')
         .toEqual(new SubParagraph(SubParagraphRoot.BR, ''));

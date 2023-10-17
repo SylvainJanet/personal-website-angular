@@ -41,13 +41,13 @@ describe('ImgLoadDirective - dom unit', () => {
     it('should create', () => {
       expect(imgLoadDirective)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
       expect(imgLoadDirective)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
 
       expect(imgLoadDirective.appImgLoad)
         .withContext('appImgLoad should be set')

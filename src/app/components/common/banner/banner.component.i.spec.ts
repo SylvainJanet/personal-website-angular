@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { BannerComponent } from './banner.component';
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
 describe('BannerComponent - integration', () => {
@@ -40,7 +39,7 @@ describe('BannerComponent - integration', () => {
     const shouldCreate = () => {
       expect(bannerComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     };
 
     describe('in dev environment', () => {
@@ -48,7 +47,6 @@ describe('BannerComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BannerComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: devEnv },
@@ -63,7 +61,6 @@ describe('BannerComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BannerComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: stagingEnv },
@@ -78,7 +75,6 @@ describe('BannerComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BannerComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: prodEnv },
@@ -93,6 +89,8 @@ describe('BannerComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
+      bannerComponent.updateTexts();
+
       const actualMessages = bannerComponent.messages;
       const actualIAmMe = bannerComponent.iAmMe;
 
@@ -129,7 +127,6 @@ describe('BannerComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BannerComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: devEnv },
@@ -147,7 +144,6 @@ describe('BannerComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BannerComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: stagingEnv },
@@ -165,7 +161,6 @@ describe('BannerComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             BannerComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             { provide: ENV, useValue: prodEnv },

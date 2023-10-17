@@ -56,7 +56,7 @@ describe('debounce decorator - unit', () => {
       testObj.action();
       expect(testObj[`${timeOutPrefix}action`])
         .withContext('timeout property should exist')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(testObj[`${timeOutPrefix}action`])
         .withContext('timeout property should be a number')
         .toBeInstanceOf(Number);
@@ -66,7 +66,7 @@ describe('debounce decorator - unit', () => {
       testObj.action();
       expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
         .withContext('timeout timeStarted property should exist')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
         .withContext('timeout timeStarted property should be a boolean')
         .toBeInstanceOf(Boolean);
@@ -113,7 +113,7 @@ describe('debounce decorator - unit', () => {
       testObj.action();
       expect(testObj[`${timeOutPrefix}action`])
         .withContext('timeout property should exist')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(testObj[`${timeOutPrefix}action`])
         .withContext('timeout property should be a number')
         .toBeInstanceOf(Number);
@@ -158,7 +158,7 @@ describe('debounce decorator - unit', () => {
       testObj.action();
       expect(testObj[`${timeOutPrefix}action`])
         .withContext('timeout property should exist')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(testObj[`${timeOutPrefix}action`])
         .withContext('timeout property should be a number')
         .toBeInstanceOf(Number);
@@ -168,7 +168,7 @@ describe('debounce decorator - unit', () => {
       testObj.action();
       expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
         .withContext('timeout timeStarted property should exist')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
         .withContext('timeout timeStarted property should be a boolean')
         .toBeInstanceOf(Boolean);
@@ -215,7 +215,7 @@ describe('debounce decorator - unit', () => {
       testObj.action();
       expect(testObj[`${timeOutPrefix}action`])
         .withContext('timeout property should exist')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(testObj[`${timeOutPrefix}action`])
         .withContext('timeout property should be a number')
         .toBeInstanceOf(Number);
@@ -225,7 +225,7 @@ describe('debounce decorator - unit', () => {
       testObj.action();
       expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
         .withContext('timeout timeStarted property should exist')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(testObj[`${timeOutPrefix}action${timeOutStartedSuffix}`])
         .withContext('timeout timeStarted property should be a boolean')
         .toBeInstanceOf(Boolean);

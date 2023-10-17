@@ -25,7 +25,7 @@ describe('ImageService', () => {
   const shouldHaveProperLogger = () => {
     expect(imageService.logger)
       .withContext('logger should be set')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
 
     const expected = 'ImageService';
     const actual = imageService.logger.className;
@@ -83,7 +83,7 @@ describe('ImageService', () => {
 
       expect(imageService['images'].get(imgInput))
         .withContext('img should not appear in map at first')
-        .not.toBeTruthy();
+        .not.toEqual(jasmine.anything());
 
       imageService.imageLoading(imgInput, loadersInput);
 
@@ -91,12 +91,12 @@ describe('ImageService', () => {
         .withContext(
           'img should appear in map after imageLoading call - first call'
         )
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(imageService['images'].get(imgInput)?.get(Preloaders.TEXTS))
         .withContext(
           'img should not be loading for Preloaders.TEXTS - first call'
         )
-        .not.toBeTruthy();
+        .not.toEqual(jasmine.anything());
       expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
         .withContext('img should be loading for Preloaders.MAIN - first call')
         .toBeTrue();
@@ -107,12 +107,12 @@ describe('ImageService', () => {
         .withContext(
           'img should appear in map after imageLoading call - second call'
         )
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(imageService['images'].get(imgInput)?.get(Preloaders.TEXTS))
         .withContext(
           'img should not be loading for Preloaders.TEXTS - second call'
         )
-        .not.toBeTruthy();
+        .not.toEqual(jasmine.anything());
       expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
         .withContext('img should be loading for Preloaders.MAIN - second call')
         .toBeTrue();
@@ -127,12 +127,12 @@ describe('ImageService', () => {
         .withContext(
           'img should appear in map after imageLoading call - third call'
         )
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
       expect(imageService['images'].get(imgInput)?.get(Preloaders.TEXTS))
         .withContext(
           'img should not be loading for Preloaders.TEXTS - third call'
         )
-        .not.toBeTruthy();
+        .not.toEqual(jasmine.anything());
       expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
         .withContext('img should be loading for Preloaders.MAIN - third call')
         .toBeTrue();

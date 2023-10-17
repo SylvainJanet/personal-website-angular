@@ -1,4 +1,4 @@
-<div class="banner-container">
+<div #mainDiv class="banner-container">
   <!-- https://stackoverflow.com/questions/5057990/how-can-i-check-if-a-background-image-is-loaded/5058336#5058336 -->
   <!-- preloaders should take into account the loading of all images, even those specified in css. It's 
   easy to directly do so when the img source is defined in the html, using the appropriate directive. Unfortunately,
@@ -17,7 +17,21 @@
     <div class="page-title-container">
       <div class="page-title">
         <div>
-          <h2>
+          <mat-progress-spinner
+            [mode]="'indeterminate'"
+            style="margin: auto"
+            *ngIf="
+              preloader.isLoading(loaderTexts) &&
+              !visibleToLoadTextService.hasTextLoaded(this)
+            "
+          ></mat-progress-spinner>
+          <h2
+            [ngClass]="{
+              hide:
+                preloader.isLoading(loaderTexts) &&
+                !visibleToLoadTextService.hasTextLoaded(this)
+            }"
+          >
             <span style="color: white">{{ iAmMe | async }}</span>
             <app-typed-animated-text
               textColor="white"

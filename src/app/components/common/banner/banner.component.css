@@ -1,1 +1,9 @@
 @import "src/css/template/styles/banner.css";
+
+mat-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: white;
+}
+
+.hide {
+  display: none;
+}

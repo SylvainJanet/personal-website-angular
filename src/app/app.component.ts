@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
    * @param cd The `ChangeDetectorRef`
    */
   constructor(public preloader: PreloaderService) {
-    this.increaseOpacity(0, 10, 10);
+    this.increaseOpacity(0, 40, 10);
   }
 
   /** Used to set a css variable representing the scroll bar width. */

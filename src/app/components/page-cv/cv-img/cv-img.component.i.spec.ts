@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -30,14 +29,13 @@ describe('CvImgComponent - integration', () => {
     const shouldCreate = () => {
       expect(cvImgComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
     };
     describe('in dev environment', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
           providers: [
             CvImgComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,
@@ -55,7 +53,6 @@ describe('CvImgComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             CvImgComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,
@@ -73,7 +70,6 @@ describe('CvImgComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             CvImgComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,
@@ -92,6 +88,8 @@ describe('CvImgComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
+      cvImgComponent.updateTexts();
+
       const actualAltTextObs = cvImgComponent.altTxt;
 
       actualAltTextObs.subscribe((s) => {
@@ -103,7 +101,6 @@ describe('CvImgComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             CvImgComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,
@@ -124,7 +121,6 @@ describe('CvImgComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             CvImgComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,
@@ -145,7 +141,6 @@ describe('CvImgComponent - integration', () => {
         TestBed.configureTestingModule({
           providers: [
             CvImgComponent,
-            LanguageService,
             TextService,
             { provide: HttpClient, useValue: httpClientSpy },
             DatasourceService,

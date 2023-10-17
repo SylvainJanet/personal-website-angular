@@ -1,1 +1,5 @@
 @import "src/css/template/styles/footer.css";
+
+.hide {
+  visibility: hidden;
+}

@@ -1,26 +1,27 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { of } from 'rxjs';
 import { DebugElement } from '@angular/core';
 import { CvImgComponent } from './cv-img.component';
 import { ImgLoadDirective } from 'src/app/directives/imgLoad/img-load.directive';
 import { ImageService } from 'src/app/services/image/image.service';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
 
 describe('CvImgComponent - dom unit', () => {
   let fixture: ComponentFixture<CvImgComponent>;
   let componentInstance: CvImgComponent;
-  let languageServiceSpy: jasmine.SpyObj<LanguageService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
   let imageServiceSpy: jasmine.SpyObj<ImageService>;
+  let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   const expectedAltText = 'test alt text';
 
   beforeEach(waitForAsync(() => {
-    languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-      'subscribe',
-      'unsubscribe',
-    ]);
     textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+    visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+      'VisibleToLoadTextServiceSpy',
+      ['hasTextLoaded', 'subscribe', 'unsubscribe', 'textLoaded'],
+      []
+    );
     imageServiceSpy = jasmine.createSpyObj('ImageService', [
       'imageLoading',
       'imageLoadedOrError',
@@ -31,9 +32,12 @@ describe('CvImgComponent - dom unit', () => {
     TestBed.configureTestingModule({
       imports: [CvImgComponent, ImgLoadDirective],
       providers: [
-        { provide: LanguageService, useValue: languageServiceSpy },
         { provide: TextService, useValue: textServiceSpy },
         { provide: ImageService, useValue: imageServiceSpy },
+        {
+          provide: VisibleToLoadTextService,
+          useValue: visibleToLoadTextServiceSpy,
+        },
       ],
     }).compileComponents();
   }));
@@ -47,7 +51,7 @@ describe('CvImgComponent - dom unit', () => {
   it('should create', () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   });
 
   it('should have proper dom structure', () => {
@@ -102,6 +106,9 @@ describe('CvImgComponent - dom unit', () => {
   });
 
   it('should have altText set by textService', () => {
+    componentInstance.updateTexts();
+    fixture.detectChanges();
+
     const debugEl: DebugElement = fixture.debugElement;
 
     const firstDivEl: DebugElement = debugEl.children[0];

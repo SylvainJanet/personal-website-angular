@@ -9,10 +9,12 @@ import { LinkBarOnHoverComponent } from '../../utilities/link-bar-on-hover/link-
 import { ButtonBarOnHoverComponent } from '../../utilities/button-bar-on-hover/button-bar-on-hover.component';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { DebugElement } from '@angular/core';
+import { LanguageService } from 'src/app/services/language/language.service';
+import { PreloaderService } from 'src/app/services/preloader/preloader.service';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
 
 describe('HeaderComponent - dom integration', () => {
   let fixture: ComponentFixture<HeaderComponent>;
@@ -45,12 +47,15 @@ describe('HeaderComponent - dom integration', () => {
   const shouldCreate = () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   };
 
   const shouldHaveContentSetByServiceExpectation =
     'should have content set by textService';
   const shouldHaveContentSetByService = () => {
+    componentInstance.updateTexts();
+    fixture.detectChanges();
+
     // myName
 
     const debugEl: DebugElement = fixture.debugElement;
@@ -133,9 +138,11 @@ describe('HeaderComponent - dom integration', () => {
             provide: DOMComputationService,
             useValue: DOMComputationServiceSpy,
           },
-          LanguageService,
           TextService,
+          LanguageService,
+          VisibleToLoadTextService,
           LogService,
+          PreloaderService,
           { provide: HttpClient, useValue: httpClientSpy },
           { provide: ENV, useValue: devEnv },
         ],
@@ -165,9 +172,11 @@ describe('HeaderComponent - dom integration', () => {
             provide: DOMComputationService,
             useValue: DOMComputationServiceSpy,
           },
-          LanguageService,
           TextService,
+          LanguageService,
+          VisibleToLoadTextService,
           LogService,
+          PreloaderService,
           { provide: HttpClient, useValue: httpClientSpy },
           { provide: ENV, useValue: stagingEnv },
         ],
@@ -197,9 +206,11 @@ describe('HeaderComponent - dom integration', () => {
             provide: DOMComputationService,
             useValue: DOMComputationServiceSpy,
           },
-          LanguageService,
           TextService,
+          LanguageService,
+          VisibleToLoadTextService,
           LogService,
+          PreloaderService,
           { provide: HttpClient, useValue: httpClientSpy },
           { provide: ENV, useValue: prodEnv },
         ],

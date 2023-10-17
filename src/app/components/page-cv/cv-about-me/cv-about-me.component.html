@@ -1,4 +1,19 @@
-<div>
+<mat-progress-spinner
+  *ngIf="
+    preloader.isLoading(loaderTexts) &&
+    !visibleToLoadTextService.hasTextLoaded(this)
+  "
+  [mode]="'indeterminate'"
+  style="height: 1em; width: 50px; margin: auto; flex: none"
+></mat-progress-spinner>
+<div
+  #mainDiv
+  [ngClass]="{
+    hide:
+      preloader.isLoading(loaderTexts) &&
+      !visibleToLoadTextService.hasTextLoaded(this)
+  }"
+>
   <div class="title-and-bar">
     <div>
       <h2 class="title">{{ aboutMe | async }}</h2>

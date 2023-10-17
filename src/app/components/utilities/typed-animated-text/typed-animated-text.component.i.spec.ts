@@ -1,6 +1,6 @@
 import { TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
 import { TypedAnimatedTextComponent } from './typed-animated-text.component';
-import { ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
 describe('TypedAnimatedTextComponent - integration', () => {
   let typedAnimatedTextComponent: TypedAnimatedTextComponent;
@@ -11,32 +11,40 @@ describe('TypedAnimatedTextComponent - integration', () => {
   const deleteDelay = 11;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [Renderer2, TypedAnimatedTextComponent],
+    textElement = jasmine.createSpyObj('ElementRef', [], {
+      nativeElement: document.createElement('DIV'),
     });
-    typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+    blinkElement = jasmine.createSpyObj('ElementRef', [], {
+      nativeElement: document.createElement('DIV'),
+    });
+
+    TestBed.configureTestingModule({
+      imports: [TypedAnimatedTextComponent],
+      providers: [TypedAnimatedTextComponent],
+    }).compileComponents();
+
+    TypedAnimatedTextComponent.prototype.textElement = textElement;
+    TypedAnimatedTextComponent.prototype.blinkElement = blinkElement;
+
+    typedAnimatedTextComponent = TestBed.createComponent(
+      TypedAnimatedTextComponent
+    ).componentInstance;
+  });
+
+  afterEach(() => {
+    TypedAnimatedTextComponent.prototype.textElement = new ElementRef(
+      document.createElement('div')
+    );
+    TypedAnimatedTextComponent.prototype.blinkElement = new ElementRef(
+      document.createElement('div')
+    );
   });
 
   describe('typingEffect', () => {
     beforeEach(() => {
-      textElement = jasmine.createSpyObj(
-        'ElementRef',
-        {},
-        { nativeElement: document.createElement('DIV') }
-      );
-      blinkElement = jasmine.createSpyObj(
-        'ElementRef',
-        {},
-        { nativeElement: document.createElement('DIV') }
-      );
-
-      typedAnimatedTextComponent.textElement = textElement;
-      typedAnimatedTextComponent.blinkElement = blinkElement;
-
       typedAnimatedTextComponent.typingSpeed = typingSpeed;
       typedAnimatedTextComponent.deleteSpeed = deleteSpeed;
       typedAnimatedTextComponent.deleteDelay = deleteDelay;
-
       typedAnimatedTextComponent.textArray = ['one', 'test'];
       typedAnimatedTextComponent['i'] = 0;
     });

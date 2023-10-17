@@ -8,12 +8,16 @@ import { LinkBarOnHoverComponent } from '../../utilities/link-bar-on-hover/link-
 import { ButtonBarOnHoverComponent } from '../../utilities/button-bar-on-hover/button-bar-on-hover.component';
 import { of } from 'rxjs';
 import { DebugElement } from '@angular/core';
+import { PreloaderService } from 'src/app/services/preloader/preloader.service';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
 
 describe('HeaderComponent - dom unit', () => {
   let fixture: ComponentFixture<HeaderComponent>;
   let componentInstance: HeaderComponent;
   let DOMComputationServiceSpy: jasmine.SpyObj<DOMComputationService>;
   let languageServiceSpy: jasmine.SpyObj<LanguageService>;
+  let preloaderServiceSpy: jasmine.SpyObj<PreloaderService>;
+  let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
   let logServiceGlobalSpy: jasmine.SpyObj<LogService>;
   let logServiceSpy: jasmine.SpyObj<LogService>;
@@ -22,6 +26,16 @@ describe('HeaderComponent - dom unit', () => {
   const expectedOtherLanguage = 'test other language';
 
   beforeEach(waitForAsync(() => {
+    preloaderServiceSpy = jasmine.createSpyObj(
+      'PreloaderService',
+      ['isLoading'],
+      []
+    );
+    visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+      'VisibleToLoadTextServiceSpy',
+      ['hasTextLoaded', 'subscribe', 'unsubscribe', 'textLoaded'],
+      []
+    );
     DOMComputationServiceSpy = jasmine.createSpyObj('DOMComputationService', [
       'getActualHeight',
     ]);
@@ -55,6 +69,11 @@ describe('HeaderComponent - dom unit', () => {
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: TextService, useValue: textServiceSpy },
         { provide: LogService, useValue: logServiceGlobalSpy },
+        { provide: PreloaderService, useValue: preloaderServiceSpy },
+        {
+          provide: VisibleToLoadTextService,
+          useValue: visibleToLoadTextServiceSpy,
+        },
       ],
     }).compileComponents();
   }));
@@ -68,7 +87,7 @@ describe('HeaderComponent - dom unit', () => {
   it('should create', () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   });
 
   describe('onResize method', () => {
@@ -95,6 +114,10 @@ describe('HeaderComponent - dom unit', () => {
   });
 
   it('should have proper dom structure', () => {
+    // loaded
+    componentInstance.updateTexts();
+    fixture.detectChanges();
+
     const debugEl: DebugElement = fixture.debugElement;
 
     expect(debugEl.children.length).withContext('1 child at root').toBe(1);
@@ -229,9 +252,173 @@ describe('HeaderComponent - dom unit', () => {
     expect(deroulantUlLi2El.children[0].nativeElement.tagName)
       .withContext('child 1 of LI 1 should be APP-BUTTON-BAR-ON-HOVER')
       .toBe('APP-BUTTON-BAR-ON-HOVER');
+
+    //loading
+    visibleToLoadTextServiceSpy.hasTextLoaded.and.returnValue(false);
+    preloaderServiceSpy.isLoading.and.returnValue(true);
+    fixture.detectChanges();
+
+    const debugElLoading: DebugElement = fixture.debugElement;
+
+    expect(debugElLoading.children.length)
+      .withContext('1 child at root')
+      .toBe(1);
+    expect(debugElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is DIV')
+      .toBe('DIV');
+
+    const headerElLoading: DebugElement = debugElLoading.children[0];
+
+    expect(headerElLoading.children.length)
+      .withContext('child 1 at root should have 1 child')
+      .toBe(1);
+    expect(headerElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of child 1 at root should be DIV')
+      .toBe('DIV');
+
+    const headerContainerElLoading: DebugElement = headerElLoading.children[0];
+
+    expect(headerContainerElLoading.children.length)
+      .withContext('header container should have 3 children')
+      .toBe(3);
+    expect(headerContainerElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of header container should be DIV')
+      .toBe('DIV');
+    expect(headerContainerElLoading.children[1].nativeElement.tagName)
+      .withContext('child 2 of header container should be DIV')
+      .toBe('DIV');
+    expect(headerContainerElLoading.children[2].nativeElement.tagName)
+      .withContext('child 3 of header container should be DIV')
+      .toBe('DIV');
+
+    // left-header
+    const leftHeaderElLoading: DebugElement =
+      headerContainerElLoading.children[0];
+
+    expect(leftHeaderElLoading.children.length)
+      .withContext('left header should have 2 children')
+      .toBe(2);
+    expect(leftHeaderElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of left header should be MAT-PROGRESS-SPINNER')
+      .toBe('MAT-PROGRESS-SPINNER');
+    expect(leftHeaderElLoading.children[1].nativeElement.tagName)
+      .withContext('child 2 of left header should be APP-LINK-BAR-ON-HOVER')
+      .toBe('APP-LINK-BAR-ON-HOVER');
+
+    // right-header
+    const rightHeaderElLoading: DebugElement =
+      headerContainerElLoading.children[1];
+
+    expect(rightHeaderElLoading.children.length)
+      .withContext('right header should have 2 children')
+      .toBe(2);
+    expect(rightHeaderElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of right header should be MAT-PROGRESS-SPINNER')
+      .toBe('MAT-PROGRESS-SPINNER');
+    expect(rightHeaderElLoading.children[1].nativeElement.tagName)
+      .withContext('child 2 of right header should be APP-BUTTON-BAR-ON-HOVER')
+      .toBe('APP-BUTTON-BAR-ON-HOVER');
+
+    // collapsed-header
+    const collapsedHeaderElLoading: DebugElement =
+      headerContainerElLoading.children[2];
+
+    expect(collapsedHeaderElLoading.children.length)
+      .withContext('collapsed header should have 1 child')
+      .toBe(1);
+    expect(collapsedHeaderElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of collapsed header should be DIV')
+      .toBe('DIV');
+
+    const deroulantElLoading: DebugElement =
+      collapsedHeaderElLoading.children[0];
+
+    expect(deroulantElLoading.children.length)
+      .withContext('deroulant should have 2 children')
+      .toBe(2);
+    expect(deroulantElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of deroulant should be DIV')
+      .toBe('DIV');
+    expect(deroulantElLoading.children[1].nativeElement.tagName)
+      .withContext('child 2 of deroulant should be UL')
+      .toBe('UL');
+
+    // collapsed-header deroulant div
+
+    const deroulantDivElLoading: DebugElement = deroulantElLoading.children[0];
+
+    expect(deroulantDivElLoading.children.length)
+      .withContext('child 1 of deroulant should have 1 child')
+      .toBe(1);
+    expect(deroulantDivElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of child 1 of deroulant should be DIV')
+      .toBe('DIV');
+
+    const deroulantDivDivElLoading: DebugElement =
+      deroulantDivElLoading.children[0];
+
+    expect(deroulantDivDivElLoading.children.length)
+      .withContext('child 1 of child 1 of deroulant should have 3 children')
+      .toBe(3);
+    expect(deroulantDivDivElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of child 1 of child 1 of deroulant should be DIV')
+      .toBe('DIV');
+    expect(deroulantDivDivElLoading.children[1].nativeElement.tagName)
+      .withContext('child 2 of child 1 of child 1 of deroulant should be DIV')
+      .toBe('DIV');
+    expect(deroulantDivDivElLoading.children[2].nativeElement.tagName)
+      .withContext('child 3 of child 1 of child 1 of deroulant should be DIV')
+      .toBe('DIV');
+
+    // collapsed-header deroulant ul
+
+    const deroulantUlElLoading: DebugElement = deroulantElLoading.children[1];
+
+    expect(deroulantUlElLoading.children.length)
+      .withContext('UL should have 2 children')
+      .toBe(2);
+    expect(deroulantUlElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of UL should be LI')
+      .toBe('LI');
+    expect(deroulantUlElLoading.children[1].nativeElement.tagName)
+      .withContext('child 2 of UL should be LI')
+      .toBe('LI');
+
+    // collapsed-header deroulant ul li 1
+
+    const deroulantUlLi1ElLoading: DebugElement =
+      deroulantUlElLoading.children[0];
+
+    expect(deroulantUlLi1ElLoading.children.length)
+      .withContext('LI 1 should have 2 children')
+      .toBe(2);
+    expect(deroulantUlLi1ElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of LI 1 should be MAT-PROGRESS-SPINNER')
+      .toBe('MAT-PROGRESS-SPINNER');
+    expect(deroulantUlLi1ElLoading.children[1].nativeElement.tagName)
+      .withContext('child 2 of LI 1 should be APP-LINK-BAR-ON-HOVER')
+      .toBe('APP-LINK-BAR-ON-HOVER');
+
+    // collapsed-header deroulant ul li 2
+
+    const deroulantUlLi2ElLoading: DebugElement =
+      deroulantUlElLoading.children[1];
+
+    expect(deroulantUlLi2ElLoading.children.length)
+      .withContext('LI 2 should have 2 children')
+      .toBe(2);
+    expect(deroulantUlLi2ElLoading.children[0].nativeElement.tagName)
+      .withContext('child 1 of LI 1 should be MAT-PROGRESS-SPINNER')
+      .toBe('MAT-PROGRESS-SPINNER');
+    expect(deroulantUlLi2ElLoading.children[1].nativeElement.tagName)
+      .withContext('child 2 of LI 1 should be APP-BUTTON-BAR-ON-HOVER')
+      .toBe('APP-BUTTON-BAR-ON-HOVER');
   });
 
   it('should set myName', () => {
+    componentInstance.updateTexts();
+    fixture.detectChanges();
+
     const debugEl: DebugElement = fixture.debugElement;
 
     const headerEl: DebugElement = debugEl.children[0];
@@ -269,6 +456,9 @@ describe('HeaderComponent - dom unit', () => {
   });
 
   it('should set otherLanguage', () => {
+    componentInstance.updateTexts();
+    fixture.detectChanges();
+
     const debugEl: DebugElement = fixture.debugElement;
 
     const headerEl: DebugElement = debugEl.children[0];

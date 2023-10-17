@@ -10,6 +10,9 @@
 
 body {
   background-color: var(--background-color);
+  min-width: 315px; /* minimum width of 315px */
+  width: auto !important; /* Firefox will set width as auto */
+  width: 315px; /* As IE6 ignores !important it will set width as 315px; */
 }
 
 * {

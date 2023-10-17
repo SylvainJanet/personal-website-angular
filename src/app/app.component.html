@@ -1,23 +1,40 @@
 <div [style.opacity]="opacity">
   <mat-progress-spinner
-    *ngIf="preloader.isAnyLoading(mainLoader, loaderTexts)"
+    *ngIf="
+      preloader.isAnyLoading(mainLoader, loaderTexts) && preloader.isMainLoad
+    "
     [mode]="'determinate'"
     [value]="preloader.getProgressionPercent(mainLoader, loaderTexts)"
   ></mat-progress-spinner>
 
   <app-header
-    [ngClass]="{ hide: preloader.isAnyLoading(mainLoader, loaderTexts) }"
+    [ngClass]="{
+      hide:
+        preloader.isAnyLoading(mainLoader, loaderTexts) && preloader.isMainLoad
+    }"
   ></app-header>
   <app-banner
-    [ngClass]="{ hide: preloader.isAnyLoading(mainLoader, loaderTexts) }"
+    [ngClass]="{
+      hide:
+        preloader.isAnyLoading(mainLoader, loaderTexts) && preloader.isMainLoad
+    }"
   ></app-banner>
   <app-page-content
-    [ngClass]="{ hide: preloader.isAnyLoading(mainLoader, loaderTexts) }"
+    [ngClass]="{
+      hide:
+        preloader.isAnyLoading(mainLoader, loaderTexts) && preloader.isMainLoad
+    }"
   ></app-page-content>
   <app-footer
-    [ngClass]="{ hide: preloader.isAnyLoading(mainLoader, loaderTexts) }"
+    [ngClass]="{
+      hide:
+        preloader.isAnyLoading(mainLoader, loaderTexts) && preloader.isMainLoad
+    }"
   ></app-footer>
   <app-back-to-top
-    [ngClass]="{ hide: preloader.isAnyLoading(mainLoader, loaderTexts) }"
+    [ngClass]="{
+      hide:
+        preloader.isAnyLoading(mainLoader, loaderTexts) && preloader.isMainLoad
+    }"
   ></app-back-to-top>
 </div>

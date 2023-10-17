@@ -1,46 +1,38 @@
 import { TestBed } from '@angular/core/testing';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { of } from 'rxjs';
 import { CvImgComponent } from './cv-img.component';
 import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
+import { environment as developmentEnvironment } from 'src/environments/environment';
+import { environment as stagingEnvironment } from 'src/environments/environment.staging';
+import { environment as productionEnvironment } from 'src/environments/environment.prod';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
 
 describe('CvImgComponent - unit', () => {
   let cvImgComponent: CvImgComponent;
-  let languageServiceSpy: jasmine.SpyObj<LanguageService>;
+  let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
+
+  const devEnv = developmentEnvironment;
+  const stagingEnv = stagingEnvironment;
+  const prodEnv = productionEnvironment;
+
   const altTextSelector = 'cv-img-alt';
 
-  beforeEach(() => {
-    languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-      'subscribe',
-      'unsubscribe',
-    ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
-    TestBed.configureTestingModule({
-      providers: [
-        CvImgComponent,
-        { provide: LanguageService, useValue: languageServiceSpy },
-        { provide: TextService, useValue: textServiceSpy },
-      ],
-    });
-  });
-
   describe('constructor', () => {
-    beforeEach(() => {
-      spyOn(CvImgComponent.prototype, 'updateTexts');
-      cvImgComponent = TestBed.inject(CvImgComponent);
-    });
-    it('should create', () => {
+    const shouldCreateExpectation = 'should create';
+    const shouldCreate = () => {
       expect(cvImgComponent)
         .withContext('component should create')
-        .toBeTruthy();
-    });
+        .toEqual(jasmine.anything());
+    };
 
-    it('should set default values', () => {
+    const shouldSetDefaultValuesExpectation = 'should set default values';
+    const shouldSetDefaultValues = () => {
       expect(cvImgComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
 
       expect(cvImgComponent.preloaders)
         .withContext('preloaders should be set')
@@ -49,26 +41,110 @@ describe('CvImgComponent - unit', () => {
       cvImgComponent.altTxt.subscribe((s) =>
         expect(s).withContext('altTxt should be set').toBe('')
       );
-    });
+    };
 
-    it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe)
-        .withContext('languageService should have been called')
-        .toHaveBeenCalledOnceWith(cvImgComponent);
-    });
+    const shouldSubscribeToVisibleToLoadTextServiceExpectation =
+      'should subscribe to the visibleToLoadTextService';
+    const shouldSubscribeToVisibleToLoadTextService = (done: DoneFn) => {
+      setTimeout(() => {
+        expect(visibleToLoadTextServiceSpy.subscribe)
+          .withContext('subscribe should have been called')
+          .toHaveBeenCalledOnceWith(cvImgComponent);
+        done();
+      });
+    };
 
-    it('should update the texts', () => {
-      expect(cvImgComponent.updateTexts)
-        .withContext('updateTexts should have been called')
-        .toHaveBeenCalledTimes(1);
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvImgComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvImgComponent = TestBed.inject(CvImgComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvImgComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvImgComponent = TestBed.inject(CvImgComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvImgComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvImgComponent = TestBed.inject(CvImgComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
     });
   });
 
   describe('updateTexts', () => {
-    beforeEach(() => {
-      cvImgComponent = TestBed.inject(CvImgComponent);
-    });
-    it('should call the textService', () => {
+    const shouldCallTextServiceExpectation = 'should call the textService';
+    const shouldCallTextService = () => {
+      textServiceSpy.get.and.returnValue(of('smth'));
+      cvImgComponent.updateTexts();
       expect(textServiceSpy.get)
         .withContext('get should have been called once')
         .toHaveBeenCalledTimes(1);
@@ -88,30 +164,185 @@ describe('CvImgComponent - unit', () => {
           'get should have been called with the proper arguments - 2'
         )
         .toHaveBeenCalledWith(altTextSelector);
-    });
-    it('should set the properties to the textService result', () => {
-      const expectedaltTextObs = of('alt text test');
-      textServiceSpy.get.and.returnValues(expectedaltTextObs);
+    };
+
+    const shouldSetPropertiesToTheServiceResultExpectation =
+      'should set the properties to the textService result';
+    const shouldSetPropertiesToTheServiceResult = () => {
+      const expectedAltText = 'alt text test';
+      const expectedaltTextObs = of(expectedAltText);
+      textServiceSpy.get.and.returnValue(expectedaltTextObs);
 
       cvImgComponent.updateTexts();
 
       const actualNameObs = cvImgComponent.altTxt;
 
-      expect(actualNameObs)
-        .withContext('altTxt should be set')
-        .toBe(expectedaltTextObs);
+      actualNameObs.subscribe((v) => {
+        expect(v).withContext('altTxt should be set').toEqual(expectedAltText);
+      });
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvImgComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvImgComponent = TestBed.inject(CvImgComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvImgComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvImgComponent = TestBed.inject(CvImgComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvImgComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvImgComponent = TestBed.inject(CvImgComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
     });
   });
 
   describe('ngOnDestroy', () => {
-    beforeEach(() => {
-      cvImgComponent = TestBed.inject(CvImgComponent);
-    });
-    it('should unsubscribe from the languageService', () => {
+    const shouldUnsubscribeExpectation =
+      'should unsubscribe from the visibleToLoadTextService';
+    const shouldUnsubscribe = () => {
       cvImgComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe)
+      expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
         .toHaveBeenCalledOnceWith(cvImgComponent);
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvImgComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvImgComponent = TestBed.inject(CvImgComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvImgComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvImgComponent = TestBed.inject(CvImgComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvImgComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvImgComponent = TestBed.inject(CvImgComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
   });
 });

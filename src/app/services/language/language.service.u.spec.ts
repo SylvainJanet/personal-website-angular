@@ -1,49 +1,128 @@
 import { Languages } from 'src/app/enums/languages';
 import { LanguageService } from './language.service';
-import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
+import { TestBed } from '@angular/core/testing';
+import { environment as developmentEnvironment } from 'src/environments/environment';
+import { environment as stagingEnvironment } from 'src/environments/environment.staging';
+import { environment as productionEnvironment } from 'src/environments/environment.prod';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
 
 let languageService: LanguageService;
+const devEnv = developmentEnvironment;
+const stagingEnv = stagingEnvironment;
+const prodEnv = productionEnvironment;
 
 describe('LanguageService', () => {
-  beforeEach(() => {
-    localStorage.removeItem('language');
-    languageService = new LanguageService();
-  });
   afterEach(() => {
     localStorage.removeItem('language');
   });
 
-  it('should set the language to english by default', () => {
+  const shouldSetDefaultLanguageToEnglishByDefaultExpectation =
+    'should set the language to english by default';
+  const shouldSetDefaultLanguageToEnglishByDefault = () => {
+    languageService = TestBed.inject(LanguageService);
+
     const expected = Languages.ENGLISH;
     const actual = languageService.language;
 
     expect(actual).withContext('language should be english').toBe(expected);
-  });
+  };
 
-  it('should set the language to english in localStorage by default', () => {
+  const shouldSetLanguageToEnglishByDefaultInLocalStorageExpectation =
+    'should set the language to english in localStorage by default';
+  const shouldSetLanguageToEnglishByDefaultInLocalStorage = () => {
     spyOn(Storage.prototype, 'setItem');
 
     localStorage.removeItem('language');
-    languageService = new LanguageService();
+    languageService = TestBed.inject(LanguageService);
 
     expect(window.localStorage.setItem)
       .withContext('setItem should have been called once with proper arguments')
       .toHaveBeenCalledOnceWith('language', Languages[Languages.ENGLISH]);
-  });
+  };
 
-  it('should set the language to the one in localStorage if there is one', () => {
+  const shouldSetLanguageToTheOneInLocalStorageExpectation =
+    'should set the language to the one in localStorage if there is one';
+  const shouldSetLanguageToTheOneInLocalStorage = () => {
     localStorage.setItem('language', Languages[Languages.FRENCH]);
 
-    languageService = new LanguageService();
+    languageService = TestBed.inject(LanguageService);
 
     const expected = Languages.FRENCH;
     const actual = languageService.language;
 
     expect(actual).withContext('language should be as expected').toBe(expected);
+  };
+
+  describe('in dev environment', () => {
+    beforeEach(() => {
+      localStorage.removeItem('language');
+
+      TestBed.configureTestingModule({
+        providers: [{ provide: ENV, useValue: devEnv }],
+      });
+    });
+    it(
+      shouldSetDefaultLanguageToEnglishByDefaultExpectation,
+      shouldSetDefaultLanguageToEnglishByDefault
+    );
+    it(
+      shouldSetLanguageToEnglishByDefaultInLocalStorageExpectation,
+      shouldSetLanguageToEnglishByDefaultInLocalStorage
+    );
+    it(
+      shouldSetLanguageToTheOneInLocalStorageExpectation,
+      shouldSetLanguageToTheOneInLocalStorage
+    );
+  });
+
+  describe('in staging environment', () => {
+    beforeEach(() => {
+      localStorage.removeItem('language');
+
+      TestBed.configureTestingModule({
+        providers: [{ provide: ENV, useValue: stagingEnv }],
+      });
+    });
+    it(
+      shouldSetDefaultLanguageToEnglishByDefaultExpectation,
+      shouldSetDefaultLanguageToEnglishByDefault
+    );
+    it(
+      shouldSetLanguageToEnglishByDefaultInLocalStorageExpectation,
+      shouldSetLanguageToEnglishByDefaultInLocalStorage
+    );
+    it(
+      shouldSetLanguageToTheOneInLocalStorageExpectation,
+      shouldSetLanguageToTheOneInLocalStorage
+    );
+  });
+
+  describe('in prod environment', () => {
+    beforeEach(() => {
+      localStorage.removeItem('language');
+
+      TestBed.configureTestingModule({
+        providers: [{ provide: ENV, useValue: prodEnv }],
+      });
+    });
+    it(
+      shouldSetDefaultLanguageToEnglishByDefaultExpectation,
+      shouldSetDefaultLanguageToEnglishByDefault
+    );
+    it(
+      shouldSetLanguageToEnglishByDefaultInLocalStorageExpectation,
+      shouldSetLanguageToEnglishByDefaultInLocalStorage
+    );
+    it(
+      shouldSetLanguageToTheOneInLocalStorageExpectation,
+      shouldSetLanguageToTheOneInLocalStorage
+    );
   });
 
   describe('current method', () => {
-    it('should return the current language', () => {
+    const shouldReturnTheCurrentLanguageExpectation =
+      'should return the current language';
+    const shouldReturnTheCurrentLanguage = () => {
       const expected = Languages.ENGLISH;
       const actual = languageService.current();
 
@@ -58,11 +137,58 @@ describe('LanguageService', () => {
       expect(actual2)
         .withContext('language should be as expected - 2')
         .toBe(expected2);
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        localStorage.removeItem('language');
+
+        TestBed.configureTestingModule({
+          providers: [{ provide: ENV, useValue: devEnv }],
+        });
+        languageService = TestBed.inject(LanguageService);
+      });
+      it(
+        shouldReturnTheCurrentLanguageExpectation,
+        shouldReturnTheCurrentLanguage
+      );
+    });
+
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        localStorage.removeItem('language');
+
+        TestBed.configureTestingModule({
+          providers: [{ provide: ENV, useValue: stagingEnv }],
+        });
+        languageService = TestBed.inject(LanguageService);
+      });
+      it(
+        shouldReturnTheCurrentLanguageExpectation,
+        shouldReturnTheCurrentLanguage
+      );
+    });
+
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        localStorage.removeItem('language');
+
+        TestBed.configureTestingModule({
+          providers: [{ provide: ENV, useValue: prodEnv }],
+        });
+        languageService = TestBed.inject(LanguageService);
+      });
+      it(
+        shouldReturnTheCurrentLanguageExpectation,
+        shouldReturnTheCurrentLanguage
+      );
     });
   });
 
   describe('set method', () => {
-    it('should set the current language', () => {
+    const shouldSetCurrentLanguageExpectation =
+      'should set the current language';
+    const shouldSetCurrentLanguage = () => {
       const expected = Languages.ENGLISH;
       const actual = languageService.language;
 
@@ -77,9 +203,11 @@ describe('LanguageService', () => {
       expect(actual2)
         .withContext('language should be as expected - 2')
         .toBe(expected2);
-    });
+    };
 
-    it('should set the current language in localStorage', () => {
+    const shouldSetCurrentLanguageInLocalStorageExpectation =
+      'should set the current language in localStorage';
+    const shouldSetCurrentLanguageInLocalStorage = () => {
       spyOn(Storage.prototype, 'setItem');
 
       const newLanguage = Languages.FRENCH;
@@ -90,116 +218,54 @@ describe('LanguageService', () => {
           'setItem should have been called once with proper arguments'
         )
         .toHaveBeenCalledOnceWith('language', Languages[newLanguage]);
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        localStorage.removeItem('language');
+
+        TestBed.configureTestingModule({
+          providers: [{ provide: ENV, useValue: devEnv }],
+        });
+        languageService = TestBed.inject(LanguageService);
+      });
+      it(shouldSetCurrentLanguageExpectation, shouldSetCurrentLanguage);
+      it(
+        shouldSetCurrentLanguageInLocalStorageExpectation,
+        shouldSetCurrentLanguageInLocalStorage
+      );
     });
 
-    it('should notify all subscribers of the language change', () => {
-      const subscriber1: ComponentWithText = {
-        updateTexts: function (): void {
-          //
-        },
-        ngOnDestroy: function (): void {
-          //
-        },
-      };
-      const subscriber2: ComponentWithText = {
-        updateTexts: function (): void {
-          //
-        },
-        ngOnDestroy: function (): void {
-          //
-        },
-      };
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        localStorage.removeItem('language');
 
-      languageService.subscribers.push(subscriber1);
-      languageService.subscribers.push(subscriber2);
-
-      spyOn(subscriber1, 'updateTexts');
-      spyOn(subscriber2, 'updateTexts');
-
-      const newLanguage = Languages.FRENCH;
-      languageService.set(newLanguage);
-
-      expect(subscriber1.updateTexts)
-        .withContext('updateTexts should have been called once - subscriber 1')
-        .toHaveBeenCalledTimes(1);
-      expect(subscriber2.updateTexts)
-        .withContext('updateTexts should have been called once - subscriber 2')
-        .toHaveBeenCalledTimes(1);
+        TestBed.configureTestingModule({
+          providers: [{ provide: ENV, useValue: stagingEnv }],
+        });
+        languageService = TestBed.inject(LanguageService);
+      });
+      it(shouldSetCurrentLanguageExpectation, shouldSetCurrentLanguage);
+      it(
+        shouldSetCurrentLanguageInLocalStorageExpectation,
+        shouldSetCurrentLanguageInLocalStorage
+      );
     });
-  });
 
-  describe('subscribe method', () => {
-    it('should subscribe a component with text to the service', () => {
-      const subscriber: ComponentWithText = {
-        updateTexts: function (): void {
-          //
-        },
-        ngOnDestroy: function (): void {
-          //
-        },
-      };
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        localStorage.removeItem('language');
 
-      expect(languageService.subscribers.length)
-        .withContext('there should be no subscribers')
-        .toBe(0);
-
-      languageService.subscribe(subscriber);
-
-      expect(languageService.subscribers.length)
-        .withContext('there should be 1 subscriber')
-        .toBe(1);
-      expect(languageService.subscribers[0])
-        .withContext('the subscriber should be as expected')
-        .toBe(subscriber);
-    });
-  });
-
-  describe('unsubscribe method', () => {
-    it('should unsubscribe a component with text to the service', () => {
-      const subscriber1: ComponentWithText = {
-        updateTexts: function (): void {
-          //
-        },
-        ngOnDestroy: function (): void {
-          //
-        },
-      };
-      const subscriber2: ComponentWithText = {
-        updateTexts: function (): void {
-          //
-        },
-        ngOnDestroy: function (): void {
-          //
-        },
-      };
-
-      expect(languageService.subscribers.length)
-        .withContext('there should be no subscribers')
-        .toBe(0);
-
-      languageService.subscribe(subscriber1);
-      languageService.subscribe(subscriber2);
-
-      expect(languageService.subscribers.length)
-        .withContext('there should be 2 subscribers')
-        .toBe(2);
-      expect(languageService.subscribers[0])
-        .withContext('the first subscriber should be as expected')
-        .toBe(subscriber1);
-      expect(languageService.subscribers[1])
-        .withContext('the second subscriber should be as expected')
-        .toBe(subscriber2);
-
-      languageService.unsubscribe(subscriber1);
-
-      expect(languageService.subscribers.length)
-        .withContext('there should be 1 subscriber')
-        .toBe(1);
-      expect(languageService.subscribers[0])
-        .withContext(
-          "the only subscriber left should be the one which didn't unsubscribe"
-        )
-        .toBe(subscriber2);
+        TestBed.configureTestingModule({
+          providers: [{ provide: ENV, useValue: prodEnv }],
+        });
+        languageService = TestBed.inject(LanguageService);
+      });
+      it(shouldSetCurrentLanguageExpectation, shouldSetCurrentLanguage);
+      it(
+        shouldSetCurrentLanguageInLocalStorageExpectation,
+        shouldSetCurrentLanguageInLocalStorage
+      );
     });
   });
 });

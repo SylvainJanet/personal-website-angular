@@ -104,7 +104,9 @@ describe('LogService - unit', () => {
       'should return a new LogService instance';
     const shouldReturnNewService = () => {
       const result = logService.withClassName('Test');
-      expect(result).withContext('should return a non null value').toBeTruthy();
+      expect(result)
+        .withContext('should return a non null value')
+        .toEqual(jasmine.anything());
     };
 
     const shouldReturnNewServiceWithCorrectLevelExpectation =

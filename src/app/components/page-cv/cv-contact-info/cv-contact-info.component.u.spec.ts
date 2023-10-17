@@ -1,13 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 import { CvContactInfoComponent } from './cv-contact-info.component';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { of } from 'rxjs';
+import { environment as developmentEnvironment } from 'src/environments/environment';
+import { environment as stagingEnvironment } from 'src/environments/environment.staging';
+import { environment as productionEnvironment } from 'src/environments/environment.prod';
+import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
 
 describe('CvContactInfoComponent - unit', () => {
   let cvContactInfoComponent: CvContactInfoComponent;
-  let languageServiceSpy: jasmine.SpyObj<LanguageService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
+  let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
+
+  const devEnv = developmentEnvironment;
+  const stagingEnv = stagingEnvironment;
+  const prodEnv = productionEnvironment;
+
   const nameSelector = 'about-name-field';
   const sjSelector = 'sylvain-janet';
   const profileSelector = 'about-profile-field';
@@ -15,36 +24,19 @@ describe('CvContactInfoComponent - unit', () => {
   const emailSelector = 'about-email-field';
   const phoneSelector = 'about-phone-field';
 
-  beforeEach(() => {
-    languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-      'subscribe',
-      'unsubscribe',
-    ]);
-    textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
-    TestBed.configureTestingModule({
-      providers: [
-        CvContactInfoComponent,
-        { provide: LanguageService, useValue: languageServiceSpy },
-        { provide: TextService, useValue: textServiceSpy },
-      ],
-    });
-  });
-
   describe('constructor', () => {
-    beforeEach(() => {
-      spyOn(CvContactInfoComponent.prototype, 'updateTexts');
-      cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
-    });
-    it('should create', () => {
+    const shouldCreateExpectation = 'should create';
+    const shouldCreate = () => {
       expect(cvContactInfoComponent)
         .withContext('component should create')
-        .toBeTruthy();
-    });
+        .toEqual(jasmine.anything());
+    };
 
-    it('should set default values', () => {
+    const shouldSetDefaultValuesExpectation = 'should set default values';
+    const shouldSetDefaultValues = () => {
       expect(cvContactInfoComponent)
         .withContext('component should create')
-        .toBeTruthy();
+        .toEqual(jasmine.anything());
 
       cvContactInfoComponent.name.subscribe((s) =>
         expect(s).withContext('name should be set').toBe('')
@@ -64,18 +56,102 @@ describe('CvContactInfoComponent - unit', () => {
       cvContactInfoComponent.phone.subscribe((s) =>
         expect(s).withContext('phone should be set').toBe('')
       );
-    });
+    };
 
-    it('should subscribe to the languageService', () => {
-      expect(languageServiceSpy.subscribe)
-        .withContext('subscribe should have been called')
-        .toHaveBeenCalledOnceWith(cvContactInfoComponent);
-    });
+    const shouldSubscribeToVisibleToLoadTextServiceExpectation =
+      'should subscribe to the visibleToLoadTextService';
+    const shouldSubscribeToVisibleToLoadTextService = (done: DoneFn) => {
+      setTimeout(() => {
+        expect(visibleToLoadTextServiceSpy.subscribe)
+          .withContext('subscribe should have been called')
+          .toHaveBeenCalledOnceWith(cvContactInfoComponent);
+        done();
+      });
+    };
 
-    it('should update the texts', () => {
-      expect(cvContactInfoComponent.updateTexts)
-        .withContext('updateTexts should have been called')
-        .toHaveBeenCalledTimes(1);
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvContactInfoComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvContactInfoComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvContactInfoComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+      });
+      it(shouldCreateExpectation, shouldCreate);
+      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(
+        shouldSubscribeToVisibleToLoadTextServiceExpectation,
+        shouldSubscribeToVisibleToLoadTextService
+      );
     });
   });
 
@@ -87,13 +163,9 @@ describe('CvContactInfoComponent - unit', () => {
     const email = 'test email';
     const phone = 'test phone';
 
-    beforeEach(() => {
-      textServiceSpy.getMulti.and.returnValues(
-        of([name, sj, profile, fsDev, email, phone])
-      );
-      cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
-    });
-    it('should call the textService', () => {
+    const shouldCallTextServiceExpectation = 'should call the textService';
+    const shouldCallTextService = () => {
+      cvContactInfoComponent.updateTexts();
       expect(textServiceSpy.getMulti)
         .withContext(
           'getMulti should have been called 1 time with proper arguments'
@@ -106,8 +178,10 @@ describe('CvContactInfoComponent - unit', () => {
           emailSelector,
           phoneSelector,
         ]);
-    });
-    it('should set the properties to the textService result', () => {
+    };
+    const shouldSetPropertiesToTheServiceResultExpectation =
+      'should set the properties to the textService result';
+    const shouldSetPropertiesToTheServiceResult = () => {
       const expectedName = 'other test name';
       const expectedSj = 'other test sj';
       const expectedProfile = 'other test profile';
@@ -154,19 +228,183 @@ describe('CvContactInfoComponent - unit', () => {
       actualPhoneObs.subscribe((s) => {
         expect(s).withContext('phone should be set').toBe(expectedPhone);
       });
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+
+        textServiceSpy.getMulti.and.returnValues(
+          of([name, sj, profile, fsDev, email, phone])
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvContactInfoComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+
+        textServiceSpy.getMulti.and.returnValues(
+          of([name, sj, profile, fsDev, email, phone])
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvContactInfoComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe', 'textLoaded']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+
+        textServiceSpy.getMulti.and.returnValues(
+          of([name, sj, profile, fsDev, email, phone])
+        );
+
+        TestBed.configureTestingModule({
+          providers: [
+            CvContactInfoComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+      });
+      it(shouldCallTextServiceExpectation, shouldCallTextService);
+      it(
+        shouldSetPropertiesToTheServiceResultExpectation,
+        shouldSetPropertiesToTheServiceResult
+      );
     });
   });
 
   describe('ngOnDestroy', () => {
-    beforeEach(() => {
-      spyOn(CvContactInfoComponent.prototype, 'updateTexts');
-      cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
-    });
-    it('should unsubscribe from the languageService', () => {
+    const shouldUnsubscribeExpectation =
+      'should unsubscribe from the visibleToLoadTextService';
+    const shouldUnsubscribe = () => {
       cvContactInfoComponent.ngOnDestroy();
-      expect(languageServiceSpy.unsubscribe)
+      expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
         .toHaveBeenCalledOnceWith(cvContactInfoComponent);
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvContactInfoComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvContactInfoComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvContactInfoComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+      });
+      it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
   });
 });

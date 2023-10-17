@@ -27,10 +27,12 @@ describe('XsrfInterceptor - unit', () => {
   });
 
   it('should be an interceptor', () => {
-    expect(xsrfInterceptor).withContext('should be defined').toBeTruthy();
+    expect(xsrfInterceptor)
+      .withContext('should be defined')
+      .toEqual(jasmine.anything());
     expect(xsrfInterceptor.intercept)
       .withContext('intercept should be defined')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   });
 
   describe('intercept method', () => {

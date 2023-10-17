@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { of } from 'rxjs';
 import { DebugElement } from '@angular/core';
@@ -50,12 +49,15 @@ describe('CvSkillsComponent - dom integration', () => {
   const shouldCreate = () => {
     expect(componentInstance)
       .withContext('component should create')
-      .toBeTruthy();
+      .toEqual(jasmine.anything());
   };
 
   const shouldHaveContentSetByServiceExpectation =
     'should have content set by textService';
   const shouldHaveContentSetByService = () => {
+    componentInstance.updateTexts();
+    fixture.detectChanges();
+
     const debugEl: DebugElement = fixture.debugElement;
 
     const firstDivEl: DebugElement = debugEl.children[0];
@@ -156,7 +158,6 @@ describe('CvSkillsComponent - dom integration', () => {
       TestBed.configureTestingModule({
         imports: [CvSkillsComponent, CvSkillBarComponent],
         providers: [
-          LanguageService,
           TextService,
           PreloaderService,
           DatasourceService,
@@ -181,7 +182,6 @@ describe('CvSkillsComponent - dom integration', () => {
       TestBed.configureTestingModule({
         imports: [CvSkillsComponent, CvSkillBarComponent],
         providers: [
-          LanguageService,
           TextService,
           PreloaderService,
           DatasourceService,
@@ -206,7 +206,6 @@ describe('CvSkillsComponent - dom integration', () => {
       TestBed.configureTestingModule({
         imports: [CvSkillsComponent, CvSkillBarComponent],
         providers: [
-          LanguageService,
           TextService,
           PreloaderService,
           DatasourceService,
