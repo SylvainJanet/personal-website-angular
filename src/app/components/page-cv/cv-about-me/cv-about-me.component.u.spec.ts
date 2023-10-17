@@ -1796,4 +1796,89 @@ describe('CvAboutMeComponent - unit', () => {
       );
     });
   });
+
+  describe('getElement', () => {
+    const shouldReturnElementExpectation = 'should return the element';
+    const shouldReturnElement = () => {
+      const expected = new ElementRef(document.createElement('div'));
+      cvAboutMeComponent.mainDiv = expected;
+
+      const actual = cvAboutMeComponent.getElement();
+
+      expect(actual).toEqual(jasmine.anything());
+      expect(actual).toEqual(expected);
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            CvAboutMeComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: ElementRef, useValue: elementRefSpy },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
+    });
+  });
 });

@@ -8,6 +8,7 @@ import { environment as developmentEnvironment } from 'src/environments/environm
 import { environment as stagingEnvironment } from 'src/environments/environment.staging';
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
 import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
+import { ElementRef } from '@angular/core';
 
 const devEnv = developmentEnvironment;
 const stagingEnv = stagingEnvironment;
@@ -482,6 +483,88 @@ describe('FooterComponent - unit', () => {
         shouldSetDoubleImgDisplayToNoneExpectation,
         shouldSetDoubleImgDisplayToNone
       );
+    });
+  });
+
+  describe('getElement', () => {
+    const shouldReturnElementExpectation = 'should return the element';
+    const shouldReturnElement = () => {
+      const expected = new ElementRef(document.createElement('section'));
+      footerComponent.mainSection = expected;
+
+      const actual = footerComponent.getElement();
+
+      expect(actual).toEqual(jasmine.anything());
+      expect(actual).toEqual(expected);
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            FooterComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        footerComponent = TestBed.inject(FooterComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            FooterComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        footerComponent = TestBed.inject(FooterComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            FooterComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        footerComponent = TestBed.inject(FooterComponent);
+      });
+      it(shouldReturnElementExpectation, shouldReturnElement);
     });
   });
 });
