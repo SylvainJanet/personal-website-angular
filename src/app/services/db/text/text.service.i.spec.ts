@@ -17,7 +17,7 @@ import { environment as stagingEnvironment } from 'src/environments/environment.
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
 import { ListStringDto } from 'src/app/interfaces/ListStringDto';
 
-let textService: TextService;
+let service: TextService;
 let httpClientSpy: jasmine.SpyObj<HttpClient>;
 let languageServiceSpy: jasmine.SpyObj<LanguageService>;
 const devEnv = developmentEnvironment;
@@ -38,7 +38,7 @@ describe('TextService - integration', () => {
         of<StringDto>({ message: expectedMessage })
       );
 
-      textService['getText'](selectorToTest, languageToTest).subscribe({
+      service['getText'](selectorToTest, languageToTest).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('message should be as expected')
@@ -63,7 +63,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
@@ -82,7 +82,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
@@ -101,7 +101,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
@@ -118,7 +118,7 @@ describe('TextService - integration', () => {
       );
       languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
 
-      textService.get(selectorToTest).subscribe({
+      service.get(selectorToTest).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('message should be as expected')
@@ -139,7 +139,7 @@ describe('TextService - integration', () => {
       );
       languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
 
-      textService.get(selectorToTest).subscribe({
+      service.get(selectorToTest).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('message should be as expected')
@@ -168,7 +168,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnMessageExpectation, shouldReturnMessage);
@@ -191,7 +191,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnMessageExpectation, shouldReturnMessage);
@@ -214,7 +214,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnMessageExpectation, shouldReturnMessage);
@@ -231,17 +231,15 @@ describe('TextService - integration', () => {
         throwError(() => new Error('this is a test error'))
       );
 
-      textService
-        .getTextInLanguage(selectorToTest, Languages.ENGLISH)
-        .subscribe({
-          next: (actual) => {
-            expect(actual)
-              .withContext('message should be as expected')
-              .toBe(EXPECTED_TEXT_ERROR_MESSAGE);
-            done();
-          },
-          error: done.fail,
-        });
+      service.getTextInLanguage(selectorToTest, Languages.ENGLISH).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('message should be as expected')
+            .toBe(EXPECTED_TEXT_ERROR_MESSAGE);
+          done();
+        },
+        error: done.fail,
+      });
     };
 
     const shouldReturnMessageExpectation = 'should return the text';
@@ -253,17 +251,15 @@ describe('TextService - integration', () => {
         of<StringDto>({ message: expectedMessage })
       );
 
-      textService
-        .getTextInLanguage(selectorToTest, Languages.ENGLISH)
-        .subscribe({
-          next: (actual) => {
-            expect(actual)
-              .withContext('message should be as expected')
-              .toBe(expectedMessage);
-            done();
-          },
-          error: done.fail,
-        });
+      service.getTextInLanguage(selectorToTest, Languages.ENGLISH).subscribe({
+        next: (actual) => {
+          expect(actual)
+            .withContext('message should be as expected')
+            .toBe(expectedMessage);
+          done();
+        },
+        error: done.fail,
+      });
     };
 
     describe('in dev environment', () => {
@@ -284,7 +280,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnMessageExpectation, shouldReturnMessage);
@@ -307,7 +303,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnMessageExpectation, shouldReturnMessage);
@@ -330,7 +326,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnMessageExpectation, shouldReturnMessage);
@@ -346,7 +342,7 @@ describe('TextService - integration', () => {
         throwError(() => new Error('this is a test error'))
       );
 
-      textService.getSplit(selectorToTest).subscribe({
+      service.getSplit(selectorToTest).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('error message should be as expected')
@@ -436,7 +432,7 @@ describe('TextService - integration', () => {
       const expected = [expectedPar1, expectedPar2];
       httpClientSpy.get.and.returnValue(of<StringDto>({ message: text }));
 
-      textService.getSplit(selectorToTest).subscribe({
+      service.getSplit(selectorToTest).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('paragraphs should be as expected')
@@ -462,7 +458,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -482,7 +478,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -502,7 +498,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -523,7 +519,7 @@ describe('TextService - integration', () => {
         })
       );
 
-      textService['getMultiText'](selectorsToTest, languageToTest).subscribe({
+      service['getMultiText'](selectorsToTest, languageToTest).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('message should be as expected')
@@ -548,7 +544,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
@@ -567,7 +563,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
@@ -586,7 +582,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
@@ -603,7 +599,7 @@ describe('TextService - integration', () => {
       );
       languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
 
-      textService.getMulti(selectorsToTest).subscribe({
+      service.getMulti(selectorsToTest).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('message should be as expected')
@@ -627,7 +623,7 @@ describe('TextService - integration', () => {
       );
       languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
 
-      textService.getMulti(selectorsToTest).subscribe({
+      service.getMulti(selectorsToTest).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('message should be as expected')
@@ -656,7 +652,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnMessageExpectation, shouldReturnMessage);
@@ -679,7 +675,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnMessageExpectation, shouldReturnMessage);
@@ -702,7 +698,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnMessageExpectation, shouldReturnMessage);
@@ -718,7 +714,7 @@ describe('TextService - integration', () => {
         throwError(() => new Error('this is a test error'))
       );
 
-      textService.getMultiAllSplit(selectorsToTest).subscribe({
+      service.getMultiAllSplit(selectorsToTest).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('error message should be as expected')
@@ -829,7 +825,7 @@ describe('TextService - integration', () => {
         of<ListStringDto>({ messages: [text, text2] })
       );
 
-      textService.getMultiAllSplit(selectorsToTest).subscribe({
+      service.getMultiAllSplit(selectorsToTest).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('paragraphs should be as expected')
@@ -855,7 +851,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -875,7 +871,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -895,7 +891,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -912,7 +908,7 @@ describe('TextService - integration', () => {
         throwError(() => new Error('this is a test error'))
       );
 
-      textService['getMultiSomeBooleanSplit'](
+      service['getMultiSomeBooleanSplit'](
         selectorsToTest,
         isSplitInput
       ).subscribe({
@@ -1014,7 +1010,7 @@ describe('TextService - integration', () => {
         of<ListStringDto>({ messages: [text, text2] })
       );
 
-      textService['getMultiSomeBooleanSplit'](
+      service['getMultiSomeBooleanSplit'](
         selectorsToTest,
         isSplitInput
       ).subscribe({
@@ -1043,7 +1039,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -1063,7 +1059,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -1083,7 +1079,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -1102,7 +1098,7 @@ describe('TextService - integration', () => {
         throwError(() => new Error('this is a test error'))
       );
 
-      textService.getMultiSomeSplit(input).subscribe({
+      service.getMultiSomeSplit(input).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('error message should be as expected')
@@ -1203,7 +1199,7 @@ describe('TextService - integration', () => {
         of<ListStringDto>({ messages: [text, text2] })
       );
 
-      textService.getMultiSomeSplit(input).subscribe({
+      service.getMultiSomeSplit(input).subscribe({
         next: (actual) => {
           expect(actual)
             .withContext('paragraphs should be as expected')
@@ -1229,7 +1225,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -1249,7 +1245,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);
@@ -1269,7 +1265,7 @@ describe('TextService - integration', () => {
           ],
         });
 
-        textService = TestBed.inject(TextService);
+        service = TestBed.inject(TextService);
       });
       it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
       it(shouldReturnParagraphsExpectation, shouldReturnParagraphs);

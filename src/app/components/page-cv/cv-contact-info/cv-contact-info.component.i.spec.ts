@@ -12,7 +12,7 @@ import { environment as stagingEnvironment } from 'src/environments/environment.
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
 
 describe('CvContactInfoComponent - integration', () => {
-  let cvContactInfoComponent: CvContactInfoComponent;
+  let component: CvContactInfoComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   const devEnv = developmentEnvironment;
   const stagingEnv = stagingEnvironment;
@@ -41,7 +41,7 @@ describe('CvContactInfoComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvContactInfoComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
@@ -58,7 +58,7 @@ describe('CvContactInfoComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -75,7 +75,7 @@ describe('CvContactInfoComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -92,7 +92,7 @@ describe('CvContactInfoComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -102,14 +102,14 @@ describe('CvContactInfoComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
-      cvContactInfoComponent.updateTexts();
+      component.updateTexts();
 
-      const actualNameObs = cvContactInfoComponent.name;
-      const actualSjObs = cvContactInfoComponent.sj;
-      const actualProfileObs = cvContactInfoComponent.profile;
-      const actualFsDevObs = cvContactInfoComponent.fsDev;
-      const actualEmailObs = cvContactInfoComponent.email;
-      const actualPhoneObs = cvContactInfoComponent.phone;
+      const actualNameObs = component.name;
+      const actualSjObs = component.sj;
+      const actualProfileObs = component.profile;
+      const actualFsDevObs = component.fsDev;
+      const actualEmailObs = component.email;
+      const actualPhoneObs = component.phone;
 
       actualNameObs.subscribe((s) => {
         expect(s).withContext('name should be set').toBe(expectedName);
@@ -143,7 +143,7 @@ describe('CvContactInfoComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -163,7 +163,7 @@ describe('CvContactInfoComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -183,7 +183,7 @@ describe('CvContactInfoComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,

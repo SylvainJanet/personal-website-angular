@@ -9,7 +9,7 @@ import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { FooterComponent } from './footer.component';
 
 describe('FooterComponent - integration', () => {
-  let footerComponent: FooterComponent;
+  let component: FooterComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
   const devEnv = developmentEnvironment;
@@ -32,7 +32,7 @@ describe('FooterComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(footerComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
@@ -47,7 +47,7 @@ describe('FooterComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -61,7 +61,7 @@ describe('FooterComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -75,7 +75,7 @@ describe('FooterComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -84,11 +84,11 @@ describe('FooterComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
-      footerComponent.updateTexts();
+      component.updateTexts();
 
-      const actualText = footerComponent.footerText;
-      const actualLink = footerComponent.footerLink;
-      const actualFooterHref = footerComponent.footerHref;
+      const actualText = component.footerText;
+      const actualLink = component.footerLink;
+      const actualFooterHref = component.footerHref;
 
       actualText.subscribe((s) => {
         expect(s)
@@ -116,7 +116,7 @@ describe('FooterComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -133,7 +133,7 @@ describe('FooterComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -150,7 +150,7 @@ describe('FooterComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,

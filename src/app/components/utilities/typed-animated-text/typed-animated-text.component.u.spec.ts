@@ -9,7 +9,7 @@ import {
 import { of } from 'rxjs';
 
 describe('TypedAnimatedTextComponent - unit', () => {
-  let typedAnimatedTextComponent: TypedAnimatedTextComponent;
+  let component: TypedAnimatedTextComponent;
   let textElement: jasmine.SpyObj<ElementRef>;
   let blinkElement: jasmine.SpyObj<ElementRef>;
   const inputArrayPropName = 'inputArray';
@@ -42,9 +42,9 @@ describe('TypedAnimatedTextComponent - unit', () => {
       ],
     });
 
-    typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+    component = TestBed.inject(TypedAnimatedTextComponent);
 
-    expect(typedAnimatedTextComponent[inputArrayPropName])
+    expect(component[inputArrayPropName])
       .withContext('inputArray property should be defined')
       .toEqual(jasmine.anything());
   });
@@ -66,9 +66,9 @@ describe('TypedAnimatedTextComponent - unit', () => {
         ],
       });
 
-      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+      component = TestBed.inject(TypedAnimatedTextComponent);
 
-      expect(typedAnimatedTextComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     });
@@ -81,50 +81,48 @@ describe('TypedAnimatedTextComponent - unit', () => {
         ],
       });
 
-      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+      component = TestBed.inject(TypedAnimatedTextComponent);
 
-      expect(typedAnimatedTextComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(typedAnimatedTextComponent.textElement)
+      expect(component.textElement)
         .withContext('textElement should be set')
         .toEqual(jasmine.anything());
-      expect(typedAnimatedTextComponent.blinkElement)
+      expect(component.blinkElement)
         .withContext('blinkElement should be set')
         .toEqual(jasmine.anything());
-      expect(typedAnimatedTextComponent.inputArray)
+      expect(component.inputArray)
         .withContext('inputArray should be set')
         .toEqual(jasmine.anything());
-      expect(typedAnimatedTextComponent.inputArray.length)
+      expect(component.inputArray.length)
         .withContext('inputArray should be non empty')
         .toBe(1);
-      typedAnimatedTextComponent.inputArray[0].subscribe((s) =>
+      component.inputArray[0].subscribe((s) =>
         expect(s).withContext('inputArray first element should be set').toBe('')
       );
 
-      expect(typedAnimatedTextComponent.textArray)
+      expect(component.textArray)
         .withContext('textArray should be set')
         .toEqual([]);
-      expect(typedAnimatedTextComponent.textColor)
+      expect(component.textColor)
         .withContext('textColor should be set')
         .toBe('black');
-      expect(typedAnimatedTextComponent.fontSize)
+      expect(component.fontSize)
         .withContext('fontSize should be set')
         .toBe('1em');
-      expect(typedAnimatedTextComponent.blinkWidth)
+      expect(component.blinkWidth)
         .withContext('blinkWidth should be set')
         .toBe('2px');
-      expect(typedAnimatedTextComponent.typingSpeed)
+      expect(component.typingSpeed)
         .withContext('typingSpeed should be set')
         .toBe(80);
-      expect(typedAnimatedTextComponent.deleteSpeed)
+      expect(component.deleteSpeed)
         .withContext('deleteSpeed should be set')
         .toBe(30);
-      expect(typedAnimatedTextComponent.loop)
-        .withContext('loop should be set')
-        .toBe(true);
-      expect(typedAnimatedTextComponent.deleteDelay)
+      expect(component.loop).withContext('loop should be set').toBe(true);
+      expect(component.deleteDelay)
         .withContext('deleteDelay should be set')
         .toBe(1100);
     });
@@ -139,10 +137,10 @@ describe('TypedAnimatedTextComponent - unit', () => {
         ],
       });
 
-      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+      component = TestBed.inject(TypedAnimatedTextComponent);
 
       setTimeout(() => {
-        expect(typedAnimatedTextComponent.initVariables)
+        expect(component.initVariables)
           .withContext('should have been called')
           .toHaveBeenCalled();
 
@@ -166,41 +164,41 @@ describe('TypedAnimatedTextComponent - unit', () => {
         ],
       });
 
-      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+      component = TestBed.inject(TypedAnimatedTextComponent);
 
       textElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
       blinkElement = jasmine.createSpyObj('ElementRef', [], ['nativeElement']);
-      typedAnimatedTextComponent.textElement = textElement;
-      typedAnimatedTextComponent.blinkElement = blinkElement;
-      spyOn(typedAnimatedTextComponent, 'typingEffect');
+      component.textElement = textElement;
+      component.blinkElement = blinkElement;
+      spyOn(component, 'typingEffect');
     });
     it('should do nothing if the inputArray is not changed', () => {
-      const oldValue = typedAnimatedTextComponent.textArray;
+      const oldValue = component.textArray;
 
-      const value = typedAnimatedTextComponent.inputArray;
+      const value = component.inputArray;
       const change = new SimpleChange(value, value, false);
       const changes: SimpleChanges = {};
       changes[inputArrayPropName] = change;
 
-      typedAnimatedTextComponent.ngOnChanges(changes);
+      component.ngOnChanges(changes);
 
-      const newValue = typedAnimatedTextComponent.textArray;
+      const newValue = component.textArray;
 
       expect(newValue).withContext('textArray should be set').toBe(oldValue);
     });
     it('should update the textArray if the inputArray is changed', () => {
-      const value = typedAnimatedTextComponent.inputArray;
+      const value = component.inputArray;
       const newValue = [of('this'), of('is'), of('a'), of('test')];
       const expected = ['this', 'is', 'a', 'test'];
-      typedAnimatedTextComponent.inputArray = newValue;
+      component.inputArray = newValue;
 
       const change = new SimpleChange(value, newValue, false);
       const changes: SimpleChanges = {};
       changes[inputArrayPropName] = change;
 
-      typedAnimatedTextComponent.ngOnChanges(changes);
+      component.ngOnChanges(changes);
 
-      const actualValue = typedAnimatedTextComponent.textArray;
+      const actualValue = component.textArray;
 
       expect(actualValue)
         .withContext('textArray should be set')
@@ -224,7 +222,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
         ],
       });
 
-      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+      component = TestBed.inject(TypedAnimatedTextComponent);
 
       textElement = jasmine.createSpyObj(
         'ElementRef',
@@ -237,11 +235,11 @@ describe('TypedAnimatedTextComponent - unit', () => {
         { nativeElement: document.createElement('DIV') }
       );
 
-      typedAnimatedTextComponent.textElement = textElement;
-      typedAnimatedTextComponent.blinkElement = blinkElement;
+      component.textElement = textElement;
+      component.blinkElement = blinkElement;
     });
     it('should set the textElement color', () => {
-      typedAnimatedTextComponent.initVariables();
+      component.initVariables();
 
       expect(renderer.setStyle)
         .withContext('setStyle should have been called 6 times')
@@ -253,11 +251,11 @@ describe('TypedAnimatedTextComponent - unit', () => {
         .toHaveBeenCalledWith(
           textElement.nativeElement,
           'color',
-          typedAnimatedTextComponent.textColor
+          component.textColor
         );
     });
     it('should set the textElement font-size', () => {
-      typedAnimatedTextComponent.initVariables();
+      component.initVariables();
 
       expect(renderer.setStyle)
         .withContext('setStyle should have been called 6 times')
@@ -269,11 +267,11 @@ describe('TypedAnimatedTextComponent - unit', () => {
         .toHaveBeenCalledWith(
           textElement.nativeElement,
           'font-size',
-          typedAnimatedTextComponent.fontSize
+          component.fontSize
         );
     });
     it('should set the textElement padding', () => {
-      typedAnimatedTextComponent.initVariables();
+      component.initVariables();
 
       expect(renderer.setStyle)
         .withContext('setStyle should have been called 6 times')
@@ -285,7 +283,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
         .toHaveBeenCalledWith(textElement.nativeElement, 'padding', '0.1em');
     });
     it('should set the blinkElement border-right-width', () => {
-      typedAnimatedTextComponent.initVariables();
+      component.initVariables();
 
       expect(renderer.setStyle)
         .withContext('setStyle should have been called 6 times')
@@ -297,11 +295,11 @@ describe('TypedAnimatedTextComponent - unit', () => {
         .toHaveBeenCalledWith(
           blinkElement.nativeElement,
           'border-right-width',
-          typedAnimatedTextComponent.blinkWidth
+          component.blinkWidth
         );
     });
     it('should set the blinkElement border-right-color', () => {
-      typedAnimatedTextComponent.initVariables();
+      component.initVariables();
 
       expect(renderer.setStyle)
         .withContext('setStyle should have been called 6 times')
@@ -313,11 +311,11 @@ describe('TypedAnimatedTextComponent - unit', () => {
         .toHaveBeenCalledWith(
           blinkElement.nativeElement,
           'border-right-color',
-          typedAnimatedTextComponent.textColor
+          component.textColor
         );
     });
     it('should set the blinkElement font-size', () => {
-      typedAnimatedTextComponent.initVariables();
+      component.initVariables();
 
       expect(renderer.setStyle)
         .withContext('setStyle should have been called 6 times')
@@ -329,7 +327,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
         .toHaveBeenCalledWith(
           blinkElement.nativeElement,
           'font-size',
-          typedAnimatedTextComponent.fontSize
+          component.fontSize
         );
     });
   });
@@ -350,7 +348,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
         ],
       });
 
-      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+      component = TestBed.inject(TypedAnimatedTextComponent);
 
       textElement = jasmine.createSpyObj(
         'ElementRef',
@@ -363,28 +361,28 @@ describe('TypedAnimatedTextComponent - unit', () => {
         { nativeElement: document.createElement('DIV') }
       );
 
-      typedAnimatedTextComponent.textElement = textElement;
-      typedAnimatedTextComponent.blinkElement = blinkElement;
+      component.textElement = textElement;
+      component.blinkElement = blinkElement;
 
-      typedAnimatedTextComponent.typingSpeed = typingSpeed;
-      typedAnimatedTextComponent.deleteSpeed = deleteSpeed;
-      typedAnimatedTextComponent.deleteDelay = deleteDelay;
+      component.typingSpeed = typingSpeed;
+      component.deleteSpeed = deleteSpeed;
+      component.deleteDelay = deleteDelay;
 
-      spyOn(typedAnimatedTextComponent, 'deletingEffect');
+      spyOn(component, 'deletingEffect');
 
-      typedAnimatedTextComponent.textArray = ['one', 'test'];
-      typedAnimatedTextComponent['i'] = 0;
+      component.textArray = ['one', 'test'];
+      component['i'] = 0;
     });
     describe('should type the word letter by letter, and then call the deletingEffect method', () => {
       it('1 - first letter', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         const actualInnerHtml = textElement.nativeElement.innerHTML;
         expect(actualInnerHtml).withContext('text should be set').toBe('o');
         flush();
       }));
       it('2 - second letter', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(typingSpeed / 2);
 
@@ -402,7 +400,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
         flush();
       }));
       it('3 - third letter', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick((typingSpeed * 3) / 2);
 
@@ -420,18 +418,18 @@ describe('TypedAnimatedTextComponent - unit', () => {
         flush();
       }));
       it('4 - call deletingEffect method', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(typingSpeed * 3 + deleteDelay / 2);
 
         const actualInnerHtml = textElement.nativeElement.innerHTML;
         expect(actualInnerHtml).withContext('text should be set').toBe('one');
-        expect(typedAnimatedTextComponent.deletingEffect)
+        expect(component.deletingEffect)
           .withContext('deletingEffect should not have been called before tick')
           .not.toHaveBeenCalled();
 
         tick(deleteDelay / 2);
-        expect(typedAnimatedTextComponent.deletingEffect)
+        expect(component.deletingEffect)
           .withContext('deletingEffect should have been called after tick')
           .toHaveBeenCalledTimes(1);
         flush();
@@ -455,7 +453,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
         ],
       });
 
-      typedAnimatedTextComponent = TestBed.inject(TypedAnimatedTextComponent);
+      component = TestBed.inject(TypedAnimatedTextComponent);
 
       textElement = jasmine.createSpyObj(
         'ElementRef',
@@ -468,35 +466,35 @@ describe('TypedAnimatedTextComponent - unit', () => {
         { nativeElement: document.createElement('DIV') }
       );
 
-      typedAnimatedTextComponent.textElement = textElement;
-      typedAnimatedTextComponent.blinkElement = blinkElement;
+      component.textElement = textElement;
+      component.blinkElement = blinkElement;
 
-      typedAnimatedTextComponent.typingSpeed = typingSpeed;
-      typedAnimatedTextComponent.deleteSpeed = deleteSpeed;
-      typedAnimatedTextComponent.deleteDelay = deleteDelay;
+      component.typingSpeed = typingSpeed;
+      component.deleteSpeed = deleteSpeed;
+      component.deleteDelay = deleteDelay;
 
-      spyOn(typedAnimatedTextComponent, 'typingEffect');
+      spyOn(component, 'typingEffect');
 
-      typedAnimatedTextComponent.textArray = ['one', 'test'];
-      typedAnimatedTextComponent['i'] = 1;
+      component.textArray = ['one', 'test'];
+      component['i'] = 1;
       textElement.nativeElement.innerHTML = 'test';
     });
     it('should change index properly when the last word is being erased', fakeAsync(() => {
-      typedAnimatedTextComponent.deletingEffect();
+      component.deletingEffect();
 
       tick((deleteSpeed * 7) / 2);
-      let actualI = typedAnimatedTextComponent['i'];
+      let actualI = component['i'];
       expect(actualI).withContext('index should be set before tick').toBe(1);
 
       tick(deleteSpeed);
 
-      actualI = typedAnimatedTextComponent['i'];
+      actualI = component['i'];
       expect(actualI).withContext('index should be set after tick').toBe(0);
       flush();
     }));
     describe('should remove the word letter by letter, and then call the typingEffect method for the next word', () => {
       beforeEach(() => {
-        typedAnimatedTextComponent['i'] = 0;
+        component['i'] = 0;
         textElement.nativeElement.innerHTML = 'one';
       });
 
@@ -506,7 +504,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
           .withContext('text should be set before')
           .toBe('one');
 
-        typedAnimatedTextComponent.deletingEffect();
+        component.deletingEffect();
 
         actualInnerHtml = textElement.nativeElement.innerHTML;
         expect(actualInnerHtml)
@@ -515,7 +513,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
         flush();
       }));
       it('2 - delete second letter', fakeAsync(() => {
-        typedAnimatedTextComponent.deletingEffect();
+        component.deletingEffect();
 
         tick(deleteSpeed / 2);
 
@@ -533,7 +531,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
         flush();
       }));
       it('3 - delete third letter', fakeAsync(() => {
-        typedAnimatedTextComponent.deletingEffect();
+        component.deletingEffect();
 
         tick((deleteSpeed * 3) / 2);
 
@@ -551,20 +549,20 @@ describe('TypedAnimatedTextComponent - unit', () => {
         flush();
       }));
       it('4 - change index', fakeAsync(() => {
-        typedAnimatedTextComponent.deletingEffect();
+        component.deletingEffect();
 
         tick((deleteSpeed * 5) / 2);
-        let actualI = typedAnimatedTextComponent['i'];
+        let actualI = component['i'];
         expect(actualI).withContext('index should be set before tick').toBe(0);
 
         tick(deleteSpeed);
 
-        actualI = typedAnimatedTextComponent['i'];
+        actualI = component['i'];
         expect(actualI).withContext('index should be set after tick').toBe(1);
         flush();
       }));
       it('5 - call typingEffect method', fakeAsync(() => {
-        typedAnimatedTextComponent.deletingEffect();
+        component.deletingEffect();
 
         tick((deleteSpeed * 5) / 2);
 
@@ -572,7 +570,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
         expect(actualInnerHtml)
           .withContext('text should be set before tick')
           .toBe('');
-        expect(typedAnimatedTextComponent.typingEffect)
+        expect(component.typingEffect)
           .withContext('typingEffect should not have been called before tick')
           .not.toHaveBeenCalled();
 
@@ -582,7 +580,7 @@ describe('TypedAnimatedTextComponent - unit', () => {
         expect(actualInnerHtml)
           .withContext('text should be set after tick')
           .toBe('');
-        expect(typedAnimatedTextComponent.typingEffect)
+        expect(component.typingEffect)
           .withContext('typingEffect should not have been called after tick')
           .toHaveBeenCalledTimes(1);
         flush();

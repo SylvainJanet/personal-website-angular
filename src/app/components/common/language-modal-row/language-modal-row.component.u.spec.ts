@@ -1,40 +1,40 @@
 import { TestBed } from '@angular/core/testing';
 import { LanguageModalRowComponent } from './language-modal-row.component';
 
-describe('LinkBarOnHoverComponent - unit', () => {
-  let languageModalRowComponent: LanguageModalRowComponent;
+describe('LanguageModalRowComponent - unit', () => {
+  let component: LanguageModalRowComponent;
   describe('constructor', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [LanguageModalRowComponent],
       });
 
-      languageModalRowComponent = TestBed.inject(LanguageModalRowComponent);
+      component = TestBed.inject(LanguageModalRowComponent);
     });
     it('should create', () => {
-      expect(languageModalRowComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
-      expect(languageModalRowComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(languageModalRowComponent.languageName)
+      expect(component.languageName)
         .withContext('languageName should be set')
         .toBe('NO LANGUAGE');
-      expect(languageModalRowComponent.flagSelectors)
+      expect(component.flagSelectors)
         .withContext('flagSelectors should be set')
         .toEqual(['xx']);
-      expect(languageModalRowComponent.isCurrent)
+      expect(component.isCurrent)
         .withContext('isCurrent should be set')
         .toBeFalse();
-      expect(languageModalRowComponent.isFirstRow)
+      expect(component.isFirstRow)
         .withContext('isFirstRow should be set')
         .toBeFalse();
-      expect(languageModalRowComponent.isLastRow)
+      expect(component.isLastRow)
         .withContext('isLastRow should be set')
         .toBeFalse();
     });

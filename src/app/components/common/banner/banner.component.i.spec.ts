@@ -7,8 +7,9 @@ import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
+
 describe('BannerComponent - integration', () => {
-  let bannerComponent: BannerComponent;
+  let component: BannerComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   const devEnv = developmentEnvironment;
   const stagingEnv = stagingEnvironment;
@@ -37,7 +38,7 @@ describe('BannerComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(bannerComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
@@ -52,7 +53,7 @@ describe('BannerComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -66,7 +67,7 @@ describe('BannerComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -80,7 +81,7 @@ describe('BannerComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -89,10 +90,10 @@ describe('BannerComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
-      bannerComponent.updateTexts();
+      component.updateTexts();
 
-      const actualMessages = bannerComponent.messages;
-      const actualIAmMe = bannerComponent.iAmMe;
+      const actualMessages = component.messages;
+      const actualIAmMe = component.iAmMe;
 
       expect(actualMessages.length)
         .withContext('there should be 4 messages')
@@ -132,7 +133,7 @@ describe('BannerComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -149,7 +150,7 @@ describe('BannerComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -166,7 +167,7 @@ describe('BannerComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,

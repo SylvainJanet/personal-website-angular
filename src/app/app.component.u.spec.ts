@@ -4,7 +4,7 @@ import { PreloaderService } from './services/preloader/preloader.service';
 import { Preloaders } from './services/preloader/preloaders/preloaders';
 
 describe('AppComponent - unit', () => {
-  let appComponent: AppComponent;
+  let component: AppComponent;
   let preloaderServiceSpy: jasmine.SpyObj<PreloaderService>;
 
   beforeEach(() => {
@@ -23,30 +23,30 @@ describe('AppComponent - unit', () => {
   describe('constructor', () => {
     beforeEach(() => {
       spyOn(AppComponent.prototype, 'increaseOpacity');
-      appComponent = TestBed.inject(AppComponent);
+      component = TestBed.inject(AppComponent);
     });
     it('should create', () => {
-      expect(appComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
-      expect(appComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
-      expect(appComponent.mainLoader)
+      expect(component.mainLoader)
         .withContext('mainLoader should be set')
         .toEqual(Preloaders.MAIN);
-      expect(appComponent.loaderTexts)
+      expect(component.loaderTexts)
         .withContext('loaderTexts should be set')
         .toEqual(Preloaders.TEXTS);
 
-      expect(appComponent.opacity).withContext('opacity should be set').toBe(0);
+      expect(component.opacity).withContext('opacity should be set').toBe(0);
     });
 
     it('should call increaseOpacity method', () => {
-      expect(appComponent.increaseOpacity)
+      expect(component.increaseOpacity)
         .withContext(
           'increaseOpacity should have been called once with proper arguments'
         )
@@ -56,10 +56,10 @@ describe('AppComponent - unit', () => {
 
   describe('ngOnInit method', () => {
     beforeEach(() => {
-      appComponent = TestBed.inject(AppComponent);
+      component = TestBed.inject(AppComponent);
     });
     it('should set css variable --scroll-bar-width value', () => {
-      appComponent.ngOnInit();
+      component.ngOnInit();
 
       const after =
         document.documentElement.style.getPropertyValue('--scroll-bar-width');
@@ -77,29 +77,29 @@ describe('AppComponent - unit', () => {
 
   describe('increaseOpacity method', () => {
     beforeEach(() => {
-      appComponent = TestBed.inject(AppComponent);
+      component = TestBed.inject(AppComponent);
     });
     it('should increase the opacity progressively', fakeAsync(() => {
       const testStepsNumber = 5;
       const testStepsDuration = 20;
 
-      const opacityBefore = appComponent.opacity;
+      const opacityBefore = component.opacity;
       expect(opacityBefore)
         .withContext('opacity should be set to 0 at first')
         .toBe(0);
 
-      appComponent.increaseOpacity(0, testStepsNumber, testStepsDuration);
+      component.increaseOpacity(0, testStepsNumber, testStepsDuration);
 
       for (let i = 0; i < testStepsNumber; i++) {
         tick(testStepsDuration);
-        const opacityDuring = appComponent.opacity;
+        const opacityDuring = component.opacity;
         expect(opacityDuring)
           .withContext('opacity should be incremented - step ' + i)
           .toBe((i + 1) / testStepsNumber);
       }
 
       tick(testStepsNumber * testStepsDuration);
-      const opacityAfter = appComponent.opacity;
+      const opacityAfter = component.opacity;
       expect(opacityAfter)
         .withContext('opacity should be set to 1 at the end')
         .toBe(1);

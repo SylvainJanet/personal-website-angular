@@ -4,8 +4,8 @@ import { LogService } from 'src/app/services/log/log.service';
 import { ButtonBarOnHoverComponent } from './button-bar-on-hover.component';
 import { EventEmitter } from '@angular/core';
 
-describe('LinkBarOnHoverComponent - unit', () => {
-  let buttonBarOnHoverComponent: ButtonBarOnHoverComponent;
+describe('ButtonBarOnHoverComponent - unit', () => {
+  let component: ButtonBarOnHoverComponent;
   let logServiceGlobalSpy: jasmine.SpyObj<LogService>;
   let logServiceSpy: jasmine.SpyObj<LogService>;
   let DOMComputationServiceSpy: jasmine.SpyObj<DOMComputationService>;
@@ -35,49 +35,49 @@ describe('LinkBarOnHoverComponent - unit', () => {
         ],
       });
 
-      buttonBarOnHoverComponent = TestBed.inject(ButtonBarOnHoverComponent);
+      component = TestBed.inject(ButtonBarOnHoverComponent);
     });
     it('should create', () => {
-      expect(buttonBarOnHoverComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
-      expect(buttonBarOnHoverComponent.logger)
+      expect(component.logger)
         .withContext('logger should be set')
         .toBe(logServiceSpy);
     });
 
     it('should set default values', () => {
-      expect(buttonBarOnHoverComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(buttonBarOnHoverComponent.lineWidth)
+      expect(component.lineWidth)
         .withContext('lineWidth should be set')
         .toBe('0%');
-      expect(buttonBarOnHoverComponent.textColor)
+      expect(component.textColor)
         .withContext('textColor should be set')
         .toBe('white');
-      expect(buttonBarOnHoverComponent.lineColor)
+      expect(component.lineColor)
         .withContext('lineColor should be set')
         .toBe('white');
-      expect(buttonBarOnHoverComponent.press)
+      expect(component.press)
         .withContext('press should be defined')
         .toEqual(jasmine.anything());
-      expect(buttonBarOnHoverComponent.press)
+      expect(component.press)
         .withContext('press should be an event emitter')
         .toBeInstanceOf(EventEmitter<Event>);
-      buttonBarOnHoverComponent.text.subscribe({
+      component.text.subscribe({
         next: (t) => {
           expect(t).withContext('text should be set').toBe('Action');
         },
       });
-      expect(buttonBarOnHoverComponent.buttonStyle)
+      expect(component.buttonStyle)
         .withContext('buttonStyle should be set')
         .toBe('');
-      expect(buttonBarOnHoverComponent.lineStyle)
+      expect(component.lineStyle)
         .withContext('lineStyle should be set')
         .toBe('');
-      expect(buttonBarOnHoverComponent.globalStyle)
+      expect(component.globalStyle)
         .withContext('globalStyle should be set')
         .toBe('');
     });
@@ -90,7 +90,7 @@ describe('LinkBarOnHoverComponent - unit', () => {
     });
 
     it('should make the line disappear on creation', () => {
-      expect(buttonBarOnHoverComponent.lineDisappears)
+      expect(component.lineDisappears)
         .withContext('lineDisappears should be defined')
         .toHaveBeenCalledTimes(1);
     });
@@ -119,7 +119,7 @@ describe('LinkBarOnHoverComponent - unit', () => {
         ],
       });
 
-      buttonBarOnHoverComponent = TestBed.inject(ButtonBarOnHoverComponent);
+      component = TestBed.inject(ButtonBarOnHoverComponent);
     });
     it('should change the lineWidth', () => {
       const eventSpy = jasmine.createSpyObj('Event', [''], ['target']);
@@ -133,9 +133,9 @@ describe('LinkBarOnHoverComponent - unit', () => {
       const expectedLength = (75 / 100) * length;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      buttonBarOnHoverComponent.lineAppears(eventSpy);
+      component.lineAppears(eventSpy);
 
-      expect(buttonBarOnHoverComponent.lineWidth)
+      expect(component.lineWidth)
         .withContext('lineWidth should be set')
         .toBe(expectedLength + 'px');
     });
@@ -164,7 +164,7 @@ describe('LinkBarOnHoverComponent - unit', () => {
         ],
       });
 
-      buttonBarOnHoverComponent = TestBed.inject(ButtonBarOnHoverComponent);
+      component = TestBed.inject(ButtonBarOnHoverComponent);
     });
     it('should change the lineWidth', () => {
       const eventSpy = jasmine.createSpyObj('Event', [''], ['target']);
@@ -177,11 +177,11 @@ describe('LinkBarOnHoverComponent - unit', () => {
       const length = 200;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      buttonBarOnHoverComponent.lineAppears(eventSpy);
+      component.lineAppears(eventSpy);
 
-      buttonBarOnHoverComponent.lineDisappears();
+      component.lineDisappears();
 
-      expect(buttonBarOnHoverComponent.lineWidth)
+      expect(component.lineWidth)
         .withContext('lineWidth should be set')
         .toBe('0%');
     });
@@ -207,25 +207,25 @@ describe('LinkBarOnHoverComponent - unit', () => {
         ],
       });
 
-      buttonBarOnHoverComponent = TestBed.inject(ButtonBarOnHoverComponent);
+      component = TestBed.inject(ButtonBarOnHoverComponent);
     });
     it('should call lineDisappears method', () => {
       const expectedEvent = new Event('click');
-      spyOn(buttonBarOnHoverComponent, 'lineDisappears');
+      spyOn(component, 'lineDisappears');
 
-      buttonBarOnHoverComponent.doAction(expectedEvent);
+      component.doAction(expectedEvent);
 
-      expect(buttonBarOnHoverComponent.lineDisappears)
+      expect(component.lineDisappears)
         .withContext('lineDisappears should have been called')
         .toHaveBeenCalledTimes(1);
     });
     it('should emit press event', () => {
       const pressSpy = jasmine.createSpyObj('EventEmitter', ['emit']);
-      buttonBarOnHoverComponent.press = pressSpy;
+      component.press = pressSpy;
       const expectedEvent = new Event('click');
-      spyOn(buttonBarOnHoverComponent, 'lineDisappears');
+      spyOn(component, 'lineDisappears');
 
-      buttonBarOnHoverComponent.doAction(expectedEvent);
+      component.doAction(expectedEvent);
 
       expect(pressSpy.emit)
         .withContext('emit should have been called')

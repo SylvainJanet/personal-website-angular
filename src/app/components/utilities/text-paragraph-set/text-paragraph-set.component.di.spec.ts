@@ -7,7 +7,7 @@ import { TextSubParagraphComponent } from '../text-sub-paragraph/text-sub-paragr
 import { TextParagraphSetComponent } from './text-paragraph-set.component';
 import { TextParagraphComponent } from '../text-paragraph/text-paragraph.component';
 
-describe('TextParagraphComponent - dom integration', () => {
+describe('TextParagraphSetComponent - dom integration', () => {
   let fixture: ComponentFixture<TextParagraphSetComponent>;
   let componentInstance: TextParagraphSetComponent;
 

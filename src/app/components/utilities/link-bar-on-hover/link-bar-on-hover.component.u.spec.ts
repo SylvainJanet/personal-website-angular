@@ -4,7 +4,7 @@ import { LogService } from 'src/app/services/log/log.service';
 import { LinkBarOnHoverComponent } from './link-bar-on-hover.component';
 
 describe('LinkBarOnHoverComponent - unit', () => {
-  let linkBarOnHoverComponent: LinkBarOnHoverComponent;
+  let component: LinkBarOnHoverComponent;
   let logServiceGlobalSpy: jasmine.SpyObj<LogService>;
   let logServiceSpy: jasmine.SpyObj<LogService>;
   let DOMComputationServiceSpy: jasmine.SpyObj<DOMComputationService>;
@@ -34,46 +34,44 @@ describe('LinkBarOnHoverComponent - unit', () => {
         ],
       });
 
-      linkBarOnHoverComponent = TestBed.inject(LinkBarOnHoverComponent);
+      component = TestBed.inject(LinkBarOnHoverComponent);
     });
     it('should create', () => {
-      expect(linkBarOnHoverComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
-      expect(linkBarOnHoverComponent.logger)
+      expect(component.logger)
         .withContext('logger should be set')
         .toBe(logServiceSpy);
     });
 
     it('should set default values', () => {
-      expect(linkBarOnHoverComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(linkBarOnHoverComponent.lineWidth)
+      expect(component.lineWidth)
         .withContext('lineWidth should be set')
         .toBe('0%');
-      expect(linkBarOnHoverComponent.textColor)
+      expect(component.textColor)
         .withContext('textColor should be set')
         .toBe('white');
-      expect(linkBarOnHoverComponent.lineColor)
+      expect(component.lineColor)
         .withContext('lineColor should be set')
         .toBe('white');
-      expect(linkBarOnHoverComponent.link)
+      expect(component.link)
         .withContext('link should be set')
         .toBe('https://sylvainjanet.fr');
-      linkBarOnHoverComponent.text.subscribe({
+      component.text.subscribe({
         next: (t) => {
           expect(t).withContext('text should be set').toBe('Sylvain Janet');
         },
       });
-      expect(linkBarOnHoverComponent.aStyle)
-        .withContext('aStyle should be set')
-        .toBe('');
-      expect(linkBarOnHoverComponent.lineStyle)
+      expect(component.aStyle).withContext('aStyle should be set').toBe('');
+      expect(component.lineStyle)
         .withContext('lineStyle should be set')
         .toBe('');
-      expect(linkBarOnHoverComponent.globalStyle)
+      expect(component.globalStyle)
         .withContext('globalStyle should be set')
         .toBe('');
     });
@@ -86,7 +84,7 @@ describe('LinkBarOnHoverComponent - unit', () => {
     });
 
     it('should make the line disappear on creation', () => {
-      expect(linkBarOnHoverComponent.lineDisappears)
+      expect(component.lineDisappears)
         .withContext('lineDisappears should have been called')
         .toHaveBeenCalledTimes(1);
     });
@@ -115,7 +113,7 @@ describe('LinkBarOnHoverComponent - unit', () => {
         ],
       });
 
-      linkBarOnHoverComponent = TestBed.inject(LinkBarOnHoverComponent);
+      component = TestBed.inject(LinkBarOnHoverComponent);
     });
     it('should change the lineWidth', () => {
       const eventSpy = jasmine.createSpyObj(Event, ['']);
@@ -123,9 +121,9 @@ describe('LinkBarOnHoverComponent - unit', () => {
       const expectedLength = (75 / 100) * length;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      linkBarOnHoverComponent.lineAppears(eventSpy);
+      component.lineAppears(eventSpy);
 
-      expect(linkBarOnHoverComponent.lineWidth)
+      expect(component.lineWidth)
         .withContext('lineWidth should be set')
         .toBe(expectedLength + 'px');
     });
@@ -154,18 +152,18 @@ describe('LinkBarOnHoverComponent - unit', () => {
         ],
       });
 
-      linkBarOnHoverComponent = TestBed.inject(LinkBarOnHoverComponent);
+      component = TestBed.inject(LinkBarOnHoverComponent);
     });
     it('should change the lineWidth', () => {
       const eventSpy = jasmine.createSpyObj(Event, ['']);
       const length = 200;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      linkBarOnHoverComponent.lineAppears(eventSpy);
+      component.lineAppears(eventSpy);
 
-      linkBarOnHoverComponent.lineDisappears();
+      component.lineDisappears();
 
-      expect(linkBarOnHoverComponent.lineWidth)
+      expect(component.lineWidth)
         .withContext('lineWidth should be set')
         .toBe('0%');
     });

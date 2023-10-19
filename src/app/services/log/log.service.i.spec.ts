@@ -8,7 +8,7 @@ import { LogLocalStorage } from './publishers/local-storage/log-local-storage';
 import { LogConsole } from './publishers/console/log-console';
 import { LogLevel } from './logLevel/logLevel';
 
-let logService: LogService;
+let service: LogService;
 let logPublishersService: LogPublishersService;
 const devEnv = developmentEnvironment;
 const stagingEnv = stagingEnvironment;
@@ -18,7 +18,7 @@ describe('LogService - integration', () => {
   const publishersSetByServiceExpectation =
     'should have publishers set by the LogPublishersService';
   const publishersSetByService = () => {
-    const actual = logService.publishers;
+    const actual = service.publishers;
 
     expect(actual.length)
       .withContext('there shoud be the expected amount of publishers')
@@ -34,21 +34,21 @@ describe('LogService - integration', () => {
   describe('in dev environment', () => {
     beforeEach(() => {
       logPublishersService = new LogPublishersService(devEnv);
-      logService = new LogService(devEnv, logPublishersService);
+      service = new LogService(devEnv, logPublishersService);
     });
     it(publishersSetByServiceExpectation, publishersSetByService);
   });
   describe('in staging environment', () => {
     beforeEach(() => {
       logPublishersService = new LogPublishersService(stagingEnv);
-      logService = new LogService(stagingEnv, logPublishersService);
+      service = new LogService(stagingEnv, logPublishersService);
     });
     it(publishersSetByServiceExpectation, publishersSetByService);
   });
   describe('in prod environment', () => {
     beforeEach(() => {
       logPublishersService = new LogPublishersService(prodEnv);
-      logService = new LogService(prodEnv, logPublishersService);
+      service = new LogService(prodEnv, logPublishersService);
     });
     it(publishersSetByServiceExpectation, publishersSetByService);
   });
@@ -57,7 +57,7 @@ describe('LogService - integration', () => {
     const shouldReturnNewServiceWithCorrectPublishersExpectation =
       'should return a new LogService instance with correct publishers';
     const shouldReturnNewServiceWithCorrectPublishers = () => {
-      const result = logService.withClassName('Test');
+      const result = service.withClassName('Test');
 
       const actual = result.publishers;
 
@@ -75,7 +75,7 @@ describe('LogService - integration', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(
         shouldReturnNewServiceWithCorrectPublishersExpectation,
@@ -85,7 +85,7 @@ describe('LogService - integration', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(
         shouldReturnNewServiceWithCorrectPublishersExpectation,
@@ -95,7 +95,7 @@ describe('LogService - integration', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(
         shouldReturnNewServiceWithCorrectPublishersExpectation,
@@ -121,19 +121,19 @@ describe('LogService - integration', () => {
 
     switch (level) {
       case LogLevel.Debug:
-        logService.debug(message, param1, param2, param3);
+        service.debug(message, param1, param2, param3);
         break;
       case LogLevel.Info:
-        logService.info(message, param1, param2, param3);
+        service.info(message, param1, param2, param3);
         break;
       case LogLevel.Warn:
-        logService.warn(message, param1, param2, param3);
+        service.warn(message, param1, param2, param3);
         break;
       case LogLevel.Error:
-        logService.error(message, param1, param2, param3);
+        service.error(message, param1, param2, param3);
         break;
       case LogLevel.Fatal:
-        logService.fatal(message, param1, param2, param3);
+        service.fatal(message, param1, param2, param3);
         break;
       default:
         done.fail('LogLevel not recognized');
@@ -169,19 +169,19 @@ describe('LogService - integration', () => {
 
     switch (level) {
       case LogLevel.Debug:
-        logService.debug(message, param1, param2, param3);
+        service.debug(message, param1, param2, param3);
         break;
       case LogLevel.Info:
-        logService.info(message, param1, param2, param3);
+        service.info(message, param1, param2, param3);
         break;
       case LogLevel.Warn:
-        logService.warn(message, param1, param2, param3);
+        service.warn(message, param1, param2, param3);
         break;
       case LogLevel.Error:
-        logService.error(message, param1, param2, param3);
+        service.error(message, param1, param2, param3);
         break;
       case LogLevel.Fatal:
-        logService.fatal(message, param1, param2, param3);
+        service.fatal(message, param1, param2, param3);
         break;
       default:
         done.fail('LogLevel not recognized');
@@ -204,7 +204,7 @@ describe('LogService - integration', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Debug, devEnv, done)
@@ -216,7 +216,7 @@ describe('LogService - integration', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Debug, stagingEnv, done)
@@ -228,7 +228,7 @@ describe('LogService - integration', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Debug, prodEnv, done)
@@ -243,7 +243,7 @@ describe('LogService - integration', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Info, devEnv, done)
@@ -255,7 +255,7 @@ describe('LogService - integration', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Info, stagingEnv, done)
@@ -267,7 +267,7 @@ describe('LogService - integration', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Info, prodEnv, done)
@@ -282,7 +282,7 @@ describe('LogService - integration', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Warn, devEnv, done)
@@ -294,7 +294,7 @@ describe('LogService - integration', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Warn, stagingEnv, done)
@@ -306,7 +306,7 @@ describe('LogService - integration', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Warn, prodEnv, done)
@@ -321,7 +321,7 @@ describe('LogService - integration', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Error, devEnv, done)
@@ -333,7 +333,7 @@ describe('LogService - integration', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Error, stagingEnv, done)
@@ -345,7 +345,7 @@ describe('LogService - integration', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Error, prodEnv, done)
@@ -360,7 +360,7 @@ describe('LogService - integration', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Fatal, devEnv, done)
@@ -372,7 +372,7 @@ describe('LogService - integration', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Fatal, stagingEnv, done)
@@ -384,7 +384,7 @@ describe('LogService - integration', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(notLogIfLevelBelowTheEnvironmentExpectation, (done: DoneFn) =>
         notLogIfLevelBelowTheEnvironment(LogLevel.Fatal, prodEnv, done)

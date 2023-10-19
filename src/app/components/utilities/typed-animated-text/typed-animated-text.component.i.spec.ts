@@ -3,7 +3,7 @@ import { TypedAnimatedTextComponent } from './typed-animated-text.component';
 import { ElementRef } from '@angular/core';
 
 describe('TypedAnimatedTextComponent - integration', () => {
-  let typedAnimatedTextComponent: TypedAnimatedTextComponent;
+  let component: TypedAnimatedTextComponent;
   let textElement: jasmine.SpyObj<ElementRef>;
   let blinkElement: jasmine.SpyObj<ElementRef>;
   const typingSpeed = 8;
@@ -26,7 +26,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
     TypedAnimatedTextComponent.prototype.textElement = textElement;
     TypedAnimatedTextComponent.prototype.blinkElement = blinkElement;
 
-    typedAnimatedTextComponent = TestBed.createComponent(
+    component = TestBed.createComponent(
       TypedAnimatedTextComponent
     ).componentInstance;
   });
@@ -42,24 +42,24 @@ describe('TypedAnimatedTextComponent - integration', () => {
 
   describe('typingEffect', () => {
     beforeEach(() => {
-      typedAnimatedTextComponent.typingSpeed = typingSpeed;
-      typedAnimatedTextComponent.deleteSpeed = deleteSpeed;
-      typedAnimatedTextComponent.deleteDelay = deleteDelay;
-      typedAnimatedTextComponent.textArray = ['one', 'test'];
-      typedAnimatedTextComponent['i'] = 0;
+      component.typingSpeed = typingSpeed;
+      component.deleteSpeed = deleteSpeed;
+      component.deleteDelay = deleteDelay;
+      component.textArray = ['one', 'test'];
+      component['i'] = 0;
     });
     describe('should type the word letter by letter, and then call the deletingEffect method, then delete the word letter by letter, then repeat for the next word', () => {
       it('1 - type first letter - first word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
-        spyOn(typedAnimatedTextComponent, 'deletingEffect').and.returnValue();
+        component.typingEffect();
+        spyOn(component, 'deletingEffect').and.returnValue();
 
         const actualInnerHtml = textElement.nativeElement.innerHTML;
         expect(actualInnerHtml).withContext('text should be set').toBe('o');
         flush();
       }));
       it('2 - type second letter - first word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
-        spyOn(typedAnimatedTextComponent, 'deletingEffect').and.returnValue();
+        component.typingEffect();
+        spyOn(component, 'deletingEffect').and.returnValue();
 
         tick(typingSpeed / 2);
 
@@ -77,8 +77,8 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('3 - type third letter - first word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
-        spyOn(typedAnimatedTextComponent, 'deletingEffect').and.returnValue();
+        component.typingEffect();
+        spyOn(component, 'deletingEffect').and.returnValue();
 
         tick((typingSpeed * 3) / 2);
 
@@ -96,28 +96,28 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('4 - call deletingEffect method - first word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
-        spyOn(typedAnimatedTextComponent, 'deletingEffect').and.returnValue();
+        component.typingEffect();
+        spyOn(component, 'deletingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay / 2);
 
         const actualInnerHtml = textElement.nativeElement.innerHTML;
         expect(actualInnerHtml).withContext('text should be set').toBe('one');
-        expect(typedAnimatedTextComponent.deletingEffect)
+        expect(component.deletingEffect)
           .withContext(
             'deleting effect should not have been called before tick'
           )
           .not.toHaveBeenCalled();
 
         tick(deleteDelay / 2);
-        expect(typedAnimatedTextComponent.deletingEffect)
+        expect(component.deletingEffect)
           .withContext('deleting effect should have been called after tick')
           .toHaveBeenCalledTimes(1);
         flush();
       }));
       it('5 - delete first letter - first word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        component.typingEffect();
+        spyOn(component, 'typingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay / 2);
 
@@ -135,8 +135,8 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('6 - delete second letter - first word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        component.typingEffect();
+        spyOn(component, 'typingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay + deleteSpeed / 2);
 
@@ -154,8 +154,8 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('7 - delete third letter - first word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        component.typingEffect();
+        spyOn(component, 'typingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay + (deleteSpeed * 3) / 2);
 
@@ -173,39 +173,39 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('8 - change index - first word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        component.typingEffect();
+        spyOn(component, 'typingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay + (deleteSpeed * 5) / 2);
 
-        let actualI = typedAnimatedTextComponent['i'];
+        let actualI = component['i'];
         expect(actualI).withContext('index should be set before tick').toBe(0);
 
         tick(deleteSpeed);
 
-        actualI = typedAnimatedTextComponent['i'];
+        actualI = component['i'];
         expect(actualI).withContext('index should be set after tick').toBe(1);
         flush();
       }));
       it('9 - call typingEffect method - first word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        component.typingEffect();
+        spyOn(component, 'typingEffect').and.returnValue();
 
         tick(typingSpeed * 3 + deleteDelay + (deleteSpeed * 5) / 2);
 
-        expect(typedAnimatedTextComponent.typingEffect)
+        expect(component.typingEffect)
           .withContext('typingEffect should not have been called before tick')
           .not.toHaveBeenCalled();
 
         tick(deleteSpeed);
 
-        expect(typedAnimatedTextComponent.typingEffect)
+        expect(component.typingEffect)
           .withContext('typingEffect should have been called after tick')
           .toHaveBeenCalledTimes(1);
         flush();
       }));
       it('10 - type first letter - second word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(typingSpeed * 3 + deleteDelay + (deleteSpeed * 5) / 2);
 
@@ -215,7 +215,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
           .toBe('');
 
         tick(deleteSpeed);
-        spyOn(typedAnimatedTextComponent, 'deletingEffect').and.returnValue();
+        spyOn(component, 'deletingEffect').and.returnValue();
 
         actualInnerHtml = textElement.nativeElement.innerHTML;
         expect(actualInnerHtml)
@@ -225,10 +225,10 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('11 - type second letter - second word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(typingSpeed * 3 + deleteDelay + deleteSpeed * 3);
-        spyOn(typedAnimatedTextComponent, 'deletingEffect').and.returnValue();
+        spyOn(component, 'deletingEffect').and.returnValue();
 
         tick(typingSpeed / 2);
 
@@ -247,10 +247,10 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('12 - type third letter - second word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(typingSpeed * 3 + deleteDelay + deleteSpeed * 3 + typingSpeed);
-        spyOn(typedAnimatedTextComponent, 'deletingEffect').and.returnValue();
+        spyOn(component, 'deletingEffect').and.returnValue();
 
         tick(typingSpeed / 2);
 
@@ -269,10 +269,10 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('13 - type forth letter - second word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(typingSpeed * 3 + deleteDelay + deleteSpeed * 3 + typingSpeed * 2);
-        spyOn(typedAnimatedTextComponent, 'deletingEffect').and.returnValue();
+        spyOn(component, 'deletingEffect').and.returnValue();
 
         tick(typingSpeed / 2);
 
@@ -291,27 +291,27 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('14 - call deletingEffect method - second word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(typingSpeed * 3 + deleteDelay + deleteSpeed * 3 + typingSpeed * 4);
-        spyOn(typedAnimatedTextComponent, 'deletingEffect').and.returnValue();
+        spyOn(component, 'deletingEffect').and.returnValue();
 
         tick(deleteDelay / 2);
 
-        expect(typedAnimatedTextComponent.deletingEffect)
+        expect(component.deletingEffect)
           .withContext('deletingEffect should not have been called before tick')
           .not.toHaveBeenCalled();
 
         tick(deleteDelay);
 
-        expect(typedAnimatedTextComponent.deletingEffect)
+        expect(component.deletingEffect)
           .withContext('deletingEffect should have been called after tick')
           .toHaveBeenCalledTimes(1);
 
         flush();
       }));
       it('15 - delete first letter - second word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(
           typingSpeed * 3 +
@@ -321,7 +321,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
             deleteDelay
         );
 
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        spyOn(component, 'typingEffect').and.returnValue();
 
         tick(deleteSpeed / 2);
 
@@ -331,7 +331,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('16 - delete second letter - second word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(
           typingSpeed * 3 +
@@ -341,7 +341,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
             deleteDelay
         );
 
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        spyOn(component, 'typingEffect').and.returnValue();
 
         tick(deleteSpeed / 2);
 
@@ -360,7 +360,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('17 - delete third letter - second word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(
           typingSpeed * 3 +
@@ -371,7 +371,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
             deleteSpeed
         );
 
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        spyOn(component, 'typingEffect').and.returnValue();
 
         tick(deleteSpeed / 2);
 
@@ -390,7 +390,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('18 - delete forth letter - second word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(
           typingSpeed * 3 +
@@ -401,7 +401,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
             deleteSpeed * 2
         );
 
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        spyOn(component, 'typingEffect').and.returnValue();
 
         tick(deleteSpeed / 2);
 
@@ -420,7 +420,7 @@ describe('TypedAnimatedTextComponent - integration', () => {
         flush();
       }));
       it('19 - change index - second word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(
           typingSpeed * 3 +
@@ -430,19 +430,19 @@ describe('TypedAnimatedTextComponent - integration', () => {
             deleteDelay +
             (deleteSpeed * 7) / 2
         );
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        spyOn(component, 'typingEffect').and.returnValue();
 
-        let actualI = typedAnimatedTextComponent['i'];
+        let actualI = component['i'];
         expect(actualI).withContext('index should be set before tick').toBe(1);
 
         tick(deleteSpeed);
 
-        actualI = typedAnimatedTextComponent['i'];
+        actualI = component['i'];
         expect(actualI).withContext('index should be set after tick').toBe(0);
         flush();
       }));
       it('20 - call typingEffect method - first word', fakeAsync(() => {
-        typedAnimatedTextComponent.typingEffect();
+        component.typingEffect();
 
         tick(
           typingSpeed * 3 +
@@ -452,15 +452,15 @@ describe('TypedAnimatedTextComponent - integration', () => {
             deleteDelay +
             (deleteSpeed * 7) / 2
         );
-        spyOn(typedAnimatedTextComponent, 'typingEffect').and.returnValue();
+        spyOn(component, 'typingEffect').and.returnValue();
 
-        expect(typedAnimatedTextComponent.typingEffect)
+        expect(component.typingEffect)
           .withContext('typingEffect should not have been called before tick')
           .not.toHaveBeenCalled();
 
         tick(deleteSpeed);
 
-        expect(typedAnimatedTextComponent.typingEffect)
+        expect(component.typingEffect)
           .withContext('typingEffect should not have been called after tick')
           .toHaveBeenCalledTimes(1);
         flush();

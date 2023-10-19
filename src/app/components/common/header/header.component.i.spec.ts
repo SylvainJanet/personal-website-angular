@@ -12,7 +12,7 @@ import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent - integration', () => {
-  let headerComponent: HeaderComponent;
+  let component: HeaderComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
   const devEnv = developmentEnvironment;
@@ -35,7 +35,7 @@ describe('HeaderComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(headerComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
@@ -51,7 +51,7 @@ describe('HeaderComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        component = TestBed.inject(HeaderComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -67,7 +67,7 @@ describe('HeaderComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        component = TestBed.inject(HeaderComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -83,7 +83,7 @@ describe('HeaderComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        component = TestBed.inject(HeaderComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -93,9 +93,9 @@ describe('HeaderComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
-      headerComponent.updateTexts();
+      component.updateTexts();
 
-      const actualMyNameObs = headerComponent.myName;
+      const actualMyNameObs = component.myName;
 
       actualMyNameObs.subscribe((s) => {
         expect(s).withContext('name should be set').toBe(expectedName);
@@ -113,7 +113,7 @@ describe('HeaderComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        component = TestBed.inject(HeaderComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -132,7 +132,7 @@ describe('HeaderComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        component = TestBed.inject(HeaderComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -151,7 +151,7 @@ describe('HeaderComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        component = TestBed.inject(HeaderComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,

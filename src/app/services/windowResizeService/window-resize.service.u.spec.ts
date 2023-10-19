@@ -4,16 +4,16 @@ import { WindowResizeService } from './window-resize.service';
 import { PLATFORM_ID } from '@angular/core';
 import { EMPTY } from 'rxjs';
 
-let windowResizeService: WindowResizeService;
+let service: WindowResizeService;
 
 describe('WindowResizeService - unit', () => {
   const shouldBeDefinedExpectation =
     'should be defined and have a defined scroll property';
   const shouldBeDefined = () => {
-    expect(windowResizeService)
+    expect(service)
       .withContext('service should create')
       .toEqual(jasmine.anything());
-    expect(windowResizeService.resize)
+    expect(service.resize)
       .withContext('resize property should create')
       .toEqual(jasmine.anything());
   };
@@ -28,7 +28,7 @@ describe('WindowResizeService - unit', () => {
           },
         ],
       });
-      windowResizeService = TestBed.inject(WindowResizeService);
+      service = TestBed.inject(WindowResizeService);
     });
     it(shouldBeDefinedExpectation, shouldBeDefined);
     describe('resize property', () => {
@@ -49,7 +49,7 @@ describe('WindowResizeService - unit', () => {
         window.innerHeight = expectedHeight;
         dispatchEvent(resizeEvent);
 
-        windowResizeService.resize.subscribe((v) => {
+        service.resize.subscribe((v) => {
           expect(v)
             .withContext(
               'emitted value should be the expected width and height value'
@@ -73,12 +73,12 @@ describe('WindowResizeService - unit', () => {
           },
         ],
       });
-      windowResizeService = TestBed.inject(WindowResizeService);
+      service = TestBed.inject(WindowResizeService);
     });
     it(shouldBeDefinedExpectation, shouldBeDefined);
     describe('scroll property', () => {
       it('should be the EMPTY observable', () => {
-        expect(windowResizeService.resize)
+        expect(service.resize)
           .withContext('resize observable should be EMPTY')
           .toBe(EMPTY);
       });

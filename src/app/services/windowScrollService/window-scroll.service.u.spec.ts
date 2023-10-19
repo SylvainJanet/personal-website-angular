@@ -3,16 +3,16 @@ import { WindowScrollService } from './window-scroll.service';
 import { PLATFORM_ID } from '@angular/core';
 import { EMPTY } from 'rxjs';
 
-let windowScrollService: WindowScrollService;
+let service: WindowScrollService;
 
 describe('WindowScrollService - unit', () => {
   const shouldBeDefinedExpectation =
     'should be defined and have a defined scroll property';
   const shouldBeDefined = () => {
-    expect(windowScrollService)
+    expect(service)
       .withContext('service should create')
       .toEqual(jasmine.anything());
-    expect(windowScrollService.scroll)
+    expect(service.scroll)
       .withContext('scroll property should create')
       .toEqual(jasmine.anything());
   };
@@ -27,7 +27,7 @@ describe('WindowScrollService - unit', () => {
           },
         ],
       });
-      windowScrollService = TestBed.inject(WindowScrollService);
+      service = TestBed.inject(WindowScrollService);
     });
     it(shouldBeDefinedExpectation, shouldBeDefined);
     describe('scroll property', () => {
@@ -45,7 +45,7 @@ describe('WindowScrollService - unit', () => {
         window.scrollY = expectedScrollValue;
         dispatchEvent(scrollEvent);
 
-        const withScrollY = windowScrollService.scroll.subscribe((v) => {
+        const withScrollY = service.scroll.subscribe((v) => {
           expect(v)
             .withContext('emitted value should be the expected scrollY value')
             .toBe(expectedScrollValue);
@@ -62,7 +62,7 @@ describe('WindowScrollService - unit', () => {
         document.documentElement.scrollTop = expectedScrollTopValue;
         dispatchEvent(scrollEvent);
 
-        const withScrollTop = windowScrollService.scroll.subscribe((v) => {
+        const withScrollTop = service.scroll.subscribe((v) => {
           expect(v)
             .withContext('emitted value should be the expected scrollTop value')
             .toBe(expectedScrollTopValue);
@@ -86,12 +86,12 @@ describe('WindowScrollService - unit', () => {
           },
         ],
       });
-      windowScrollService = TestBed.inject(WindowScrollService);
+      service = TestBed.inject(WindowScrollService);
     });
     it(shouldBeDefinedExpectation, shouldBeDefined);
     describe('scroll property', () => {
       it('should be the EMPTY observable', () => {
-        expect(windowScrollService.scroll)
+        expect(service.scroll)
           .withContext('scroll observable should be EMPTY')
           .toBe(EMPTY);
       });

@@ -12,7 +12,7 @@ import { environment as productionEnvironment } from 'src/environments/environme
 import { CvImgComponent } from './cv-img.component';
 
 describe('CvImgComponent - integration', () => {
-  let cvImgComponent: CvImgComponent;
+  let component: CvImgComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   const devEnv = developmentEnvironment;
   const stagingEnv = stagingEnvironment;
@@ -27,7 +27,7 @@ describe('CvImgComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvImgComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
@@ -44,7 +44,7 @@ describe('CvImgComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -61,7 +61,7 @@ describe('CvImgComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -78,7 +78,7 @@ describe('CvImgComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -88,9 +88,9 @@ describe('CvImgComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
-      cvImgComponent.updateTexts();
+      component.updateTexts();
 
-      const actualAltTextObs = cvImgComponent.altTxt;
+      const actualAltTextObs = component.altTxt;
 
       actualAltTextObs.subscribe((s) => {
         expect(s).withContext('altTxt should be set').toBe(expectedAltText);
@@ -109,7 +109,7 @@ describe('CvImgComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -129,7 +129,7 @@ describe('CvImgComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -149,7 +149,7 @@ describe('CvImgComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,

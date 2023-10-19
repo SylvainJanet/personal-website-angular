@@ -3,7 +3,7 @@ import { DebugElement } from '@angular/core';
 import { LanguageModalRowComponent } from './language-modal-row.component';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-describe('ButtonBarOnHoverComponent - dom unit', () => {
+describe('LanguageModalRowComponent - dom unit', () => {
   let fixture: ComponentFixture<LanguageModalRowComponent>;
   let componentInstance: LanguageModalRowComponent;
   let logServiceGlobalSpy: jasmine.SpyObj<LogService>;

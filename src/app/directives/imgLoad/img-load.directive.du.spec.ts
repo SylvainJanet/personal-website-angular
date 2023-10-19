@@ -12,8 +12,8 @@ class TestComponent {
 }
 
 describe('ImgLoadDirective - dom unit', () => {
-  let imgLoadDirective: ImgLoadDirective;
-  let testComponentFixture: ComponentFixture<TestComponent>;
+  let directive: ImgLoadDirective;
+  let fixture: ComponentFixture<TestComponent>;
   let imageServiceSpy: jasmine.SpyObj<ImageService>;
 
   beforeEach(waitForAsync(() => {
@@ -29,31 +29,28 @@ describe('ImgLoadDirective - dom unit', () => {
   }));
 
   beforeEach(() => {
-    testComponentFixture = TestBed.createComponent(TestComponent);
-    testComponentFixture.detectChanges();
-    imgLoadDirective =
-      testComponentFixture.debugElement.children[0].injector.get(
-        ImgLoadDirective
-      );
+    fixture = TestBed.createComponent(TestComponent);
+    fixture.detectChanges();
+    directive = fixture.debugElement.children[0].injector.get(ImgLoadDirective);
   });
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(imgLoadDirective)
+      expect(directive)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
-      expect(imgLoadDirective)
+      expect(directive)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(imgLoadDirective.appImgLoad)
+      expect(directive.appImgLoad)
         .withContext('appImgLoad should be set')
         .toEqual([Preloaders.MAIN]);
 
-      expect(imgLoadDirective.isLoadedOrError)
+      expect(directive.isLoadedOrError)
         .withContext('isLoadedOrError should be set')
         .toBeFalse();
     });
@@ -64,19 +61,19 @@ describe('ImgLoadDirective - dom unit', () => {
       expect(imageServiceSpy.imageLoading)
         .withContext('imageLoading should have been called')
         .toHaveBeenCalledOnceWith(
-          testComponentFixture.debugElement.children[0].nativeElement,
-          imgLoadDirective.appImgLoad
+          fixture.debugElement.children[0].nativeElement,
+          directive.appImgLoad
         );
     });
     it('should not notify the imageService if isLoadedOrError is true', () => {
       expect(imageServiceSpy.imageLoading)
         .withContext('imageLoading should have been called - 1')
         .toHaveBeenCalledTimes(1);
-      imgLoadDirective.isLoadedOrError = true;
-      const change = new SimpleChange(undefined, imgLoadDirective, false);
+      directive.isLoadedOrError = true;
+      const change = new SimpleChange(undefined, directive, false);
       const changes = { appImgLoad: change };
 
-      imgLoadDirective.ngOnChanges(changes);
+      directive.ngOnChanges(changes);
 
       expect(imageServiceSpy.imageLoading)
         .withContext('imageLoading should have been called - 2')
@@ -86,11 +83,11 @@ describe('ImgLoadDirective - dom unit', () => {
 
   describe('onLoad method', () => {
     it('should trigger on load event', () => {
-      spyOn(imgLoadDirective, 'loadOrError');
-      testComponentFixture.debugElement.children[0].nativeElement.dispatchEvent(
+      spyOn(directive, 'loadOrError');
+      fixture.debugElement.children[0].nativeElement.dispatchEvent(
         new Event('load')
       );
-      expect(imgLoadDirective.loadOrError)
+      expect(directive.loadOrError)
         .withContext('loadOrError should have been called')
         .toHaveBeenCalledTimes(1);
     });
@@ -98,11 +95,11 @@ describe('ImgLoadDirective - dom unit', () => {
 
   describe('onError method', () => {
     it('should trigger on error event', () => {
-      spyOn(imgLoadDirective, 'loadOrError');
-      testComponentFixture.debugElement.children[0].nativeElement.dispatchEvent(
+      spyOn(directive, 'loadOrError');
+      fixture.debugElement.children[0].nativeElement.dispatchEvent(
         new Event('error')
       );
-      expect(imgLoadDirective.loadOrError)
+      expect(directive.loadOrError)
         .withContext('loadOrError should have been called')
         .toHaveBeenCalledTimes(1);
     });

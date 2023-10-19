@@ -12,7 +12,7 @@ import { environment as productionEnvironment } from 'src/environments/environme
 import { CvSkillsComponent } from './cv-skills.component';
 
 describe('CvSkillsComponent - integration', () => {
-  let cvSkillsComponent: CvSkillsComponent;
+  let component: CvSkillsComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   const devEnv = developmentEnvironment;
   const stagingEnv = stagingEnvironment;
@@ -45,7 +45,7 @@ describe('CvSkillsComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvSkillsComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
@@ -62,7 +62,7 @@ describe('CvSkillsComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -79,7 +79,7 @@ describe('CvSkillsComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -96,7 +96,7 @@ describe('CvSkillsComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -106,16 +106,16 @@ describe('CvSkillsComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
-      cvSkillsComponent.updateTexts();
+      component.updateTexts();
 
-      const actualSkillsObs = cvSkillsComponent.skills;
-      const actualJavaObs = cvSkillsComponent.java;
-      const actualCsharpObs = cvSkillsComponent.csharp;
-      const actualPythonDevObs = cvSkillsComponent.python;
-      const actualJstsObs = cvSkillsComponent.jsts;
-      const actualSqlObs = cvSkillsComponent.sql;
-      const actualHtmlObs = cvSkillsComponent.html;
-      const actualLatexObs = cvSkillsComponent.latex;
+      const actualSkillsObs = component.skills;
+      const actualJavaObs = component.java;
+      const actualCsharpObs = component.csharp;
+      const actualPythonDevObs = component.python;
+      const actualJstsObs = component.jsts;
+      const actualSqlObs = component.sql;
+      const actualHtmlObs = component.html;
+      const actualLatexObs = component.latex;
 
       actualSkillsObs.subscribe((s) => {
         expect(s).withContext('skills should be set').toBe(expectedSkills);
@@ -155,7 +155,7 @@ describe('CvSkillsComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -175,7 +175,7 @@ describe('CvSkillsComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -195,7 +195,7 @@ describe('CvSkillsComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,

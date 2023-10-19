@@ -8,7 +8,7 @@ import { ElementRef, PLATFORM_ID } from '@angular/core';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { Observable } from 'rxjs';
 
-let visibleToLoadTextService: VisibleToLoadTextService;
+let service: VisibleToLoadTextService;
 let windowScrollService: WindowScrollService;
 let windowResizeService: WindowResizeService;
 let domComputationService: DOMComputationService;
@@ -32,52 +32,52 @@ describe('VisibleToLoadTextService - unit', () => {
   });
 
   it('should be defined', () => {
-    visibleToLoadTextService = new VisibleToLoadTextService(
+    service = new VisibleToLoadTextService(
       windowScrollService,
       windowResizeService,
       domComputationService
     );
-    expect(visibleToLoadTextService)
+    expect(service)
       .withContext('service should create')
       .toEqual(jasmine.anything());
   });
 
   describe('constructor', () => {
     it('should have correct initial parameters', () => {
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
       );
 
-      expect(visibleToLoadTextService.subscribers)
+      expect(service.subscribers)
         .withContext('subscribers should be set')
         .toEqual([]);
-      expect(visibleToLoadTextService.visibility)
+      expect(service.visibility)
         .withContext('visibility should be set')
         .toEqual(new Map<ComponentWithText, boolean>());
-      expect(visibleToLoadTextService.loaded)
+      expect(service.loaded)
         .withContext('loaded should be set')
         .toEqual(new Map<ComponentWithText, boolean>());
-      expect(visibleToLoadTextService.loading)
+      expect(service.loading)
         .withContext('loading should be set')
         .toEqual(new Map<ComponentWithText, boolean>());
-      expect(visibleToLoadTextService.toReload)
+      expect(service.toReload)
         .withContext('toReload should be set')
         .toEqual(new Map<ComponentWithText, boolean>());
-      expect(visibleToLoadTextService.onlyOnce)
+      expect(service.onlyOnce)
         .withContext('onlyOnce should be set')
         .toEqual(new Map<ComponentWithText, boolean>());
-      expect(visibleToLoadTextService.scroll)
+      expect(service.scroll)
         .withContext('scroll should be set')
         .toEqual(jasmine.anything());
-      expect(visibleToLoadTextService.resize)
+      expect(service.resize)
         .withContext('resize should be set')
         .toEqual(jasmine.anything());
-      expect(visibleToLoadTextService.bufferFactorHeight)
+      expect(service.bufferFactorHeight)
         .withContext('bufferFactorHeight should be set')
         .toBe(expectedBufferHeight);
-      expect(visibleToLoadTextService.bufferFactorWidth)
+      expect(service.bufferFactorWidth)
         .withContext('bufferFactorWidth should be set')
         .toBe(expectedBufferWidth);
     });
@@ -92,7 +92,7 @@ describe('VisibleToLoadTextService - unit', () => {
         Object.getOwnPropertyDescriptor(windowScrollServiceSpy, 'scroll')
           ?.get as jasmine.Spy<() => Observable<number>>
       ).and.returnValue(scrollObsSpy);
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollServiceSpy,
         windowResizeService,
         domComputationService
@@ -103,13 +103,13 @@ describe('VisibleToLoadTextService - unit', () => {
         .toHaveBeenCalledTimes(1);
 
       spyOn(VisibleToLoadTextService.prototype, 'loadNewTexts');
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
       );
 
-      expect(visibleToLoadTextService.loadNewTexts)
+      expect(service.loadNewTexts)
         .withContext(
           'before scroll obs emits, loadNewTexts should not have been called'
         )
@@ -122,7 +122,7 @@ describe('VisibleToLoadTextService - unit', () => {
       });
       dispatchEvent(scrollEvent);
 
-      expect(visibleToLoadTextService.loadNewTexts)
+      expect(service.loadNewTexts)
         .withContext(
           'after scroll obs emits, loadNewTexts should have been called'
         )
@@ -139,7 +139,7 @@ describe('VisibleToLoadTextService - unit', () => {
         Object.getOwnPropertyDescriptor(windowResizeServiceSpy, 'resize')
           ?.get as jasmine.Spy<() => Observable<number[]>>
       ).and.returnValue(resizeObsSpy);
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeServiceSpy,
         domComputationService
@@ -150,13 +150,13 @@ describe('VisibleToLoadTextService - unit', () => {
         .toHaveBeenCalledTimes(1);
 
       spyOn(VisibleToLoadTextService.prototype, 'loadNewTexts');
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
       );
 
-      expect(visibleToLoadTextService.loadNewTexts)
+      expect(service.loadNewTexts)
         .withContext(
           'before resize obs emits, loadNewTexts should not have been called'
         )
@@ -169,7 +169,7 @@ describe('VisibleToLoadTextService - unit', () => {
       });
       dispatchEvent(scrollEvent);
 
-      expect(visibleToLoadTextService.loadNewTexts)
+      expect(service.loadNewTexts)
         .withContext(
           'after resize obs emits, loadNewTexts should have been called'
         )
@@ -193,7 +193,7 @@ describe('VisibleToLoadTextService - unit', () => {
         Object.getOwnPropertyDescriptor(windowScrollServiceSpy, 'scroll')
           ?.get as jasmine.Spy<() => Observable<number>>
       ).and.returnValue(scrollObsSpy);
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollServiceSpy,
         windowResizeService,
         domComputationService
@@ -202,7 +202,7 @@ describe('VisibleToLoadTextService - unit', () => {
         .withContext('unsubscribe method should not have been called before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.ngOnDestroy();
+      service.ngOnDestroy();
 
       expect(subscriptionSpy.unsubscribe)
         .withContext('should call unsubscribe method')
@@ -223,7 +223,7 @@ describe('VisibleToLoadTextService - unit', () => {
         Object.getOwnPropertyDescriptor(windowResizeServiceSpy, 'resize')
           ?.get as jasmine.Spy<() => Observable<number[]>>
       ).and.returnValue(scrollObsSpy);
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeServiceSpy,
         domComputationService
@@ -232,7 +232,7 @@ describe('VisibleToLoadTextService - unit', () => {
         .withContext('unsubscribe method should not have been called before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.ngOnDestroy();
+      service.ngOnDestroy();
 
       expect(subscriptionSpy.unsubscribe)
         .withContext('should call unsubscribe method')
@@ -243,7 +243,7 @@ describe('VisibleToLoadTextService - unit', () => {
   describe('subscribe method', () => {
     beforeEach(() => {
       spyOn(VisibleToLoadTextService.prototype, 'loadNewTextsOf');
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
@@ -262,16 +262,16 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.subscribers.length)
+      expect(service.subscribers.length)
         .withContext('there should be no subscribers')
         .toBe(0);
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      expect(visibleToLoadTextService.subscribers.length)
+      expect(service.subscribers.length)
         .withContext('there should be 1 subscriber')
         .toBe(1);
-      expect(visibleToLoadTextService.subscribers[0])
+      expect(service.subscribers[0])
         .withContext('the subscriber should be as expected')
         .toBe(subscriber);
     });
@@ -288,13 +288,13 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be undefined for the subscriber at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be set to false')
         .toBeFalse();
     });
@@ -311,13 +311,13 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('loading should be undefined for the subscriber at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('loading should be set to false')
         .toBeFalse();
     });
@@ -334,13 +334,13 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.toReload.get(subscriber))
+      expect(service.toReload.get(subscriber))
         .withContext('toReload should be undefined for the subscriber at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      expect(visibleToLoadTextService.toReload.get(subscriber))
+      expect(service.toReload.get(subscriber))
         .withContext('toReload should be set to false')
         .toBeFalse();
     });
@@ -357,13 +357,13 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.loadNewTextsOf)
+      expect(service.loadNewTextsOf)
         .withContext('loadNewTextsOf should not have been called at first')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      expect(visibleToLoadTextService.loadNewTextsOf)
+      expect(service.loadNewTextsOf)
         .withContext(
           'loadNewTextsOf should have been called after the subscription'
         )
@@ -382,13 +382,13 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+      expect(service.onlyOnce.get(subscriber))
         .withContext('onlyOnce should be undefined for the subscriber at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+      expect(service.onlyOnce.get(subscriber))
         .withContext('onlyOnce should be set to false')
         .toBeFalse();
     });
@@ -405,13 +405,13 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+      expect(service.onlyOnce.get(subscriber))
         .withContext('onlyOnce should be undefined for the subscriber at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber, false);
+      service.subscribe(subscriber, false);
 
-      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+      expect(service.onlyOnce.get(subscriber))
         .withContext('onlyOnce should be set to false')
         .toBeFalse();
     });
@@ -428,13 +428,13 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+      expect(service.onlyOnce.get(subscriber))
         .withContext('onlyOnce should be undefined for the subscriber at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber, true);
+      service.subscribe(subscriber, true);
 
-      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+      expect(service.onlyOnce.get(subscriber))
         .withContext('onlyOnce should be set to true')
         .toBeTrue();
     });
@@ -442,7 +442,7 @@ describe('VisibleToLoadTextService - unit', () => {
 
   describe('unsubscribe method', () => {
     beforeEach(() => {
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
@@ -472,29 +472,29 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.subscribers.length)
+      expect(service.subscribers.length)
         .withContext('there should be no subscribers')
         .toBe(0);
 
-      visibleToLoadTextService.subscribe(subscriber1);
-      visibleToLoadTextService.subscribe(subscriber2);
+      service.subscribe(subscriber1);
+      service.subscribe(subscriber2);
 
-      expect(visibleToLoadTextService.subscribers.length)
+      expect(service.subscribers.length)
         .withContext('there should be 2 subscribers')
         .toBe(2);
-      expect(visibleToLoadTextService.subscribers[0])
+      expect(service.subscribers[0])
         .withContext('the first subscriber should be as expected')
         .toBe(subscriber1);
-      expect(visibleToLoadTextService.subscribers[1])
+      expect(service.subscribers[1])
         .withContext('the second subscriber should be as expected')
         .toBe(subscriber2);
 
-      visibleToLoadTextService.unsubscribe(subscriber1);
+      service.unsubscribe(subscriber1);
 
-      expect(visibleToLoadTextService.subscribers.length)
+      expect(service.subscribers.length)
         .withContext('there should be 1 subscriber')
         .toBe(1);
-      expect(visibleToLoadTextService.subscribers[0])
+      expect(service.subscribers[0])
         .withContext(
           "the only subscriber left should be the one which didn't unsubscribe"
         )
@@ -524,35 +524,35 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.visibility.get(subscriber1))
+      expect(service.visibility.get(subscriber1))
         .withContext(
           'visibility should be undefined for the subscriber at first - 1'
         )
         .toBeUndefined();
-      expect(visibleToLoadTextService.visibility.get(subscriber2))
+      expect(service.visibility.get(subscriber2))
         .withContext(
           'visibility should be undefined for the subscriber at first - 2'
         )
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber1);
-      visibleToLoadTextService.subscribe(subscriber2);
+      service.subscribe(subscriber1);
+      service.subscribe(subscriber2);
 
-      expect(visibleToLoadTextService.visibility.get(subscriber1))
+      expect(service.visibility.get(subscriber1))
         .withContext('visibility should be set to false - 1')
         .toBeFalse();
 
-      expect(visibleToLoadTextService.visibility.get(subscriber2))
+      expect(service.visibility.get(subscriber2))
         .withContext('visibility should be set to false - 2')
         .toBeFalse();
 
-      visibleToLoadTextService.unsubscribe(subscriber1);
+      service.unsubscribe(subscriber1);
 
-      expect(visibleToLoadTextService.visibility.get(subscriber1))
+      expect(service.visibility.get(subscriber1))
         .withContext('visibility should undefined after')
         .toBeUndefined();
 
-      expect(visibleToLoadTextService.visibility.get(subscriber2))
+      expect(service.visibility.get(subscriber2))
         .withContext('visibility should be set to false - 3')
         .toBeFalse();
     });
@@ -580,35 +580,35 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.loaded.get(subscriber1))
+      expect(service.loaded.get(subscriber1))
         .withContext(
           'loaded should be undefined for the subscriber at first - 1'
         )
         .toBeUndefined();
-      expect(visibleToLoadTextService.loaded.get(subscriber2))
+      expect(service.loaded.get(subscriber2))
         .withContext(
           'loaded should be undefined for the subscriber at first - 2'
         )
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber1);
-      visibleToLoadTextService.subscribe(subscriber2);
+      service.subscribe(subscriber1);
+      service.subscribe(subscriber2);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber1))
+      expect(service.loaded.get(subscriber1))
         .withContext('loaded should be set to false - 1')
         .toBeFalse();
 
-      expect(visibleToLoadTextService.loaded.get(subscriber2))
+      expect(service.loaded.get(subscriber2))
         .withContext('loaded should be set to false - 2')
         .toBeFalse();
 
-      visibleToLoadTextService.unsubscribe(subscriber1);
+      service.unsubscribe(subscriber1);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber1))
+      expect(service.loaded.get(subscriber1))
         .withContext('loaded should undefined after')
         .toBeUndefined();
 
-      expect(visibleToLoadTextService.loaded.get(subscriber2))
+      expect(service.loaded.get(subscriber2))
         .withContext('loaded should be set to false - 3')
         .toBeFalse();
     });
@@ -636,35 +636,35 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.loading.get(subscriber1))
+      expect(service.loading.get(subscriber1))
         .withContext(
           'loading should be undefined for the subscriber at first - 1'
         )
         .toBeUndefined();
-      expect(visibleToLoadTextService.loading.get(subscriber2))
+      expect(service.loading.get(subscriber2))
         .withContext(
           'loading should be undefined for the subscriber at first - 2'
         )
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber1);
-      visibleToLoadTextService.subscribe(subscriber2);
+      service.subscribe(subscriber1);
+      service.subscribe(subscriber2);
 
-      expect(visibleToLoadTextService.loading.get(subscriber1))
+      expect(service.loading.get(subscriber1))
         .withContext('loading should be set to false - 1')
         .toBeFalse();
 
-      expect(visibleToLoadTextService.loading.get(subscriber2))
+      expect(service.loading.get(subscriber2))
         .withContext('loading should be set to false - 2')
         .toBeFalse();
 
-      visibleToLoadTextService.unsubscribe(subscriber1);
+      service.unsubscribe(subscriber1);
 
-      expect(visibleToLoadTextService.loading.get(subscriber1))
+      expect(service.loading.get(subscriber1))
         .withContext('loading should undefined after')
         .toBeUndefined();
 
-      expect(visibleToLoadTextService.loading.get(subscriber2))
+      expect(service.loading.get(subscriber2))
         .withContext('loading should be set to false - 3')
         .toBeFalse();
     });
@@ -676,7 +676,7 @@ describe('VisibleToLoadTextService - unit', () => {
       domComputationServiceSpy = jasmine.createSpyObj('DOMComputationService', [
         'isIntoView',
       ]);
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationServiceSpy
@@ -699,7 +699,7 @@ describe('VisibleToLoadTextService - unit', () => {
         .withContext('domComputationService should not have been called before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService['updateVisibilityOf'](subscriber);
+      service['updateVisibilityOf'](subscriber);
 
       expect(domComputationServiceSpy.isIntoView)
         .withContext('domComputationService should have been called after')
@@ -722,23 +722,23 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.visibility.get(subscriber))
+      expect(service.visibility.get(subscriber))
         .withContext('visibility should be undefined before')
         .toBeUndefined();
 
       domComputationServiceSpy.isIntoView.and.returnValue(true);
 
-      visibleToLoadTextService['updateVisibilityOf'](subscriber);
+      service['updateVisibilityOf'](subscriber);
 
-      expect(visibleToLoadTextService.visibility.get(subscriber))
+      expect(service.visibility.get(subscriber))
         .withContext('visibility should be set after - true')
         .toBeTrue();
 
       domComputationServiceSpy.isIntoView.and.returnValue(false);
 
-      visibleToLoadTextService['updateVisibilityOf'](subscriber);
+      service['updateVisibilityOf'](subscriber);
 
-      expect(visibleToLoadTextService.visibility.get(subscriber))
+      expect(service.visibility.get(subscriber))
         .withContext('visibility should be set after - false')
         .toBeFalse();
     });
@@ -746,13 +746,13 @@ describe('VisibleToLoadTextService - unit', () => {
 
   describe('updateVisibility method', () => {
     beforeEach(() => {
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
       );
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(visibleToLoadTextService, 'updateVisibilityOf');
+      spyOn<any>(service, 'updateVisibilityOf');
     });
     it('should set the visibility of all components', () => {
       const subscriber1: ComponentWithText = {
@@ -779,24 +779,24 @@ describe('VisibleToLoadTextService - unit', () => {
       };
 
       // not a subscribe() call since it already updates the visibility of components
-      visibleToLoadTextService.subscribers.push(subscriber1);
-      visibleToLoadTextService.subscribers.push(subscriber2);
+      service.subscribers.push(subscriber1);
+      service.subscribers.push(subscriber2);
 
-      expect(visibleToLoadTextService['updateVisibilityOf'])
+      expect(service['updateVisibilityOf'])
         .withContext('visibility should have not been updated before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.updateVisibility();
+      service.updateVisibility();
 
-      expect(visibleToLoadTextService['updateVisibilityOf'])
+      expect(service['updateVisibilityOf'])
         .withContext('updateVisibilityOf should have been called twice')
         .toHaveBeenCalledTimes(2);
-      expect(visibleToLoadTextService['updateVisibilityOf'])
+      expect(service['updateVisibilityOf'])
         .withContext(
           'updateVisibilityOf should have been called with the proper arguments - 1'
         )
         .toHaveBeenCalledWith(subscriber1);
-      expect(visibleToLoadTextService['updateVisibilityOf'])
+      expect(service['updateVisibilityOf'])
         .withContext(
           'updateVisibilityOf should have been called with the proper arguments - 2'
         )
@@ -806,7 +806,7 @@ describe('VisibleToLoadTextService - unit', () => {
 
   describe('textLoaded method', () => {
     beforeEach(() => {
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
@@ -825,19 +825,19 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be undefined at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be false after subscription')
         .toBeFalse();
 
-      visibleToLoadTextService.textLoaded(subscriber);
+      service.textLoaded(subscriber);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be true after')
         .toBeTrue();
     });
@@ -854,22 +854,22 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('loading should be undefined at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('loading should be false after subscription')
         .toBeFalse();
 
       // assume the text loads
-      visibleToLoadTextService.loading.set(subscriber, true);
+      service.loading.set(subscriber, true);
 
-      visibleToLoadTextService.textLoaded(subscriber);
+      service.textLoaded(subscriber);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('loading should be false after')
         .toBeFalse();
     });
@@ -886,25 +886,25 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be undefined at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber);
-      visibleToLoadTextService.toReload.set(subscriber, true);
+      service.subscribe(subscriber);
+      service.toReload.set(subscriber, true);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be false after subscription')
         .toBeFalse();
 
-      visibleToLoadTextService.loaded.set(subscriber, true);
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      service.loaded.set(subscriber, true);
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be true before')
         .toBeTrue();
 
-      visibleToLoadTextService.textLoaded(subscriber);
+      service.textLoaded(subscriber);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be true false')
         .toBeFalse();
     });
@@ -921,20 +921,20 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('loading should be undefined at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber);
-      visibleToLoadTextService.toReload.set(subscriber, true);
+      service.subscribe(subscriber);
+      service.toReload.set(subscriber, true);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('loading should be false after subscription')
         .toBeFalse();
 
-      visibleToLoadTextService.textLoaded(subscriber);
+      service.textLoaded(subscriber);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('loading should be true after')
         .toBeTrue();
     });
@@ -951,20 +951,20 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.toReload.get(subscriber))
+      expect(service.toReload.get(subscriber))
         .withContext('toReload should be undefined at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber);
-      visibleToLoadTextService.toReload.set(subscriber, true);
+      service.subscribe(subscriber);
+      service.toReload.set(subscriber, true);
 
-      expect(visibleToLoadTextService.toReload.get(subscriber))
+      expect(service.toReload.get(subscriber))
         .withContext('toReload should be true before')
         .toBeTrue();
 
-      visibleToLoadTextService.textLoaded(subscriber);
+      service.textLoaded(subscriber);
 
-      expect(visibleToLoadTextService.toReload.get(subscriber))
+      expect(service.toReload.get(subscriber))
         .withContext('toReload should be false after')
         .toBeFalse();
     });
@@ -987,14 +987,14 @@ describe('VisibleToLoadTextService - unit', () => {
         .withContext('should not have been called at first')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.subscribe(subscriber);
-      visibleToLoadTextService.toReload.set(subscriber, true);
+      service.subscribe(subscriber);
+      service.toReload.set(subscriber, true);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.textLoaded(subscriber);
+      service.textLoaded(subscriber);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called before')
@@ -1004,7 +1004,7 @@ describe('VisibleToLoadTextService - unit', () => {
 
   describe('hasTextLoaded method', () => {
     beforeEach(() => {
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
@@ -1023,28 +1023,28 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be undefined at first')
         .toBeUndefined();
-      expect(visibleToLoadTextService.hasTextLoaded(subscriber))
+      expect(service.hasTextLoaded(subscriber))
         .withContext('returns undefined at first')
         .toBeUndefined();
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be false after subscription')
         .toBeFalse();
-      expect(visibleToLoadTextService.hasTextLoaded(subscriber))
+      expect(service.hasTextLoaded(subscriber))
         .withContext('returns false')
         .toBeFalse();
 
-      visibleToLoadTextService.textLoaded(subscriber);
+      service.textLoaded(subscriber);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be true after')
         .toBeTrue();
-      expect(visibleToLoadTextService.hasTextLoaded(subscriber))
+      expect(service.hasTextLoaded(subscriber))
         .withContext('returns true')
         .toBeTrue();
     });
@@ -1063,227 +1063,227 @@ describe('VisibleToLoadTextService - unit', () => {
       },
     };
     beforeEach(() => {
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
       );
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(visibleToLoadTextService, 'updateVisibilityOf');
+      spyOn<any>(service, 'updateVisibilityOf');
       spyOn(subscriber, 'updateTexts');
       // not subscribe method since it also calls updateVisibiliyOf and would mess with the future checks
-      visibleToLoadTextService.subscribers.push(subscriber);
+      service.subscribers.push(subscriber);
     });
     it('should call the updateVisibilityOf method', () => {
-      expect(visibleToLoadTextService['updateVisibilityOf'])
+      expect(service['updateVisibilityOf'])
         .withContext('should not have been called at first')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
-      expect(visibleToLoadTextService['updateVisibilityOf'])
+      expect(service['updateVisibilityOf'])
         .withContext('should have been called after')
         .toHaveBeenCalledOnceWith(subscriber);
     });
     it('should update the text when appropriate', () => {
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, false);
-      visibleToLoadTextService.loading.set(subscriber, false);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, false);
+      service.loading.set(subscriber, false);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
       expect(subscriber.updateTexts)
         .withContext('should have been called after')
         .toHaveBeenCalledTimes(1);
     });
     it('should set the loading map to true for the component when appropriate', () => {
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, false);
-      visibleToLoadTextService.loading.set(subscriber, false);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, false);
+      service.loading.set(subscriber, false);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be false before')
         .toBeFalse();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be true after')
         .toBeTrue();
     });
     it('should not update the text when the component is not visible', () => {
-      visibleToLoadTextService.visibility.set(subscriber, false);
-      visibleToLoadTextService.loaded.set(subscriber, false);
-      visibleToLoadTextService.loading.set(subscriber, false);
+      service.visibility.set(subscriber, false);
+      service.loaded.set(subscriber, false);
+      service.loading.set(subscriber, false);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called after')
         .not.toHaveBeenCalled();
     });
     it('should not set the loading map to true for the component when the component is not visible', () => {
-      visibleToLoadTextService.visibility.set(subscriber, false);
-      visibleToLoadTextService.loaded.set(subscriber, false);
-      visibleToLoadTextService.loading.set(subscriber, false);
+      service.visibility.set(subscriber, false);
+      service.loaded.set(subscriber, false);
+      service.loading.set(subscriber, false);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be false before')
         .toBeFalse();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be false after')
         .toBeFalse();
     });
     it('should not update the text when the component is loaded', () => {
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, true);
-      visibleToLoadTextService.loading.set(subscriber, false);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, true);
+      service.loading.set(subscriber, false);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called after')
         .not.toHaveBeenCalled();
     });
     it('should not set the loading map to true for the component when the component is loaded', () => {
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, true);
-      visibleToLoadTextService.loading.set(subscriber, false);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, true);
+      service.loading.set(subscriber, false);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be false before')
         .toBeFalse();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be false after')
         .toBeFalse();
     });
     it('should not update the text when the component is loading', () => {
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, false);
-      visibleToLoadTextService.loading.set(subscriber, true);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, false);
+      service.loading.set(subscriber, true);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called after')
         .not.toHaveBeenCalled();
     });
     it('should not set the loading map to true for the component when the component is loading', () => {
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, false);
-      visibleToLoadTextService.loading.set(subscriber, true);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, false);
+      service.loading.set(subscriber, true);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be true before')
         .toBeTrue();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be true after')
         .toBeTrue();
     });
 
     it('should not update visibility when onlyOnce and loaded or loading', () => {
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, false);
-      visibleToLoadTextService.loading.set(subscriber, true);
-      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, false);
+      service.loading.set(subscriber, true);
+      service.onlyOnce.set(subscriber, true);
 
-      expect(visibleToLoadTextService['updateVisibilityOf'])
+      expect(service['updateVisibilityOf'])
         .withContext('should not have been called before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
-      expect(visibleToLoadTextService['updateVisibilityOf'])
+      expect(service['updateVisibilityOf'])
         .withContext('should not have been called after - 1')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, true);
-      visibleToLoadTextService.loading.set(subscriber, false);
-      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, true);
+      service.loading.set(subscriber, false);
+      service.onlyOnce.set(subscriber, true);
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
-      expect(visibleToLoadTextService['updateVisibilityOf'])
+      expect(service['updateVisibilityOf'])
         .withContext('should not have been called after - 2')
         .not.toHaveBeenCalled();
     });
     it('should not update the text when onlyOnce and loaded or loading', () => {
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, false);
-      visibleToLoadTextService.loading.set(subscriber, true);
-      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, false);
+      service.loading.set(subscriber, true);
+      service.onlyOnce.set(subscriber, true);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called after - 1')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, true);
-      visibleToLoadTextService.loading.set(subscriber, false);
-      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, true);
+      service.loading.set(subscriber, false);
+      service.onlyOnce.set(subscriber, true);
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
       expect(subscriber.updateTexts)
         .withContext('should not have been called after - 2')
         .not.toHaveBeenCalled();
     });
     it('should not set the loading map to true for the component when onlyOnce and loaded or loading', () => {
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, false);
-      visibleToLoadTextService.loading.set(subscriber, true);
-      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, false);
+      service.loading.set(subscriber, true);
+      service.onlyOnce.set(subscriber, true);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be true before')
         .toBeTrue();
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be true after - 1')
         .toBeTrue();
 
-      visibleToLoadTextService.visibility.set(subscriber, true);
-      visibleToLoadTextService.loaded.set(subscriber, true);
-      visibleToLoadTextService.loading.set(subscriber, false);
-      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+      service.visibility.set(subscriber, true);
+      service.loaded.set(subscriber, true);
+      service.loading.set(subscriber, false);
+      service.onlyOnce.set(subscriber, true);
 
-      visibleToLoadTextService.loadNewTextsOf(subscriber);
+      service.loadNewTextsOf(subscriber);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('should be false after - 2')
         .toBeFalse();
     });
@@ -1291,13 +1291,13 @@ describe('VisibleToLoadTextService - unit', () => {
 
   describe('loadNewTexts method', () => {
     beforeEach(() => {
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
       );
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(visibleToLoadTextService, 'loadNewTextsOf');
+      spyOn<any>(service, 'loadNewTextsOf');
     });
     it('should load the new texts for every components', () => {
       const subscriber1: ComponentWithText = {
@@ -1324,24 +1324,24 @@ describe('VisibleToLoadTextService - unit', () => {
       };
 
       // not a subscribe() call since it already loads the texts of components
-      visibleToLoadTextService.subscribers.push(subscriber1);
-      visibleToLoadTextService.subscribers.push(subscriber2);
+      service.subscribers.push(subscriber1);
+      service.subscribers.push(subscriber2);
 
-      expect(visibleToLoadTextService['loadNewTextsOf'])
+      expect(service['loadNewTextsOf'])
         .withContext('visibility should not have been updated before')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.loadNewTexts();
+      service.loadNewTexts();
 
-      expect(visibleToLoadTextService['loadNewTextsOf'])
+      expect(service['loadNewTextsOf'])
         .withContext('loadNewTextsOf should have been called twice')
         .toHaveBeenCalledTimes(2);
-      expect(visibleToLoadTextService['loadNewTextsOf'])
+      expect(service['loadNewTextsOf'])
         .withContext(
           'loadNewTextsOf should have been called with the proper arguments - 1'
         )
         .toHaveBeenCalledWith(subscriber1);
-      expect(visibleToLoadTextService['loadNewTextsOf'])
+      expect(service['loadNewTextsOf'])
         .withContext(
           'loadNewTextsOf should have been called with the proper arguments - 2'
         )
@@ -1352,20 +1352,20 @@ describe('VisibleToLoadTextService - unit', () => {
   describe('languageChange method', () => {
     beforeEach(() => {
       spyOn(VisibleToLoadTextService.prototype, 'loadNewTexts');
-      visibleToLoadTextService = new VisibleToLoadTextService(
+      service = new VisibleToLoadTextService(
         windowScrollService,
         windowResizeService,
         domComputationService
       );
     });
     it('should call loadNewTexts components', () => {
-      expect(visibleToLoadTextService.loadNewTexts)
+      expect(service.loadNewTexts)
         .withContext('should not have been called at first')
         .not.toHaveBeenCalled();
 
-      visibleToLoadTextService.languageChange();
+      service.languageChange();
 
-      expect(visibleToLoadTextService.loadNewTexts)
+      expect(service.loadNewTexts)
         .withContext('should have been called after')
         .toHaveBeenCalled();
     });
@@ -1393,25 +1393,25 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      visibleToLoadTextService.subscribe(subscriber1);
-      visibleToLoadTextService.subscribe(subscriber2);
+      service.subscribe(subscriber1);
+      service.subscribe(subscriber2);
 
-      visibleToLoadTextService.loading.set(subscriber1, true);
-      visibleToLoadTextService.loading.set(subscriber2, true);
+      service.loading.set(subscriber1, true);
+      service.loading.set(subscriber2, true);
 
-      expect(visibleToLoadTextService.loading.get(subscriber1))
+      expect(service.loading.get(subscriber1))
         .withContext('loading should be true before - 1')
         .toBeTrue();
-      expect(visibleToLoadTextService.loading.get(subscriber2))
+      expect(service.loading.get(subscriber2))
         .withContext('loading should be true before - 2')
         .toBeTrue();
 
-      visibleToLoadTextService.languageChange();
+      service.languageChange();
 
-      expect(visibleToLoadTextService.loading.get(subscriber1))
+      expect(service.loading.get(subscriber1))
         .withContext('loading should be false after - 1')
         .toBeFalse();
-      expect(visibleToLoadTextService.loading.get(subscriber2))
+      expect(service.loading.get(subscriber2))
         .withContext('loading should be false after - 2')
         .toBeFalse();
     });
@@ -1439,25 +1439,25 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      visibleToLoadTextService.subscribe(subscriber1);
-      visibleToLoadTextService.subscribe(subscriber2);
+      service.subscribe(subscriber1);
+      service.subscribe(subscriber2);
 
-      visibleToLoadTextService.loaded.set(subscriber1, true);
-      visibleToLoadTextService.loaded.set(subscriber2, true);
+      service.loaded.set(subscriber1, true);
+      service.loaded.set(subscriber2, true);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber1))
+      expect(service.loaded.get(subscriber1))
         .withContext('loaded should be true before - 1')
         .toBeTrue();
-      expect(visibleToLoadTextService.loaded.get(subscriber2))
+      expect(service.loaded.get(subscriber2))
         .withContext('loaded should be true before - 2')
         .toBeTrue();
 
-      visibleToLoadTextService.languageChange();
+      service.languageChange();
 
-      expect(visibleToLoadTextService.loaded.get(subscriber1))
+      expect(service.loaded.get(subscriber1))
         .withContext('loaded should be false after - 1')
         .toBeFalse();
-      expect(visibleToLoadTextService.loaded.get(subscriber2))
+      expect(service.loaded.get(subscriber2))
         .withContext('loaded should be false after - 2')
         .toBeFalse();
     });
@@ -1486,25 +1486,25 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      visibleToLoadTextService.subscribe(subscriber1);
-      visibleToLoadTextService.subscribe(subscriber2);
+      service.subscribe(subscriber1);
+      service.subscribe(subscriber2);
 
-      visibleToLoadTextService.loading.set(subscriber1, true);
-      visibleToLoadTextService.loading.set(subscriber2, true);
+      service.loading.set(subscriber1, true);
+      service.loading.set(subscriber2, true);
 
-      expect(visibleToLoadTextService.toReload.get(subscriber1))
+      expect(service.toReload.get(subscriber1))
         .withContext('toReload should be false before - 1')
         .toBeFalse();
-      expect(visibleToLoadTextService.toReload.get(subscriber2))
+      expect(service.toReload.get(subscriber2))
         .withContext('toReload should be false before - 2')
         .toBeFalse();
 
-      visibleToLoadTextService.languageChange();
+      service.languageChange();
 
-      expect(visibleToLoadTextService.toReload.get(subscriber1))
+      expect(service.toReload.get(subscriber1))
         .withContext('toReload should be true after - 1')
         .toBeTrue();
-      expect(visibleToLoadTextService.toReload.get(subscriber2))
+      expect(service.toReload.get(subscriber2))
         .withContext('toReload should be true after - 2')
         .toBeTrue();
     });
@@ -1533,25 +1533,25 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      visibleToLoadTextService.subscribe(subscriber1);
-      visibleToLoadTextService.subscribe(subscriber2);
+      service.subscribe(subscriber1);
+      service.subscribe(subscriber2);
 
-      visibleToLoadTextService.loading.set(subscriber1, true);
-      visibleToLoadTextService.loading.set(subscriber2, false);
+      service.loading.set(subscriber1, true);
+      service.loading.set(subscriber2, false);
 
-      expect(visibleToLoadTextService.toReload.get(subscriber1))
+      expect(service.toReload.get(subscriber1))
         .withContext('toReload should be false before - 1')
         .toBeFalse();
-      expect(visibleToLoadTextService.toReload.get(subscriber2))
+      expect(service.toReload.get(subscriber2))
         .withContext('toReload should be false before - 2')
         .toBeFalse();
 
-      visibleToLoadTextService.languageChange();
+      service.languageChange();
 
-      expect(visibleToLoadTextService.toReload.get(subscriber1))
+      expect(service.toReload.get(subscriber1))
         .withContext('toReload should be true after')
         .toBeTrue();
-      expect(visibleToLoadTextService.toReload.get(subscriber2))
+      expect(service.toReload.get(subscriber2))
         .withContext('toReload should be false after')
         .toBeFalse();
     });
@@ -1580,26 +1580,26 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      visibleToLoadTextService.subscribe(subscriber1);
-      visibleToLoadTextService.subscribe(subscriber2);
+      service.subscribe(subscriber1);
+      service.subscribe(subscriber2);
 
-      visibleToLoadTextService.loading.set(subscriber1, true);
-      visibleToLoadTextService.loading.set(subscriber2, false);
-      visibleToLoadTextService.loaded.set(subscriber2, true);
+      service.loading.set(subscriber1, true);
+      service.loading.set(subscriber2, false);
+      service.loaded.set(subscriber2, true);
 
-      expect(visibleToLoadTextService.toReload.get(subscriber1))
+      expect(service.toReload.get(subscriber1))
         .withContext('toReload should be false before - 1')
         .toBeFalse();
-      expect(visibleToLoadTextService.toReload.get(subscriber2))
+      expect(service.toReload.get(subscriber2))
         .withContext('toReload should be false before - 2')
         .toBeFalse();
 
-      visibleToLoadTextService.languageChange();
+      service.languageChange();
 
-      expect(visibleToLoadTextService.toReload.get(subscriber1))
+      expect(service.toReload.get(subscriber1))
         .withContext('toReload should be true after')
         .toBeTrue();
-      expect(visibleToLoadTextService.toReload.get(subscriber2))
+      expect(service.toReload.get(subscriber2))
         .withContext('toReload should be false after')
         .toBeFalse();
     });
@@ -1617,18 +1617,18 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      visibleToLoadTextService.loading.set(subscriber, true);
-      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+      service.loading.set(subscriber, true);
+      service.onlyOnce.set(subscriber, true);
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('loading should be true before')
         .toBeTrue();
 
-      visibleToLoadTextService.languageChange();
+      service.languageChange();
 
-      expect(visibleToLoadTextService.loading.get(subscriber))
+      expect(service.loading.get(subscriber))
         .withContext('loading should be true after')
         .toBeTrue();
     });
@@ -1646,18 +1646,18 @@ describe('VisibleToLoadTextService - unit', () => {
         },
       };
 
-      visibleToLoadTextService.subscribe(subscriber);
+      service.subscribe(subscriber);
 
-      visibleToLoadTextService.loaded.set(subscriber, true);
-      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+      service.loaded.set(subscriber, true);
+      service.onlyOnce.set(subscriber, true);
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be true before')
         .toBeTrue();
 
-      visibleToLoadTextService.languageChange();
+      service.languageChange();
 
-      expect(visibleToLoadTextService.loaded.get(subscriber))
+      expect(service.loaded.get(subscriber))
         .withContext('loaded should be true after')
         .toBeTrue();
     });

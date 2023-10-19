@@ -11,7 +11,7 @@ import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { ElementRef } from '@angular/core';
 
 describe('BannerComponent - unit', () => {
-  let bannerComponent: BannerComponent;
+  let component: BannerComponent;
   let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
 
@@ -35,30 +35,30 @@ describe('BannerComponent - unit', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(bannerComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
 
     const shouldSetDefaultValuesExpectation = 'should set default values';
     const shouldSetDefaultValues = () => {
-      expect(bannerComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
-      expect(bannerComponent.preloaders)
+      expect(component.preloaders)
         .withContext('preloaders should be set')
         .toEqual([Preloaders.MAIN]);
 
-      expect(bannerComponent.bannerSrc)
+      expect(component.bannerSrc)
         .withContext('bannerSrc should be set')
         .toBe(expectedBannerUrl);
-      expect(bannerComponent.messages)
+      expect(component.messages)
         .withContext('messages should be set')
         .toEqual([]);
-      bannerComponent.iAmMe.subscribe((s) => {
+      component.iAmMe.subscribe((s) => {
         expect(s).withContext('iAmMe should be set').toBe('');
       });
-      expect(bannerComponent.doubleImgDisplay)
+      expect(component.doubleImgDisplay)
         .withContext('doubleImgDisplay should be set')
         .toBe('block');
     };
@@ -69,7 +69,7 @@ describe('BannerComponent - unit', () => {
       setTimeout(() => {
         expect(visibleToLoadTextServiceSpy.subscribe)
           .withContext('subscribe should have been called')
-          .toHaveBeenCalledOnceWith(bannerComponent);
+          .toHaveBeenCalledOnceWith(component);
         done();
       });
     };
@@ -102,7 +102,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -139,7 +139,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -176,7 +176,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -190,7 +190,7 @@ describe('BannerComponent - unit', () => {
   describe('updateTexts', () => {
     const shouldCallTextServiceExpectation = 'should call the textService';
     const shouldCallTextService = () => {
-      bannerComponent.updateTexts();
+      component.updateTexts();
 
       expect(textServiceSpy.getMulti)
         .withContext(
@@ -207,10 +207,10 @@ describe('BannerComponent - unit', () => {
     const shouldSetPropertiesToTheServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesToTheServiceResult = () => {
-      bannerComponent.updateTexts();
+      component.updateTexts();
 
-      const actualMessages = bannerComponent.messages;
-      const actualIAmMe = bannerComponent.iAmMe;
+      const actualMessages = component.messages;
+      const actualIAmMe = component.iAmMe;
 
       expect(actualMessages.length)
         .withContext('there should be 4 messages')
@@ -269,7 +269,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -305,7 +305,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -341,7 +341,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -355,10 +355,10 @@ describe('BannerComponent - unit', () => {
     const shouldUnsubscribeExpectation =
       'should unsubscribe from the visibleToLoadTextService';
     const shouldUnsubscribe = () => {
-      bannerComponent.ngOnDestroy();
+      component.ngOnDestroy();
       expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
-        .toHaveBeenCalledOnceWith(bannerComponent);
+        .toHaveBeenCalledOnceWith(component);
     };
 
     describe('in dev environment', () => {
@@ -389,7 +389,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -421,7 +421,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -453,7 +453,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -463,9 +463,9 @@ describe('BannerComponent - unit', () => {
     const shouldSetDoublieImgDisplayToNoneExpectation =
       "should set doubleImgDisplay to 'none'";
     const shouldSetDoublieImgDisplayToNone = () => {
-      bannerComponent.onDoubleImgLoad();
+      component.onDoubleImgLoad();
 
-      expect(bannerComponent.doubleImgDisplay)
+      expect(component.doubleImgDisplay)
         .withContext("doubleImgDisplay should be 'none'")
         .toBe('none');
     };
@@ -498,7 +498,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(
         shouldSetDoublieImgDisplayToNoneExpectation,
@@ -533,7 +533,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(
         shouldSetDoublieImgDisplayToNoneExpectation,
@@ -568,7 +568,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(
         shouldSetDoublieImgDisplayToNoneExpectation,
@@ -581,9 +581,9 @@ describe('BannerComponent - unit', () => {
     const shouldReturnElementExpectation = 'should return the element';
     const shouldReturnElement = () => {
       const expected = new ElementRef(document.createElement('div'));
-      bannerComponent.mainDiv = expected;
+      component.mainDiv = expected;
 
-      const actual = bannerComponent.getElement();
+      const actual = component.getElement();
 
       expect(actual).toEqual(jasmine.anything());
       expect(actual).toEqual(expected);
@@ -607,7 +607,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -630,7 +630,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -653,7 +653,7 @@ describe('BannerComponent - unit', () => {
           ],
         });
 
-        bannerComponent = TestBed.inject(BannerComponent);
+        component = TestBed.inject(BannerComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });

@@ -15,7 +15,7 @@ import { environment as productionEnvironment } from 'src/environments/environme
 import { of } from 'rxjs';
 
 describe('CvAboutMeComponent - integration', () => {
-  let cvAboutMeComponent: CvAboutMeComponent;
+  let component: CvAboutMeComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   let elementRefSpy: jasmine.SpyObj<ElementRef>;
   const devEnv = developmentEnvironment;
@@ -70,7 +70,7 @@ describe('CvAboutMeComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvAboutMeComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
@@ -87,7 +87,7 @@ describe('CvAboutMeComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -104,7 +104,7 @@ describe('CvAboutMeComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -121,7 +121,7 @@ describe('CvAboutMeComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -131,11 +131,11 @@ describe('CvAboutMeComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
-      cvAboutMeComponent.updateTexts();
+      component.updateTexts();
 
-      const actualTitleObs = cvAboutMeComponent.aboutMe;
-      const actualPdfLink = cvAboutMeComponent.linkToCv;
-      const actualParagraphs = cvAboutMeComponent.paragraphs;
+      const actualTitleObs = component.aboutMe;
+      const actualPdfLink = component.linkToCv;
+      const actualParagraphs = component.paragraphs;
 
       actualTitleObs.subscribe((s) => {
         expect(s).withContext('title should be set').toBe(expectedTitle);
@@ -160,7 +160,7 @@ describe('CvAboutMeComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -180,7 +180,7 @@ describe('CvAboutMeComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -200,7 +200,7 @@ describe('CvAboutMeComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,

@@ -12,7 +12,7 @@ import { environment as productionEnvironment } from 'src/environments/environme
 import { LanguageModalComponent } from './language-modal.component';
 
 describe('LanguageModalComponent - integration', () => {
-  let languageModalComponent: LanguageModalComponent;
+  let component: LanguageModalComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   const devEnv = developmentEnvironment;
   const stagingEnv = stagingEnvironment;
@@ -38,7 +38,7 @@ describe('LanguageModalComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(languageModalComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
@@ -55,7 +55,7 @@ describe('LanguageModalComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -72,7 +72,7 @@ describe('LanguageModalComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -89,7 +89,7 @@ describe('LanguageModalComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -99,10 +99,10 @@ describe('LanguageModalComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
-      languageModalComponent.updateTexts();
+      component.updateTexts();
 
-      const actualEnglishName = languageModalComponent.englishName;
-      const actualFrenchName = languageModalComponent.frenchName;
+      const actualEnglishName = component.englishName;
+      const actualFrenchName = component.frenchName;
 
       expect(actualEnglishName)
         .withContext('english name should be set')
@@ -124,7 +124,7 @@ describe('LanguageModalComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -144,7 +144,7 @@ describe('LanguageModalComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -164,7 +164,7 @@ describe('LanguageModalComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,

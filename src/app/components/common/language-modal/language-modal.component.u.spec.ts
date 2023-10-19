@@ -13,7 +13,7 @@ import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
 import { LanguageService } from 'src/app/services/language/language.service';
 
 describe('LanguageModalComponent - unit', () => {
-  let languageModalComponent: LanguageModalComponent;
+  let component: LanguageModalComponent;
   let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
   let languageServiceSpy: jasmine.SpyObj<LanguageService>;
@@ -28,54 +28,52 @@ describe('LanguageModalComponent - unit', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(languageModalComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
 
     const shouldSetDefaultValuesExpectation = 'should set default values';
     const shouldSetDefaultValues = () => {
-      expect(languageModalComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(languageModalComponent.isOpen)
-        .withContext('isOpen should be set')
-        .toBeFalse();
+      expect(component.isOpen).withContext('isOpen should be set').toBeFalse();
 
-      expect(languageModalComponent.closed)
+      expect(component.closed)
         .withContext('closed should be set')
         .toEqual(new EventEmitter<boolean>());
 
-      expect(languageModalComponent.Languages)
+      expect(component.Languages)
         .withContext('Languages should be set')
         .toBe(Languages);
 
-      expect(languageModalComponent.englishName)
+      expect(component.englishName)
         .withContext('englishName should be set')
         .toBe('');
 
-      expect(languageModalComponent.frenchName)
+      expect(component.frenchName)
         .withContext('frenchName should be set')
         .toBe('');
 
-      expect(languageModalComponent.loaderTexts)
+      expect(component.loaderTexts)
         .withContext('loaderTexts should be set')
         .toBe(Preloaders.TEXTS);
 
-      expect(languageModalComponent.doubleImgDisplay)
+      expect(component.doubleImgDisplay)
         .withContext('doubleImgDisplay should be set')
         .toBe('block');
 
-      expect(languageModalComponent.flagSrcs)
+      expect(component.flagSrcs)
         .withContext('flagSrcs should be set')
         .toEqual(['fr.svg', 'gb.svg', 'us.svg', 'xx.svg']);
 
-      expect(languageModalComponent.flagSelectors)
+      expect(component.flagSelectors)
         .withContext('flagSelectors should be set')
         .toEqual(['fr', 'gb', 'us', 'xx']);
 
-      expect(languageModalComponent.preloaders)
+      expect(component.preloaders)
         .withContext('preloaders should be set')
         .toEqual([Preloaders.MAIN]);
     };
@@ -85,7 +83,7 @@ describe('LanguageModalComponent - unit', () => {
       setTimeout(() => {
         expect(visibleToLoadTextServiceSpy.subscribe)
           .withContext('subscribe should have been called')
-          .toHaveBeenCalledOnceWith(languageModalComponent, true);
+          .toHaveBeenCalledOnceWith(component, true);
         done();
       });
     };
@@ -111,7 +109,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -142,7 +140,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -173,7 +171,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -190,7 +188,7 @@ describe('LanguageModalComponent - unit', () => {
 
     const shouldCallTextServiceExpectation = 'should call the textService';
     const shouldCallTextService = () => {
-      languageModalComponent.updateTexts();
+      component.updateTexts();
       expect(textServiceSpy.getTextInLanguage)
         .withContext('getTextInLanguage should have been called twice')
         .toHaveBeenCalledTimes(2);
@@ -213,10 +211,10 @@ describe('LanguageModalComponent - unit', () => {
         of(english),
         of(french)
       );
-      languageModalComponent.updateTexts();
+      component.updateTexts();
 
-      const actualEnglish = languageModalComponent.englishName;
-      const actualFrench = languageModalComponent.frenchName;
+      const actualEnglish = component.englishName;
+      const actualFrench = component.frenchName;
 
       expect(actualEnglish)
         .withContext('should set english language name')
@@ -254,7 +252,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -290,7 +288,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -326,7 +324,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -340,10 +338,10 @@ describe('LanguageModalComponent - unit', () => {
     const shouldUnsubscribeExpectation =
       'should unsubscribe from the visibleToLoadTextService';
     const shouldUnsubscribe = () => {
-      languageModalComponent.ngOnDestroy();
+      component.ngOnDestroy();
       expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
-        .toHaveBeenCalledOnceWith(languageModalComponent);
+        .toHaveBeenCalledOnceWith(component);
     };
 
     describe('in dev environment', () => {
@@ -368,7 +366,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -394,7 +392,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -420,7 +418,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -430,8 +428,8 @@ describe('LanguageModalComponent - unit', () => {
     const shouldReturnElementExpectation = 'should return the element';
     const shouldReturnElement = () => {
       const expected = new ElementRef(document.createElement('div'));
-      languageModalComponent.mainDiv = expected;
-      const actual = languageModalComponent.getElement();
+      component.mainDiv = expected;
+      const actual = component.getElement();
       expect(actual)
         .withContext('should return something')
         .toEqual(jasmine.anything());
@@ -459,7 +457,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -485,7 +483,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -511,7 +509,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -521,9 +519,9 @@ describe('LanguageModalComponent - unit', () => {
     const shouldSetDoublieImgDisplayToNoneExpectation =
       "should set doubleImgDisplay to 'none'";
     const shouldSetDoublieImgDisplayToNone = () => {
-      languageModalComponent.onDoubleImgLoad();
+      component.onDoubleImgLoad();
 
-      expect(languageModalComponent.doubleImgDisplay)
+      expect(component.doubleImgDisplay)
         .withContext("doubleImgDisplay should be 'none'")
         .toBe('none');
     };
@@ -550,7 +548,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(
         shouldSetDoublieImgDisplayToNoneExpectation,
@@ -579,7 +577,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(
         shouldSetDoublieImgDisplayToNoneExpectation,
@@ -608,7 +606,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(
         shouldSetDoublieImgDisplayToNoneExpectation,
@@ -620,14 +618,14 @@ describe('LanguageModalComponent - unit', () => {
   describe('closeModal method', () => {
     const shouldSetIsOpenExpectation = 'should set isOpen to false';
     const shouldSetIsOpen = () => {
-      languageModalComponent.isOpen = true;
+      component.isOpen = true;
 
-      const actualBefore = languageModalComponent.isOpen;
+      const actualBefore = component.isOpen;
       expect(actualBefore).withContext('should be true before').toBeTrue();
 
-      languageModalComponent.closeModal();
+      component.closeModal();
 
-      const actualAfter = languageModalComponent.isOpen;
+      const actualAfter = component.isOpen;
       expect(actualAfter).withContext('should be false after').toBeFalse();
     };
 
@@ -653,7 +651,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldSetIsOpenExpectation, shouldSetIsOpen);
     });
@@ -679,7 +677,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldSetIsOpenExpectation, shouldSetIsOpen);
     });
@@ -705,7 +703,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldSetIsOpenExpectation, shouldSetIsOpen);
     });
@@ -714,25 +712,25 @@ describe('LanguageModalComponent - unit', () => {
   describe('changeLanguage method', () => {
     const shouldCloseModalExpectation = 'should close the modal';
     const shouldCloseModal = () => {
-      spyOn(languageModalComponent, 'closeModal');
+      spyOn(component, 'closeModal');
 
-      expect(languageModalComponent.closeModal)
+      expect(component.closeModal)
         .withContext('should not have been called before')
         .not.toHaveBeenCalled();
 
       languageServiceSpy.current.and.returnValue(Languages.FRENCH);
-      languageModalComponent.changeLanguage(Languages.FRENCH);
+      component.changeLanguage(Languages.FRENCH);
 
-      expect(languageModalComponent.closeModal)
+      expect(component.closeModal)
         .withContext('should have been called after - 1')
         .toHaveBeenCalledOnceWith();
 
-      languageModalComponent.isOpen = true;
+      component.isOpen = true;
 
       languageServiceSpy.current.and.returnValue(Languages.FRENCH);
-      languageModalComponent.changeLanguage(Languages.ENGLISH);
+      component.changeLanguage(Languages.ENGLISH);
 
-      expect(languageModalComponent.closeModal)
+      expect(component.closeModal)
         .withContext('should have been called after - 2')
         .toHaveBeenCalledTimes(2);
     };
@@ -744,16 +742,16 @@ describe('LanguageModalComponent - unit', () => {
         .not.toHaveBeenCalled();
 
       languageServiceSpy.current.and.returnValue(Languages.FRENCH);
-      languageModalComponent.changeLanguage(Languages.FRENCH);
+      component.changeLanguage(Languages.FRENCH);
 
       expect(languageServiceSpy.set)
         .withContext('should not have been called after')
         .not.toHaveBeenCalled();
 
-      languageModalComponent.isOpen = true;
+      component.isOpen = true;
 
       languageServiceSpy.current.and.returnValue(Languages.FRENCH);
-      languageModalComponent.changeLanguage(Languages.ENGLISH);
+      component.changeLanguage(Languages.ENGLISH);
 
       expect(languageServiceSpy.set)
         .withContext('should have been called after')
@@ -785,7 +783,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCloseModalExpectation, shouldCloseModal);
       it(shouldChangeLanguageExpectation, shouldChangeLanguage);
@@ -816,7 +814,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCloseModalExpectation, shouldCloseModal);
       it(shouldChangeLanguageExpectation, shouldChangeLanguage);
@@ -847,7 +845,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCloseModalExpectation, shouldCloseModal);
       it(shouldChangeLanguageExpectation, shouldChangeLanguage);
@@ -857,10 +855,10 @@ describe('LanguageModalComponent - unit', () => {
   describe('onClick method', () => {
     const shouldCloseModalExpectation = 'should close modal';
     const shouldCloseModal = () => {
-      spyOn(languageModalComponent, 'closeModal');
+      spyOn(component, 'closeModal');
 
       const clickedElSpy = jasmine.createSpyObj(HTMLElement, ['contains']);
-      languageModalComponent.clickedEl = clickedElSpy;
+      component.clickedEl = clickedElSpy;
 
       const modalContentDivSpy = jasmine.createSpyObj(
         'ElementRef',
@@ -872,17 +870,17 @@ describe('LanguageModalComponent - unit', () => {
         Object.getOwnPropertyDescriptor(modalContentDivSpy, 'nativeElement')
           ?.get as jasmine.Spy<() => HTMLElement>
       ).and.returnValue(modalNativeSpy);
-      languageModalComponent.modalContent = modalContentDivSpy;
+      component.modalContent = modalContentDivSpy;
 
-      languageModalComponent.isOpen = true;
+      component.isOpen = true;
       clickedElSpy.contains.and.returnValue(false);
       modalNativeSpy.contains.and.returnValue(false);
 
-      languageModalComponent.onClick({
+      component.onClick({
         target: null as unknown as HTMLElement,
       } as unknown as Event);
 
-      expect(languageModalComponent.closeModal)
+      expect(component.closeModal)
         .withContext('should be called')
         .toHaveBeenCalledOnceWith();
     };
@@ -890,10 +888,10 @@ describe('LanguageModalComponent - unit', () => {
     const shouldNotCloseModalIfNotOpenExpectation =
       'should not close modal if not open';
     const shouldNotCloseModalIfNotOpen = () => {
-      spyOn(languageModalComponent, 'closeModal');
+      spyOn(component, 'closeModal');
 
       const clickedElSpy = jasmine.createSpyObj(HTMLElement, ['contains']);
-      languageModalComponent.clickedEl = clickedElSpy;
+      component.clickedEl = clickedElSpy;
 
       const modalContentDivSpy = jasmine.createSpyObj(
         'ElementRef',
@@ -905,17 +903,17 @@ describe('LanguageModalComponent - unit', () => {
         Object.getOwnPropertyDescriptor(modalContentDivSpy, 'nativeElement')
           ?.get as jasmine.Spy<() => HTMLElement>
       ).and.returnValue(modalNativeSpy);
-      languageModalComponent.modalContent = modalContentDivSpy;
+      component.modalContent = modalContentDivSpy;
 
-      languageModalComponent.isOpen = false;
+      component.isOpen = false;
       clickedElSpy.contains.and.returnValue(false);
       modalNativeSpy.contains.and.returnValue(false);
 
-      languageModalComponent.onClick({
+      component.onClick({
         target: null as unknown as HTMLElement,
       } as unknown as Event);
 
-      expect(languageModalComponent.closeModal)
+      expect(component.closeModal)
         .withContext('should be called')
         .not.toHaveBeenCalled();
     };
@@ -923,10 +921,10 @@ describe('LanguageModalComponent - unit', () => {
     const shouldNotCloseModalIfOpeningModalExpectation =
       'should not close modal if modal is opening';
     const shouldNotCloseModalIfOpeningModal = () => {
-      spyOn(languageModalComponent, 'closeModal');
+      spyOn(component, 'closeModal');
 
       const clickedElSpy = jasmine.createSpyObj(HTMLElement, ['contains']);
-      languageModalComponent.clickedEl = clickedElSpy;
+      component.clickedEl = clickedElSpy;
 
       const modalContentDivSpy = jasmine.createSpyObj(
         'ElementRef',
@@ -938,17 +936,17 @@ describe('LanguageModalComponent - unit', () => {
         Object.getOwnPropertyDescriptor(modalContentDivSpy, 'nativeElement')
           ?.get as jasmine.Spy<() => HTMLElement>
       ).and.returnValue(modalNativeSpy);
-      languageModalComponent.modalContent = modalContentDivSpy;
+      component.modalContent = modalContentDivSpy;
 
-      languageModalComponent.isOpen = true;
+      component.isOpen = true;
       clickedElSpy.contains.and.returnValue(true);
       modalNativeSpy.contains.and.returnValue(false);
 
-      languageModalComponent.onClick({
+      component.onClick({
         target: null as unknown as HTMLElement,
       } as unknown as Event);
 
-      expect(languageModalComponent.closeModal)
+      expect(component.closeModal)
         .withContext('should be called')
         .not.toHaveBeenCalled();
     };
@@ -956,10 +954,10 @@ describe('LanguageModalComponent - unit', () => {
     const shouldNotCloseModalIfClickOnModalExpectation =
       'should not close modal if modal is clicked';
     const shouldNotCloseModalIfClickOnModal = () => {
-      spyOn(languageModalComponent, 'closeModal');
+      spyOn(component, 'closeModal');
 
       const clickedElSpy = jasmine.createSpyObj(HTMLElement, ['contains']);
-      languageModalComponent.clickedEl = clickedElSpy;
+      component.clickedEl = clickedElSpy;
 
       const modalContentDivSpy = jasmine.createSpyObj(
         'ElementRef',
@@ -971,17 +969,17 @@ describe('LanguageModalComponent - unit', () => {
         Object.getOwnPropertyDescriptor(modalContentDivSpy, 'nativeElement')
           ?.get as jasmine.Spy<() => HTMLElement>
       ).and.returnValue(modalNativeSpy);
-      languageModalComponent.modalContent = modalContentDivSpy;
+      component.modalContent = modalContentDivSpy;
 
-      languageModalComponent.isOpen = true;
+      component.isOpen = true;
       clickedElSpy.contains.and.returnValue(false);
       modalNativeSpy.contains.and.returnValue(true);
 
-      languageModalComponent.onClick({
+      component.onClick({
         target: null as unknown as HTMLElement,
       } as unknown as Event);
 
-      expect(languageModalComponent.closeModal)
+      expect(component.closeModal)
         .withContext('should be called')
         .not.toHaveBeenCalled();
     };
@@ -1012,7 +1010,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCloseModalExpectation, shouldCloseModal);
       it(shouldNotCloseModalIfNotOpenExpectation, shouldNotCloseModalIfNotOpen);
@@ -1050,7 +1048,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCloseModalExpectation, shouldCloseModal);
       it(shouldNotCloseModalIfNotOpenExpectation, shouldNotCloseModalIfNotOpen);
@@ -1088,7 +1086,7 @@ describe('LanguageModalComponent - unit', () => {
           ],
         });
 
-        languageModalComponent = TestBed.inject(LanguageModalComponent);
+        component = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCloseModalExpectation, shouldCloseModal);
       it(shouldNotCloseModalIfNotOpenExpectation, shouldNotCloseModalIfNotOpen);
