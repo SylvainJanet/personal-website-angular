@@ -224,6 +224,20 @@ describe('LanguageModalComponent - unit', () => {
         .toBe(french);
     };
 
+    const shouldCallVisibleToLoadTextServiceExpectation =
+      'should call the visibleToLoadTextService';
+    const shouldCallVisibleToLoadTextService = () => {
+      component.updateTexts();
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service twice')
+        .toHaveBeenCalledTimes(2);
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service with proper arguments')
+        .toHaveBeenCalledWith(component);
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
@@ -258,6 +272,10 @@ describe('LanguageModalComponent - unit', () => {
       it(
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
     describe('in staging environment', () => {
@@ -295,6 +313,10 @@ describe('LanguageModalComponent - unit', () => {
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
       );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in prod environment', () => {
       beforeEach(() => {
@@ -330,6 +352,10 @@ describe('LanguageModalComponent - unit', () => {
       it(
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
   });

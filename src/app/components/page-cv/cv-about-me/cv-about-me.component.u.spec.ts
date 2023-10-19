@@ -568,6 +568,16 @@ describe('CvAboutMeComponent - unit', () => {
         .toBe('pdf/' + expectedPdfName);
     };
 
+    const shouldCallVisibleToLoadTextServiceExpectation =
+      'should call the visibleToLoadTextService';
+    const shouldCallVisibleToLoadTextService = () => {
+      component.updateTexts();
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service')
+        .toHaveBeenCalledOnceWith(component);
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         preloaderServiceSpy = jasmine.createSpyObj(
@@ -635,6 +645,10 @@ describe('CvAboutMeComponent - unit', () => {
         shouldAddCssClassToParagraphs
       );
       it(shouldAddLinkToCvExpectation, shouldAddLinkToCv);
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in staging environment', () => {
       beforeEach(() => {
@@ -703,6 +717,10 @@ describe('CvAboutMeComponent - unit', () => {
         shouldAddCssClassToParagraphs
       );
       it(shouldAddLinkToCvExpectation, shouldAddLinkToCv);
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in prod environment', () => {
       beforeEach(() => {
@@ -771,6 +789,10 @@ describe('CvAboutMeComponent - unit', () => {
         shouldAddCssClassToParagraphs
       );
       it(shouldAddLinkToCvExpectation, shouldAddLinkToCv);
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
   });
 

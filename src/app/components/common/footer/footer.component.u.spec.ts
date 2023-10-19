@@ -206,6 +206,17 @@ describe('FooterComponent - unit', () => {
           .toBe(expectedFooterHref);
       });
     };
+
+    const shouldCallVisibleToLoadTextServiceExpectation =
+      'should call the visibleToLoadTextService';
+    const shouldCallVisibleToLoadTextService = () => {
+      component.updateTexts();
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service')
+        .toHaveBeenCalledOnceWith(component);
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
@@ -233,6 +244,10 @@ describe('FooterComponent - unit', () => {
       it(
         shouldSetPropertiesToTextServiceResultExpectation,
         shouldSetPropertiesToTextServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
     describe('in staging environment', () => {
@@ -263,6 +278,10 @@ describe('FooterComponent - unit', () => {
         shouldSetPropertiesToTextServiceResultExpectation,
         shouldSetPropertiesToTextServiceResult
       );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in prod environment', () => {
       beforeEach(() => {
@@ -291,6 +310,10 @@ describe('FooterComponent - unit', () => {
       it(
         shouldSetPropertiesToTextServiceResultExpectation,
         shouldSetPropertiesToTextServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
   });

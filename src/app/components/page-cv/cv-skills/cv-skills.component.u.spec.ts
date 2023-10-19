@@ -252,6 +252,16 @@ describe('CvSkillsComponent - unit', () => {
       });
     };
 
+    const shouldCallVisibleToLoadTextServiceExpectation =
+      'should call the visibleToLoadTextService';
+    const shouldCallVisibleToLoadTextService = () => {
+      component.updateTexts();
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service')
+        .toHaveBeenCalledOnceWith(component);
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
@@ -282,6 +292,10 @@ describe('CvSkillsComponent - unit', () => {
       it(
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
     describe('in staging environment', () => {
@@ -315,6 +329,10 @@ describe('CvSkillsComponent - unit', () => {
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
       );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in prod environment', () => {
       beforeEach(() => {
@@ -346,6 +364,10 @@ describe('CvSkillsComponent - unit', () => {
       it(
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
   });

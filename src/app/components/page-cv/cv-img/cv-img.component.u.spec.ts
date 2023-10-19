@@ -55,11 +55,22 @@ describe('CvImgComponent - unit', () => {
       });
     };
 
+    const shouldCallVisibleToLoadTextServiceExpectation =
+      'should call the visibleToLoadTextService';
+    const shouldCallVisibleToLoadTextService = () => {
+      textServiceSpy.get.and.returnValue(of('nothing'));
+      component.updateTexts();
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service')
+        .toHaveBeenCalledOnceWith(component);
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
           'VisibleToLoadTextService',
-          ['subscribe', 'unsubscribe']
+          ['subscribe', 'unsubscribe', 'textLoaded']
         );
         textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         TestBed.configureTestingModule({
@@ -82,12 +93,16 @@ describe('CvImgComponent - unit', () => {
         shouldSubscribeToVisibleToLoadTextServiceExpectation,
         shouldSubscribeToVisibleToLoadTextService
       );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in staging environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
           'VisibleToLoadTextService',
-          ['subscribe', 'unsubscribe']
+          ['subscribe', 'unsubscribe', 'textLoaded']
         );
         textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         TestBed.configureTestingModule({
@@ -110,12 +125,16 @@ describe('CvImgComponent - unit', () => {
         shouldSubscribeToVisibleToLoadTextServiceExpectation,
         shouldSubscribeToVisibleToLoadTextService
       );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in prod environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
           'VisibleToLoadTextService',
-          ['subscribe', 'unsubscribe']
+          ['subscribe', 'unsubscribe', 'textLoaded']
         );
         textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         TestBed.configureTestingModule({
@@ -137,6 +156,10 @@ describe('CvImgComponent - unit', () => {
       it(
         shouldSubscribeToVisibleToLoadTextServiceExpectation,
         shouldSubscribeToVisibleToLoadTextService
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
   });
