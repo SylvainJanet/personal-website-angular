@@ -67,7 +67,12 @@ describe('LanguageModalComponent - unit', () => {
 
       expect(component.flagSrcs)
         .withContext('flagSrcs should be set')
-        .toEqual(['fr.svg', 'gb.svg', 'us.svg', 'xx.svg']);
+        .toEqual([
+          '../../../../assets/flags/fr.svg',
+          '../../../../assets/flags/gb.svg',
+          '../../../../assets/flags/us.svg',
+          '../../../../assets/flags/xx.svg',
+        ]);
 
       expect(component.flagSelectors)
         .withContext('flagSelectors should be set')

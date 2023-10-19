@@ -16,14 +16,14 @@
   content: "\00a0";
 }
 .fi-xx {
-  background-image: url(../../assets/flags/xx.svg);
+  background-image: url(/assets/flags/xx.svg);
 }
 .fi-fr {
-  background-image: url(../../assets/flags/fr.svg);
+  background-image: url(/assets/flags/fr.svg);
 }
 .fi-gb {
-  background-image: url(../../assets/flags/gb.svg);
+  background-image: url(/assets/flags/gb.svg);
 }
 .fi-us {
-  background-image: url(../../assets/flags/us.svg);
+  background-image: url(/assets/flags/us.svg);
 }
