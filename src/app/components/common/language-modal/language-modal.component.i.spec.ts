@@ -1,41 +1,44 @@
+import { TestBed } from '@angular/core/testing';
+import { TextService } from 'src/app/services/db/text/text.service';
+import { of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { DatasourceService } from 'src/app/services/db/datasource/datasource.service';
+import { PreloaderService } from 'src/app/services/preloader/preloader.service';
+import { ParagraphDecoderService } from 'src/app/services/paragraphdecoder/paragraph-decoder.service';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { environment as developmentEnvironment } from 'src/environments/environment';
 import { environment as stagingEnvironment } from 'src/environments/environment.staging';
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
+import { LanguageModalComponent } from './language-modal.component';
 
-import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
-import { TestBed } from '@angular/core/testing';
-import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
-import { TextService } from 'src/app/services/db/text/text.service';
-import { LogService } from 'src/app/services/log/log.service';
-import { ENV } from 'src/environments/injectionToken/environment-provider';
-import { HeaderComponent } from './header.component';
-
-describe('HeaderComponent - integration', () => {
-  let headerComponent: HeaderComponent;
+describe('LanguageModalComponent - integration', () => {
+  let languageModalComponent: LanguageModalComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
-
   const devEnv = developmentEnvironment;
   const stagingEnv = stagingEnvironment;
   const prodEnv = productionEnvironment;
 
-  const expectedName = 'test title';
-  const expectedOtherLanguage = 'test other language';
+  const expectedEnglishName = 'test english name';
+  const expectedFrenchName = 'test french name';
 
   beforeEach(() => {
+    const expectedMessageDto1 = of({
+      message: expectedEnglishName,
+    });
+    const expectedMessageDto2 = of({
+      message: expectedFrenchName,
+    });
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-    const expectedNameDto = of({ message: expectedName });
-    const expectedOtherLanguageDto = of({ message: expectedOtherLanguage });
     httpClientSpy.get.and.returnValues(
-      expectedNameDto,
-      expectedOtherLanguageDto
+      expectedMessageDto1,
+      expectedMessageDto2
     );
   });
 
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(headerComponent)
+      expect(languageModalComponent)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
@@ -43,15 +46,16 @@ describe('HeaderComponent - integration', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
           providers: [
-            HeaderComponent,
-            DOMComputationService,
+            LanguageModalComponent,
             TextService,
-            LogService,
             { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            PreloaderService,
+            ParagraphDecoderService,
             { provide: ENV, useValue: devEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        languageModalComponent = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -59,15 +63,16 @@ describe('HeaderComponent - integration', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
           providers: [
-            HeaderComponent,
-            DOMComputationService,
+            LanguageModalComponent,
             TextService,
-            LogService,
             { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            PreloaderService,
+            ParagraphDecoderService,
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        languageModalComponent = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -75,15 +80,16 @@ describe('HeaderComponent - integration', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
           providers: [
-            HeaderComponent,
-            DOMComputationService,
+            LanguageModalComponent,
             TextService,
-            LogService,
             { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            PreloaderService,
+            ParagraphDecoderService,
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        languageModalComponent = TestBed.inject(LanguageModalComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -93,27 +99,32 @@ describe('HeaderComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
-      headerComponent.updateTexts();
+      languageModalComponent.updateTexts();
 
-      const actualMyNameObs = headerComponent.myName;
+      const actualEnglishName = languageModalComponent.englishName;
+      const actualFrenchName = languageModalComponent.frenchName;
 
-      actualMyNameObs.subscribe((s) => {
-        expect(s).withContext('name should be set').toBe(expectedName);
-      });
+      expect(actualEnglishName)
+        .withContext('english name should be set')
+        .toBe(expectedEnglishName);
+      expect(actualFrenchName)
+        .withContext('french name should be set')
+        .toBe(expectedFrenchName);
     };
     describe('in dev environment', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
           providers: [
-            HeaderComponent,
-            DOMComputationService,
+            LanguageModalComponent,
             TextService,
-            LogService,
             { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            PreloaderService,
+            ParagraphDecoderService,
             { provide: ENV, useValue: devEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        languageModalComponent = TestBed.inject(LanguageModalComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -124,15 +135,16 @@ describe('HeaderComponent - integration', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
           providers: [
-            HeaderComponent,
-            DOMComputationService,
+            LanguageModalComponent,
             TextService,
-            LogService,
             { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            PreloaderService,
+            ParagraphDecoderService,
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        languageModalComponent = TestBed.inject(LanguageModalComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -143,15 +155,16 @@ describe('HeaderComponent - integration', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
           providers: [
-            HeaderComponent,
-            DOMComputationService,
+            LanguageModalComponent,
             TextService,
-            LogService,
             { provide: HttpClient, useValue: httpClientSpy },
+            DatasourceService,
+            PreloaderService,
+            ParagraphDecoderService,
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        headerComponent = TestBed.inject(HeaderComponent);
+        languageModalComponent = TestBed.inject(LanguageModalComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,

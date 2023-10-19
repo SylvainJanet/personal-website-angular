@@ -12,8 +12,6 @@ import { LogService } from 'src/app/services/log/log.service';
 import { debounce } from 'src/scripts/tools/debounce/debounce';
 import { Observable, of } from 'rxjs';
 import { TextService } from 'src/app/services/db/text/text.service';
-import { LanguageService } from 'src/app/services/language/language.service';
-import { Languages } from 'src/app/enums/languages';
 import { ComponentWithText } from 'src/app/interfaces/ComponentWithText';
 import { ButtonBarOnHoverComponent } from '../../utilities/button-bar-on-hover/button-bar-on-hover.component';
 import { LinkBarOnHoverComponent } from '../../utilities/link-bar-on-hover/link-bar-on-hover.component';
@@ -22,6 +20,7 @@ import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { LanguageModalComponent } from '../language-modal/language-modal.component';
 
 /**
  * Header component, displaying either a link back home to the left and a button
@@ -39,6 +38,7 @@ import { CommonModule } from '@angular/common';
     LinkBarOnHoverComponent,
     MatProgressSpinnerModule,
     CommonModule,
+    LanguageModalComponent,
   ],
 })
 export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
@@ -59,10 +59,21 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
   logger: LogService;
   /** Name used as text for the link back the the home page */
   myName: Observable<string> = of('');
-  /** Text containing the other language on the button used to switch language. */
-  otherLanguage: Observable<string> = of('');
   /** Preloader for texts. */
   loaderTexts = Preloaders.TEXTS;
+
+  /** Whether or not to show the language change modal. */
+  showModal = false;
+  /** ElementRef of the button in the uncollapsed header opening the modal. */
+  @ViewChild('buttonHeaderModal', { read: ElementRef })
+  buttonHeaderModal!: ElementRef;
+  /** ElementRef of the button in the collapsed header opening the modal. */
+  @ViewChild('buttonCollapsedModal', { read: ElementRef })
+  buttonCollapsedModal!: ElementRef;
+  /** HTMLElement of the button clicked on to open the modal */
+  clickedEl!: HTMLElement;
+  /** Text icon to be clicked on to open the modal */
+  textIcon = of('\xa0🌐\xa0');
 
   /**
    * Header component constructor.
@@ -70,15 +81,14 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
    * @param domcomputation The {@link DOMComputationService}
    * @param logService The {@link LogService}
    * @param textService The {@link TextService}
-   * @param languageService The {@link LanguageService}
    * @param visibleToLoadTextService The {@link VisibleToLoadTextService}
    * @param preloader The {@link PreloaderService}
+   * @param changeDetectorRef The {@link ChangeDetectorRef}
    */
   constructor(
     private domcomputation: DOMComputationService,
     logService: LogService,
     private textService: TextService,
-    private languageService: LanguageService,
     public visibleToLoadTextService: VisibleToLoadTextService,
     public preloader: PreloaderService
   ) {
@@ -111,7 +121,6 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
       this.myName = of(v);
       this.visibleToLoadTextService.textLoaded(this);
     });
-    this.otherLanguage = this.textService.getOtherLanguage();
   }
 
   /**
@@ -224,23 +233,28 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
   }
 
   /**
-   * Method called on click of the language change button. Switches the language
-   * from English to French.
-   */
-  languageChange() {
-    if (this.languageService.current() == Languages.ENGLISH) {
-      this.languageService.set(Languages.FRENCH);
-    } else {
-      this.languageService.set(Languages.ENGLISH);
-    }
-  }
-
-  /**
    * Get the main component element.
    *
    * @returns The element.
    */
   getElement(): ElementRef<HTMLElement> {
     return this.mainDiv;
+  }
+
+  /** Open the modal using the uncollapsed header button */
+  openModalButtonHeader() {
+    this.clickedEl =
+      this.buttonHeaderModal?.nativeElement?.children[0]?.children[0];
+    this.showModal = true;
+  }
+  /** Open the modal using the collapsed header button */
+  openModalButtonCollapsed() {
+    this.clickedEl =
+      this.buttonCollapsedModal?.nativeElement?.children[0]?.children[0];
+    this.showModal = true;
+  }
+  /** Close the modal */
+  closeModal() {
+    this.showModal = false;
   }
 }

@@ -24,8 +24,6 @@ const API_SELECTOR_PARAM = 'selector';
 const API_MULTI_SELECTOR_PARAM = 'selectors';
 const API_LANGUAGE_PARAM = 'language';
 const EXPECTED_TEXT_ERROR_MESSAGE = 'error';
-const ENGLISH_LANGUAGE_NAME_SELECTOR = 'english-language-name';
-const FRENCH_LANGUAGE_NAME_SELECTOR = 'french-language-name';
 
 describe('TextService - unit', () => {
   beforeEach(() => {
@@ -133,6 +131,17 @@ describe('TextService - unit', () => {
   });
 
   describe('get method', () => {
+    it('should call the getTextInLanguage method', () => {
+      spyOn(textService, 'getTextInLanguage');
+      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+
+      const selectorToTest = 'test-selector';
+      textService.get(selectorToTest);
+
+      expect(textService.getTextInLanguage)
+        .withContext('method should have been called')
+        .toHaveBeenCalledOnceWith(selectorToTest, Languages.ENGLISH);
+    });
     it('should notify the TEXTS preloader that a text has to load on subscription', () => {
       const selectorToTest = 'test-selector';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -232,66 +241,105 @@ describe('TextService - unit', () => {
     });
   });
 
-  describe('getOtherLanguage method', () => {
-    it('should call getText correctly when the current language is FRENCH', () => {
-      languageServiceSpy.current.and.returnValue(Languages.FRENCH);
+  describe('getTextInLanguage method', () => {
+    it('should notify the TEXTS preloader that a text has to load on subscription', () => {
+      const selectorToTest = 'test-selector';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       spyOn<any>(textService, 'getText').and.returnValue(of('this is a test'));
 
-      textService.getOtherLanguage();
+      textService
+        .getTextInLanguage(selectorToTest, Languages.ENGLISH)
+        .subscribe();
 
-      expect(textService['getText'])
-        .withContext('getText should have been called')
-        .toHaveBeenCalledOnceWith(
-          ENGLISH_LANGUAGE_NAME_SELECTOR,
-          Languages.ENGLISH
-        );
+      expect(preloaderServiceSpy.toLoad)
+        .withContext('toLoad should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
     });
-    it('should call getText correctly when the current language is ENGLISH', () => {
-      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+    it('should not notify the TEXTS preloader that a text has to load without subscribers', () => {
+      const selectorToTest = 'test-selector';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       spyOn<any>(textService, 'getText').and.returnValue(of('this is a test'));
 
-      textService.getOtherLanguage();
+      textService.getTextInLanguage(selectorToTest, Languages.ENGLISH);
+
+      expect(preloaderServiceSpy.toLoad)
+        .withContext('toLoad should not have been called')
+        .not.toHaveBeenCalled();
+    });
+    it('should call getText method', () => {
+      const selectorToTest = 'test-selector';
+      const languageToTest = Languages.ENGLISH;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getText').and.returnValue(of('this is a test'));
+
+      textService.getTextInLanguage(selectorToTest, languageToTest);
 
       expect(textService['getText'])
         .withContext('getText should have been called')
-        .toHaveBeenCalledOnceWith(
-          FRENCH_LANGUAGE_NAME_SELECTOR,
-          Languages.FRENCH
-        );
+        .toHaveBeenCalledOnceWith(selectorToTest, languageToTest);
     });
-    it('should return the other language when the current language is FRENCH', (done: DoneFn) => {
-      const expectedText = 'this is a test';
-      languageServiceSpy.current.and.returnValue(Languages.FRENCH);
+    it('should notify the TEXTS preloader that a text has loaded', () => {
+      const selectorToTest = 'test-selector';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(textService, 'getText').and.returnValue(of(expectedText));
+      spyOn<any>(textService, 'getText').and.returnValue(of('this is a test'));
 
-      textService.getOtherLanguage().subscribe({
-        next: (actual) => {
-          expect(actual)
-            .withContext('other language should be as expected')
-            .toBe(expectedText);
-          done();
-        },
-        error: done.fail,
-      });
+      textService.get(selectorToTest).subscribe();
+
+      expect(preloaderServiceSpy.loaded)
+        .withContext('loaded should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
     });
-    it('should return the other language when the current language is ENGLISH', (done: DoneFn) => {
-      const expectedText = 'this is a test';
-      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+    it('should notify the TEXTS preloader that a text has loaded on error', () => {
+      const selectorToTest = 'test-selector';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(textService, 'getText').and.returnValue(of(expectedText));
+      spyOn<any>(textService, 'getText').and.returnValue(
+        throwError(() => new Error('this is a test error'))
+      );
 
-      textService.getOtherLanguage().subscribe({
-        next: (actual) => {
-          expect(actual)
-            .withContext('other language should be as expected')
-            .toBe(expectedText);
-          done();
-        },
-        error: done.fail,
-      });
+      textService
+        .getTextInLanguage(selectorToTest, Languages.ENGLISH)
+        .subscribe();
+
+      expect(preloaderServiceSpy.loaded)
+        .withContext('loaded should have been called')
+        .toHaveBeenCalledOnceWith(Preloaders.TEXTS, 1);
+    });
+    it('should return an error message on error', (done: DoneFn) => {
+      const selectorToTest = 'test-selector';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getText').and.returnValue(
+        throwError(() => new Error('this is a test error'))
+      );
+
+      textService
+        .getTextInLanguage(selectorToTest, Languages.ENGLISH)
+        .subscribe({
+          next: (actual) => {
+            expect(actual)
+              .withContext('error message should be as expected')
+              .toBe(EXPECTED_TEXT_ERROR_MESSAGE);
+            done();
+          },
+          error: done.fail,
+        });
+    });
+    it('should return the text', (done: DoneFn) => {
+      const selectorToTest = 'test-selector';
+      const expectedMessage = 'this is a test';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(textService, 'getText').and.returnValue(of(expectedMessage));
+
+      textService
+        .getTextInLanguage(selectorToTest, Languages.ENGLISH)
+        .subscribe({
+          next: (actual) => {
+            expect(actual)
+              .withContext('text should be as expected')
+              .toBe(expectedMessage);
+            done();
+          },
+          error: done.fail,
+        });
     });
   });
 

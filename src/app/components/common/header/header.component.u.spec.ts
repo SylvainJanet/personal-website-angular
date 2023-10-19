@@ -5,20 +5,18 @@ import { HeaderComponent } from './header.component';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { of } from 'rxjs';
 import { scriptVar } from 'src/scripts/template/tools/setUp';
-import { Languages } from 'src/app/enums/languages';
 import { VisibleToLoadTextService } from 'src/app/services/visibletoloadtext/visible-to-load-text.service';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { environment as developmentEnvironment } from 'src/environments/environment';
 import { environment as stagingEnvironment } from 'src/environments/environment.staging';
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { ElementRef } from '@angular/core';
+import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
 
 describe('HeaderComponent - unit', () => {
   let headerComponent: HeaderComponent;
   let DOMComputationServiceSpy: jasmine.SpyObj<DOMComputationService>;
-  let languageServiceSpy: jasmine.SpyObj<LanguageService>;
   let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let preloaderServiceSpy: jasmine.SpyObj<PreloaderService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
@@ -31,7 +29,6 @@ describe('HeaderComponent - unit', () => {
 
   const myNameSelector = 'sylvain-janet';
   const expectedName = 'test title';
-  const expectedOtherLanguage = 'test other language';
   const expectedActualHeight = 18;
 
   const headerStateLight = scriptVar.headerStateLight;
@@ -71,9 +68,16 @@ describe('HeaderComponent - unit', () => {
         .toBe('');
       headerComponent.myName.subscribe((s) => {
         expect(s).withContext('myName should be set').toBe('');
-      });
-      headerComponent.otherLanguage.subscribe((s) => {
-        expect(s).withContext('otherLanguage should be set').toBe('');
+
+        expect(headerComponent.loaderTexts)
+          .withContext('loaderTexts should be set')
+          .toBe(Preloaders.TEXTS);
+        expect(headerComponent.showModal)
+          .withContext('showModal should be set')
+          .toBeFalse();
+        headerComponent.textIcon.subscribe((s) => {
+          expect(s).withContext('textIcon should be set').toBe('\xa0🌐\xa0');
+        });
       });
     };
 
@@ -112,14 +116,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -175,14 +173,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -238,14 +230,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -298,10 +284,6 @@ describe('HeaderComponent - unit', () => {
       expect(textServiceSpy.get)
         .withContext('get should have been called with the proper arguments')
         .toHaveBeenCalledWith(myNameSelector);
-
-      expect(textServiceSpy.getOtherLanguage)
-        .withContext('getOtherLanguage should have been called')
-        .toHaveBeenCalledTimes(1);
     };
     const shouldSetPropertiesToTheServiceResultExpectation =
       'should set the properties to the textService result';
@@ -309,15 +291,9 @@ describe('HeaderComponent - unit', () => {
       headerComponent.updateTexts();
 
       const actualMyNameObs = headerComponent.myName;
-      const actualOtherLanguageObs = headerComponent.otherLanguage;
 
       actualMyNameObs.subscribe((s) => {
         expect(s).withContext('myName should be set').toBe(expectedName);
-      });
-      actualOtherLanguageObs.subscribe((s) => {
-        expect(s)
-          .withContext('otherLanguage should be set')
-          .toBe(expectedOtherLanguage);
       });
     };
 
@@ -337,14 +313,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -398,14 +368,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -459,14 +423,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -532,14 +490,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -589,14 +541,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -646,14 +592,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -721,14 +661,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -778,14 +712,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -835,14 +763,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -907,14 +829,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -964,14 +880,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1021,14 +931,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1219,14 +1123,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1283,14 +1181,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1347,14 +1239,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1486,14 +1372,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1547,14 +1427,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1608,14 +1482,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1717,14 +1585,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1775,14 +1637,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1833,14 +1689,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -1959,14 +1809,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -2025,14 +1869,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -2091,14 +1929,8 @@ describe('HeaderComponent - unit', () => {
           'VisibleToLoadTextService',
           ['subscribe', 'unsubscribe', 'textLoaded']
         );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
+        textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
         logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
           'withClassName',
         ]);
@@ -2143,222 +1975,7 @@ describe('HeaderComponent - unit', () => {
     });
   });
 
-  describe('languageChange method', () => {
-    const shouldSwitchFromEngToFrExpectation =
-      'should switch language from ENGLISH to FRENCH';
-    const shouldSwitchFromEngToFr = () => {
-      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
-
-      headerComponent.languageChange();
-
-      expect(languageServiceSpy.set)
-        .withContext('set should have been called')
-        .toHaveBeenCalledOnceWith(Languages.FRENCH);
-    };
-    const shouldSwitchFromFrtoEngExpectation =
-      'should switch language from FRENCH to ENGLISH';
-    const shouldSwitchFromFrtoEng = () => {
-      languageServiceSpy.current.and.returnValue(Languages.FRENCH);
-
-      headerComponent.languageChange();
-
-      expect(languageServiceSpy.set)
-        .withContext('set should have been called')
-        .toHaveBeenCalledOnceWith(Languages.ENGLISH);
-    };
-
-    describe('in dev environment', () => {
-      beforeEach(() => {
-        languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-          'set',
-          'current',
-        ]);
-        DOMComputationServiceSpy = jasmine.createSpyObj(
-          'DOMComputationService',
-          ['getActualHeight']
-        );
-        DOMComputationServiceSpy.getActualHeight.and.returnValues(
-          expectedActualHeight,
-          expectedActualHeight,
-          expectedActualHeight,
-          expectedActualHeight
-        );
-        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
-          'VisibleToLoadTextService',
-          ['subscribe', 'unsubscribe', 'textLoaded']
-        );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
-        textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
-        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
-          'withClassName',
-        ]);
-        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
-        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
-
-        preloaderServiceSpy = jasmine.createSpyObj(
-          'PreloaderService',
-          ['isLoading'],
-          []
-        );
-        TestBed.configureTestingModule({
-          providers: [
-            HeaderComponent,
-            {
-              provide: DOMComputationService,
-              useValue: DOMComputationServiceSpy,
-            },
-            {
-              provide: VisibleToLoadTextService,
-              useValue: visibleToLoadTextServiceSpy,
-            },
-            { provide: TextService, useValue: textServiceSpy },
-            { provide: LogService, useValue: logServiceGlobalSpy },
-            { provide: LanguageService, useValue: languageServiceSpy },
-            { provide: PreloaderService, useValue: preloaderServiceSpy },
-            { provide: ENV, useValue: devEnv },
-          ],
-        });
-
-        headerComponent = TestBed.inject(HeaderComponent);
-      });
-      it(shouldSwitchFromEngToFrExpectation, shouldSwitchFromEngToFr);
-      it(shouldSwitchFromFrtoEngExpectation, shouldSwitchFromFrtoEng);
-    });
-    describe('in staging environment', () => {
-      beforeEach(() => {
-        languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-          'set',
-          'current',
-        ]);
-        DOMComputationServiceSpy = jasmine.createSpyObj(
-          'DOMComputationService',
-          ['getActualHeight']
-        );
-        DOMComputationServiceSpy.getActualHeight.and.returnValues(
-          expectedActualHeight,
-          expectedActualHeight,
-          expectedActualHeight,
-          expectedActualHeight
-        );
-        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
-          'VisibleToLoadTextService',
-          ['subscribe', 'unsubscribe', 'textLoaded']
-        );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
-        textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
-        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
-          'withClassName',
-        ]);
-        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
-        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
-
-        preloaderServiceSpy = jasmine.createSpyObj(
-          'PreloaderService',
-          ['isLoading'],
-          []
-        );
-        TestBed.configureTestingModule({
-          providers: [
-            HeaderComponent,
-            {
-              provide: DOMComputationService,
-              useValue: DOMComputationServiceSpy,
-            },
-            {
-              provide: VisibleToLoadTextService,
-              useValue: visibleToLoadTextServiceSpy,
-            },
-            { provide: TextService, useValue: textServiceSpy },
-            { provide: LogService, useValue: logServiceGlobalSpy },
-            { provide: LanguageService, useValue: languageServiceSpy },
-            { provide: PreloaderService, useValue: preloaderServiceSpy },
-            { provide: ENV, useValue: stagingEnv },
-          ],
-        });
-
-        headerComponent = TestBed.inject(HeaderComponent);
-      });
-      it(shouldSwitchFromEngToFrExpectation, shouldSwitchFromEngToFr);
-      it(shouldSwitchFromFrtoEngExpectation, shouldSwitchFromFrtoEng);
-    });
-    describe('in prod environment', () => {
-      beforeEach(() => {
-        languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-          'set',
-          'current',
-        ]);
-        DOMComputationServiceSpy = jasmine.createSpyObj(
-          'DOMComputationService',
-          ['getActualHeight']
-        );
-        DOMComputationServiceSpy.getActualHeight.and.returnValues(
-          expectedActualHeight,
-          expectedActualHeight,
-          expectedActualHeight,
-          expectedActualHeight
-        );
-        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
-          'VisibleToLoadTextService',
-          ['subscribe', 'unsubscribe', 'textLoaded']
-        );
-        textServiceSpy = jasmine.createSpyObj('TextService', [
-          'get',
-          'getOtherLanguage',
-        ]);
-        textServiceSpy.get.and.returnValues(of(expectedName));
-        textServiceSpy.getOtherLanguage.and.returnValues(
-          of(expectedOtherLanguage)
-        );
-        logServiceGlobalSpy = jasmine.createSpyObj('LogService', [
-          'withClassName',
-        ]);
-        logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
-        logServiceGlobalSpy.withClassName.and.returnValue(logServiceSpy);
-
-        preloaderServiceSpy = jasmine.createSpyObj(
-          'PreloaderService',
-          ['isLoading'],
-          []
-        );
-        TestBed.configureTestingModule({
-          providers: [
-            HeaderComponent,
-            {
-              provide: DOMComputationService,
-              useValue: DOMComputationServiceSpy,
-            },
-            {
-              provide: VisibleToLoadTextService,
-              useValue: visibleToLoadTextServiceSpy,
-            },
-            { provide: TextService, useValue: textServiceSpy },
-            { provide: LogService, useValue: logServiceGlobalSpy },
-            { provide: LanguageService, useValue: languageServiceSpy },
-            { provide: PreloaderService, useValue: preloaderServiceSpy },
-            { provide: ENV, useValue: prodEnv },
-          ],
-        });
-
-        headerComponent = TestBed.inject(HeaderComponent);
-      });
-      it(shouldSwitchFromEngToFrExpectation, shouldSwitchFromEngToFr);
-      it(shouldSwitchFromFrtoEngExpectation, shouldSwitchFromFrtoEng);
-    });
-  });
-
-  describe('getElement', () => {
+  describe('getElement method', () => {
     const shouldReturnElementExpectation = 'should return the element';
     const shouldReturnElement = () => {
       const expected = new ElementRef(document.createElement('div'));
@@ -2366,8 +1983,10 @@ describe('HeaderComponent - unit', () => {
 
       const actual = headerComponent.getElement();
 
-      expect(actual).toEqual(jasmine.anything());
-      expect(actual).toEqual(expected);
+      expect(actual)
+        .withContext('should return something')
+        .toEqual(jasmine.anything());
+      expect(actual).withContext('should return the element').toEqual(expected);
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -2437,6 +2056,300 @@ describe('HeaderComponent - unit', () => {
         headerComponent = TestBed.inject(HeaderComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
+    });
+  });
+
+  describe('openModalButtonHeader method', () => {
+    const shouldChangeClickedElExpectation =
+      'should set clickedEl to the button in the uncollapsed header';
+    const shouldChangeClickedEl = () => {
+      const buttonDiv = document.createElement('div');
+
+      const subDiv = document.createElement('div');
+      const expected = document.createElement('div');
+      subDiv.appendChild(expected);
+      buttonDiv.appendChild(subDiv);
+
+      headerComponent.buttonHeaderModal = new ElementRef(buttonDiv);
+
+      expect(headerComponent.clickedEl)
+        .withContext('should be undefined at first')
+        .toBeUndefined();
+
+      headerComponent.openModalButtonHeader();
+
+      const actual = headerComponent.clickedEl;
+      expect(actual).withContext('should be set').toEqual(expected);
+    };
+    const shouldShowModalExpectation = 'should set showModal to true';
+    const shouldShowModal = () => {
+      expect(headerComponent.showModal)
+        .withContext('should be false at first')
+        .toBeFalse();
+
+      headerComponent.openModalButtonHeader();
+
+      expect(headerComponent.showModal).withContext('should be set').toBeTrue();
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            HeaderComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        headerComponent = TestBed.inject(HeaderComponent);
+      });
+      it(shouldChangeClickedElExpectation, shouldChangeClickedEl);
+      it(shouldShowModalExpectation, shouldShowModal);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            HeaderComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        headerComponent = TestBed.inject(HeaderComponent);
+      });
+      it(shouldChangeClickedElExpectation, shouldChangeClickedEl);
+      it(shouldShowModalExpectation, shouldShowModal);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            HeaderComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        headerComponent = TestBed.inject(HeaderComponent);
+      });
+      it(shouldChangeClickedElExpectation, shouldChangeClickedEl);
+      it(shouldShowModalExpectation, shouldShowModal);
+    });
+  });
+
+  describe('openModalButtonCollapsed method', () => {
+    const shouldChangeClickedElExpectation =
+      'should set clickedEl to the button in the collapsed header';
+    const shouldChangeClickedEl = () => {
+      const buttonDiv = document.createElement('div');
+
+      const subDiv = document.createElement('div');
+      const expected = document.createElement('div');
+      subDiv.appendChild(expected);
+      buttonDiv.appendChild(subDiv);
+
+      headerComponent.buttonCollapsedModal = new ElementRef(buttonDiv);
+
+      expect(headerComponent.clickedEl)
+        .withContext('should be undefined at first')
+        .toBeUndefined();
+
+      headerComponent.openModalButtonCollapsed();
+
+      const actual = headerComponent.clickedEl;
+      expect(actual).withContext('should be set').toEqual(expected);
+    };
+    const shouldShowModalExpectation = 'should set showModal to true';
+    const shouldShowModal = () => {
+      expect(headerComponent.showModal)
+        .withContext('should be false at first')
+        .toBeFalse();
+
+      headerComponent.openModalButtonHeader();
+
+      expect(headerComponent.showModal).withContext('should be set').toBeTrue();
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            HeaderComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        headerComponent = TestBed.inject(HeaderComponent);
+      });
+      it(shouldChangeClickedElExpectation, shouldChangeClickedEl);
+      it(shouldShowModalExpectation, shouldShowModal);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            HeaderComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        headerComponent = TestBed.inject(HeaderComponent);
+      });
+      it(shouldChangeClickedElExpectation, shouldChangeClickedEl);
+      it(shouldShowModalExpectation, shouldShowModal);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            HeaderComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        headerComponent = TestBed.inject(HeaderComponent);
+      });
+      it(shouldChangeClickedElExpectation, shouldChangeClickedEl);
+      it(shouldShowModalExpectation, shouldShowModal);
+    });
+  });
+
+  describe('closeModal method', () => {
+    const shouldSetShowModalExpectation = 'should set showModal to false';
+    const shouldSetShowModal = () => {
+      headerComponent.showModal = true;
+
+      headerComponent.closeModal();
+
+      const actual = headerComponent.showModal;
+
+      expect(actual).withContext('should be set to false').toBeFalse();
+    };
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            HeaderComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: devEnv },
+          ],
+        });
+
+        headerComponent = TestBed.inject(HeaderComponent);
+      });
+      it(shouldSetShowModalExpectation, shouldSetShowModal);
+    });
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            HeaderComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: stagingEnv },
+          ],
+        });
+
+        headerComponent = TestBed.inject(HeaderComponent);
+      });
+      it(shouldSetShowModalExpectation, shouldSetShowModal);
+    });
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        visibleToLoadTextServiceSpy = jasmine.createSpyObj(
+          'VisibleToLoadTextService',
+          ['subscribe', 'unsubscribe']
+        );
+        textServiceSpy = jasmine.createSpyObj('TextService', ['getMulti']);
+        TestBed.configureTestingModule({
+          providers: [
+            HeaderComponent,
+            {
+              provide: VisibleToLoadTextService,
+              useValue: visibleToLoadTextServiceSpy,
+            },
+            { provide: TextService, useValue: textServiceSpy },
+            { provide: ENV, useValue: prodEnv },
+          ],
+        });
+
+        headerComponent = TestBed.inject(HeaderComponent);
+      });
+      it(shouldSetShowModalExpectation, shouldSetShowModal);
     });
   });
 });

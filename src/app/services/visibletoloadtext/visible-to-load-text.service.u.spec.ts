@@ -13,8 +13,8 @@ let windowScrollService: WindowScrollService;
 let windowResizeService: WindowResizeService;
 let domComputationService: DOMComputationService;
 
-const expectedBufferHeight = 2;
-const expectedBufferWidth = 1;
+const expectedBufferHeight = 0.5;
+const expectedBufferWidth = 0.25;
 
 describe('VisibleToLoadTextService - unit', () => {
   beforeEach(() => {
@@ -64,6 +64,9 @@ describe('VisibleToLoadTextService - unit', () => {
         .toEqual(new Map<ComponentWithText, boolean>());
       expect(visibleToLoadTextService.toReload)
         .withContext('toReload should be set')
+        .toEqual(new Map<ComponentWithText, boolean>());
+      expect(visibleToLoadTextService.onlyOnce)
+        .withContext('onlyOnce should be set')
         .toEqual(new Map<ComponentWithText, boolean>());
       expect(visibleToLoadTextService.scroll)
         .withContext('scroll should be set')
@@ -365,6 +368,75 @@ describe('VisibleToLoadTextService - unit', () => {
           'loadNewTextsOf should have been called after the subscription'
         )
         .toHaveBeenCalledOnceWith(subscriber);
+    });
+    it('should set onlyOnce to false by default', () => {
+      const subscriber: ComponentWithText = {
+        updateTexts: function (): void {
+          //
+        },
+        getElement: function (): ElementRef<HTMLElement> {
+          return {} as ElementRef<HTMLElement>;
+        },
+        ngOnDestroy: function (): void {
+          //
+        },
+      };
+
+      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+        .withContext('onlyOnce should be undefined for the subscriber at first')
+        .toBeUndefined();
+
+      visibleToLoadTextService.subscribe(subscriber);
+
+      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+        .withContext('onlyOnce should be set to false')
+        .toBeFalse();
+    });
+    it('should set onlyOnce to false', () => {
+      const subscriber: ComponentWithText = {
+        updateTexts: function (): void {
+          //
+        },
+        getElement: function (): ElementRef<HTMLElement> {
+          return {} as ElementRef<HTMLElement>;
+        },
+        ngOnDestroy: function (): void {
+          //
+        },
+      };
+
+      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+        .withContext('onlyOnce should be undefined for the subscriber at first')
+        .toBeUndefined();
+
+      visibleToLoadTextService.subscribe(subscriber, false);
+
+      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+        .withContext('onlyOnce should be set to false')
+        .toBeFalse();
+    });
+    it('should set onlyOnce to true', () => {
+      const subscriber: ComponentWithText = {
+        updateTexts: function (): void {
+          //
+        },
+        getElement: function (): ElementRef<HTMLElement> {
+          return {} as ElementRef<HTMLElement>;
+        },
+        ngOnDestroy: function (): void {
+          //
+        },
+      };
+
+      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+        .withContext('onlyOnce should be undefined for the subscriber at first')
+        .toBeUndefined();
+
+      visibleToLoadTextService.subscribe(subscriber, true);
+
+      expect(visibleToLoadTextService.onlyOnce.get(subscriber))
+        .withContext('onlyOnce should be set to true')
+        .toBeTrue();
     });
   });
 
@@ -1133,6 +1205,88 @@ describe('VisibleToLoadTextService - unit', () => {
         .withContext('should be true after')
         .toBeTrue();
     });
+
+    it('should not update visibility when onlyOnce and loaded or loading', () => {
+      visibleToLoadTextService.visibility.set(subscriber, true);
+      visibleToLoadTextService.loaded.set(subscriber, false);
+      visibleToLoadTextService.loading.set(subscriber, true);
+      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+
+      expect(visibleToLoadTextService['updateVisibilityOf'])
+        .withContext('should not have been called before')
+        .not.toHaveBeenCalled();
+
+      visibleToLoadTextService.loadNewTextsOf(subscriber);
+
+      expect(visibleToLoadTextService['updateVisibilityOf'])
+        .withContext('should not have been called after - 1')
+        .not.toHaveBeenCalled();
+
+      visibleToLoadTextService.visibility.set(subscriber, true);
+      visibleToLoadTextService.loaded.set(subscriber, true);
+      visibleToLoadTextService.loading.set(subscriber, false);
+      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+
+      visibleToLoadTextService.loadNewTextsOf(subscriber);
+
+      expect(visibleToLoadTextService['updateVisibilityOf'])
+        .withContext('should not have been called after - 2')
+        .not.toHaveBeenCalled();
+    });
+    it('should not update the text when onlyOnce and loaded or loading', () => {
+      visibleToLoadTextService.visibility.set(subscriber, true);
+      visibleToLoadTextService.loaded.set(subscriber, false);
+      visibleToLoadTextService.loading.set(subscriber, true);
+      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+
+      expect(subscriber.updateTexts)
+        .withContext('should not have been called before')
+        .not.toHaveBeenCalled();
+
+      visibleToLoadTextService.loadNewTextsOf(subscriber);
+
+      expect(subscriber.updateTexts)
+        .withContext('should not have been called after - 1')
+        .not.toHaveBeenCalled();
+
+      visibleToLoadTextService.visibility.set(subscriber, true);
+      visibleToLoadTextService.loaded.set(subscriber, true);
+      visibleToLoadTextService.loading.set(subscriber, false);
+      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+
+      visibleToLoadTextService.loadNewTextsOf(subscriber);
+
+      expect(subscriber.updateTexts)
+        .withContext('should not have been called after - 2')
+        .not.toHaveBeenCalled();
+    });
+    it('should not set the loading map to true for the component when onlyOnce and loaded or loading', () => {
+      visibleToLoadTextService.visibility.set(subscriber, true);
+      visibleToLoadTextService.loaded.set(subscriber, false);
+      visibleToLoadTextService.loading.set(subscriber, true);
+      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+
+      expect(visibleToLoadTextService.loading.get(subscriber))
+        .withContext('should be true before')
+        .toBeTrue();
+
+      visibleToLoadTextService.loadNewTextsOf(subscriber);
+
+      expect(visibleToLoadTextService.loading.get(subscriber))
+        .withContext('should be true after - 1')
+        .toBeTrue();
+
+      visibleToLoadTextService.visibility.set(subscriber, true);
+      visibleToLoadTextService.loaded.set(subscriber, true);
+      visibleToLoadTextService.loading.set(subscriber, false);
+      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+
+      visibleToLoadTextService.loadNewTextsOf(subscriber);
+
+      expect(visibleToLoadTextService.loading.get(subscriber))
+        .withContext('should be false after - 2')
+        .toBeFalse();
+    });
   });
 
   describe('loadNewTexts method', () => {
@@ -1448,6 +1602,64 @@ describe('VisibleToLoadTextService - unit', () => {
       expect(visibleToLoadTextService.toReload.get(subscriber2))
         .withContext('toReload should be false after')
         .toBeFalse();
+    });
+
+    it('should not set loading map to false when onlyOnce', () => {
+      const subscriber: ComponentWithText = {
+        updateTexts: function (): void {
+          //
+        },
+        getElement: function (): ElementRef<HTMLElement> {
+          return {} as ElementRef<HTMLElement>;
+        },
+        ngOnDestroy: function (): void {
+          //
+        },
+      };
+
+      visibleToLoadTextService.subscribe(subscriber);
+
+      visibleToLoadTextService.loading.set(subscriber, true);
+      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+
+      expect(visibleToLoadTextService.loading.get(subscriber))
+        .withContext('loading should be true before')
+        .toBeTrue();
+
+      visibleToLoadTextService.languageChange();
+
+      expect(visibleToLoadTextService.loading.get(subscriber))
+        .withContext('loading should be true after')
+        .toBeTrue();
+    });
+
+    it('should not set loaded map to false when onlyOnce', () => {
+      const subscriber: ComponentWithText = {
+        updateTexts: function (): void {
+          //
+        },
+        getElement: function (): ElementRef<HTMLElement> {
+          return {} as ElementRef<HTMLElement>;
+        },
+        ngOnDestroy: function (): void {
+          //
+        },
+      };
+
+      visibleToLoadTextService.subscribe(subscriber);
+
+      visibleToLoadTextService.loaded.set(subscriber, true);
+      visibleToLoadTextService.onlyOnce.set(subscriber, true);
+
+      expect(visibleToLoadTextService.loaded.get(subscriber))
+        .withContext('loaded should be true before')
+        .toBeTrue();
+
+      visibleToLoadTextService.languageChange();
+
+      expect(visibleToLoadTextService.loaded.get(subscriber))
+        .withContext('loaded should be true after')
+        .toBeTrue();
     });
   });
 });

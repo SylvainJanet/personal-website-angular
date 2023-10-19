@@ -1,0 +1,5 @@
+@import "./flag-icons.css";
+
+.fi-tp {
+  background-image: url(../../assets/flags/Toki_Pona_flag.svg);
+}

@@ -221,46 +221,51 @@ describe('TextService - integration', () => {
     });
   });
 
-  describe('getOtherLanguage method', () => {
-    const shouldReturnLanguageCurrentFrenchExpectation =
-      'should return the other language when the current language is FRENCH';
-    const shouldReturnLanguageCurrentFrench = (done: DoneFn) => {
-      const expectedText = 'this is a test';
-      languageServiceSpy.current.and.returnValue(Languages.FRENCH);
+  describe('getTextInLanguage method', () => {
+    const shouldReturnErrorMessageExpectation =
+      'should return an error message on error';
+    const shouldReturnErrorMessage = (done: DoneFn) => {
+      const selectorToTest = 'test-selector';
+
       httpClientSpy.get.and.returnValue(
-        of<StringDto>({ message: expectedText })
+        throwError(() => new Error('this is a test error'))
       );
 
-      textService.getOtherLanguage().subscribe({
-        next: (actual) => {
-          expect(actual)
-            .withContext('other language should be as expected')
-            .toBe(expectedText);
-          done();
-        },
-        error: done.fail,
-      });
+      textService
+        .getTextInLanguage(selectorToTest, Languages.ENGLISH)
+        .subscribe({
+          next: (actual) => {
+            expect(actual)
+              .withContext('message should be as expected')
+              .toBe(EXPECTED_TEXT_ERROR_MESSAGE);
+            done();
+          },
+          error: done.fail,
+        });
     };
 
-    const shouldReturnLanguageCurrentEnglishExpectation =
-      'should return the other language when the current language is ENGLISH';
-    const shouldReturnLanguageCurrentEnglish = (done: DoneFn) => {
-      const expectedText = 'this is a test';
-      languageServiceSpy.current.and.returnValue(Languages.ENGLISH);
+    const shouldReturnMessageExpectation = 'should return the text';
+    const shouldReturnMessage = (done: DoneFn) => {
+      const selectorToTest = 'test-selector';
+      const expectedMessage = 'this is a test';
+
       httpClientSpy.get.and.returnValue(
-        of<StringDto>({ message: expectedText })
+        of<StringDto>({ message: expectedMessage })
       );
 
-      textService.getOtherLanguage().subscribe({
-        next: (actual) => {
-          expect(actual)
-            .withContext('other language should be as expected')
-            .toBe(expectedText);
-          done();
-        },
-        error: done.fail,
-      });
+      textService
+        .getTextInLanguage(selectorToTest, Languages.ENGLISH)
+        .subscribe({
+          next: (actual) => {
+            expect(actual)
+              .withContext('message should be as expected')
+              .toBe(expectedMessage);
+            done();
+          },
+          error: done.fail,
+        });
     };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
@@ -281,14 +286,8 @@ describe('TextService - integration', () => {
 
         textService = TestBed.inject(TextService);
       });
-      it(
-        shouldReturnLanguageCurrentFrenchExpectation,
-        shouldReturnLanguageCurrentFrench
-      );
-      it(
-        shouldReturnLanguageCurrentEnglishExpectation,
-        shouldReturnLanguageCurrentEnglish
-      );
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
     describe('in staging environment', () => {
       beforeEach(() => {
@@ -310,14 +309,8 @@ describe('TextService - integration', () => {
 
         textService = TestBed.inject(TextService);
       });
-      it(
-        shouldReturnLanguageCurrentFrenchExpectation,
-        shouldReturnLanguageCurrentFrench
-      );
-      it(
-        shouldReturnLanguageCurrentEnglishExpectation,
-        shouldReturnLanguageCurrentEnglish
-      );
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
     describe('in prod environment', () => {
       beforeEach(() => {
@@ -339,14 +332,8 @@ describe('TextService - integration', () => {
 
         textService = TestBed.inject(TextService);
       });
-      it(
-        shouldReturnLanguageCurrentFrenchExpectation,
-        shouldReturnLanguageCurrentFrench
-      );
-      it(
-        shouldReturnLanguageCurrentEnglishExpectation,
-        shouldReturnLanguageCurrentEnglish
-      );
+      it(shouldReturnErrorMessageExpectation, shouldReturnErrorMessage);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
   });
 

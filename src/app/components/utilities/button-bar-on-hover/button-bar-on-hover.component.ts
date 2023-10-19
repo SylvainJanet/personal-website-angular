@@ -59,7 +59,9 @@ export class ButtonBarOnHoverComponent {
    */
   lineAppears(event: Event) {
     this.logger.debug('Line appears');
-    const width = this.domcomputation.getActualWidth(event.target);
+    const width = this.domcomputation.getActualWidth(
+      (event.target as HTMLElement)?.children?.item(0)
+    );
     this.lineWidth = (75 * width) / 100 + 'px';
   }
 

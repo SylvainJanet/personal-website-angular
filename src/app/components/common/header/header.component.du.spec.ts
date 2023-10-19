@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
-import { LanguageService } from 'src/app/services/language/language.service';
 import { TextService } from 'src/app/services/db/text/text.service';
 import { LogService } from 'src/app/services/log/log.service';
 import { LinkBarOnHoverComponent } from '../../utilities/link-bar-on-hover/link-bar-on-hover.component';
@@ -15,7 +14,6 @@ describe('HeaderComponent - dom unit', () => {
   let fixture: ComponentFixture<HeaderComponent>;
   let componentInstance: HeaderComponent;
   let DOMComputationServiceSpy: jasmine.SpyObj<DOMComputationService>;
-  let languageServiceSpy: jasmine.SpyObj<LanguageService>;
   let preloaderServiceSpy: jasmine.SpyObj<PreloaderService>;
   let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
@@ -23,12 +21,12 @@ describe('HeaderComponent - dom unit', () => {
   let logServiceSpy: jasmine.SpyObj<LogService>;
 
   const expectedName = 'test title';
-  const expectedOtherLanguage = 'test other language';
+  const expectedSetLanguage = '\xa0🌐\xa0';
 
   beforeEach(waitForAsync(() => {
     preloaderServiceSpy = jasmine.createSpyObj(
       'PreloaderService',
-      ['isLoading'],
+      ['isLoading', 'toLoad'],
       []
     );
     visibleToLoadTextServiceSpy = jasmine.createSpyObj(
@@ -40,19 +38,8 @@ describe('HeaderComponent - dom unit', () => {
       'getActualHeight',
     ]);
 
-    languageServiceSpy = jasmine.createSpyObj('LanguageService', [
-      'subscribe',
-      'unsubscribe',
-      'current',
-      'set',
-    ]);
-
-    textServiceSpy = jasmine.createSpyObj('TextService', [
-      'get',
-      'getOtherLanguage',
-    ]);
+    textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
     textServiceSpy.get.and.returnValues(of(expectedName));
-    textServiceSpy.getOtherLanguage.and.returnValue(of(expectedOtherLanguage));
 
     logServiceGlobalSpy = jasmine.createSpyObj('LogService', ['withClassName']);
     logServiceSpy = jasmine.createSpyObj('LogService', ['debug']);
@@ -66,7 +53,6 @@ describe('HeaderComponent - dom unit', () => {
       ],
       providers: [
         { provide: DOMComputationService, useValue: DOMComputationServiceSpy },
-        { provide: LanguageService, useValue: languageServiceSpy },
         { provide: TextService, useValue: textServiceSpy },
         { provide: LogService, useValue: logServiceGlobalSpy },
         { provide: PreloaderService, useValue: preloaderServiceSpy },
@@ -117,25 +103,22 @@ describe('HeaderComponent - dom unit', () => {
     // loaded
     componentInstance.updateTexts();
     fixture.detectChanges();
-
     const debugEl: DebugElement = fixture.debugElement;
-
-    expect(debugEl.children.length).withContext('1 child at root').toBe(1);
+    expect(debugEl.children.length).withContext('2 children at root').toBe(2);
     expect(debugEl.children[0].nativeElement.tagName)
-      .withContext('child 1 at root is DIV')
+      .withContext('child 1 at root is APP-LANGUAGE-MODAL')
+      .toBe('APP-LANGUAGE-MODAL');
+    expect(debugEl.children[1].nativeElement.tagName)
+      .withContext('child 2 at root is DIV')
       .toBe('DIV');
-
-    const headerEl: DebugElement = debugEl.children[0];
-
+    const headerEl: DebugElement = debugEl.children[1];
     expect(headerEl.children.length)
       .withContext('child 1 at root should have 1 child')
       .toBe(1);
     expect(headerEl.children[0].nativeElement.tagName)
       .withContext('child 1 of child 1 at root should be DIV')
       .toBe('DIV');
-
     const headerContainerEl: DebugElement = headerEl.children[0];
-
     expect(headerContainerEl.children.length)
       .withContext('header container should have 3 children')
       .toBe(3);
@@ -148,39 +131,31 @@ describe('HeaderComponent - dom unit', () => {
     expect(headerContainerEl.children[2].nativeElement.tagName)
       .withContext('child 3 of header container should be DIV')
       .toBe('DIV');
-
     // left-header
     const leftHeaderEl: DebugElement = headerContainerEl.children[0];
-
     expect(leftHeaderEl.children.length)
       .withContext('left header should have 1 child')
       .toBe(1);
     expect(leftHeaderEl.children[0].nativeElement.tagName)
       .withContext('child 1 of left header should be APP-LINK-BAR-ON-HOVER')
       .toBe('APP-LINK-BAR-ON-HOVER');
-
     // right-header
     const rightHeaderEl: DebugElement = headerContainerEl.children[1];
-
     expect(rightHeaderEl.children.length)
       .withContext('right header should have 1 child')
       .toBe(1);
     expect(rightHeaderEl.children[0].nativeElement.tagName)
       .withContext('child 1 of right header should be APP-BUTTON-BAR-ON-HOVER')
       .toBe('APP-BUTTON-BAR-ON-HOVER');
-
     // collapsed-header
     const collapsedHeaderEl: DebugElement = headerContainerEl.children[2];
-
     expect(collapsedHeaderEl.children.length)
       .withContext('collapsed header should have 1 child')
       .toBe(1);
     expect(collapsedHeaderEl.children[0].nativeElement.tagName)
       .withContext('child 1 of collapsed header should be DIV')
       .toBe('DIV');
-
     const deroulantEl: DebugElement = collapsedHeaderEl.children[0];
-
     expect(deroulantEl.children.length)
       .withContext('deroulant should have 2 children')
       .toBe(2);
@@ -190,20 +165,15 @@ describe('HeaderComponent - dom unit', () => {
     expect(deroulantEl.children[1].nativeElement.tagName)
       .withContext('child 2 of deroulant should be UL')
       .toBe('UL');
-
     // collapsed-header deroulant div
-
     const deroulantDivEl: DebugElement = deroulantEl.children[0];
-
     expect(deroulantDivEl.children.length)
       .withContext('child 1 of deroulant should have 1 child')
       .toBe(1);
     expect(deroulantDivEl.children[0].nativeElement.tagName)
       .withContext('child 1 of child 1 of deroulant should be DIV')
       .toBe('DIV');
-
     const deroulantDivDivEl: DebugElement = deroulantDivEl.children[0];
-
     expect(deroulantDivDivEl.children.length)
       .withContext('child 1 of child 1 of deroulant should have 3 children')
       .toBe(3);
@@ -216,11 +186,8 @@ describe('HeaderComponent - dom unit', () => {
     expect(deroulantDivDivEl.children[2].nativeElement.tagName)
       .withContext('child 3 of child 1 of child 1 of deroulant should be DIV')
       .toBe('DIV');
-
     // collapsed-header deroulant ul
-
     const deroulantUlEl: DebugElement = deroulantEl.children[1];
-
     expect(deroulantUlEl.children.length)
       .withContext('UL should have 2 children')
       .toBe(2);
@@ -230,54 +197,42 @@ describe('HeaderComponent - dom unit', () => {
     expect(deroulantUlEl.children[1].nativeElement.tagName)
       .withContext('child 2 of UL should be LI')
       .toBe('LI');
-
     // collapsed-header deroulant ul li 1
-
     const deroulantUlLi1El: DebugElement = deroulantUlEl.children[0];
-
     expect(deroulantUlLi1El.children.length)
       .withContext('LI 1 should have 1 child')
       .toBe(1);
     expect(deroulantUlLi1El.children[0].nativeElement.tagName)
       .withContext('child 1 of LI 1 should be APP-LINK-BAR-ON-HOVER')
       .toBe('APP-LINK-BAR-ON-HOVER');
-
     // collapsed-header deroulant ul li 2
-
     const deroulantUlLi2El: DebugElement = deroulantUlEl.children[1];
-
     expect(deroulantUlLi2El.children.length)
       .withContext('LI 2 should have 1 child')
       .toBe(1);
     expect(deroulantUlLi2El.children[0].nativeElement.tagName)
       .withContext('child 1 of LI 1 should be APP-BUTTON-BAR-ON-HOVER')
       .toBe('APP-BUTTON-BAR-ON-HOVER');
-
     //loading
     visibleToLoadTextServiceSpy.hasTextLoaded.and.returnValue(false);
     preloaderServiceSpy.isLoading.and.returnValue(true);
     fixture.detectChanges();
-
     const debugElLoading: DebugElement = fixture.debugElement;
-
-    expect(debugElLoading.children.length)
-      .withContext('1 child at root')
-      .toBe(1);
-    expect(debugElLoading.children[0].nativeElement.tagName)
-      .withContext('child 1 at root is DIV')
+    expect(debugEl.children.length).withContext('2 children at root').toBe(2);
+    expect(debugEl.children[0].nativeElement.tagName)
+      .withContext('child 1 at root is APP-LANGUAGE-MODAL')
+      .toBe('APP-LANGUAGE-MODAL');
+    expect(debugEl.children[1].nativeElement.tagName)
+      .withContext('child 2 at root is DIV')
       .toBe('DIV');
-
-    const headerElLoading: DebugElement = debugElLoading.children[0];
-
+    const headerElLoading: DebugElement = debugElLoading.children[1];
     expect(headerElLoading.children.length)
       .withContext('child 1 at root should have 1 child')
       .toBe(1);
     expect(headerElLoading.children[0].nativeElement.tagName)
       .withContext('child 1 of child 1 at root should be DIV')
       .toBe('DIV');
-
     const headerContainerElLoading: DebugElement = headerElLoading.children[0];
-
     expect(headerContainerElLoading.children.length)
       .withContext('header container should have 3 children')
       .toBe(3);
@@ -290,11 +245,9 @@ describe('HeaderComponent - dom unit', () => {
     expect(headerContainerElLoading.children[2].nativeElement.tagName)
       .withContext('child 3 of header container should be DIV')
       .toBe('DIV');
-
     // left-header
     const leftHeaderElLoading: DebugElement =
       headerContainerElLoading.children[0];
-
     expect(leftHeaderElLoading.children.length)
       .withContext('left header should have 2 children')
       .toBe(2);
@@ -304,11 +257,9 @@ describe('HeaderComponent - dom unit', () => {
     expect(leftHeaderElLoading.children[1].nativeElement.tagName)
       .withContext('child 2 of left header should be APP-LINK-BAR-ON-HOVER')
       .toBe('APP-LINK-BAR-ON-HOVER');
-
     // right-header
     const rightHeaderElLoading: DebugElement =
       headerContainerElLoading.children[1];
-
     expect(rightHeaderElLoading.children.length)
       .withContext('right header should have 2 children')
       .toBe(2);
@@ -318,21 +269,17 @@ describe('HeaderComponent - dom unit', () => {
     expect(rightHeaderElLoading.children[1].nativeElement.tagName)
       .withContext('child 2 of right header should be APP-BUTTON-BAR-ON-HOVER')
       .toBe('APP-BUTTON-BAR-ON-HOVER');
-
     // collapsed-header
     const collapsedHeaderElLoading: DebugElement =
       headerContainerElLoading.children[2];
-
     expect(collapsedHeaderElLoading.children.length)
       .withContext('collapsed header should have 1 child')
       .toBe(1);
     expect(collapsedHeaderElLoading.children[0].nativeElement.tagName)
       .withContext('child 1 of collapsed header should be DIV')
       .toBe('DIV');
-
     const deroulantElLoading: DebugElement =
       collapsedHeaderElLoading.children[0];
-
     expect(deroulantElLoading.children.length)
       .withContext('deroulant should have 2 children')
       .toBe(2);
@@ -342,21 +289,16 @@ describe('HeaderComponent - dom unit', () => {
     expect(deroulantElLoading.children[1].nativeElement.tagName)
       .withContext('child 2 of deroulant should be UL')
       .toBe('UL');
-
     // collapsed-header deroulant div
-
     const deroulantDivElLoading: DebugElement = deroulantElLoading.children[0];
-
     expect(deroulantDivElLoading.children.length)
       .withContext('child 1 of deroulant should have 1 child')
       .toBe(1);
     expect(deroulantDivElLoading.children[0].nativeElement.tagName)
       .withContext('child 1 of child 1 of deroulant should be DIV')
       .toBe('DIV');
-
     const deroulantDivDivElLoading: DebugElement =
       deroulantDivElLoading.children[0];
-
     expect(deroulantDivDivElLoading.children.length)
       .withContext('child 1 of child 1 of deroulant should have 3 children')
       .toBe(3);
@@ -369,11 +311,8 @@ describe('HeaderComponent - dom unit', () => {
     expect(deroulantDivDivElLoading.children[2].nativeElement.tagName)
       .withContext('child 3 of child 1 of child 1 of deroulant should be DIV')
       .toBe('DIV');
-
     // collapsed-header deroulant ul
-
     const deroulantUlElLoading: DebugElement = deroulantElLoading.children[1];
-
     expect(deroulantUlElLoading.children.length)
       .withContext('UL should have 2 children')
       .toBe(2);
@@ -383,12 +322,9 @@ describe('HeaderComponent - dom unit', () => {
     expect(deroulantUlElLoading.children[1].nativeElement.tagName)
       .withContext('child 2 of UL should be LI')
       .toBe('LI');
-
     // collapsed-header deroulant ul li 1
-
     const deroulantUlLi1ElLoading: DebugElement =
       deroulantUlElLoading.children[0];
-
     expect(deroulantUlLi1ElLoading.children.length)
       .withContext('LI 1 should have 2 children')
       .toBe(2);
@@ -398,12 +334,9 @@ describe('HeaderComponent - dom unit', () => {
     expect(deroulantUlLi1ElLoading.children[1].nativeElement.tagName)
       .withContext('child 2 of LI 1 should be APP-LINK-BAR-ON-HOVER')
       .toBe('APP-LINK-BAR-ON-HOVER');
-
     // collapsed-header deroulant ul li 2
-
     const deroulantUlLi2ElLoading: DebugElement =
       deroulantUlElLoading.children[1];
-
     expect(deroulantUlLi2ElLoading.children.length)
       .withContext('LI 2 should have 2 children')
       .toBe(2);
@@ -421,7 +354,7 @@ describe('HeaderComponent - dom unit', () => {
 
     const debugEl: DebugElement = fixture.debugElement;
 
-    const headerEl: DebugElement = debugEl.children[0];
+    const headerEl: DebugElement = debugEl.children[1];
 
     const headerContainerEl: DebugElement = headerEl.children[0];
 
@@ -455,13 +388,13 @@ describe('HeaderComponent - dom unit', () => {
     });
   });
 
-  it('should set otherLanguage', () => {
+  it('should set setLanguage', () => {
     componentInstance.updateTexts();
     fixture.detectChanges();
 
     const debugEl: DebugElement = fixture.debugElement;
 
-    const headerEl: DebugElement = debugEl.children[0];
+    const headerEl: DebugElement = debugEl.children[1];
 
     const headerContainerEl: DebugElement = headerEl.children[0];
 
@@ -474,7 +407,7 @@ describe('HeaderComponent - dom unit', () => {
     rightLinkComp.text.subscribe((s) => {
       expect(s)
         .withContext('right link should be set')
-        .toBe(expectedOtherLanguage);
+        .toBe(expectedSetLanguage);
     });
 
     // collapsed-header
@@ -496,7 +429,7 @@ describe('HeaderComponent - dom unit', () => {
     collapsedLink2Comp.text.subscribe((s) => {
       expect(s)
         .withContext('collapsed link should be set')
-        .toBe(expectedOtherLanguage);
+        .toBe(expectedSetLanguage);
     });
   });
 });

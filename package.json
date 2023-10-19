@@ -37,6 +37,7 @@
     "@compodoc/compodoc": "^1.1.21",
     "@types/node": "^20.6.3",
     "edge-launcher": "^1.2.2",
+    "flag-icons": "^6.11.1",
     "hammerjs": "^2.0.8",
     "lint-staged": "^13.2.2",
     "prettier-plugin-jsdoc": "^0.4.2",

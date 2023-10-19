@@ -122,7 +122,13 @@ describe('LinkBarOnHoverComponent - unit', () => {
       buttonBarOnHoverComponent = TestBed.inject(ButtonBarOnHoverComponent);
     });
     it('should change the lineWidth', () => {
-      const eventSpy = jasmine.createSpyObj(Event, ['']);
+      const eventSpy = jasmine.createSpyObj('Event', [''], ['target']);
+      const htmlEl = document.createElement('div');
+      (
+        Object.getOwnPropertyDescriptor(eventSpy, 'target')?.get as jasmine.Spy<
+          () => HTMLElement
+        >
+      ).and.returnValue(htmlEl);
       const length = 200;
       const expectedLength = (75 / 100) * length;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
@@ -161,7 +167,13 @@ describe('LinkBarOnHoverComponent - unit', () => {
       buttonBarOnHoverComponent = TestBed.inject(ButtonBarOnHoverComponent);
     });
     it('should change the lineWidth', () => {
-      const eventSpy = jasmine.createSpyObj(Event, ['']);
+      const eventSpy = jasmine.createSpyObj('Event', [''], ['target']);
+      const htmlEl = document.createElement('div');
+      (
+        Object.getOwnPropertyDescriptor(eventSpy, 'target')?.get as jasmine.Spy<
+          () => HTMLElement
+        >
+      ).and.returnValue(htmlEl);
       const length = 200;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 

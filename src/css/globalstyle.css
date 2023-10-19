@@ -8,11 +8,17 @@
 @import "normalize/normalize.css";
 @import "./content/content.css";
 
+:root {
+  --minimum-width: calc(315px - var(--scroll-bar-width));
+}
+
 body {
   background-color: var(--background-color);
-  min-width: 315px; /* minimum width of 315px */
+  min-width: var(--minimum-width); /* minimum width of 315px */
   width: auto !important; /* Firefox will set width as auto */
-  width: 315px; /* As IE6 ignores !important it will set width as 315px; */
+  width: var(
+    --minimum-width
+  ); /* As IE6 ignores !important it will set width as 315px; */
 }
 
 * {

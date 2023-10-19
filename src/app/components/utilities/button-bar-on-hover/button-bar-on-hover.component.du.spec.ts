@@ -159,7 +159,7 @@ describe('ButtonBarOnHoverComponent - dom unit', () => {
       pressSpy = jasmine.createSpyObj('EventEmitter', ['emit']);
       spyOn(componentInstance, 'lineDisappears');
       spyOn(componentInstance, 'lineAppears');
-      aDebugEl = fixture.debugElement.children[0].children[0];
+      aDebugEl = fixture.debugElement.children[0];
       componentInstance.press = pressSpy;
     });
     it('should call lineDisappears on click event', () => {
