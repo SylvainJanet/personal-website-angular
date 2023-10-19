@@ -21,7 +21,7 @@ describe('HeaderComponent - dom unit', () => {
   let logServiceSpy: jasmine.SpyObj<LogService>;
 
   const expectedName = 'test title';
-  const expectedSetLanguage = '\xa0🌐\xa0';
+  const expectedSetLanguage = '\xa0 \xa0 🌐 \xa0 \xa0';
 
   beforeEach(waitForAsync(() => {
     preloaderServiceSpy = jasmine.createSpyObj(

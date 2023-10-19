@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
   /** HTMLElement of the button clicked on to open the modal */
   clickedEl!: HTMLElement;
   /** Text icon to be clicked on to open the modal */
-  textIcon = of('\xa0🌐\xa0');
+  textIcon = of('\xa0 \xa0 🌐 \xa0 \xa0');
 
   /**
    * Header component constructor.

@@ -74,7 +74,9 @@ describe('HeaderComponent - unit', () => {
           .withContext('showModal should be set')
           .toBeFalse();
         component.textIcon.subscribe((s) => {
-          expect(s).withContext('textIcon should be set').toBe('\xa0🌐\xa0');
+          expect(s)
+            .withContext('textIcon should be set')
+            .toBe('\xa0 \xa0 🌐 \xa0 \xa0');
         });
       });
     };

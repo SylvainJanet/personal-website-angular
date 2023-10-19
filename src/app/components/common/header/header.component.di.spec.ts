@@ -26,7 +26,7 @@ describe('HeaderComponent - dom integration', () => {
   const prodEnv = productionEnvironment;
 
   const expectedName = 'test title';
-  const expectedSetLanguage = '\xa0🌐\xa0';
+  const expectedSetLanguage = '\xa0 \xa0 🌐 \xa0 \xa0';
 
   beforeEach(() => {
     DOMComputationServiceSpy = jasmine.createSpyObj('DOMComputationService', [
