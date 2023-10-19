@@ -11,6 +11,9 @@
   height: var(--language-modal-flag-height);
   border-radius: var(--language-modal-flag-border-radius);
   box-sizing: border-box;
+  -webkit-box-shadow: inset 0 0 0 var(--language-modal-flag-box-shadow) black;
+  -moz-box-shadow: inset 0 0 0 var(--language-modal-flag-box-shadow) black;
+  box-shadow: inset 0 0 0 var(--language-modal-flag-box-shadow) black;
 }
 
 .language-name-container {
@@ -39,12 +42,6 @@
 .selected-row span {
   color: rgba(255, 255, 255, 1);
   text-shadow: 0 0 0.1em black;
-}
-
-.flag-icon {
-  -webkit-box-shadow: inset 0 0 0 var(--language-modal-flag-box-shadow) black;
-  -moz-box-shadow: inset 0 0 0 var(--language-modal-flag-box-shadow) black;
-  box-shadow: inset 0 0 0 var(--language-modal-flag-box-shadow) black;
 }
 
 .unselected-row:hover {
