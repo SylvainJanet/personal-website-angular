@@ -37,27 +37,25 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
   });
 
   describe('button element', () => {
-    let buttonDebugEl: DebugElement;
     let lineDebugEl: DebugElement;
-    let mainDivEl: DebugElement;
+    let buttonDebugEl: DebugElement;
     beforeEach(() => {
-      mainDivEl = fixture.debugElement.children[0];
-      buttonDebugEl = mainDivEl.children[0];
-      lineDebugEl = mainDivEl.children[1];
+      buttonDebugEl = fixture.debugElement.children[0].children[0];
+      lineDebugEl = fixture.debugElement.children[0].children[1];
     });
     it('should make the line disappear on click event', () => {
       const expectedEvent = new Event('mouseenter');
       const length = 200;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      mainDivEl.triggerEventHandler('mouseenter', expectedEvent);
+      buttonDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
       expect(lineDebugEl.styles['width'])
         .withContext('width should not be 0')
         .not.toBe('0%');
 
-      mainDivEl.triggerEventHandler('click');
+      buttonDebugEl.triggerEventHandler('click');
       buttonDebugEl.triggerEventHandler('click');
       lineDebugEl.triggerEventHandler('click');
       fixture.detectChanges();
@@ -71,14 +69,14 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
       const length = 200;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      mainDivEl.triggerEventHandler('mouseenter', expectedEvent);
+      buttonDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
       expect(lineDebugEl.styles['width'])
         .withContext('width should not be 0')
         .not.toBe('0%');
 
-      mainDivEl.triggerEventHandler('touchend');
+      buttonDebugEl.triggerEventHandler('touchend');
       fixture.detectChanges();
 
       expect(lineDebugEl.styles['width'])
@@ -90,14 +88,14 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
       const length = 200;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      mainDivEl.triggerEventHandler('mouseenter', expectedEvent);
+      buttonDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
       expect(lineDebugEl.styles['width'])
         .withContext('width should not be 0')
         .not.toBe('0%');
 
-      mainDivEl.triggerEventHandler('mouseleave');
+      buttonDebugEl.triggerEventHandler('mouseleave');
       fixture.detectChanges();
 
       expect(lineDebugEl.styles['width'])
@@ -105,7 +103,7 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
         .toBe('0%');
     });
     it('should make the line appear on touchstart event', () => {
-      mainDivEl.triggerEventHandler('click');
+      buttonDebugEl.triggerEventHandler('click');
       fixture.detectChanges();
 
       expect(lineDebugEl.styles['width'])
@@ -117,7 +115,7 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
       const expectedLength = (75 / 100) * length;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      mainDivEl.triggerEventHandler('touchstart', expectedEvent);
+      buttonDebugEl.triggerEventHandler('touchstart', expectedEvent);
       fixture.detectChanges();
 
       expect(lineDebugEl.styles['width'])
@@ -125,7 +123,7 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
         .toBe(expectedLength + 'px');
     });
     it('should make the line appear on mouseenter event', () => {
-      mainDivEl.triggerEventHandler('click');
+      buttonDebugEl.triggerEventHandler('click');
       fixture.detectChanges();
 
       expect(lineDebugEl.styles['width'])
@@ -137,7 +135,7 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
       const expectedLength = (75 / 100) * length;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      mainDivEl.triggerEventHandler('mouseenter', expectedEvent);
+      buttonDebugEl.triggerEventHandler('mouseenter', expectedEvent);
       fixture.detectChanges();
 
       expect(lineDebugEl.styles['width'])

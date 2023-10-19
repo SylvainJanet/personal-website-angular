@@ -170,7 +170,7 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
     beforeEach(() => {
       spyOn(componentInstance, 'lineDisappears');
       spyOn(componentInstance, 'lineAppears');
-      aDebugEl = fixture.debugElement.children[0];
+      aDebugEl = fixture.debugElement.children[0].children[0];
     });
     it('should call lineDisappears on click event', () => {
       aDebugEl.triggerEventHandler('click');
