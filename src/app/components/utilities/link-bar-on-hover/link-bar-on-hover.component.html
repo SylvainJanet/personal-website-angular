@@ -12,6 +12,11 @@
     [href]="link"
     [style]="aStyle"
     [ngStyle]="{ color: textColor }"
+    (click)="lineDisappears()"
+    (touchstart)="lineAppears($event)"
+    (mouseenter)="lineAppears($event)"
+    (touchend)="lineDisappears()"
+    (mouseleave)="lineDisappears()"
     >{{ text | async }}
   </a>
   <div

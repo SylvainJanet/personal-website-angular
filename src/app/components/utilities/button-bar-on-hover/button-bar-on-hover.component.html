@@ -11,6 +11,11 @@
     class="line-on-hover"
     [style]="buttonStyle"
     [ngStyle]="{ color: textColor }"
+    (click)="doAction($event)"
+    (touchstart)="lineAppears($event)"
+    (mouseenter)="lineAppears($event)"
+    (touchend)="lineDisappears()"
+    (mouseleave)="lineDisappears()"
   >
     {{ text | async }}
   </button>
