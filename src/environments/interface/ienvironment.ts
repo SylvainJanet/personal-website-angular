@@ -13,6 +13,8 @@ export interface IEnvironment {
   compactLogDisplay: boolean;
   /** API link. */
   api: string;
+  /** Website link */
+  website: string;
   /** App base href. */
   baseHref: string;
   /** If true, logs will contain the date of log. */

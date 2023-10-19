@@ -116,8 +116,8 @@ export class VisibleToLoadTextService implements OnDestroy {
     this.loaded.set(s, false);
     this.loading.set(s, false);
     this.toReload.set(s, false);
-    this.loadNewTextsOf(s);
     this.onlyOnce.set(s, onlyOnce);
+    this.loadNewTextsOf(s);
   }
 
   /**

@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  Inject,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -21,6 +22,8 @@ import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { LanguageModalComponent } from '../language-modal/language-modal.component';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
+import { IEnvironment } from 'src/environments/interface/ienvironment';
 
 /**
  * Header component, displaying either a link back home to the left and a button
@@ -75,6 +78,9 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
   /** Text icon to be clicked on to open the modal */
   textIcon = of('\xa0 \xa0 🌐 \xa0 \xa0');
 
+  /** Website url */
+  website: string;
+
   /**
    * Header component constructor.
    *
@@ -84,14 +90,17 @@ export class HeaderComponent implements OnInit, ComponentWithText, OnDestroy {
    * @param visibleToLoadTextService The {@link VisibleToLoadTextService}
    * @param preloader The {@link PreloaderService}
    * @param changeDetectorRef The {@link ChangeDetectorRef}
+   * @param environment The {@link IEnvironment}
    */
   constructor(
     private domcomputation: DOMComputationService,
     logService: LogService,
     private textService: TextService,
     public visibleToLoadTextService: VisibleToLoadTextService,
-    public preloader: PreloaderService
+    public preloader: PreloaderService,
+    @Inject(ENV) public environment: IEnvironment
   ) {
+    this.website = environment.website;
     this.trigger = 0;
     this.headerState = '';
     this.logger = logService.withClassName(this.constructor.name);

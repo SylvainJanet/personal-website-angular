@@ -7,6 +7,7 @@ export const environment: IEnvironment = {
   logLevel: LogLevel.All,
   compactLogDisplay: true,
   api: 'https://server.sylvainjanet.fr/app-dev/',
+  website: 'https://dev.sylvainjanet.fr/',
   logWithDate: false,
   baseHref: '',
   // eslint-disable-next-line @typescript-eslint/no-var-requires

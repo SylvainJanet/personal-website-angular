@@ -13,6 +13,7 @@ import { environment as productionEnvironment } from 'src/environments/environme
 import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { ElementRef } from '@angular/core';
 import { Preloaders } from 'src/app/services/preloader/preloaders/preloaders';
+import { IEnvironment } from 'src/environments/interface/ienvironment';
 
 describe('HeaderComponent - unit', () => {
   let component: HeaderComponent;
@@ -40,10 +41,6 @@ describe('HeaderComponent - unit', () => {
   const cssContentLightClass = scriptVar.cssHeaderContentLightClass;
 
   describe('constructor', () => {
-    // beforeEach(() => {
-    //   spyOn(HeaderComponent.prototype, 'updateTexts');
-    //   headerComponent = TestBed.inject(HeaderComponent);
-    // });
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
       expect(component)
@@ -52,7 +49,7 @@ describe('HeaderComponent - unit', () => {
     };
 
     const shouldSetDefaultValuesExpectation = 'should set default values';
-    const shouldSetDefaultValues = () => {
+    const shouldSetDefaultValues = (env: IEnvironment) => {
       expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
@@ -66,19 +63,21 @@ describe('HeaderComponent - unit', () => {
         .toBe('');
       component.myName.subscribe((s) => {
         expect(s).withContext('myName should be set').toBe('');
-
-        expect(component.loaderTexts)
-          .withContext('loaderTexts should be set')
-          .toBe(Preloaders.TEXTS);
-        expect(component.showModal)
-          .withContext('showModal should be set')
-          .toBeFalse();
-        component.textIcon.subscribe((s) => {
-          expect(s)
-            .withContext('textIcon should be set')
-            .toBe('\xa0 \xa0 🌐 \xa0 \xa0');
-        });
       });
+      expect(component.loaderTexts)
+        .withContext('loaderTexts should be set')
+        .toBe(Preloaders.TEXTS);
+      expect(component.showModal)
+        .withContext('showModal should be set')
+        .toBeFalse();
+      component.textIcon.subscribe((s) => {
+        expect(s)
+          .withContext('textIcon should be set')
+          .toBe('\xa0 \xa0 🌐 \xa0 \xa0');
+      });
+      expect(component.website)
+        .withContext('website should be set')
+        .toBe(env.website);
     };
 
     const shouldSetProperLoggerExpectation = 'should set proper logger';
@@ -150,7 +149,9 @@ describe('HeaderComponent - unit', () => {
         component = TestBed.inject(HeaderComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
-      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(shouldSetDefaultValuesExpectation, () =>
+        shouldSetDefaultValues(devEnv)
+      );
       it(shouldSetProperLoggerExpectation, shouldSetProperLogger);
       it(
         shouldSubscribeToVisibleToLoadTextServiceExpectation,
@@ -207,7 +208,9 @@ describe('HeaderComponent - unit', () => {
         component = TestBed.inject(HeaderComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
-      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(shouldSetDefaultValuesExpectation, () =>
+        shouldSetDefaultValues(stagingEnv)
+      );
       it(shouldSetProperLoggerExpectation, shouldSetProperLogger);
       it(
         shouldSubscribeToVisibleToLoadTextServiceExpectation,
@@ -264,7 +267,9 @@ describe('HeaderComponent - unit', () => {
         component = TestBed.inject(HeaderComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
-      it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
+      it(shouldSetDefaultValuesExpectation, () =>
+        shouldSetDefaultValues(prodEnv)
+      );
       it(shouldSetProperLoggerExpectation, shouldSetProperLogger);
       it(
         shouldSubscribeToVisibleToLoadTextServiceExpectation,
