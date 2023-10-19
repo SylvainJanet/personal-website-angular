@@ -2,12 +2,13 @@
   class="line-on-hover-container clickable"
   [style]="globalStyle"
   (click)="lineDisappears()"
-  (touchstart)="lineAppears($event)"
-  (mouseenter)="lineAppears($event)"
+  (touchstart)="lineAppears()"
+  (mouseenter)="lineAppears()"
   (touchend)="lineDisappears()"
   (mouseleave)="lineDisappears()"
 >
   <a
+    #mainLink
     class="line-on-hover"
     [href]="link"
     [style]="aStyle"

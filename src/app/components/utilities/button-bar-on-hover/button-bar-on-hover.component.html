@@ -1,13 +1,14 @@
 <div
   class="line-on-hover-container clickable"
   [style]="globalStyle"
-  (click)="doAction($event)"
-  (touchstart)="lineAppears($event)"
-  (mouseenter)="lineAppears($event)"
+  (click)="doAction()"
+  (touchstart)="lineAppears()"
+  (mouseenter)="lineAppears()"
   (touchend)="lineDisappears()"
   (mouseleave)="lineDisappears()"
 >
   <button
+    #mainButton
     class="line-on-hover"
     [style]="buttonStyle"
     [ngStyle]="{ color: textColor }"

@@ -116,12 +116,16 @@ describe('LinkBarOnHoverComponent - unit', () => {
       component = TestBed.inject(LinkBarOnHoverComponent);
     });
     it('should change the lineWidth', () => {
-      const eventSpy = jasmine.createSpyObj(Event, ['']);
+      component.mainLink = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
       const length = 200;
       const expectedLength = (75 / 100) * length;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      component.lineAppears(eventSpy);
+      component.lineAppears();
 
       expect(component.lineWidth)
         .withContext('lineWidth should be set')
@@ -155,11 +159,15 @@ describe('LinkBarOnHoverComponent - unit', () => {
       component = TestBed.inject(LinkBarOnHoverComponent);
     });
     it('should change the lineWidth', () => {
-      const eventSpy = jasmine.createSpyObj(Event, ['']);
+      component.mainLink = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
       const length = 200;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      component.lineAppears(eventSpy);
+      component.lineAppears();
 
       component.lineDisappears();
 

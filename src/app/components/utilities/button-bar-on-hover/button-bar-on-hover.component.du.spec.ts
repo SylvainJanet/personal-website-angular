@@ -189,7 +189,7 @@ describe('ButtonBarOnHoverComponent - dom unit', () => {
 
       expect(componentInstance.lineAppears)
         .withContext('lineAppears should have been called')
-        .toHaveBeenCalledOnceWith(expectedEvent);
+        .toHaveBeenCalledOnceWith();
     });
     it('should call lineAppears on mouseenter event', () => {
       const expectedEvent = new Event('mouseenter');
@@ -197,7 +197,7 @@ describe('ButtonBarOnHoverComponent - dom unit', () => {
 
       expect(componentInstance.lineAppears)
         .withContext('lineAppears should have been called')
-        .toHaveBeenCalledOnceWith(expectedEvent);
+        .toHaveBeenCalledOnceWith();
     });
     it('should emit press event on click event', () => {
       const expectedEvent = new Event('click');
@@ -205,7 +205,7 @@ describe('ButtonBarOnHoverComponent - dom unit', () => {
 
       expect(pressSpy.emit)
         .withContext('emit should have been called')
-        .toHaveBeenCalledOnceWith(expectedEvent);
+        .toHaveBeenCalledOnceWith();
     });
   });
 });

@@ -122,18 +122,16 @@ describe('ButtonBarOnHoverComponent - unit', () => {
       component = TestBed.inject(ButtonBarOnHoverComponent);
     });
     it('should change the lineWidth', () => {
-      const eventSpy = jasmine.createSpyObj('Event', [''], ['target']);
-      const htmlEl = document.createElement('div');
-      (
-        Object.getOwnPropertyDescriptor(eventSpy, 'target')?.get as jasmine.Spy<
-          () => HTMLElement
-        >
-      ).and.returnValue(htmlEl);
+      component.mainButton = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
       const length = 200;
       const expectedLength = (75 / 100) * length;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      component.lineAppears(eventSpy);
+      component.lineAppears();
 
       expect(component.lineWidth)
         .withContext('lineWidth should be set')
@@ -167,17 +165,15 @@ describe('ButtonBarOnHoverComponent - unit', () => {
       component = TestBed.inject(ButtonBarOnHoverComponent);
     });
     it('should change the lineWidth', () => {
-      const eventSpy = jasmine.createSpyObj('Event', [''], ['target']);
-      const htmlEl = document.createElement('div');
-      (
-        Object.getOwnPropertyDescriptor(eventSpy, 'target')?.get as jasmine.Spy<
-          () => HTMLElement
-        >
-      ).and.returnValue(htmlEl);
+      component.mainButton = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
       const length = 200;
       DOMComputationServiceSpy.getActualWidth.and.returnValue(length);
 
-      component.lineAppears(eventSpy);
+      component.lineAppears();
 
       component.lineDisappears();
 
@@ -210,26 +206,34 @@ describe('ButtonBarOnHoverComponent - unit', () => {
       component = TestBed.inject(ButtonBarOnHoverComponent);
     });
     it('should call lineDisappears method', () => {
-      const expectedEvent = new Event('click');
+      component.mainButton = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
       spyOn(component, 'lineDisappears');
 
-      component.doAction(expectedEvent);
+      component.doAction();
 
       expect(component.lineDisappears)
         .withContext('lineDisappears should have been called')
         .toHaveBeenCalledTimes(1);
     });
     it('should emit press event', () => {
+      component.mainButton = jasmine.createSpyObj(
+        'ElementRef',
+        [],
+        ['nativeElement']
+      );
       const pressSpy = jasmine.createSpyObj('EventEmitter', ['emit']);
       component.press = pressSpy;
-      const expectedEvent = new Event('click');
       spyOn(component, 'lineDisappears');
 
-      component.doAction(expectedEvent);
+      component.doAction();
 
       expect(pressSpy.emit)
         .withContext('emit should have been called')
-        .toHaveBeenCalledOnceWith(expectedEvent);
+        .toHaveBeenCalledOnceWith();
     });
   });
 });
