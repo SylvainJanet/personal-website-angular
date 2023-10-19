@@ -1,11 +1,11 @@
 import { ElementRef } from '@angular/core';
 import { DOMComputationService } from './domcomputation.service';
 
-let domComputationService: DOMComputationService;
+let service: DOMComputationService;
 
-describe('DOMComputationService', () => {
+describe('DOMComputationService - unit', () => {
   beforeEach(() => {
-    domComputationService = new DOMComputationService();
+    service = new DOMComputationService();
   });
 
   describe('getActualWidth method', () => {
@@ -20,7 +20,7 @@ describe('DOMComputationService', () => {
       elToTest.style.borderLeftWidth = '10px';
       elToTest.style.borderRightWidth = '10px';
 
-      const actual = domComputationService.getActualWidth(elToTest);
+      const actual = service.getActualWidth(elToTest);
       expect(actual).withContext('width should be correct - 1').toBe(expected);
 
       elToTest.style.boxSizing = 'border-box';
@@ -28,7 +28,7 @@ describe('DOMComputationService', () => {
       elToTest.style.paddingLeft = '10px';
       elToTest.style.paddingRight = '10px';
 
-      const actual2 = domComputationService.getActualWidth(elToTest);
+      const actual2 = service.getActualWidth(elToTest);
       expect(actual2).withContext('width should be correct - 2').toBe(expected);
     });
   });
@@ -44,7 +44,7 @@ describe('DOMComputationService', () => {
       elToTest.style.borderTopWidth = '10px';
       elToTest.style.borderBottomWidth = '10px';
 
-      const actual = domComputationService.getActualHeight(elToTest);
+      const actual = service.getActualHeight(elToTest);
       expect(actual).withContext('width should be correct - 1').toBe(expected);
 
       elToTest.style.boxSizing = 'border-box';
@@ -52,20 +52,18 @@ describe('DOMComputationService', () => {
       elToTest.style.paddingTop = '10px';
       elToTest.style.paddingBottom = '10px';
 
-      const actual2 = domComputationService.getActualHeight(elToTest);
+      const actual2 = service.getActualHeight(elToTest);
       expect(actual2).withContext('width should be correct - 2').toBe(expected);
     });
   });
   describe('isIntoView method', () => {
     it('should return false if the element is falsy', () => {
-      const actual = domComputationService.isIntoView(
-        {} as ElementRef<HTMLElement>
-      );
+      const actual = service.isIntoView({} as ElementRef<HTMLElement>);
 
       expect(actual).withContext('should be false').toBeFalse();
     });
     it("should return false if the element's nativeElement is null or undefined", () => {
-      const actual = domComputationService.isIntoView({
+      const actual = service.isIntoView({
         nativeElement: null,
       } as unknown as ElementRef<HTMLElement>);
 
@@ -102,7 +100,7 @@ describe('DOMComputationService', () => {
         right: rectRight,
       });
 
-      const actual = domComputationService.isIntoView(elementSpy);
+      const actual = service.isIntoView(elementSpy);
       expect(actual).withContext('should be true').toBeTrue();
 
       window.innerHeight = oldHeight;
@@ -139,7 +137,7 @@ describe('DOMComputationService', () => {
         right: rectRight,
       });
 
-      const actual = domComputationService.isIntoView(elementSpy);
+      const actual = service.isIntoView(elementSpy);
       expect(actual).withContext('should be true').toBeTrue();
 
       window.innerHeight = oldHeight;
@@ -176,7 +174,7 @@ describe('DOMComputationService', () => {
         right: rectRight,
       });
 
-      const actual = domComputationService.isIntoView(elementSpy);
+      const actual = service.isIntoView(elementSpy);
       expect(actual).withContext('should be true').toBeTrue();
 
       window.innerHeight = oldHeight;
@@ -213,7 +211,7 @@ describe('DOMComputationService', () => {
         right: rectRight,
       });
 
-      const actual = domComputationService.isIntoView(elementSpy);
+      const actual = service.isIntoView(elementSpy);
       expect(actual).withContext('should be true').toBeTrue();
 
       window.innerHeight = oldHeight;
@@ -253,11 +251,7 @@ describe('DOMComputationService', () => {
         right: rectRight,
       });
 
-      const actual = domComputationService.isIntoView(
-        elementSpy,
-        bufferHeight,
-        bufferWidth
-      );
+      const actual = service.isIntoView(elementSpy, bufferHeight, bufferWidth);
       expect(actual).withContext('should be true').toBeTrue();
 
       window.innerHeight = oldHeight;
@@ -297,11 +291,7 @@ describe('DOMComputationService', () => {
         right: rectRight,
       });
 
-      const actual = domComputationService.isIntoView(
-        elementSpy,
-        bufferHeight,
-        bufferWidth
-      );
+      const actual = service.isIntoView(elementSpy, bufferHeight, bufferWidth);
       expect(actual).withContext('should be true').toBeTrue();
 
       window.innerHeight = oldHeight;
@@ -341,11 +331,7 @@ describe('DOMComputationService', () => {
         right: rectRight,
       });
 
-      const actual = domComputationService.isIntoView(
-        elementSpy,
-        bufferHeight,
-        bufferWidth
-      );
+      const actual = service.isIntoView(elementSpy, bufferHeight, bufferWidth);
       expect(actual).withContext('should be true').toBeTrue();
 
       window.innerHeight = oldHeight;
@@ -385,11 +371,7 @@ describe('DOMComputationService', () => {
         right: rectRight,
       });
 
-      const actual = domComputationService.isIntoView(
-        elementSpy,
-        bufferHeight,
-        bufferWidth
-      );
+      const actual = service.isIntoView(elementSpy, bufferHeight, bufferWidth);
       expect(actual).withContext('should be true').toBeTrue();
 
       window.innerHeight = oldHeight;

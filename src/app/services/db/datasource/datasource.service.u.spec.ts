@@ -7,39 +7,39 @@ import { IEnvironment } from 'src/environments/interface/ienvironment';
 import { StringDto } from 'src/app/interfaces/StringDto';
 import { of } from 'rxjs';
 
+let service: DatasourceService;
 let httpClientSpy: jasmine.SpyObj<HttpClient>;
-let datasourceService: DatasourceService;
 const devEnv = developmentEnvironment;
 const stagingEnv = stagingEnvironment;
 const prodEnv = productionEnvironment;
 
-describe('DatasourceService', () => {
+describe('DatasourceService - unit', () => {
   const shouldHaveCorrectUrlExpectation =
     'should have the api url set by the environment';
   const shouldHaveCorrectUrl = (env: IEnvironment) => {
     const expected = env.api;
-    const actual = datasourceService.URL;
+    const actual = service.URL;
 
     expect(actual).withContext('url should be set').toBe(expected);
   };
   describe('in dev environment', () => {
     beforeEach(() => {
       httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-      datasourceService = new DatasourceService(devEnv, httpClientSpy);
+      service = new DatasourceService(devEnv, httpClientSpy);
     });
     it(shouldHaveCorrectUrlExpectation, () => shouldHaveCorrectUrl(devEnv));
   });
   describe('in staging environment', () => {
     beforeEach(() => {
       httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-      datasourceService = new DatasourceService(stagingEnv, httpClientSpy);
+      service = new DatasourceService(stagingEnv, httpClientSpy);
     });
     it(shouldHaveCorrectUrlExpectation, () => shouldHaveCorrectUrl(stagingEnv));
   });
   describe('in prod environment', () => {
     beforeEach(() => {
       httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-      datasourceService = new DatasourceService(prodEnv, httpClientSpy);
+      service = new DatasourceService(prodEnv, httpClientSpy);
     });
     it(shouldHaveCorrectUrlExpectation, () => shouldHaveCorrectUrl(prodEnv));
   });
@@ -49,7 +49,7 @@ describe('DatasourceService', () => {
       const pathToTest = 'test/get';
       const paramsToTest = new HttpParams();
 
-      datasourceService.get(pathToTest, paramsToTest);
+      service.get(pathToTest, paramsToTest);
 
       expect(httpClientSpy.get)
         .withContext('get should have been called')
@@ -63,7 +63,7 @@ describe('DatasourceService', () => {
     const shouldMakeHttpCallNoHttpParams = (env: IEnvironment) => {
       const pathToTest = 'test/get';
 
-      datasourceService.get(pathToTest);
+      service.get(pathToTest);
 
       expect(httpClientSpy.get)
         .withContext('get should have been called')
@@ -83,7 +83,7 @@ describe('DatasourceService', () => {
       };
       httpClientSpy.get.and.returnValue(of(expectedDto));
 
-      datasourceService.get<StringDto>(pathToTest, paramsToTest).subscribe({
+      service.get<StringDto>(pathToTest, paramsToTest).subscribe({
         next: (response) => {
           expect(response)
             .withContext('response should be the dto')
@@ -101,7 +101,7 @@ describe('DatasourceService', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-        datasourceService = new DatasourceService(devEnv, httpClientSpy);
+        service = new DatasourceService(devEnv, httpClientSpy);
       });
       it(shouldMakeHttpCallExpectation, () => shouldMakeHttpCall(devEnv));
       it(shouldMakeHttpCallNoHttpParamsExpectation, () =>
@@ -112,7 +112,7 @@ describe('DatasourceService', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-        datasourceService = new DatasourceService(stagingEnv, httpClientSpy);
+        service = new DatasourceService(stagingEnv, httpClientSpy);
       });
       it(shouldMakeHttpCallExpectation, () => shouldMakeHttpCall(stagingEnv));
       it(shouldMakeHttpCallNoHttpParamsExpectation, () =>
@@ -123,7 +123,7 @@ describe('DatasourceService', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-        datasourceService = new DatasourceService(prodEnv, httpClientSpy);
+        service = new DatasourceService(prodEnv, httpClientSpy);
       });
       it(shouldMakeHttpCallExpectation, () => shouldMakeHttpCall(prodEnv));
       it(shouldMakeHttpCallNoHttpParamsExpectation, () =>

@@ -8,13 +8,13 @@ import { LogPublishersService } from '../log/publishers/log-publishers.service';
 import { IEnvironment } from 'src/environments/interface/ienvironment';
 import { Preloaders } from '../preloader/preloaders/preloaders';
 
-let imageService: ImageService;
+let service: ImageService;
 let preloaderService: PreloaderService;
 let devEnv: IEnvironment;
 let stagingEnv: IEnvironment;
 let prodEnv: IEnvironment;
 
-describe('ImageService', () => {
+describe('ImageService - unit', () => {
   beforeEach(() => {
     devEnv = devEnvironment;
     stagingEnv = stagingEnvironment;
@@ -23,12 +23,12 @@ describe('ImageService', () => {
 
   const shouldHaveProperLoggerExpectation = 'should have a proper logger';
   const shouldHaveProperLogger = () => {
-    expect(imageService.logger)
+    expect(service.logger)
       .withContext('logger should be set')
       .toEqual(jasmine.anything());
 
     const expected = 'ImageService';
-    const actual = imageService.logger.className;
+    const actual = service.logger.className;
 
     expect(actual)
       .withContext('logger should be set with expected value')
@@ -42,7 +42,7 @@ describe('ImageService', () => {
         new LogPublishersService(devEnv)
       );
       preloaderService = new PreloaderService(logService);
-      imageService = new ImageService(preloaderService, logService);
+      service = new ImageService(preloaderService, logService);
     });
 
     it(shouldHaveProperLoggerExpectation, shouldHaveProperLogger);
@@ -55,7 +55,7 @@ describe('ImageService', () => {
         new LogPublishersService(stagingEnv)
       );
       preloaderService = new PreloaderService(logService);
-      imageService = new ImageService(preloaderService, logService);
+      service = new ImageService(preloaderService, logService);
     });
 
     it(shouldHaveProperLoggerExpectation, shouldHaveProperLogger);
@@ -68,7 +68,7 @@ describe('ImageService', () => {
         new LogPublishersService(prodEnv)
       );
       preloaderService = new PreloaderService(logService);
-      imageService = new ImageService(preloaderService, logService);
+      service = new ImageService(preloaderService, logService);
     });
 
     it(shouldHaveProperLoggerExpectation, shouldHaveProperLogger);
@@ -81,59 +81,59 @@ describe('ImageService', () => {
       const imgInput = document.createElement('img');
       const loadersInput = [Preloaders.MAIN];
 
-      expect(imageService['images'].get(imgInput))
+      expect(service['images'].get(imgInput))
         .withContext('img should not appear in map at first')
         .not.toEqual(jasmine.anything());
 
-      imageService.imageLoading(imgInput, loadersInput);
+      service.imageLoading(imgInput, loadersInput);
 
-      expect(imageService['images'].get(imgInput))
+      expect(service['images'].get(imgInput))
         .withContext(
           'img should appear in map after imageLoading call - first call'
         )
         .toEqual(jasmine.anything());
-      expect(imageService['images'].get(imgInput)?.get(Preloaders.TEXTS))
+      expect(service['images'].get(imgInput)?.get(Preloaders.TEXTS))
         .withContext(
           'img should not be loading for Preloaders.TEXTS - first call'
         )
         .not.toEqual(jasmine.anything());
-      expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
+      expect(service['images'].get(imgInput)?.get(Preloaders.MAIN))
         .withContext('img should be loading for Preloaders.MAIN - first call')
         .toBeTrue();
 
-      imageService.imageLoading(imgInput, loadersInput);
+      service.imageLoading(imgInput, loadersInput);
 
-      expect(imageService['images'].get(imgInput))
+      expect(service['images'].get(imgInput))
         .withContext(
           'img should appear in map after imageLoading call - second call'
         )
         .toEqual(jasmine.anything());
-      expect(imageService['images'].get(imgInput)?.get(Preloaders.TEXTS))
+      expect(service['images'].get(imgInput)?.get(Preloaders.TEXTS))
         .withContext(
           'img should not be loading for Preloaders.TEXTS - second call'
         )
         .not.toEqual(jasmine.anything());
-      expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
+      expect(service['images'].get(imgInput)?.get(Preloaders.MAIN))
         .withContext('img should be loading for Preloaders.MAIN - second call')
         .toBeTrue();
 
       // assume it laters changes and map is updated : the preloader has loaded
       // should be done by imageLoadedOrError method
-      imageService['images'].get(imgInput)?.set(Preloaders.MAIN, false);
+      service['images'].get(imgInput)?.set(Preloaders.MAIN, false);
 
-      imageService.imageLoading(imgInput, loadersInput);
+      service.imageLoading(imgInput, loadersInput);
 
-      expect(imageService['images'].get(imgInput))
+      expect(service['images'].get(imgInput))
         .withContext(
           'img should appear in map after imageLoading call - third call'
         )
         .toEqual(jasmine.anything());
-      expect(imageService['images'].get(imgInput)?.get(Preloaders.TEXTS))
+      expect(service['images'].get(imgInput)?.get(Preloaders.TEXTS))
         .withContext(
           'img should not be loading for Preloaders.TEXTS - third call'
         )
         .not.toEqual(jasmine.anything());
-      expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
+      expect(service['images'].get(imgInput)?.get(Preloaders.MAIN))
         .withContext('img should be loading for Preloaders.MAIN - third call')
         .toBeTrue();
     };
@@ -146,7 +146,7 @@ describe('ImageService', () => {
 
       spyOn(preloaderService, 'toLoad');
 
-      imageService.imageLoading(imgInput, loadersInput);
+      service.imageLoading(imgInput, loadersInput);
 
       expect(preloaderService.toLoad)
         .withContext(
@@ -156,9 +156,9 @@ describe('ImageService', () => {
 
       // assume it laters changes and map is updated : the preloader has loaded
       // should be done by imageLoadedOrError method
-      imageService['images'].get(imgInput)?.set(Preloaders.TEXTS, false);
+      service['images'].get(imgInput)?.set(Preloaders.TEXTS, false);
 
-      imageService.imageLoading(imgInput, [Preloaders.MAIN, Preloaders.TEXTS]);
+      service.imageLoading(imgInput, [Preloaders.MAIN, Preloaders.TEXTS]);
 
       expect(preloaderService.toLoad)
         .withContext(
@@ -178,9 +178,9 @@ describe('ImageService', () => {
 
       spyOn(preloaderService, 'toLoad');
 
-      imageService.imageLoading(imgInput, loadersInput);
+      service.imageLoading(imgInput, loadersInput);
 
-      imageService.imageLoading(imgInput, loadersInput);
+      service.imageLoading(imgInput, loadersInput);
 
       expect(preloaderService.toLoad)
         .withContext('toLoad should have been called once - first time')
@@ -188,8 +188,8 @@ describe('ImageService', () => {
 
       // assume it laters changes and map is updated : the preloader has loaded
       // should be done by imageLoading method
-      imageService['images'].get(imgInput)?.set(Preloaders.TEXTS, true);
-      imageService.imageLoading(imgInput, [Preloaders.MAIN, Preloaders.TEXTS]);
+      service['images'].get(imgInput)?.set(Preloaders.TEXTS, true);
+      service.imageLoading(imgInput, [Preloaders.MAIN, Preloaders.TEXTS]);
 
       expect(preloaderService.toLoad)
         .withContext('toLoad should have been called once - second time')
@@ -203,7 +203,7 @@ describe('ImageService', () => {
           new LogPublishersService(devEnv)
         );
         preloaderService = new PreloaderService(logService);
-        imageService = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -224,7 +224,7 @@ describe('ImageService', () => {
           new LogPublishersService(stagingEnv)
         );
         preloaderService = new PreloaderService(logService);
-        imageService = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -245,7 +245,7 @@ describe('ImageService', () => {
           new LogPublishersService(prodEnv)
         );
         preloaderService = new PreloaderService(logService);
-        imageService = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -267,11 +267,11 @@ describe('ImageService', () => {
       const imgInput = document.createElement('img');
       const loadersInput = [Preloaders.MAIN];
 
-      imageService.imageLoading(imgInput, loadersInput);
+      service.imageLoading(imgInput, loadersInput);
 
-      imageService.imageLoadedOrError(imgInput, loadersInput);
+      service.imageLoadedOrError(imgInput, loadersInput);
 
-      expect(imageService['images'].get(imgInput)?.get(Preloaders.MAIN))
+      expect(service['images'].get(imgInput)?.get(Preloaders.MAIN))
         .withContext('img should not be loading for Preloaders.MAIN')
         .toBeFalse();
     };
@@ -284,9 +284,9 @@ describe('ImageService', () => {
 
       spyOn(preloaderService, 'loaded');
 
-      imageService.imageLoading(imgInput, loadersInput);
+      service.imageLoading(imgInput, loadersInput);
 
-      imageService.imageLoadedOrError(imgInput, loadersInput);
+      service.imageLoadedOrError(imgInput, loadersInput);
 
       expect(preloaderService.loaded)
         .withContext(
@@ -296,12 +296,9 @@ describe('ImageService', () => {
 
       // assume it laters changes and map is updated : the preloader has loaded
       // should be done by imageLoading method
-      imageService['images'].get(imgInput)?.set(Preloaders.TEXTS, true);
+      service['images'].get(imgInput)?.set(Preloaders.TEXTS, true);
 
-      imageService.imageLoadedOrError(imgInput, [
-        Preloaders.MAIN,
-        Preloaders.TEXTS,
-      ]);
+      service.imageLoadedOrError(imgInput, [Preloaders.MAIN, Preloaders.TEXTS]);
 
       expect(preloaderService.loaded)
         .withContext(
@@ -321,20 +318,17 @@ describe('ImageService', () => {
 
       spyOn(preloaderService, 'loaded');
 
-      imageService.imageLoading(imgInput, loadersInput);
+      service.imageLoading(imgInput, loadersInput);
 
-      imageService.imageLoadedOrError(imgInput, loadersInput);
+      service.imageLoadedOrError(imgInput, loadersInput);
 
-      imageService.imageLoadedOrError(imgInput, loadersInput);
+      service.imageLoadedOrError(imgInput, loadersInput);
 
-      imageService.imageLoadedOrError(imgInput, [
-        Preloaders.MAIN,
-        Preloaders.TEXTS,
-      ]);
+      service.imageLoadedOrError(imgInput, [Preloaders.MAIN, Preloaders.TEXTS]);
 
-      imageService['images'].get(imgInput)?.set(Preloaders.TEXTS, false);
+      service['images'].get(imgInput)?.set(Preloaders.TEXTS, false);
 
-      imageService.imageLoadedOrError(imgInput, [Preloaders.TEXTS]);
+      service.imageLoadedOrError(imgInput, [Preloaders.TEXTS]);
 
       expect(preloaderService.loaded)
         .withContext('loaded should have been called once')
@@ -348,7 +342,7 @@ describe('ImageService', () => {
           new LogPublishersService(devEnv)
         );
         preloaderService = new PreloaderService(logService);
-        imageService = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -369,7 +363,7 @@ describe('ImageService', () => {
           new LogPublishersService(stagingEnv)
         );
         preloaderService = new PreloaderService(logService);
-        imageService = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -390,7 +384,7 @@ describe('ImageService', () => {
           new LogPublishersService(prodEnv)
         );
         preloaderService = new PreloaderService(logService);
-        imageService = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);

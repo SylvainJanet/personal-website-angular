@@ -74,7 +74,9 @@ export class CvAboutMeComponent
     public visibleToLoadTextService: VisibleToLoadTextService
   ) {
     this.logger = logService.withClassName('CvAboutMeComponent');
-    this.visibleToLoadTextService.subscribe(this);
+    setTimeout(() => {
+      this.visibleToLoadTextService.subscribe(this);
+    }, 0);
   }
 
   /**

@@ -1,0 +1,40 @@
+<div
+  class="row"
+  [class.selected-row]="isCurrent"
+  [class.unselected-row]="!isCurrent"
+  [class.first-row]="isFirstRow"
+  [class.last-row]="isLastRow"
+>
+  <div class="col-6 language-name-container">
+    <span class="language-name">{{ languageName }}</span>
+  </div>
+  <div
+    *ngIf="
+      flagSelectors.length === 2;
+      then firstColTwoLanguages;
+      else firstColOneLanguage
+    "
+  ></div>
+  <div
+    *ngIf="
+      flagSelectors.length === 2;
+      then secondColTwoLanguages;
+      else secondColOneLanguage
+    "
+  ></div>
+
+  <ng-template #firstColTwoLanguages>
+    <div class="col-3 flag-container">
+      <span class="flag-icon fi" [class]="'fi-' + flagSelectors[0]"></span></div
+  ></ng-template>
+  <ng-template #secondColTwoLanguages>
+    <div class="col-3 flag-container">
+      <span class="flag-icon fi" [class]="'fi-' + flagSelectors[1]"></span></div
+  ></ng-template>
+
+  <ng-template #firstColOneLanguage> <div class="offset-3"></div></ng-template>
+  <ng-template #secondColOneLanguage>
+    <div class="col-3 flag-container">
+      <span class="flag-icon fi" [class]="'fi-' + flagSelectors[0]"></span></div
+  ></ng-template>
+</div>

@@ -3,11 +3,9 @@ import { DOMComputationService } from 'src/app/services/domcomputation/domcomput
 import { LogService } from 'src/app/services/log/log.service';
 import { DebugElement } from '@angular/core';
 import { ButtonBarOnHoverComponent } from './button-bar-on-hover.component';
-import { first } from 'rxjs';
 
 describe('ButtonBarOnHoverComponent - dom integration', () => {
   let fixture: ComponentFixture<ButtonBarOnHoverComponent>;
-  let componentInstance: ButtonBarOnHoverComponent;
   let logServiceGlobalSpy: jasmine.SpyObj<LogService>;
   let logServiceSpy: jasmine.SpyObj<LogService>;
   let DOMComputationServiceSpy: jasmine.SpyObj<DOMComputationService>;
@@ -35,13 +33,12 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ButtonBarOnHoverComponent);
-    componentInstance = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   describe('button element', () => {
-    let buttonDebugEl: DebugElement;
     let lineDebugEl: DebugElement;
+    let buttonDebugEl: DebugElement;
     beforeEach(() => {
       buttonDebugEl = fixture.debugElement.children[0].children[0];
       lineDebugEl = fixture.debugElement.children[0].children[1];
@@ -59,6 +56,8 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
         .not.toBe('0%');
 
       buttonDebugEl.triggerEventHandler('click');
+      buttonDebugEl.triggerEventHandler('click');
+      lineDebugEl.triggerEventHandler('click');
       fixture.detectChanges();
 
       expect(lineDebugEl.styles['width'])
@@ -142,20 +141,6 @@ describe('ButtonBarOnHoverComponent - dom integration', () => {
       expect(lineDebugEl.styles['width'])
         .withContext('width should be defined')
         .toBe(expectedLength + 'px');
-    });
-    it('should emit press event on click event', () => {
-      const expectedEvent = new Event('click');
-      let emitted: Event | undefined;
-
-      componentInstance.press
-        .pipe(first())
-        .subscribe((e: Event) => (emitted = e));
-
-      buttonDebugEl.triggerEventHandler('click', expectedEvent);
-
-      expect(emitted)
-        .withContext('event should be emitted')
-        .toBe(expectedEvent);
     });
   });
 });

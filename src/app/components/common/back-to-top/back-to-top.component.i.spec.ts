@@ -9,7 +9,7 @@ import { TextService } from 'src/app/services/db/text/text.service';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
 
 describe('BackToTopComponent - integration', () => {
-  let backToTopComponent: BackToTopComponent;
+  let component: BackToTopComponent;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   const devEnv = developmentEnvironment;
   const stagingEnv = stagingEnvironment;
@@ -25,7 +25,7 @@ describe('BackToTopComponent - integration', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(backToTopComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
@@ -39,7 +39,7 @@ describe('BackToTopComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        backToTopComponent = TestBed.inject(BackToTopComponent);
+        component = TestBed.inject(BackToTopComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -53,7 +53,7 @@ describe('BackToTopComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        backToTopComponent = TestBed.inject(BackToTopComponent);
+        component = TestBed.inject(BackToTopComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -67,7 +67,7 @@ describe('BackToTopComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        backToTopComponent = TestBed.inject(BackToTopComponent);
+        component = TestBed.inject(BackToTopComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
     });
@@ -77,9 +77,9 @@ describe('BackToTopComponent - integration', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesTextServiceResult = () => {
-      backToTopComponent.updateTexts();
+      component.updateTexts();
 
-      const actualAltTxtObs = backToTopComponent.altTxt;
+      const actualAltTxtObs = component.altTxt;
 
       actualAltTxtObs.subscribe((s) => {
         expect(s)
@@ -97,7 +97,7 @@ describe('BackToTopComponent - integration', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        backToTopComponent = TestBed.inject(BackToTopComponent);
+        component = TestBed.inject(BackToTopComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -114,7 +114,7 @@ describe('BackToTopComponent - integration', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        backToTopComponent = TestBed.inject(BackToTopComponent);
+        component = TestBed.inject(BackToTopComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,
@@ -131,7 +131,7 @@ describe('BackToTopComponent - integration', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        backToTopComponent = TestBed.inject(BackToTopComponent);
+        component = TestBed.inject(BackToTopComponent);
       });
       it(
         shouldSetPropertiesTextServiceResultExpectation,

@@ -130,6 +130,43 @@ Not done classes : w-100
   max-width: var(--prct-12);
 }
 
+.offset-1 {
+  margin-left: var(--prct-1);
+}
+.offset-2 {
+  margin-left: var(--prct-2);
+}
+.offset-3 {
+  margin-left: var(--prct-3);
+}
+.offset-4 {
+  margin-left: var(--prct-4);
+}
+.offset-5 {
+  margin-left: var(--prct-5);
+}
+.offset-6 {
+  margin-left: var(--prct-6);
+}
+.offset-7 {
+  margin-left: var(--prct-7);
+}
+.offset-8 {
+  margin-left: var(--prct-8);
+}
+.offset-9 {
+  margin-left: var(--prct-9);
+}
+.offset-10 {
+  margin-left: var(--prct-10);
+}
+.offset-11 {
+  margin-left: var(--prct-11);
+}
+.offset-12 {
+  margin-left: var(--prct-12);
+}
+
 .col,
 .col-1,
 .col-2,

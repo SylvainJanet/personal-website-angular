@@ -10,7 +10,7 @@ import { LogLevel } from './logLevel/logLevel';
 import { of, throwError } from 'rxjs';
 import { LogEntry } from './logEntry/logEntry';
 
-let logService: LogService;
+let service: LogService;
 let logPublishersService: LogPublishersService;
 const devEnv = developmentEnvironment;
 const stagingEnv = stagingEnvironment;
@@ -21,7 +21,7 @@ describe('LogService - unit', () => {
     'should have a level set by the environment';
   const levelSetByEnvironment = (env: IEnvironment) => {
     const expected = env.logLevel;
-    const actual = logService.level;
+    const actual = service.level;
 
     expect(actual).withContext('level should be set').toBe(expected);
   };
@@ -30,7 +30,7 @@ describe('LogService - unit', () => {
     'should log with date if set by the environment';
   const withDateSetByEnvironment = (env: IEnvironment) => {
     const expected = env.logWithDate;
-    const actual = logService.logWithDate;
+    const actual = service.logWithDate;
 
     expect(actual).withContext('logWithDate should be set').toBe(expected);
   };
@@ -41,9 +41,9 @@ describe('LogService - unit', () => {
     const expected = [new LogConsole(), new LogLocalStorage(env)];
 
     spyOnProperty(logPublishersService, 'publishers').and.returnValue(expected);
-    logService = new LogService(env, logPublishersService);
+    service = new LogService(env, logPublishersService);
 
-    const actual = logService.publishers;
+    const actual = service.publishers;
     expect(actual).withContext('publishers should be set').toEqual(expected);
   };
 
@@ -51,7 +51,7 @@ describe('LogService - unit', () => {
     "should have 'none specified' class name by default";
   const classNameDefault = () => {
     const expected = 'none specified';
-    const actual = logService.className;
+    const actual = service.className;
 
     expect(actual).withContext('className should be set').toBe(expected);
   };
@@ -59,7 +59,7 @@ describe('LogService - unit', () => {
   describe('in dev environment', () => {
     beforeEach(() => {
       logPublishersService = new LogPublishersService(devEnv);
-      logService = new LogService(devEnv, logPublishersService);
+      service = new LogService(devEnv, logPublishersService);
     });
     it(levelSetByEnvironmentExpectation, () => levelSetByEnvironment(devEnv));
     it(withDateSetByEnvironmentExpectation, () =>
@@ -71,7 +71,7 @@ describe('LogService - unit', () => {
   describe('in staging environment', () => {
     beforeEach(() => {
       logPublishersService = new LogPublishersService(stagingEnv);
-      logService = new LogService(stagingEnv, logPublishersService);
+      service = new LogService(stagingEnv, logPublishersService);
     });
     it(levelSetByEnvironmentExpectation, () =>
       levelSetByEnvironment(stagingEnv)
@@ -87,7 +87,7 @@ describe('LogService - unit', () => {
   describe('in prod environment', () => {
     beforeEach(() => {
       logPublishersService = new LogPublishersService(prodEnv);
-      logService = new LogService(prodEnv, logPublishersService);
+      service = new LogService(prodEnv, logPublishersService);
     });
     it(levelSetByEnvironmentExpectation, () => levelSetByEnvironment(prodEnv));
     it(withDateSetByEnvironmentExpectation, () =>
@@ -103,7 +103,7 @@ describe('LogService - unit', () => {
     const shouldReturnNewServiceExpectation =
       'should return a new LogService instance';
     const shouldReturnNewService = () => {
-      const result = logService.withClassName('Test');
+      const result = service.withClassName('Test');
       expect(result)
         .withContext('should return a non null value')
         .toEqual(jasmine.anything());
@@ -112,8 +112,8 @@ describe('LogService - unit', () => {
     const shouldReturnNewServiceWithCorrectLevelExpectation =
       'should return a new LogService instance with correct level';
     const shouldReturnNewServiceWithCorrectLevel = () => {
-      const expected = logService.level;
-      const result = logService.withClassName('Test');
+      const expected = service.level;
+      const result = service.withClassName('Test');
       const actual = result.level;
 
       expect(actual).withContext('level should be as expected').toBe(expected);
@@ -122,8 +122,8 @@ describe('LogService - unit', () => {
     const shouldReturnNewServiceWithCorrectLogWithDateExpectation =
       'should return a new LogService instance with correct logWithDate';
     const shouldReturnNewServiceWithCorrectLogWithDate = () => {
-      const expected = logService.logWithDate;
-      const result = logService.withClassName('Test');
+      const expected = service.logWithDate;
+      const result = service.withClassName('Test');
       const actual = result.logWithDate;
 
       expect(actual)
@@ -139,7 +139,7 @@ describe('LogService - unit', () => {
       spyOnProperty(logPublishersService, 'publishers').and.returnValue(
         expected
       );
-      const result = logService.withClassName('Test');
+      const result = service.withClassName('Test');
 
       const actual = result.publishers;
       expect(actual)
@@ -151,7 +151,7 @@ describe('LogService - unit', () => {
       'should return a new LogService instance with correct class name';
     const shouldReturnNewServiceWithCorrectClassName = () => {
       const expected = 'Test';
-      const result = logService.withClassName(expected);
+      const result = service.withClassName(expected);
       const actual = result.className;
 
       expect(actual)
@@ -162,7 +162,7 @@ describe('LogService - unit', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(shouldReturnNewServiceExpectation, shouldReturnNewService);
       it(
@@ -184,7 +184,7 @@ describe('LogService - unit', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(shouldReturnNewServiceExpectation, shouldReturnNewService);
       it(
@@ -206,7 +206,7 @@ describe('LogService - unit', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(shouldReturnNewServiceExpectation, shouldReturnNewService);
       it(
@@ -231,7 +231,7 @@ describe('LogService - unit', () => {
     'should call writeToLog method with appropriate parameters';
   const useWriteToLogMethod = (level: LogLevel, done: DoneFn) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn<any>(logService, 'writeToLog');
+    spyOn<any>(service, 'writeToLog');
 
     const message = 'This is a test';
     const param1 = true;
@@ -240,26 +240,26 @@ describe('LogService - unit', () => {
 
     switch (level) {
       case LogLevel.Debug:
-        logService.debug(message, param1, param2, param3);
+        service.debug(message, param1, param2, param3);
         break;
       case LogLevel.Info:
-        logService.info(message, param1, param2, param3);
+        service.info(message, param1, param2, param3);
         break;
       case LogLevel.Warn:
-        logService.warn(message, param1, param2, param3);
+        service.warn(message, param1, param2, param3);
         break;
       case LogLevel.Error:
-        logService.error(message, param1, param2, param3);
+        service.error(message, param1, param2, param3);
         break;
       case LogLevel.Fatal:
-        logService.fatal(message, param1, param2, param3);
+        service.fatal(message, param1, param2, param3);
         break;
       default:
         done.fail('LogLevel not recognized');
         break;
     }
 
-    expect(logService['writeToLog'])
+    expect(service['writeToLog'])
       .withContext(
         'writeToLog should have been called once with proper arguments'
       )
@@ -281,7 +281,7 @@ describe('LogService - unit', () => {
     spyOnProperty(logPublishersService, 'publishers').and.returnValue(
       publishers
     );
-    logService = new LogService(env, logPublishersService);
+    service = new LogService(env, logPublishersService);
 
     spyOn(logConsole, 'log').and.returnValue(of(true));
     spyOn(logLocalStorage, 'log').and.returnValue(of(true));
@@ -293,19 +293,19 @@ describe('LogService - unit', () => {
 
     switch (level) {
       case LogLevel.Debug:
-        logService.debug(message, param1, param2, param3);
+        service.debug(message, param1, param2, param3);
         break;
       case LogLevel.Info:
-        logService.info(message, param1, param2, param3);
+        service.info(message, param1, param2, param3);
         break;
       case LogLevel.Warn:
-        logService.warn(message, param1, param2, param3);
+        service.warn(message, param1, param2, param3);
         break;
       case LogLevel.Error:
-        logService.error(message, param1, param2, param3);
+        service.error(message, param1, param2, param3);
         break;
       case LogLevel.Fatal:
-        logService.fatal(message, param1, param2, param3);
+        service.fatal(message, param1, param2, param3);
         break;
       default:
         done.fail('LogLevel not recognized');
@@ -338,7 +338,7 @@ describe('LogService - unit', () => {
     spyOnProperty(logPublishersService, 'publishers').and.returnValue(
       publishers
     );
-    logService = new LogService(env, logPublishersService);
+    service = new LogService(env, logPublishersService);
 
     spyOn(logConsole, 'log').and.returnValue(of(true));
     spyOn(logLocalStorage, 'log').and.returnValue(of(true));
@@ -350,19 +350,19 @@ describe('LogService - unit', () => {
 
     switch (level) {
       case LogLevel.Debug:
-        logService.debug(message, param1, param2, param3);
+        service.debug(message, param1, param2, param3);
         break;
       case LogLevel.Info:
-        logService.info(message, param1, param2, param3);
+        service.info(message, param1, param2, param3);
         break;
       case LogLevel.Warn:
-        logService.warn(message, param1, param2, param3);
+        service.warn(message, param1, param2, param3);
         break;
       case LogLevel.Error:
-        logService.error(message, param1, param2, param3);
+        service.error(message, param1, param2, param3);
         break;
       case LogLevel.Fatal:
-        logService.fatal(message, param1, param2, param3);
+        service.fatal(message, param1, param2, param3);
         break;
       default:
         done.fail('LogLevel not recognized');
@@ -394,7 +394,7 @@ describe('LogService - unit', () => {
     spyOnProperty(logPublishersService, 'publishers').and.returnValue(
       publishers
     );
-    logService = new LogService(env, logPublishersService);
+    service = new LogService(env, logPublishersService);
 
     spyOn(logConsole, 'log').and.returnValue(of(true));
     spyOn(logLocalStorage, 'log').and.returnValue(of(true));
@@ -409,19 +409,19 @@ describe('LogService - unit', () => {
 
     switch (level) {
       case LogLevel.Debug:
-        logService.debug(message, param1, param2, param3);
+        service.debug(message, param1, param2, param3);
         break;
       case LogLevel.Info:
-        logService.info(message, param1, param2, param3);
+        service.info(message, param1, param2, param3);
         break;
       case LogLevel.Warn:
-        logService.warn(message, param1, param2, param3);
+        service.warn(message, param1, param2, param3);
         break;
       case LogLevel.Error:
-        logService.error(message, param1, param2, param3);
+        service.error(message, param1, param2, param3);
         break;
       case LogLevel.Fatal:
-        logService.fatal(message, param1, param2, param3);
+        service.fatal(message, param1, param2, param3);
         break;
       default:
         done.fail('LogLevel not recognized');
@@ -433,8 +433,8 @@ describe('LogService - unit', () => {
       expected.message = message;
       expected.level = level;
       expected.extraInfo = [param1, param2, param3];
-      expected.logWithDate = logService.logWithDate;
-      expected.className = logService.className;
+      expected.logWithDate = service.logWithDate;
+      expected.className = service.className;
 
       expect(logConsole.log)
         .withContext(
@@ -465,7 +465,7 @@ describe('LogService - unit', () => {
     spyOnProperty(logPublishersService, 'publishers').and.returnValue(
       publishers
     );
-    logService = new LogService(env, logPublishersService);
+    service = new LogService(env, logPublishersService);
 
     spyOn(logConsole, 'log').and.returnValue(of(false));
     spyOn(logLocalStorage, 'log').and.returnValue(of(false));
@@ -479,19 +479,19 @@ describe('LogService - unit', () => {
 
     switch (level) {
       case LogLevel.Debug:
-        logService.debug(message, param1, param2, param3);
+        service.debug(message, param1, param2, param3);
         break;
       case LogLevel.Info:
-        logService.info(message, param1, param2, param3);
+        service.info(message, param1, param2, param3);
         break;
       case LogLevel.Warn:
-        logService.warn(message, param1, param2, param3);
+        service.warn(message, param1, param2, param3);
         break;
       case LogLevel.Error:
-        logService.error(message, param1, param2, param3);
+        service.error(message, param1, param2, param3);
         break;
       case LogLevel.Fatal:
-        logService.fatal(message, param1, param2, param3);
+        service.fatal(message, param1, param2, param3);
         break;
       default:
         done.fail('LogLevel not recognized');
@@ -528,7 +528,7 @@ describe('LogService - unit', () => {
     spyOnProperty(logPublishersService, 'publishers').and.returnValue(
       publishers
     );
-    logService = new LogService(env, logPublishersService);
+    service = new LogService(env, logPublishersService);
 
     spyOn(logConsole, 'log').and.returnValue(
       throwError(() => new Error("Test d'erreur"))
@@ -546,19 +546,19 @@ describe('LogService - unit', () => {
 
     switch (level) {
       case LogLevel.Debug:
-        logService.debug(message, param1, param2, param3);
+        service.debug(message, param1, param2, param3);
         break;
       case LogLevel.Info:
-        logService.info(message, param1, param2, param3);
+        service.info(message, param1, param2, param3);
         break;
       case LogLevel.Warn:
-        logService.warn(message, param1, param2, param3);
+        service.warn(message, param1, param2, param3);
         break;
       case LogLevel.Error:
-        logService.error(message, param1, param2, param3);
+        service.error(message, param1, param2, param3);
         break;
       case LogLevel.Fatal:
-        logService.fatal(message, param1, param2, param3);
+        service.fatal(message, param1, param2, param3);
         break;
       default:
         done.fail('LogLevel not recognized');
@@ -585,7 +585,7 @@ describe('LogService - unit', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Debug, done)
@@ -609,7 +609,7 @@ describe('LogService - unit', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Debug, done)
@@ -637,7 +637,7 @@ describe('LogService - unit', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Debug, done)
@@ -664,7 +664,7 @@ describe('LogService - unit', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Info, done)
@@ -688,7 +688,7 @@ describe('LogService - unit', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Info, done)
@@ -716,7 +716,7 @@ describe('LogService - unit', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Info, done)
@@ -743,7 +743,7 @@ describe('LogService - unit', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Warn, done)
@@ -767,7 +767,7 @@ describe('LogService - unit', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Warn, done)
@@ -795,7 +795,7 @@ describe('LogService - unit', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Warn, done)
@@ -822,7 +822,7 @@ describe('LogService - unit', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Error, done)
@@ -846,7 +846,7 @@ describe('LogService - unit', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Error, done)
@@ -874,7 +874,7 @@ describe('LogService - unit', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Error, done)
@@ -901,7 +901,7 @@ describe('LogService - unit', () => {
     describe('in dev environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(devEnv);
-        logService = new LogService(devEnv, logPublishersService);
+        service = new LogService(devEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Fatal, done)
@@ -925,7 +925,7 @@ describe('LogService - unit', () => {
     describe('in staging environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(stagingEnv);
-        logService = new LogService(stagingEnv, logPublishersService);
+        service = new LogService(stagingEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Fatal, done)
@@ -953,7 +953,7 @@ describe('LogService - unit', () => {
     describe('in prod environment', () => {
       beforeEach(() => {
         logPublishersService = new LogPublishersService(prodEnv);
-        logService = new LogService(prodEnv, logPublishersService);
+        service = new LogService(prodEnv, logPublishersService);
       });
       it(useWriteToLogMethodExpectation, (done: DoneFn) =>
         useWriteToLogMethod(LogLevel.Fatal, done)

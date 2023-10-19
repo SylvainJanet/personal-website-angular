@@ -45,6 +45,12 @@ export class VisibleToLoadTextService implements OnDestroy {
    * already loading.
    */
   toReload: Map<ComponentWithText, boolean>;
+  /**
+   * Allow any {@link ComponentWithText} to be loaded when appropriate only once.
+   * Usefull for language names for instance, which are loaded in their onw
+   * languages and thus do not need to be reloaded on language change.
+   */
+  onlyOnce: Map<ComponentWithText, boolean>;
 
   /** Scroll subscription to the {@link WindowScrollService} scroll observable */
   scroll: Subscription;
@@ -56,13 +62,13 @@ export class VisibleToLoadTextService implements OnDestroy {
    * buffer, a buffer factor of 1 means that the viewport height is extended
    * (both up and down) by another viewport height.
    */
-  bufferFactorHeight = 2;
+  bufferFactorHeight = 0.5;
   /**
    * Buffer factor for the width. For instance, a buffer factor of 0 means no
    * buffer, a buffer factor of 1 means that the viewport width is extended
    * (both left and right) by another viewport width.
    */
-  bufferFactorWidth = 1;
+  bufferFactorWidth = 0.25;
 
   /**
    * VisibleToLoadText service constructor
@@ -86,6 +92,7 @@ export class VisibleToLoadTextService implements OnDestroy {
     this.loaded = new Map<ComponentWithText, boolean>();
     this.loading = new Map<ComponentWithText, boolean>();
     this.toReload = new Map<ComponentWithText, boolean>();
+    this.onlyOnce = new Map<ComponentWithText, boolean>();
   }
 
   /**
@@ -104,12 +111,13 @@ export class VisibleToLoadTextService implements OnDestroy {
    *
    * @param s The {@link ComponentWithText}
    */
-  subscribe(s: ComponentWithText) {
+  subscribe(s: ComponentWithText, onlyOnce = false) {
     this.subscribers.push(s);
     this.loaded.set(s, false);
     this.loading.set(s, false);
     this.toReload.set(s, false);
     this.loadNewTextsOf(s);
+    this.onlyOnce.set(s, onlyOnce);
   }
 
   /**
@@ -183,6 +191,11 @@ export class VisibleToLoadTextService implements OnDestroy {
    * @param comp The {@link ComponentWithText}
    */
   loadNewTextsOf(comp: ComponentWithText) {
+    if (
+      (this.loading.get(comp) || this.loaded.get(comp)) &&
+      this.onlyOnce.get(comp)
+    )
+      return;
     this.updateVisibilityOf(comp);
     if (
       this.visibility.get(comp) &&
@@ -211,11 +224,17 @@ export class VisibleToLoadTextService implements OnDestroy {
     for (const comp of this.subscribers) {
       // if the language change occurs during the loading of a component's text and
       // is not into view, the component should reload the texts with the correct language
-      if (this.loading.get(comp) && !this.loaded.get(comp)) {
+      if (
+        this.loading.get(comp) &&
+        !this.loaded.get(comp) &&
+        !this.onlyOnce.get(comp)
+      ) {
         this.toReload.set(comp, true);
       }
-      this.loading.set(comp, false);
-      this.loaded.set(comp, false);
+      if (!this.onlyOnce.get(comp)) {
+        this.loading.set(comp, false);
+        this.loaded.set(comp, false);
+      }
     }
     this.loadNewTexts();
   }

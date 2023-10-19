@@ -5,20 +5,20 @@ import { environment as productionEnvironment } from 'src/environments/environme
 import { LogEntry } from '../../logEntry/logEntry';
 import { LogLevel } from '../../logLevel/logLevel';
 
-let logConsole: LogConsole;
+let objToTest: LogConsole;
 let entry: LogEntry;
 const devEnv = developmentEnvironment;
 const stagingEnv = stagingEnvironment;
 const prodEnv = productionEnvironment;
 
-describe('LogConsole', () => {
+describe('LogConsole - unit', () => {
   beforeEach(() => {
-    logConsole = new LogConsole();
+    objToTest = new LogConsole();
   });
 
   const shouldLogEntryExpectation = 'should log an entry to the console';
   const shouldLogEntry = (done: DoneFn) => {
-    const result = logConsole.log(entry);
+    const result = objToTest.log(entry);
 
     result.subscribe({
       next: () => {
@@ -34,7 +34,7 @@ describe('LogConsole', () => {
   const returnTrueAfterLoggingExpectation = 'should return true after logging';
   const returnTrueAfterLogging = (done: DoneFn) => {
     const expected = true;
-    const result = logConsole.log(entry);
+    const result = objToTest.log(entry);
 
     result.subscribe({
       next: (actual) => {
@@ -96,7 +96,7 @@ describe('LogConsole', () => {
     });
 
     it('should clear the console', (done: DoneFn) => {
-      const result = logConsole.clear();
+      const result = objToTest.clear();
 
       result.subscribe({
         next: () => {
@@ -111,7 +111,7 @@ describe('LogConsole', () => {
 
     it('should return true after clearing', (done: DoneFn) => {
       const expected = true;
-      const result = logConsole.clear();
+      const result = objToTest.clear();
 
       result.subscribe({
         next: (actual) => {

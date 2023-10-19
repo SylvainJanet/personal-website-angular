@@ -4,7 +4,7 @@ import { ImgLoadDirective } from './img-load.directive';
 import { ElementRef, SimpleChange } from '@angular/core';
 
 describe('ImgLoadDirective - unit', () => {
-  let imgLoadDirective: ImgLoadDirective;
+  let directive: ImgLoadDirective;
   let elementRefSpy: jasmine.SpyObj<ElementRef>;
   let imageServiceSpy: jasmine.SpyObj<ImageService>;
 
@@ -25,26 +25,26 @@ describe('ImgLoadDirective - unit', () => {
         { provide: ElementRef, useValue: elementRefSpy },
       ],
     });
-    imgLoadDirective = TestBed.inject(ImgLoadDirective);
+    directive = TestBed.inject(ImgLoadDirective);
   });
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(imgLoadDirective)
+      expect(directive)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
-      expect(imgLoadDirective)
+      expect(directive)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(imgLoadDirective.appImgLoad)
+      expect(directive.appImgLoad)
         .withContext('appImgLoad should be set')
         .toEqual([]);
 
-      expect(imgLoadDirective.isLoadedOrError)
+      expect(directive.isLoadedOrError)
         .withContext('isLoadedOrError should be set')
         .toBeFalse();
     });
@@ -52,25 +52,25 @@ describe('ImgLoadDirective - unit', () => {
 
   describe('ngOnChanges method', () => {
     it('should notify the imageService when the directive value is injected and isLoadedOrError is false', () => {
-      imgLoadDirective.isLoadedOrError = false;
-      const change = new SimpleChange(undefined, imgLoadDirective, false);
+      directive.isLoadedOrError = false;
+      const change = new SimpleChange(undefined, directive, false);
       const changes = { appImgLoad: change };
 
-      imgLoadDirective.ngOnChanges(changes);
+      directive.ngOnChanges(changes);
 
       expect(imageServiceSpy.imageLoading)
         .withContext('imageLoading should have been called')
         .toHaveBeenCalledOnceWith(
           elementRefSpy.nativeElement,
-          imgLoadDirective.appImgLoad
+          directive.appImgLoad
         );
     });
     it('should not notify the imageService if isLoadedOrError is true', () => {
-      imgLoadDirective.isLoadedOrError = true;
-      const change = new SimpleChange(undefined, imgLoadDirective, false);
+      directive.isLoadedOrError = true;
+      const change = new SimpleChange(undefined, directive, false);
       const changes = { appImgLoad: change };
 
-      imgLoadDirective.ngOnChanges(changes);
+      directive.ngOnChanges(changes);
 
       expect(imageServiceSpy.imageLoading)
         .withContext('imageLoading should not have been called')
@@ -80,10 +80,10 @@ describe('ImgLoadDirective - unit', () => {
 
   describe('onLoad method', () => {
     it('should call the loadOrError method', () => {
-      spyOn(imgLoadDirective, 'loadOrError');
-      imgLoadDirective.onLoad();
+      spyOn(directive, 'loadOrError');
+      directive.onLoad();
 
-      expect(imgLoadDirective.loadOrError)
+      expect(directive.loadOrError)
         .withContext('loadOrError should have been called')
         .toHaveBeenCalledTimes(1);
     });
@@ -91,10 +91,10 @@ describe('ImgLoadDirective - unit', () => {
 
   describe('onError method', () => {
     it('should call the loadOrError method', () => {
-      spyOn(imgLoadDirective, 'loadOrError');
-      imgLoadDirective.onError();
+      spyOn(directive, 'loadOrError');
+      directive.onError();
 
-      expect(imgLoadDirective.loadOrError)
+      expect(directive.loadOrError)
         .withContext('loadOrError should have been called')
         .toHaveBeenCalledTimes(1);
     });
@@ -102,30 +102,30 @@ describe('ImgLoadDirective - unit', () => {
 
   describe('loadOrError method', () => {
     it('should notify the service if isLoadedOrError is false', () => {
-      imgLoadDirective.isLoadedOrError = false;
+      directive.isLoadedOrError = false;
 
-      imgLoadDirective.loadOrError();
+      directive.loadOrError();
 
       expect(imageServiceSpy.imageLoadedOrError)
         .withContext('imageLoadedOrError should have been called')
         .toHaveBeenCalledOnceWith(
           elementRefSpy.nativeElement,
-          imgLoadDirective.appImgLoad
+          directive.appImgLoad
         );
     });
     it('should change isLoadedOrError to true if it is false', () => {
-      imgLoadDirective.isLoadedOrError = false;
+      directive.isLoadedOrError = false;
 
-      imgLoadDirective.loadOrError();
+      directive.loadOrError();
 
-      expect(imgLoadDirective.isLoadedOrError)
+      expect(directive.isLoadedOrError)
         .withContext('isLoadedOrError should be set')
         .toBeTrue();
     });
     it('should not notify the service if isLoadedOrError is true', () => {
-      imgLoadDirective.isLoadedOrError = true;
+      directive.isLoadedOrError = true;
 
-      imgLoadDirective.loadOrError();
+      directive.loadOrError();
 
       expect(imageServiceSpy.imageLoadedOrError)
         .withContext('imageLoadedOrError should not have been called')

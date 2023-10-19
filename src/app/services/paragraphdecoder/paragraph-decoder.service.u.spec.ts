@@ -3,19 +3,18 @@ import { ParagraphDecoderService } from './paragraph-decoder.service';
 import { SubParagraph } from 'src/app/components/classes/subparagraph/subParagraph';
 import { Paragraph } from 'src/app/components/classes/paragraph/paragraph';
 
-let paragraphDecoderService: ParagraphDecoderService;
+let service: ParagraphDecoderService;
 
 describe('ParagraphDecoderService', () => {
   beforeEach(() => {
-    paragraphDecoderService = new ParagraphDecoderService();
+    service = new ParagraphDecoderService();
   });
   describe('decodeSubParagraphSpan method', () => {
     it('should decode a span subparagraph', () => {
       const textInput = 'this is a test';
       const expected = new SubParagraph(SubParagraphRoot.SPAN, textInput);
 
-      const actual =
-        paragraphDecoderService['decodeSubParagraphSpan'](textInput);
+      const actual = service['decodeSubParagraphSpan'](textInput);
 
       expect(actual)
         .withContext('span subparagraph should be decoded')
@@ -26,7 +25,7 @@ describe('ParagraphDecoderService', () => {
     it('should decode a br subparagraph', () => {
       const expected = new SubParagraph(SubParagraphRoot.BR, '');
 
-      const actual = paragraphDecoderService['decodeSubParagraphBr']();
+      const actual = service['decodeSubParagraphBr']();
 
       expect(actual)
         .withContext('br subparagraph should be decoded')
@@ -39,8 +38,7 @@ describe('ParagraphDecoderService', () => {
       const textInput = 'a_asset,' + linkToAsset;
       const expected = new SubParagraph(SubParagraphRoot.A_ASSET, linkToAsset);
 
-      const actual =
-        paragraphDecoderService['decodeSubParagraphAasset'](textInput);
+      const actual = service['decodeSubParagraphAasset'](textInput);
 
       expect(actual)
         .withContext('link for assets subparagraph should be decoded')
@@ -53,8 +51,7 @@ describe('ParagraphDecoderService', () => {
       const textInput = ',' + content;
       const expected = new SubParagraph(SubParagraphRoot.STRONG_EM, content);
 
-      const actual =
-        paragraphDecoderService['decodeSubParagraphStrongEm'](textInput);
+      const actual = service['decodeSubParagraphStrongEm'](textInput);
 
       expect(actual)
         .withContext('strong em subparagraph should be decoded')
@@ -67,19 +64,19 @@ describe('ParagraphDecoderService', () => {
       const textInput = 'this is a test';
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(paragraphDecoderService, 'decodeSubParagraphSpan');
+      spyOn<any>(service, 'decodeSubParagraphSpan');
 
-      paragraphDecoderService['decodeSubParagraph'](0, textInput);
+      service['decodeSubParagraph'](0, textInput);
 
-      expect(paragraphDecoderService['decodeSubParagraphSpan'])
+      expect(service['decodeSubParagraphSpan'])
         .withContext(
           'decodeSubParagraphSpan should have been called once with proper arguments'
         )
         .toHaveBeenCalledOnceWith(textInput);
 
-      paragraphDecoderService['decodeSubParagraph'](4, textInput);
+      service['decodeSubParagraph'](4, textInput);
 
-      expect(paragraphDecoderService['decodeSubParagraphSpan'])
+      expect(service['decodeSubParagraphSpan'])
         .withContext('decodeSubParagraphSpan should have been called twice')
         .toHaveBeenCalledTimes(2);
     });
@@ -87,17 +84,17 @@ describe('ParagraphDecoderService', () => {
       const input = 'br';
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(paragraphDecoderService, 'decodeSubParagraphBr');
+      spyOn<any>(service, 'decodeSubParagraphBr');
 
-      paragraphDecoderService['decodeSubParagraph'](1, input);
+      service['decodeSubParagraph'](1, input);
 
-      expect(paragraphDecoderService['decodeSubParagraphBr'])
+      expect(service['decodeSubParagraphBr'])
         .withContext('decodeSubParagraphBr should have been called once')
         .toHaveBeenCalledOnceWith();
 
-      paragraphDecoderService['decodeSubParagraph'](5, input);
+      service['decodeSubParagraph'](5, input);
 
-      expect(paragraphDecoderService['decodeSubParagraphBr'])
+      expect(service['decodeSubParagraphBr'])
         .withContext('decodeSubParagraphBr should have been called twice')
         .toHaveBeenCalledTimes(2);
     });
@@ -106,19 +103,19 @@ describe('ParagraphDecoderService', () => {
       const textInput = 'a_asset,' + linkToAsset;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(paragraphDecoderService, 'decodeSubParagraphAasset');
+      spyOn<any>(service, 'decodeSubParagraphAasset');
 
-      paragraphDecoderService['decodeSubParagraph'](1, textInput);
+      service['decodeSubParagraph'](1, textInput);
 
-      expect(paragraphDecoderService['decodeSubParagraphAasset'])
+      expect(service['decodeSubParagraphAasset'])
         .withContext(
           'decodeSubParagraphAasset should have been called once with the proper arguments'
         )
         .toHaveBeenCalledOnceWith(textInput);
 
-      paragraphDecoderService['decodeSubParagraph'](5, textInput);
+      service['decodeSubParagraph'](5, textInput);
 
-      expect(paragraphDecoderService['decodeSubParagraphAasset'])
+      expect(service['decodeSubParagraphAasset'])
         .withContext('decodeSubParagraphAasset should have been called twice')
         .toHaveBeenCalledTimes(2);
     });
@@ -127,19 +124,19 @@ describe('ParagraphDecoderService', () => {
       const textInput = ',' + content;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(paragraphDecoderService, 'decodeSubParagraphStrongEm');
+      spyOn<any>(service, 'decodeSubParagraphStrongEm');
 
-      paragraphDecoderService['decodeSubParagraph'](1, textInput);
+      service['decodeSubParagraph'](1, textInput);
 
-      expect(paragraphDecoderService['decodeSubParagraphStrongEm'])
+      expect(service['decodeSubParagraphStrongEm'])
         .withContext(
           'decodeSubParagraphStrongEm should have been called once with the proper arguments'
         )
         .toHaveBeenCalledOnceWith(textInput);
 
-      paragraphDecoderService['decodeSubParagraph'](5, textInput);
+      service['decodeSubParagraph'](5, textInput);
 
-      expect(paragraphDecoderService['decodeSubParagraphStrongEm'])
+      expect(service['decodeSubParagraphStrongEm'])
         .withContext('decodeSubParagraphStrongEm should have been called twice')
         .toHaveBeenCalledTimes(2);
     });
@@ -194,10 +191,7 @@ describe('ParagraphDecoderService', () => {
       );
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(
-        paragraphDecoderService,
-        'decodeSubParagraph'
-      ).and.returnValues(
+      spyOn<any>(service, 'decodeSubParagraph').and.returnValues(
         expectedSubPar1,
         expectedSubPar2,
         expectedSubPar3,
@@ -206,51 +200,51 @@ describe('ParagraphDecoderService', () => {
         expectedSubPar6,
         expectedSubPar7
       );
-      const actual = paragraphDecoderService['decodeParagraph'](input);
+      const actual = service['decodeParagraph'](input);
 
-      expect(paragraphDecoderService['decodeSubParagraph'])
+      expect(service['decodeSubParagraph'])
         .withContext(
           'decodeSubParagraph should have been called the correct amount of times'
         )
         .toHaveBeenCalledTimes(7);
 
-      expect(paragraphDecoderService['decodeSubParagraph'])
+      expect(service['decodeSubParagraph'])
         .withContext(
           'decodeSubParagraph should have been called with the proper arguments - 1'
         )
         .toHaveBeenCalledWith(0, spanContent1);
 
-      expect(paragraphDecoderService['decodeSubParagraph'])
+      expect(service['decodeSubParagraph'])
         .withContext(
           'decodeSubParagraph should have been called with the proper arguments - 2'
         )
         .toHaveBeenCalledWith(1, br);
 
-      expect(paragraphDecoderService['decodeSubParagraph'])
+      expect(service['decodeSubParagraph'])
         .withContext(
           'decodeSubParagraph should have been called with the proper arguments - 3'
         )
         .toHaveBeenCalledWith(2, spanContent2);
 
-      expect(paragraphDecoderService['decodeSubParagraph'])
+      expect(service['decodeSubParagraph'])
         .withContext(
           'decodeSubParagraph should have been called with the proper arguments - 4'
         )
         .toHaveBeenCalledWith(3, a);
 
-      expect(paragraphDecoderService['decodeSubParagraph'])
+      expect(service['decodeSubParagraph'])
         .withContext(
           'decodeSubParagraph should have been called with the proper arguments - 5'
         )
         .toHaveBeenCalledWith(4, spanContent3);
 
-      expect(paragraphDecoderService['decodeSubParagraph'])
+      expect(service['decodeSubParagraph'])
         .withContext(
           'decodeSubParagraph should have been called with the proper arguments - 6'
         )
         .toHaveBeenCalledWith(5, strongEm);
 
-      expect(paragraphDecoderService['decodeSubParagraph'])
+      expect(service['decodeSubParagraph'])
         .withContext(
           'decodeSubParagraph should have been called with the proper arguments - 7'
         )
@@ -339,26 +333,26 @@ describe('ParagraphDecoderService', () => {
       const expectedPar2 = new Paragraph([expectedSubPar8]);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      spyOn<any>(paragraphDecoderService, 'decodeParagraph').and.returnValues(
+      spyOn<any>(service, 'decodeParagraph').and.returnValues(
         expectedPar1,
         expectedPar2
       );
 
-      const actual = paragraphDecoderService.decode(input);
+      const actual = service.decode(input);
 
-      expect(paragraphDecoderService['decodeParagraph'])
+      expect(service['decodeParagraph'])
         .withContext(
           'decodeParagraph should have been called the correct amount of times'
         )
         .toHaveBeenCalledTimes(2);
 
-      expect(paragraphDecoderService['decodeParagraph'])
+      expect(service['decodeParagraph'])
         .withContext(
           'decodeParagraph should have been called with the proper arguments - 1'
         )
         .toHaveBeenCalledWith(par1);
 
-      expect(paragraphDecoderService['decodeParagraph'])
+      expect(service['decodeParagraph'])
         .withContext(
           'decodeParagraph should have been called with the proper arguments - 2'
         )

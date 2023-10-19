@@ -26,7 +26,7 @@ describe('HeaderComponent - dom integration', () => {
   const prodEnv = productionEnvironment;
 
   const expectedName = 'test title';
-  const expectedOtherLanguage = 'test other language';
+  const expectedSetLanguage = '\xa0 \xa0 🌐 \xa0 \xa0';
 
   beforeEach(() => {
     DOMComputationServiceSpy = jasmine.createSpyObj('DOMComputationService', [
@@ -35,12 +35,8 @@ describe('HeaderComponent - dom integration', () => {
 
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
     const expectedNameDto = of({ message: expectedName });
-    const expectedOtherLanguageDto = of({ message: expectedOtherLanguage });
 
-    httpClientSpy.get.and.returnValues(
-      expectedNameDto,
-      expectedOtherLanguageDto
-    );
+    httpClientSpy.get.and.returnValues(expectedNameDto);
   });
 
   const shouldCreateExpectation = 'should create';
@@ -60,7 +56,7 @@ describe('HeaderComponent - dom integration', () => {
 
     const debugEl: DebugElement = fixture.debugElement;
 
-    const headerEl: DebugElement = debugEl.children[0];
+    const headerEl: DebugElement = debugEl.children[1];
 
     const headerContainerEl: DebugElement = headerEl.children[0];
 
@@ -97,7 +93,7 @@ describe('HeaderComponent - dom integration', () => {
         .toBe(expectedName);
     });
 
-    // otherLanguage
+    // setLanguage
 
     // right-header
     const rightHeaderEl: DebugElement = headerContainerEl.children[1];
@@ -107,8 +103,8 @@ describe('HeaderComponent - dom integration', () => {
       rightLinkEl.componentInstance;
     rightLinkComp.text.subscribe((s) => {
       expect(s)
-        .withContext('right link text should be set - other language')
-        .toBe(expectedOtherLanguage);
+        .withContext('right link text should be set - set language')
+        .toBe(expectedSetLanguage);
     });
 
     // collapsed-header deroulant ul li 2
@@ -120,8 +116,8 @@ describe('HeaderComponent - dom integration', () => {
       collapsedLink2El.componentInstance;
     collapsedLink2Comp.text.subscribe((s) => {
       expect(s)
-        .withContext('collapsed link text should be set - other language')
-        .toBe(expectedOtherLanguage);
+        .withContext('collapsed link text should be set - set language')
+        .toBe(expectedSetLanguage);
     });
   };
 

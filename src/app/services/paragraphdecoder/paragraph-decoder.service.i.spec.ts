@@ -3,29 +3,23 @@ import { ParagraphDecoderService } from './paragraph-decoder.service';
 import { SubParagraph } from 'src/app/components/classes/subparagraph/subParagraph';
 import { Paragraph } from 'src/app/components/classes/paragraph/paragraph';
 
-let paragraphDecoderService: ParagraphDecoderService;
+let service: ParagraphDecoderService;
 describe('ParagraphDecoderService - integration', () => {
   beforeEach(() => {
-    paragraphDecoderService = new ParagraphDecoderService();
+    service = new ParagraphDecoderService();
   });
   describe('decodeSubParagraph method', () => {
     it('should decode a span subparagraph, at even positions', () => {
       const textInput = 'this is a test';
       const expected = new SubParagraph(SubParagraphRoot.SPAN, textInput);
 
-      const actual = paragraphDecoderService['decodeSubParagraph'](
-        0,
-        textInput
-      );
+      const actual = service['decodeSubParagraph'](0, textInput);
 
       expect(actual)
         .withContext('should decode a span subparagraph - position 0')
         .toEqual(expected);
 
-      const otherActual = paragraphDecoderService['decodeSubParagraph'](
-        4,
-        textInput
-      );
+      const otherActual = service['decodeSubParagraph'](4, textInput);
 
       expect(otherActual)
         .withContext('should decode a span subparagraph - position 4')
@@ -35,16 +29,13 @@ describe('ParagraphDecoderService - integration', () => {
       const input = 'br';
       const expected = new SubParagraph(SubParagraphRoot.BR, '');
 
-      const actual = paragraphDecoderService['decodeSubParagraph'](1, input);
+      const actual = service['decodeSubParagraph'](1, input);
 
       expect(actual)
         .withContext('should decode a br subparagraph - position 1')
         .toEqual(expected);
 
-      const otherActual = paragraphDecoderService['decodeSubParagraph'](
-        5,
-        input
-      );
+      const otherActual = service['decodeSubParagraph'](5, input);
 
       expect(otherActual)
         .withContext('should decode a br subparagraph - position 5')
@@ -55,19 +46,13 @@ describe('ParagraphDecoderService - integration', () => {
       const textInput = 'a_asset,' + linkToAsset;
       const expected = new SubParagraph(SubParagraphRoot.A_ASSET, linkToAsset);
 
-      const actual = paragraphDecoderService['decodeSubParagraph'](
-        1,
-        textInput
-      );
+      const actual = service['decodeSubParagraph'](1, textInput);
 
       expect(actual)
         .withContext('should decode a link to asset subparagraph - position 1')
         .toEqual(expected);
 
-      const otherActual = paragraphDecoderService['decodeSubParagraph'](
-        5,
-        textInput
-      );
+      const otherActual = service['decodeSubParagraph'](5, textInput);
 
       expect(otherActual)
         .withContext('should decode a link to asset subparagraph - position 5')
@@ -78,19 +63,13 @@ describe('ParagraphDecoderService - integration', () => {
       const textInput = ',' + content;
       const expected = new SubParagraph(SubParagraphRoot.STRONG_EM, content);
 
-      const actual = paragraphDecoderService['decodeSubParagraph'](
-        1,
-        textInput
-      );
+      const actual = service['decodeSubParagraph'](1, textInput);
 
       expect(actual)
         .withContext('should decode a strong em subparagraph - position 1')
         .toEqual(expected);
 
-      const otherActual = paragraphDecoderService['decodeSubParagraph'](
-        5,
-        textInput
-      );
+      const otherActual = service['decodeSubParagraph'](5, textInput);
 
       expect(otherActual)
         .withContext('should decode a strong em subparagraph - position 5')
@@ -157,7 +136,7 @@ describe('ParagraphDecoderService - integration', () => {
         expectedSubPar7,
       ]);
 
-      const actual = paragraphDecoderService['decodeParagraph'](input);
+      const actual = service['decodeParagraph'](input);
       expect(actual)
         .withContext('paragraph should be decoded')
         .toEqual(expectedPar);
@@ -235,7 +214,7 @@ describe('ParagraphDecoderService - integration', () => {
 
       const expected = [expectedPar1, expectedPar2];
 
-      const actual = paragraphDecoderService.decode(input);
+      const actual = service.decode(input);
 
       expect(actual)
         .withContext('paragraphs should be decoded')

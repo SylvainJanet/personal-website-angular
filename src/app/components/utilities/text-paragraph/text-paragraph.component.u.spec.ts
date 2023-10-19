@@ -3,31 +3,31 @@ import { TextParagraphComponent } from './text-paragraph.component';
 import { Paragraph } from '../../classes/paragraph/paragraph';
 
 describe('TextParagraphComponent - unit', () => {
-  let textParagraphComponent: TextParagraphComponent;
+  let component: TextParagraphComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [TextParagraphComponent],
     });
-    textParagraphComponent = TestBed.inject(TextParagraphComponent);
+    component = TestBed.inject(TextParagraphComponent);
   });
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(textParagraphComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
-      expect(textParagraphComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(textParagraphComponent.paragraph)
+      expect(component.paragraph)
         .withContext('paragraph should be defined')
         .toEqual(jasmine.anything());
-      expect(textParagraphComponent.paragraph)
+      expect(component.paragraph)
         .withContext('paragraph should be empty')
         .toEqual(new Paragraph([]));
     });

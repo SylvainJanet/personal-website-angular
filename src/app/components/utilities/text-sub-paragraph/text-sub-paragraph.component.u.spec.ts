@@ -4,40 +4,40 @@ import { SubParagraphRoot } from 'src/app/enums/subParagraphRoot';
 import { SubParagraph } from '../../classes/subparagraph/subParagraph';
 
 describe('TextSubParagraphComponent - unit', () => {
-  let textSubParagraphComponent: TextSubParagraphComponent;
+  let component: TextSubParagraphComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [TextSubParagraphComponent],
     });
-    textSubParagraphComponent = TestBed.inject(TextSubParagraphComponent);
+    component = TestBed.inject(TextSubParagraphComponent);
   });
 
   it('should have SubParagraphRoot property', () => {
-    expect(textSubParagraphComponent.SubParagraphRoot)
+    expect(component.SubParagraphRoot)
       .withContext('SubParagraphRoot should be defined')
       .toEqual(jasmine.anything());
-    expect(textSubParagraphComponent.SubParagraphRoot)
+    expect(component.SubParagraphRoot)
       .withContext('SubParagraphRoot should be the correct value')
       .toBe(SubParagraphRoot);
   });
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(textSubParagraphComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
-      expect(textSubParagraphComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(textSubParagraphComponent.subPar)
+      expect(component.subPar)
         .withContext('subPar should be defined')
         .toEqual(jasmine.anything());
-      expect(textSubParagraphComponent.subPar)
+      expect(component.subPar)
         .withContext('subPar should be empty BR')
         .toEqual(new SubParagraph(SubParagraphRoot.BR, ''));
     });

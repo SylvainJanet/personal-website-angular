@@ -1,0 +1,73 @@
+<!-- Use flags here that are immediately hidden to load the svg resources in the page. -->
+<div
+  *ngFor="let flagSrc of flagSrcs; index as i"
+  [style]="{ display: doubleImgDisplay }"
+>
+  <img
+    [src]="flagSrc"
+    [appImgLoad]="preloaders"
+    alt=""
+    (load)="onDoubleImgLoad()"
+  />
+  <span class="fi" [class]="'fi-' + flagSelectors[i]"></span>
+</div>
+
+<div class="modal" [class.hide]="!isOpen" #mainDiv>
+  <div class="modal-content prevent-select" #modalContent>
+    <div class="container">
+      <mat-progress-spinner
+        [mode]="'indeterminate'"
+        *ngIf="
+          preloader.isLoading(loaderTexts) &&
+          !visibleToLoadTextService.hasTextLoaded(this)
+        "
+        style="
+          height: 1em;
+          width: 50px;
+          margin-left: auto;
+          margin-right: auto;
+          margin-top: var(--default-padding);
+          margin-bottom: var(--default-padding);
+        "
+      ></mat-progress-spinner>
+      <app-language-modal-row
+        [class.hide]="
+          preloader.isLoading(loaderTexts) &&
+          !visibleToLoadTextService.hasTextLoaded(this)
+        "
+        [flagSelectors]="['us', 'gb']"
+        [languageName]="englishName"
+        [isCurrent]="languageService.current() === Languages.ENGLISH"
+        (click)="changeLanguage(Languages.ENGLISH)"
+        [isFirstRow]="true"
+      ></app-language-modal-row>
+      <mat-progress-spinner
+        [mode]="'indeterminate'"
+        *ngIf="
+          preloader.isLoading(loaderTexts) &&
+          !visibleToLoadTextService.hasTextLoaded(this)
+        "
+        style="
+          height: 1em;
+          width: 50px;
+          margin-left: auto;
+          margin-right: auto;
+          margin-top: var(--default-padding);
+          margin-bottom: var(--default-padding);
+        "
+      ></mat-progress-spinner>
+      <app-language-modal-row
+        [class.hide]="
+          preloader.isLoading(loaderTexts) &&
+          !visibleToLoadTextService.hasTextLoaded(this)
+        "
+        [languageName]="frenchName"
+        [flagSelectors]="['fr']"
+        [isCurrent]="languageService.current() === Languages.FRENCH"
+        (click)="changeLanguage(Languages.FRENCH)"
+        [isLastRow]="true"
+      ></app-language-modal-row>
+      <!-- Can do : Deutsch with de, TokiPona with tp and sitelen pona-->
+    </div>
+  </div>
+</div>

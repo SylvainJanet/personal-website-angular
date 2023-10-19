@@ -5,7 +5,7 @@ import { environment as stagingEnvironment } from 'src/environments/environment.
 import { environment as prodEnvironment } from 'src/environments/environment.prod';
 import { LogEntry } from '../../logEntry/logEntry';
 
-let logLocalStorage: LogLocalStorage;
+let objToTest: LogLocalStorage;
 let devEnv: IEnvironment;
 let stagingEnv: IEnvironment;
 let prodEnv: IEnvironment;
@@ -14,7 +14,7 @@ const expectedMaxSizeStaging = 1000;
 const expectedMaxSizeProd = 100;
 const expectedLoggingLocation = 'logging';
 
-describe('LogLocalStorage', () => {
+describe('LogLocalStorage - unit', () => {
   beforeEach(() => {
     devEnv = devEnvironment;
     stagingEnv = stagingEnvironment;
@@ -25,7 +25,7 @@ describe('LogLocalStorage', () => {
   const hasLoggingLocationExpectation = "should have 'logging' as location";
   const hasLoggingLocation = () => {
     const expected = expectedLoggingLocation;
-    const actual = logLocalStorage.location;
+    const actual = objToTest.location;
     expect(actual).withContext('location should be set').toBe(expected);
   };
 
@@ -34,7 +34,7 @@ describe('LogLocalStorage', () => {
     'should have maxSize of ' + nbr;
   const hasMaxSize = (nbr: number) => {
     const expected = nbr;
-    const actual = logLocalStorage.maxSize;
+    const actual = objToTest.maxSize;
     expect(actual)
       .withContext('should have maxSize as expected')
       .toBe(expected);
@@ -44,7 +44,7 @@ describe('LogLocalStorage', () => {
 
   describe('in dev environment', () => {
     beforeEach(() => {
-      logLocalStorage = new LogLocalStorage(devEnv);
+      objToTest = new LogLocalStorage(devEnv);
     });
 
     const expectedMaxSize = expectedMaxSizeDev;
@@ -56,7 +56,7 @@ describe('LogLocalStorage', () => {
 
   describe('in staging environment', () => {
     beforeEach(() => {
-      logLocalStorage = new LogLocalStorage(stagingEnv);
+      objToTest = new LogLocalStorage(stagingEnv);
     });
 
     const expectedMaxSize = expectedMaxSizeStaging;
@@ -68,7 +68,7 @@ describe('LogLocalStorage', () => {
 
   describe('in prod environment', () => {
     beforeEach(() => {
-      logLocalStorage = new LogLocalStorage(prodEnv);
+      objToTest = new LogLocalStorage(prodEnv);
     });
 
     const expectedMaxSize = expectedMaxSizeProd;
@@ -93,7 +93,7 @@ describe('LogLocalStorage', () => {
       }
 
       const to_push = new LogEntry(env);
-      logLocalStorage.pushOrShift(input, to_push);
+      objToTest.pushOrShift(input, to_push);
 
       const expected_length = maxSize;
       const actual_length = input.length;
@@ -127,7 +127,7 @@ describe('LogLocalStorage', () => {
       }
 
       const to_push = new LogEntry(env);
-      logLocalStorage.pushOrShift(input, to_push);
+      objToTest.pushOrShift(input, to_push);
 
       const expected_length = maxSize;
       const actual_length = input.length;
@@ -149,7 +149,7 @@ describe('LogLocalStorage', () => {
 
     describe('in dev environment', () => {
       beforeEach(() => {
-        logLocalStorage = new LogLocalStorage(devEnv);
+        objToTest = new LogLocalStorage(devEnv);
       });
 
       const expectedMaxSize = expectedMaxSizeDev;
@@ -163,7 +163,7 @@ describe('LogLocalStorage', () => {
 
     describe('in staging environment', () => {
       beforeEach(() => {
-        logLocalStorage = new LogLocalStorage(stagingEnv);
+        objToTest = new LogLocalStorage(stagingEnv);
       });
 
       const expectedMaxSize = expectedMaxSizeStaging;
@@ -177,7 +177,7 @@ describe('LogLocalStorage', () => {
 
     describe('in prod environment', () => {
       beforeEach(() => {
-        logLocalStorage = new LogLocalStorage(prodEnv);
+        objToTest = new LogLocalStorage(prodEnv);
       });
 
       const expectedMaxSize = expectedMaxSizeProd;
@@ -199,19 +199,19 @@ describe('LogLocalStorage', () => {
     const clearLocalStorageExpectation =
       'should clear the localStorage at expected location';
     const clearLocalStorage = () => {
-      logLocalStorage.clear();
+      objToTest.clear();
       expect(localStorage.removeItem)
         .withContext(
           'removeItem should have been called once with proper arguments'
         )
-        .toHaveBeenCalledOnceWith(logLocalStorage.location);
+        .toHaveBeenCalledOnceWith(objToTest.location);
     };
 
     const returnTrueAfterClearingExpectation =
       'should return true after clearing';
     const returnTrueAfterClearing = (done: DoneFn) => {
       const expected = true;
-      const result = logLocalStorage.clear();
+      const result = objToTest.clear();
 
       result.subscribe({
         next: (actual) => {
@@ -224,7 +224,7 @@ describe('LogLocalStorage', () => {
 
     describe('in dev environment', () => {
       beforeEach(() => {
-        logLocalStorage = new LogLocalStorage(devEnv);
+        objToTest = new LogLocalStorage(devEnv);
       });
       it(clearLocalStorageExpectation, clearLocalStorage);
       it(returnTrueAfterClearingExpectation, returnTrueAfterClearing);
@@ -232,7 +232,7 @@ describe('LogLocalStorage', () => {
 
     describe('in staging environment', () => {
       beforeEach(() => {
-        logLocalStorage = new LogLocalStorage(stagingEnv);
+        objToTest = new LogLocalStorage(stagingEnv);
       });
       it(clearLocalStorageExpectation, clearLocalStorage);
       it(returnTrueAfterClearingExpectation, returnTrueAfterClearing);
@@ -240,7 +240,7 @@ describe('LogLocalStorage', () => {
 
     describe('in prod environment', () => {
       beforeEach(() => {
-        logLocalStorage = new LogLocalStorage(prodEnv);
+        objToTest = new LogLocalStorage(prodEnv);
       });
       it(clearLocalStorageExpectation, clearLocalStorage);
       it(returnTrueAfterClearingExpectation, returnTrueAfterClearing);
@@ -257,11 +257,11 @@ describe('LogLocalStorage', () => {
 
       localStorage.clear();
 
-      logLocalStorage.log(input);
+      objToTest.log(input);
       // https://github.com/jasmine/jasmine/issues/299
       localStorageSetItemSpy = spyOn(Storage.prototype, 'setItem');
 
-      logLocalStorage.log(input);
+      objToTest.log(input);
 
       expect(localStorage.setItem)
         .withContext(
@@ -278,7 +278,7 @@ describe('LogLocalStorage', () => {
 
       localStorageSetItemSpy = spyOn(Storage.prototype, 'setItem');
 
-      logLocalStorage.log(input);
+      objToTest.log(input);
 
       expect(localStorage.setItem)
         .withContext(
@@ -293,9 +293,9 @@ describe('LogLocalStorage', () => {
       localStorageSetItemSpy = spyOn(Storage.prototype, 'setItem');
       const input = new LogEntry(env);
 
-      logLocalStorage.log(input);
+      objToTest.log(input);
 
-      expect(logLocalStorage.pushOrShift)
+      expect(objToTest.pushOrShift)
         .withContext(
           'pushOrShift should have been called once with proper arguments'
         )
@@ -308,7 +308,7 @@ describe('LogLocalStorage', () => {
       const input = new LogEntry(env);
 
       const expected = true;
-      const result = logLocalStorage.log(input);
+      const result = objToTest.log(input);
 
       result.subscribe({
         next: (actual) => {
@@ -328,7 +328,7 @@ describe('LogLocalStorage', () => {
       spyOn(window.console, 'log');
       localStorageSetItemSpy.and.throwError('Test error');
 
-      logLocalStorage.log(input);
+      objToTest.log(input);
 
       expect(window.console.log)
         .withContext('log should have been called once with proper arguments')
@@ -345,7 +345,7 @@ describe('LogLocalStorage', () => {
 
       localStorageSetItemSpy.and.throwError('Test error');
 
-      const result = logLocalStorage.log(input);
+      const result = objToTest.log(input);
 
       result.subscribe({
         next: (actual) => {
@@ -358,8 +358,8 @@ describe('LogLocalStorage', () => {
 
     describe('in dev environment', () => {
       beforeEach(() => {
-        logLocalStorage = new LogLocalStorage(devEnv);
-        spyOn(logLocalStorage, 'pushOrShift');
+        objToTest = new LogLocalStorage(devEnv);
+        spyOn(objToTest, 'pushOrShift');
       });
       it(shouldSetItemExpectation, () => shouldSetItem(devEnv));
       it(shouldSetNewItemExpectation, () => shouldSetNewItem(devEnv));
@@ -377,8 +377,8 @@ describe('LogLocalStorage', () => {
 
     describe('in staging environment', () => {
       beforeEach(() => {
-        logLocalStorage = new LogLocalStorage(stagingEnv);
-        spyOn(logLocalStorage, 'pushOrShift');
+        objToTest = new LogLocalStorage(stagingEnv);
+        spyOn(objToTest, 'pushOrShift');
       });
       it(shouldSetItemExpectation, () => shouldSetItem(stagingEnv));
       it(shouldSetNewItemExpectation, () => shouldSetNewItem(stagingEnv));
@@ -396,8 +396,8 @@ describe('LogLocalStorage', () => {
 
     describe('in prod environment', () => {
       beforeEach(() => {
-        logLocalStorage = new LogLocalStorage(prodEnv);
-        spyOn(logLocalStorage, 'pushOrShift');
+        objToTest = new LogLocalStorage(prodEnv);
+        spyOn(objToTest, 'pushOrShift');
       });
       it(shouldSetItemExpectation, () => shouldSetItem(prodEnv));
       it(shouldSetNewItemExpectation, () => shouldSetNewItem(prodEnv));

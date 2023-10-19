@@ -6,7 +6,7 @@ import { environment as prodEnvironment } from 'src/environments/environment.pro
 import { LogConsole } from './console/log-console';
 import { LogLocalStorage } from './local-storage/log-local-storage';
 
-let logPublishersService: LogPublishersService;
+let service: LogPublishersService;
 let devEnv: IEnvironment;
 let stagingEnv: IEnvironment;
 let prodEnv: IEnvironment;
@@ -22,7 +22,7 @@ describe('LogPublishersService', () => {
   const publisherShouldBuild = () => {
     const expected_nbr = 2;
 
-    const actual = logPublishersService.publishers;
+    const actual = service.publishers;
     const actual_nbr = actual.length;
 
     expect(actual_nbr)
@@ -39,21 +39,21 @@ describe('LogPublishersService', () => {
 
   describe('in dev environment', () => {
     beforeEach(() => {
-      logPublishersService = new LogPublishersService(devEnv);
+      service = new LogPublishersService(devEnv);
     });
     it(publisherShouldBuildExpectation, publisherShouldBuild);
   });
 
   describe('in staging environment', () => {
     beforeEach(() => {
-      logPublishersService = new LogPublishersService(stagingEnv);
+      service = new LogPublishersService(stagingEnv);
     });
     it(publisherShouldBuildExpectation, publisherShouldBuild);
   });
 
   describe('in prod environment', () => {
     beforeEach(() => {
-      logPublishersService = new LogPublishersService(prodEnv);
+      service = new LogPublishersService(prodEnv);
     });
     it(publisherShouldBuildExpectation, publisherShouldBuild);
   });

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { PageContentComponent } from './page-content.component';
 
-describe('CvSkillsComponent - unit', () => {
-  let pageContentComponent: PageContentComponent;
+describe('PageContentComponent - unit', () => {
+  let component: PageContentComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -12,10 +12,10 @@ describe('CvSkillsComponent - unit', () => {
 
   describe('constructor', () => {
     beforeEach(() => {
-      pageContentComponent = TestBed.inject(PageContentComponent);
+      component = TestBed.inject(PageContentComponent);
     });
     it('should create', () => {
-      expect(pageContentComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     });

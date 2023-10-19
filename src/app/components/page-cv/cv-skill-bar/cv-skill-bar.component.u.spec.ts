@@ -5,7 +5,7 @@ import { PreloaderService } from 'src/app/services/preloader/preloader.service';
 import { BehaviorSubject } from 'rxjs';
 
 describe('CvSkillBarComponent - unit', () => {
-  let cvSkillBarComponent: CvSkillBarComponent;
+  let component: CvSkillBarComponent;
   let preloaderServiceSpy: jasmine.SpyObj<PreloaderService>;
   let elementRefSpy: jasmine.SpyObj<ElementRef>;
 
@@ -27,35 +27,31 @@ describe('CvSkillBarComponent - unit', () => {
         { provide: ElementRef, useValue: elementRefSpy },
       ],
     });
-    cvSkillBarComponent = TestBed.inject(CvSkillBarComponent);
+    component = TestBed.inject(CvSkillBarComponent);
   });
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(cvSkillBarComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
-      expect(cvSkillBarComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      cvSkillBarComponent.skillName.subscribe((s) => {
+      component.skillName.subscribe((s) => {
         expect(s).withContext('skill name should be set').toBe('SKILL');
       });
 
-      expect(cvSkillBarComponent.percent)
-        .withContext('percent should be set')
-        .toBe(50);
-      expect(cvSkillBarComponent.width)
-        .withContext('width should be set')
-        .toBe('0');
-      expect(cvSkillBarComponent.posElementMin)
+      expect(component.percent).withContext('percent should be set').toBe(50);
+      expect(component.width).withContext('width should be set').toBe('0');
+      expect(component.posElementMin)
         .withContext('posElementMin should be set')
         .toBe(0);
-      expect(cvSkillBarComponent.posElementMax)
+      expect(component.posElementMax)
         .withContext('posElementMax should be set')
         .toBe(0);
     });
@@ -63,22 +59,22 @@ describe('CvSkillBarComponent - unit', () => {
 
   describe('ngOnChanges method', () => {
     it('should call getElPos method', () => {
-      spyOn(cvSkillBarComponent, 'getElPos');
-      spyOn(cvSkillBarComponent, 'updateWidth');
+      spyOn(component, 'getElPos');
+      spyOn(component, 'updateWidth');
 
-      cvSkillBarComponent.ngOnChanges();
+      component.ngOnChanges();
 
-      expect(cvSkillBarComponent.getElPos)
+      expect(component.getElPos)
         .withContext('getElPos should have been called')
         .toHaveBeenCalledTimes(1);
     });
     it('should call updateWidth method', () => {
-      spyOn(cvSkillBarComponent, 'getElPos');
-      spyOn(cvSkillBarComponent, 'updateWidth');
+      spyOn(component, 'getElPos');
+      spyOn(component, 'updateWidth');
 
-      cvSkillBarComponent.ngOnChanges();
+      component.ngOnChanges();
 
-      expect(cvSkillBarComponent.updateWidth)
+      expect(component.updateWidth)
         .withContext('updateWidth should have been called')
         .toHaveBeenCalledTimes(1);
     });
@@ -86,11 +82,11 @@ describe('CvSkillBarComponent - unit', () => {
 
   describe('onResize method', () => {
     it('should call updateAfterLoaded method', () => {
-      spyOn(cvSkillBarComponent, 'updateAfterLoaded');
+      spyOn(component, 'updateAfterLoaded');
 
-      cvSkillBarComponent.onResize();
+      component.onResize();
 
-      expect(cvSkillBarComponent.updateAfterLoaded)
+      expect(component.updateAfterLoaded)
         .withContext('updateAfterLoaded should have been called')
         .toHaveBeenCalledTimes(1);
     });
@@ -98,37 +94,33 @@ describe('CvSkillBarComponent - unit', () => {
 
   describe('updateWidth method', () => {
     it('should set to 0 if scrollY is less than min', () => {
-      cvSkillBarComponent.posElementMin = 10;
-      cvSkillBarComponent.posElementMax = 20;
+      component.posElementMin = 10;
+      component.posElementMax = 20;
 
       scrollY = 5;
 
-      cvSkillBarComponent.updateWidth();
-      expect(cvSkillBarComponent.width)
-        .withContext('width should be set')
-        .toBe('0');
+      component.updateWidth();
+      expect(component.width).withContext('width should be set').toBe('0');
     });
     it('should set to 0 if scrollY is more than max', () => {
-      cvSkillBarComponent.posElementMin = 10;
-      cvSkillBarComponent.posElementMax = 20;
+      component.posElementMin = 10;
+      component.posElementMax = 20;
 
       scrollY = 25;
 
-      cvSkillBarComponent.updateWidth();
-      expect(cvSkillBarComponent.width)
-        .withContext('width should be set')
-        .toBe('0');
+      component.updateWidth();
+      expect(component.width).withContext('width should be set').toBe('0');
     });
     it('should set to percent % if scrollY is between min and max', () => {
-      cvSkillBarComponent.posElementMin = 10;
-      cvSkillBarComponent.posElementMax = 20;
+      component.posElementMin = 10;
+      component.posElementMax = 20;
 
       scrollY = 15;
 
-      cvSkillBarComponent.updateWidth();
-      expect(cvSkillBarComponent.width)
+      component.updateWidth();
+      expect(component.width)
         .withContext('width should be set')
-        .toBe(cvSkillBarComponent.percent + '%');
+        .toBe(component.percent + '%');
     });
   });
 
@@ -142,15 +134,15 @@ describe('CvSkillBarComponent - unit', () => {
           ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
       ).and.returnValue(bs);
 
-      cvSkillBarComponent.updateAfterLoaded();
+      component.updateAfterLoaded();
 
       expect(preloaderServiceSpy.statusAnyLoading.subscribe)
         .withContext('subscribe should be have been called')
         .toHaveBeenCalledTimes(1);
     });
     it('should call getElPos and UpdateWidth when all assets are loaded', () => {
-      spyOn(cvSkillBarComponent, 'getElPos');
-      spyOn(cvSkillBarComponent, 'updateWidth');
+      spyOn(component, 'getElPos');
+      spyOn(component, 'updateWidth');
 
       const bs = new BehaviorSubject<boolean | null>(null);
       (
@@ -158,36 +150,36 @@ describe('CvSkillBarComponent - unit', () => {
           ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
       ).and.returnValue(bs);
 
-      cvSkillBarComponent.updateAfterLoaded();
+      component.updateAfterLoaded();
 
-      expect(cvSkillBarComponent.getElPos)
+      expect(component.getElPos)
         .withContext('getElPos should not have been called - 1')
         .not.toHaveBeenCalled();
-      expect(cvSkillBarComponent.updateWidth)
+      expect(component.updateWidth)
         .withContext('updateWidth should not have been called - 1')
         .not.toHaveBeenCalled();
 
       bs.next(true);
-      expect(cvSkillBarComponent.getElPos)
+      expect(component.getElPos)
         .withContext('getElPos should not have been called - 2')
         .not.toHaveBeenCalled();
-      expect(cvSkillBarComponent.updateWidth)
+      expect(component.updateWidth)
         .withContext('updateWidth should not have been called - 2')
         .not.toHaveBeenCalled();
 
       bs.next(false);
-      expect(cvSkillBarComponent.getElPos)
+      expect(component.getElPos)
         .withContext('getElPos should have been called once')
         .toHaveBeenCalledTimes(1);
-      expect(cvSkillBarComponent.updateWidth)
+      expect(component.updateWidth)
         .withContext('updateWidth should have been called once')
         .toHaveBeenCalledTimes(1);
 
       bs.next(false);
-      expect(cvSkillBarComponent.getElPos)
+      expect(component.getElPos)
         .withContext('getElPos should have been called twice')
         .toHaveBeenCalledTimes(2);
-      expect(cvSkillBarComponent.updateWidth)
+      expect(component.updateWidth)
         .withContext('updateWidth should have been called twice')
         .toHaveBeenCalledTimes(2);
     });
@@ -195,11 +187,11 @@ describe('CvSkillBarComponent - unit', () => {
 
   describe('onScroll method', () => {
     it('should call updateAfterLoaded method', () => {
-      spyOn(cvSkillBarComponent, 'updateAfterLoaded');
+      spyOn(component, 'updateAfterLoaded');
 
-      cvSkillBarComponent.onScroll();
+      component.onScroll();
 
-      expect(cvSkillBarComponent.updateAfterLoaded)
+      expect(component.updateAfterLoaded)
         .withContext('updateAfterLoaded should have been called')
         .toHaveBeenCalledTimes(1);
     });

@@ -11,7 +11,7 @@ import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { ElementRef } from '@angular/core';
 
 describe('CvImgComponent - unit', () => {
-  let cvImgComponent: CvImgComponent;
+  let component: CvImgComponent;
   let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
 
@@ -24,22 +24,22 @@ describe('CvImgComponent - unit', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvImgComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
 
     const shouldSetDefaultValuesExpectation = 'should set default values';
     const shouldSetDefaultValues = () => {
-      expect(cvImgComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(cvImgComponent.preloaders)
+      expect(component.preloaders)
         .withContext('preloaders should be set')
         .toEqual([Preloaders.MAIN]);
 
-      cvImgComponent.altTxt.subscribe((s) =>
+      component.altTxt.subscribe((s) =>
         expect(s).withContext('altTxt should be set').toBe('')
       );
     };
@@ -50,16 +50,27 @@ describe('CvImgComponent - unit', () => {
       setTimeout(() => {
         expect(visibleToLoadTextServiceSpy.subscribe)
           .withContext('subscribe should have been called')
-          .toHaveBeenCalledOnceWith(cvImgComponent);
+          .toHaveBeenCalledOnceWith(component);
         done();
       });
+    };
+
+    const shouldCallVisibleToLoadTextServiceExpectation =
+      'should call the visibleToLoadTextService';
+    const shouldCallVisibleToLoadTextService = () => {
+      textServiceSpy.get.and.returnValue(of('nothing'));
+      component.updateTexts();
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service')
+        .toHaveBeenCalledOnceWith(component);
     };
 
     describe('in dev environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
           'VisibleToLoadTextService',
-          ['subscribe', 'unsubscribe']
+          ['subscribe', 'unsubscribe', 'textLoaded']
         );
         textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         TestBed.configureTestingModule({
@@ -74,7 +85,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -82,12 +93,16 @@ describe('CvImgComponent - unit', () => {
         shouldSubscribeToVisibleToLoadTextServiceExpectation,
         shouldSubscribeToVisibleToLoadTextService
       );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in staging environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
           'VisibleToLoadTextService',
-          ['subscribe', 'unsubscribe']
+          ['subscribe', 'unsubscribe', 'textLoaded']
         );
         textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         TestBed.configureTestingModule({
@@ -102,7 +117,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -110,12 +125,16 @@ describe('CvImgComponent - unit', () => {
         shouldSubscribeToVisibleToLoadTextServiceExpectation,
         shouldSubscribeToVisibleToLoadTextService
       );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in prod environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
           'VisibleToLoadTextService',
-          ['subscribe', 'unsubscribe']
+          ['subscribe', 'unsubscribe', 'textLoaded']
         );
         textServiceSpy = jasmine.createSpyObj('TextService', ['get']);
         TestBed.configureTestingModule({
@@ -130,13 +149,17 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
       it(
         shouldSubscribeToVisibleToLoadTextServiceExpectation,
         shouldSubscribeToVisibleToLoadTextService
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
   });
@@ -145,7 +168,7 @@ describe('CvImgComponent - unit', () => {
     const shouldCallTextServiceExpectation = 'should call the textService';
     const shouldCallTextService = () => {
       textServiceSpy.get.and.returnValue(of('smth'));
-      cvImgComponent.updateTexts();
+      component.updateTexts();
       expect(textServiceSpy.get)
         .withContext('get should have been called once')
         .toHaveBeenCalledTimes(1);
@@ -155,7 +178,7 @@ describe('CvImgComponent - unit', () => {
         )
         .toHaveBeenCalledWith(altTextSelector);
 
-      cvImgComponent.updateTexts();
+      component.updateTexts();
 
       expect(textServiceSpy.get)
         .withContext('get should have been called twice')
@@ -174,9 +197,9 @@ describe('CvImgComponent - unit', () => {
       const expectedaltTextObs = of(expectedAltText);
       textServiceSpy.get.and.returnValue(expectedaltTextObs);
 
-      cvImgComponent.updateTexts();
+      component.updateTexts();
 
-      const actualNameObs = cvImgComponent.altTxt;
+      const actualNameObs = component.altTxt;
 
       actualNameObs.subscribe((v) => {
         expect(v).withContext('altTxt should be set').toEqual(expectedAltText);
@@ -202,7 +225,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -229,7 +252,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -256,7 +279,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -270,10 +293,10 @@ describe('CvImgComponent - unit', () => {
     const shouldUnsubscribeExpectation =
       'should unsubscribe from the visibleToLoadTextService';
     const shouldUnsubscribe = () => {
-      cvImgComponent.ngOnDestroy();
+      component.ngOnDestroy();
       expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
-        .toHaveBeenCalledOnceWith(cvImgComponent);
+        .toHaveBeenCalledOnceWith(component);
     };
 
     describe('in dev environment', () => {
@@ -295,7 +318,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -318,7 +341,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -341,7 +364,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -351,8 +374,8 @@ describe('CvImgComponent - unit', () => {
     const shouldReturnElementExpectation = 'should return the element';
     const shouldReturnElement = () => {
       const expected = new ElementRef(document.createElement('div'));
-      cvImgComponent.mainDiv = expected;
-      const actual = cvImgComponent.getElement();
+      component.mainDiv = expected;
+      const actual = component.getElement();
       expect(actual).toEqual(jasmine.anything());
       expect(actual).toEqual(expected);
     };
@@ -375,7 +398,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -398,7 +421,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -421,7 +444,7 @@ describe('CvImgComponent - unit', () => {
           ],
         });
 
-        cvImgComponent = TestBed.inject(CvImgComponent);
+        component = TestBed.inject(CvImgComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });

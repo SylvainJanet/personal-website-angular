@@ -1,12 +1,13 @@
 <div class="line-on-hover-container" [style]="globalStyle">
   <a
-    class="line-on-hover"
-    [href]="link"
+    #mainLink
+    class="line-on-hover clickable"
+    (touchstart)="lineAppears()"
     (click)="lineDisappears()"
-    (touchstart)="lineAppears($event)"
-    (mouseenter)="lineAppears($event)"
     (touchend)="lineDisappears()"
     (mouseleave)="lineDisappears()"
+    (mouseenter)="lineAppears()"
+    [href]="link"
     [style]="aStyle"
     [ngStyle]="{ color: textColor }"
     >{{ text | async }}

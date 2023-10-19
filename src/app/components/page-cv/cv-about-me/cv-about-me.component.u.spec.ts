@@ -15,7 +15,7 @@ import { environment as stagingEnvironment } from 'src/environments/environment.
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
 
 describe('CvAboutMeComponent - unit', () => {
-  let cvAboutMeComponent: CvAboutMeComponent;
+  let component: CvAboutMeComponent;
   let preloaderServiceSpy: jasmine.SpyObj<PreloaderService>;
   let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
@@ -67,36 +67,32 @@ describe('CvAboutMeComponent - unit', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvAboutMeComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
 
     const shouldSetDefaultValuesExpectation = 'should set default values';
     const shouldSetDefaultValues = () => {
-      expect(cvAboutMeComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
-      expect(cvAboutMeComponent.logger)
+      expect(component.logger)
         .withContext('logger should be set')
         .toBe(logServiceSpy);
 
-      expect(cvAboutMeComponent.width)
-        .withContext('width should be set')
-        .toBe('0');
-      expect(cvAboutMeComponent.posElementMin)
+      expect(component.width).withContext('width should be set').toBe('0');
+      expect(component.posElementMin)
         .withContext('posElementMin should be set')
         .toBe(0);
-      expect(cvAboutMeComponent.posElementMax)
+      expect(component.posElementMax)
         .withContext('posElementMax should be set')
         .toBe(0);
-      cvAboutMeComponent.aboutMe.subscribe((s) => {
+      component.aboutMe.subscribe((s) => {
         expect(s).withContext('aboutMe should be set').toBe('');
       });
-      expect(cvAboutMeComponent.linkToCv)
-        .withContext('linkToCv should be set')
-        .toBe('');
-      expect(cvAboutMeComponent.paragraphs)
+      expect(component.linkToCv).withContext('linkToCv should be set').toBe('');
+      expect(component.paragraphs)
         .withContext('paragraphs should be set')
         .toEqual([]);
     };
@@ -115,7 +111,7 @@ describe('CvAboutMeComponent - unit', () => {
       setTimeout(() => {
         expect(visibleToLoadTextServiceSpy.subscribe)
           .withContext('subscribe should have been called')
-          .toHaveBeenCalledOnceWith(cvAboutMeComponent);
+          .toHaveBeenCalledOnceWith(component);
         done();
       });
     };
@@ -171,7 +167,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -232,7 +228,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -293,7 +289,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -308,23 +304,23 @@ describe('CvAboutMeComponent - unit', () => {
   describe('ngOnChanges method', () => {
     const shouldCallGetElPosExpectation = 'should call getElPos method';
     const shouldCallGetElPos = () => {
-      spyOn(cvAboutMeComponent, 'getElPos');
-      spyOn(cvAboutMeComponent, 'updateWidth');
+      spyOn(component, 'getElPos');
+      spyOn(component, 'updateWidth');
 
-      cvAboutMeComponent.ngOnChanges();
+      component.ngOnChanges();
 
-      expect(cvAboutMeComponent.getElPos)
+      expect(component.getElPos)
         .withContext('getElPos should have been called')
         .toHaveBeenCalledTimes(1);
     };
     const shouldCallUpdateWidthExpectation = 'should call updateWidth method';
     const shouldCallUpdateWidth = () => {
-      spyOn(cvAboutMeComponent, 'getElPos');
-      spyOn(cvAboutMeComponent, 'updateWidth');
+      spyOn(component, 'getElPos');
+      spyOn(component, 'updateWidth');
 
-      cvAboutMeComponent.ngOnChanges();
+      component.ngOnChanges();
 
-      expect(cvAboutMeComponent.updateWidth)
+      expect(component.updateWidth)
         .withContext('updateWidth should have been called')
         .toHaveBeenCalledTimes(1);
     };
@@ -380,7 +376,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallGetElPosExpectation, shouldCallGetElPos);
       it(shouldCallUpdateWidthExpectation, shouldCallUpdateWidth);
@@ -436,7 +432,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallGetElPosExpectation, shouldCallGetElPos);
       it(shouldCallUpdateWidthExpectation, shouldCallUpdateWidth);
@@ -492,7 +488,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallGetElPosExpectation, shouldCallGetElPos);
       it(shouldCallUpdateWidthExpectation, shouldCallUpdateWidth);
@@ -502,7 +498,7 @@ describe('CvAboutMeComponent - unit', () => {
   describe('updateTexts', () => {
     const shouldCallTextServiceExpectation = 'should call the textService';
     const shouldCallTextService = () => {
-      cvAboutMeComponent.updateTexts();
+      component.updateTexts();
       expect(textServiceSpy.getMultiSomeSplit)
         .withContext(
           'getMultiSomeSplit should have been called 1 time with proper arguments'
@@ -517,11 +513,11 @@ describe('CvAboutMeComponent - unit', () => {
     const shouldSetPropertiesToTheServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesToTheServiceResult = () => {
-      cvAboutMeComponent.updateTexts();
+      component.updateTexts();
 
-      const actualTitleObs = cvAboutMeComponent.aboutMe;
-      const actualCvFileName = cvAboutMeComponent.linkToCv;
-      const actualAboutMeContent = cvAboutMeComponent.paragraphs;
+      const actualTitleObs = component.aboutMe;
+      const actualCvFileName = component.linkToCv;
+      const actualAboutMeContent = component.paragraphs;
 
       actualTitleObs.subscribe((s) => {
         expect(s).withContext('width should be set').toBe(expectedTitle);
@@ -537,9 +533,9 @@ describe('CvAboutMeComponent - unit', () => {
     const shouldInsertNewParagraphAtIndex1Expectation =
       'should insert a new paragraph at index 1';
     const shouldInsertNewParagraphAtIndex1 = () => {
-      cvAboutMeComponent.updateTexts();
+      component.updateTexts();
 
-      const actualAboutMeContent = cvAboutMeComponent.paragraphs;
+      const actualAboutMeContent = component.paragraphs;
       expect(actualAboutMeContent[1].els.length)
         .withContext('first paragraph should have no elements')
         .toBe(0);
@@ -548,9 +544,9 @@ describe('CvAboutMeComponent - unit', () => {
     const shouldAddCssClassToParagraphsExpectation =
       'should add cssClass to all paragraphs';
     const shouldAddCssClassToParagraphs = () => {
-      cvAboutMeComponent.updateTexts();
+      component.updateTexts();
 
-      const actualAboutMeContent = cvAboutMeComponent.paragraphs;
+      const actualAboutMeContent = component.paragraphs;
       expect(actualAboutMeContent.length)
         .withContext('there should be paragraphs')
         .not.toBe(0);
@@ -564,12 +560,22 @@ describe('CvAboutMeComponent - unit', () => {
     const shouldAddLinkToCvExpectation =
       'should add link to cv to the proper paragraph';
     const shouldAddLinkToCv = () => {
-      cvAboutMeComponent.updateTexts();
+      component.updateTexts();
 
-      const actualAboutMeContent = cvAboutMeComponent.paragraphs;
+      const actualAboutMeContent = component.paragraphs;
       expect(actualAboutMeContent[6].els[1].assetHref)
         .withContext('assetHref should be set')
         .toBe('pdf/' + expectedPdfName);
+    };
+
+    const shouldCallVisibleToLoadTextServiceExpectation =
+      'should call the visibleToLoadTextService';
+    const shouldCallVisibleToLoadTextService = () => {
+      component.updateTexts();
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service')
+        .toHaveBeenCalledOnceWith(component);
     };
 
     describe('in dev environment', () => {
@@ -623,7 +629,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -639,6 +645,10 @@ describe('CvAboutMeComponent - unit', () => {
         shouldAddCssClassToParagraphs
       );
       it(shouldAddLinkToCvExpectation, shouldAddLinkToCv);
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in staging environment', () => {
       beforeEach(() => {
@@ -691,7 +701,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -707,6 +717,10 @@ describe('CvAboutMeComponent - unit', () => {
         shouldAddCssClassToParagraphs
       );
       it(shouldAddLinkToCvExpectation, shouldAddLinkToCv);
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
     describe('in prod environment', () => {
       beforeEach(() => {
@@ -759,7 +773,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
@@ -775,6 +789,10 @@ describe('CvAboutMeComponent - unit', () => {
         shouldAddCssClassToParagraphs
       );
       it(shouldAddLinkToCvExpectation, shouldAddLinkToCv);
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
+      );
     });
   });
 
@@ -782,10 +800,10 @@ describe('CvAboutMeComponent - unit', () => {
     const shouldUnsubscribeExpectation =
       'should unsubscribe from the visibleToLoadTextService';
     const shouldUnsubscribe = () => {
-      cvAboutMeComponent.ngOnDestroy();
+      component.ngOnDestroy();
       expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
-        .toHaveBeenCalledOnceWith(cvAboutMeComponent);
+        .toHaveBeenCalledOnceWith(component);
     };
 
     describe('in dev environment', () => {
@@ -839,7 +857,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -894,7 +912,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -949,7 +967,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -959,42 +977,36 @@ describe('CvAboutMeComponent - unit', () => {
     const shouldSetTo0IfScrollYLessThanMinExpectation =
       'should set to 0 if scrollY is less than min';
     const shouldSetTo0IfScrollYLessThanMin = () => {
-      cvAboutMeComponent.posElementMin = 10;
-      cvAboutMeComponent.posElementMax = 20;
+      component.posElementMin = 10;
+      component.posElementMax = 20;
 
       scrollY = 5;
 
-      cvAboutMeComponent.updateWidth();
-      expect(cvAboutMeComponent.width)
-        .withContext('width should be set')
-        .toBe('0');
+      component.updateWidth();
+      expect(component.width).withContext('width should be set').toBe('0');
     };
 
     const shouldSetTo0IfScrollYMoreThanMaxExpectation =
       'should set to 0 if scrollY is more than max';
     const shouldSetTo0IfScrollYMoreThanMax = () => {
-      cvAboutMeComponent.posElementMin = 10;
-      cvAboutMeComponent.posElementMax = 20;
+      component.posElementMin = 10;
+      component.posElementMax = 20;
 
       scrollY = 25;
 
-      cvAboutMeComponent.updateWidth();
-      expect(cvAboutMeComponent.width)
-        .withContext('width should be set')
-        .toBe('0');
+      component.updateWidth();
+      expect(component.width).withContext('width should be set').toBe('0');
     };
     const shouldSetTo75IfScrollYBetweenMinMaxExpectation =
       'should set to 75% if scrollY is between min and max';
     const shouldSetTo75IfScrollYBetweenMinMax = () => {
-      cvAboutMeComponent.posElementMin = 10;
-      cvAboutMeComponent.posElementMax = 20;
+      component.posElementMin = 10;
+      component.posElementMax = 20;
 
       scrollY = 15;
 
-      cvAboutMeComponent.updateWidth();
-      expect(cvAboutMeComponent.width)
-        .withContext('width should be set')
-        .toBe('75%');
+      component.updateWidth();
+      expect(component.width).withContext('width should be set').toBe('75%');
     };
 
     describe('in dev environment', () => {
@@ -1048,7 +1060,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(
         shouldSetTo0IfScrollYLessThanMinExpectation,
@@ -1114,7 +1126,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(
         shouldSetTo0IfScrollYLessThanMinExpectation,
@@ -1180,7 +1192,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(
         shouldSetTo0IfScrollYLessThanMinExpectation,
@@ -1201,11 +1213,11 @@ describe('CvAboutMeComponent - unit', () => {
     const shouldCallUpdateAfterLoadedExpectation =
       'should call updateAfterLoaded method';
     const shouldCallUpdateAfterLoaded = () => {
-      spyOn(cvAboutMeComponent, 'updateAfterLoaded');
+      spyOn(component, 'updateAfterLoaded');
 
-      cvAboutMeComponent.onResize();
+      component.onResize();
 
-      expect(cvAboutMeComponent.updateAfterLoaded)
+      expect(component.updateAfterLoaded)
         .withContext('updateAfterLoaded should have been called')
         .toHaveBeenCalledTimes(1);
     };
@@ -1260,7 +1272,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
     });
@@ -1315,7 +1327,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
     });
@@ -1370,7 +1382,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
     });
@@ -1380,11 +1392,11 @@ describe('CvAboutMeComponent - unit', () => {
     const shouldCallUpdateAfterLoadedExpectation =
       'should call updateAfterLoaded method';
     const shouldCallUpdateAfterLoaded = () => {
-      spyOn(cvAboutMeComponent, 'updateAfterLoaded');
+      spyOn(component, 'updateAfterLoaded');
 
-      cvAboutMeComponent.onScroll();
+      component.onScroll();
 
-      expect(cvAboutMeComponent.updateAfterLoaded)
+      expect(component.updateAfterLoaded)
         .withContext('updateAfterLoaded should have been called')
         .toHaveBeenCalledTimes(1);
     };
@@ -1439,7 +1451,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
     });
@@ -1494,7 +1506,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
     });
@@ -1549,7 +1561,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
     });
@@ -1567,7 +1579,7 @@ describe('CvAboutMeComponent - unit', () => {
           ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
       ).and.returnValue(bs);
 
-      cvAboutMeComponent.updateAfterLoaded();
+      component.updateAfterLoaded();
 
       expect(preloaderServiceSpy.statusAnyLoading.subscribe)
         .withContext('subscribe should have been called')
@@ -1576,8 +1588,8 @@ describe('CvAboutMeComponent - unit', () => {
     const shouldCallMethodsWhenAssetsAreLoadedExpectation =
       'should call getElPos and UpdateWidth when all assets are loaded';
     const shouldCallMethodsWhenAssetsAreLoaded = () => {
-      spyOn(cvAboutMeComponent, 'getElPos');
-      spyOn(cvAboutMeComponent, 'updateWidth');
+      spyOn(component, 'getElPos');
+      spyOn(component, 'updateWidth');
 
       const bs = new BehaviorSubject<boolean | null>(null);
       (
@@ -1585,36 +1597,36 @@ describe('CvAboutMeComponent - unit', () => {
           ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
       ).and.returnValue(bs);
 
-      cvAboutMeComponent.updateAfterLoaded();
+      component.updateAfterLoaded();
 
-      expect(cvAboutMeComponent.getElPos)
+      expect(component.getElPos)
         .withContext('getElPos should not have been called - 1')
         .not.toHaveBeenCalled();
-      expect(cvAboutMeComponent.updateWidth)
+      expect(component.updateWidth)
         .withContext('updateWidth should not have been called - 1')
         .not.toHaveBeenCalled();
 
       bs.next(true);
-      expect(cvAboutMeComponent.getElPos)
+      expect(component.getElPos)
         .withContext('getElPos should not have been called - 2')
         .not.toHaveBeenCalled();
-      expect(cvAboutMeComponent.updateWidth)
+      expect(component.updateWidth)
         .withContext('updateWidth should not have been called - 2')
         .not.toHaveBeenCalled();
 
       bs.next(false);
-      expect(cvAboutMeComponent.getElPos)
+      expect(component.getElPos)
         .withContext('getElPos should have been called once')
         .toHaveBeenCalledTimes(1);
-      expect(cvAboutMeComponent.updateWidth)
+      expect(component.updateWidth)
         .withContext('updateWidth should have been called once')
         .toHaveBeenCalledTimes(1);
 
       bs.next(false);
-      expect(cvAboutMeComponent.getElPos)
+      expect(component.getElPos)
         .withContext('getElPos should have been called twice')
         .toHaveBeenCalledTimes(2);
-      expect(cvAboutMeComponent.updateWidth)
+      expect(component.updateWidth)
         .withContext('updateWidth should have been called twice')
         .toHaveBeenCalledTimes(2);
     };
@@ -1669,7 +1681,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallPreloaderServiceExpectation, shouldCallPreloaderService);
       it(
@@ -1728,7 +1740,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallPreloaderServiceExpectation, shouldCallPreloaderService);
       it(
@@ -1787,7 +1799,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldCallPreloaderServiceExpectation, shouldCallPreloaderService);
       it(
@@ -1801,9 +1813,9 @@ describe('CvAboutMeComponent - unit', () => {
     const shouldReturnElementExpectation = 'should return the element';
     const shouldReturnElement = () => {
       const expected = new ElementRef(document.createElement('div'));
-      cvAboutMeComponent.mainDiv = expected;
+      component.mainDiv = expected;
 
-      const actual = cvAboutMeComponent.getElement();
+      const actual = component.getElement();
 
       expect(actual).toEqual(jasmine.anything());
       expect(actual).toEqual(expected);
@@ -1828,7 +1840,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -1852,7 +1864,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -1876,7 +1888,7 @@ describe('CvAboutMeComponent - unit', () => {
           ],
         });
 
-        cvAboutMeComponent = TestBed.inject(CvAboutMeComponent);
+        component = TestBed.inject(CvAboutMeComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });

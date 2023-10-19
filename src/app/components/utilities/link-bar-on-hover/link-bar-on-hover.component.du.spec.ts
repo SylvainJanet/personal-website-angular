@@ -199,7 +199,7 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
 
       expect(componentInstance.lineAppears)
         .withContext('lineAppears should have been called')
-        .toHaveBeenCalledOnceWith(expectedEvent);
+        .toHaveBeenCalledOnceWith();
     });
     it('should call lineAppears on mouseenter event', () => {
       const expectedEvent = new Event('mouseenter');
@@ -207,7 +207,7 @@ describe('LinkBarOnHoverComponent - dom unit', () => {
 
       expect(componentInstance.lineAppears)
         .withContext('lineAppears should have been called')
-        .toHaveBeenCalledOnceWith(expectedEvent);
+        .toHaveBeenCalledOnceWith();
     });
   });
 });

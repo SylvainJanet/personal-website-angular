@@ -5,18 +5,18 @@ import { environment as stagingEnvironment } from 'src/environments/environment.
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
 import { IEnvironment } from 'src/environments/interface/ienvironment';
 
-let logEntry: LogEntry;
+let objToTest: LogEntry;
 const devEnv = developmentEnvironment;
 const stagingEnv = stagingEnvironment;
 const prodEnv = productionEnvironment;
 
-describe('LogEntry', () => {
+describe('LogEntry - unit', () => {
   const entryDateOnConstructionExpectation =
     'should have an entryDate on construction';
   const entryDateOnConstruction = () => {
     const now = new Date();
 
-    expect(logEntry.entryDate.getTime())
+    expect(objToTest.entryDate.getTime())
       .withContext('should have correct date')
       .toBeCloseTo(now.getTime(), -2);
   };
@@ -24,13 +24,13 @@ describe('LogEntry', () => {
   const emptyMessageOnConstructionExpectation =
     'should have an empty message on construction';
   const emptyMessageOnConstruction = () => {
-    expect(logEntry.message).withContext('message should be set').toBe('');
+    expect(objToTest.message).withContext('message should be set').toBe('');
   };
 
   const debugLevelOnConstructionExpectation =
     'should have level of Debug on construction';
   const debugLevelOnConstruction = () => {
-    expect(logEntry.level)
+    expect(objToTest.level)
       .withContext('level should be set')
       .toBe(LogLevel.Debug);
   };
@@ -38,7 +38,7 @@ describe('LogEntry', () => {
   const emptyExtraInfoOnConstructionExpectation =
     'should have an empty extraInfo on construction';
   const emptyExtraInfoOnConstruction = () => {
-    expect(logEntry.extraInfo)
+    expect(objToTest.extraInfo)
       .withContext('extraInfo should be set')
       .toEqual([]);
   };
@@ -46,7 +46,7 @@ describe('LogEntry', () => {
   const logWithDateOnConstructionExpectation =
     'should logWithDate by default on construction';
   const logWithDateOnConstruction = () => {
-    expect(logEntry.logWithDate)
+    expect(objToTest.logWithDate)
       .withContext('logWithDate should be set')
       .toBe(true);
   };
@@ -55,7 +55,7 @@ describe('LogEntry', () => {
     'should be compact if the environment is set to have compact logs';
   const shouldBeCompactIfEnvIsSet = (env: IEnvironment) => {
     const expected = env.compactLogDisplay;
-    const actual = logEntry.compactDisplay;
+    const actual = objToTest.compactDisplay;
 
     expect(actual)
       .withContext('compactLogDisplay should be set')
@@ -64,7 +64,7 @@ describe('LogEntry', () => {
 
   describe('in dev environment', () => {
     beforeEach(() => {
-      logEntry = new LogEntry(devEnv);
+      objToTest = new LogEntry(devEnv);
     });
 
     it(entryDateOnConstructionExpectation, entryDateOnConstruction);
@@ -79,7 +79,7 @@ describe('LogEntry', () => {
 
   describe('in staging environment', () => {
     beforeEach(() => {
-      logEntry = new LogEntry(stagingEnv);
+      objToTest = new LogEntry(stagingEnv);
     });
 
     it(entryDateOnConstructionExpectation, entryDateOnConstruction);
@@ -94,7 +94,7 @@ describe('LogEntry', () => {
 
   describe('in prod environment', () => {
     beforeEach(() => {
-      logEntry = new LogEntry(prodEnv);
+      objToTest = new LogEntry(prodEnv);
     });
 
     it(entryDateOnConstructionExpectation, entryDateOnConstruction);
@@ -111,18 +111,18 @@ describe('LogEntry', () => {
     const buildLogDataDateCompactNoExtraInfoExpectation =
       'should build log string correctly with date and compact and no extraInfo';
     const buildLogDataDateCompactNoExtraInfo = () => {
-      logEntry.message = 'this is a test';
-      logEntry.level = LogLevel.Debug;
-      logEntry.extraInfo = [];
-      logEntry.className = 'test';
-      logEntry.logWithDate = true;
-      logEntry.compactDisplay = true;
+      objToTest.message = 'this is a test';
+      objToTest.level = LogLevel.Debug;
+      objToTest.extraInfo = [];
+      objToTest.className = 'test';
+      objToTest.logWithDate = true;
+      objToTest.compactDisplay = true;
 
-      const actual = logEntry.buildLogString();
+      const actual = objToTest.buildLogString();
       expect(actual)
         .withContext('log string should be as expected')
         .toBe(
-          logEntry.entryDate.toLocaleString() +
+          objToTest.entryDate.toLocaleString() +
             ' - Class: test - Type: Debug - Message: this is a test'
         );
     };
@@ -130,14 +130,14 @@ describe('LogEntry', () => {
     const buildLogDataNoDateCompactNoExtraInfoExpectation =
       'should build log string correctly without date and compact and no extraInfo';
     const buildLogDataNoDateCompactNoExtraInfo = () => {
-      logEntry.message = 'this is a test';
-      logEntry.level = LogLevel.Debug;
-      logEntry.extraInfo = [];
-      logEntry.className = 'test';
-      logEntry.logWithDate = false;
-      logEntry.compactDisplay = true;
+      objToTest.message = 'this is a test';
+      objToTest.level = LogLevel.Debug;
+      objToTest.extraInfo = [];
+      objToTest.className = 'test';
+      objToTest.logWithDate = false;
+      objToTest.compactDisplay = true;
 
-      const actual = logEntry.buildLogString();
+      const actual = objToTest.buildLogString();
       expect(actual)
         .withContext('log string should be as expected')
         .toBe('Class: test - Type: Debug - Message: this is a test');
@@ -146,18 +146,18 @@ describe('LogEntry', () => {
     const buildLogDataDateNotCompactNoExtraInfoExpectation =
       'should build log string correctly with date and not compact and no extraInfo';
     const buildLogDataDateNotCompactNoExtraInfo = () => {
-      logEntry.message = 'this is a test';
-      logEntry.level = LogLevel.Debug;
-      logEntry.extraInfo = [];
-      logEntry.className = 'test';
-      logEntry.logWithDate = true;
-      logEntry.compactDisplay = false;
+      objToTest.message = 'this is a test';
+      objToTest.level = LogLevel.Debug;
+      objToTest.extraInfo = [];
+      objToTest.className = 'test';
+      objToTest.logWithDate = true;
+      objToTest.compactDisplay = false;
 
-      const actual = logEntry.buildLogString();
+      const actual = objToTest.buildLogString();
       expect(actual)
         .withContext('log string should be as expected')
         .toBe(
-          logEntry.entryDate.toLocaleString() +
+          objToTest.entryDate.toLocaleString() +
             '\n\tClass:\ttest\n\tType:\tDebug\n\t\tMessage:\tthis is a test'
         );
     };
@@ -165,14 +165,14 @@ describe('LogEntry', () => {
     const buildLogDataNoDateNotCompactNoExtraInfoExpectation =
       'should build log string correctly without date and not compact and no extraInfo';
     const buildLogDataNoDateNotCompactNoExtraInfo = () => {
-      logEntry.message = 'this is a test';
-      logEntry.level = LogLevel.Debug;
-      logEntry.extraInfo = [];
-      logEntry.className = 'test';
-      logEntry.logWithDate = false;
-      logEntry.compactDisplay = false;
+      objToTest.message = 'this is a test';
+      objToTest.level = LogLevel.Debug;
+      objToTest.extraInfo = [];
+      objToTest.className = 'test';
+      objToTest.logWithDate = false;
+      objToTest.compactDisplay = false;
 
-      const actual = logEntry.buildLogString();
+      const actual = objToTest.buildLogString();
       expect(actual)
         .withContext('log string should be as expected')
         .toBe('\n\tClass:\ttest\n\tType:\tDebug\n\t\tMessage:\tthis is a test');
@@ -181,18 +181,18 @@ describe('LogEntry', () => {
     const buildLogDataDateCompactExtraInfoExpectation =
       'should build log string correctly with date and compact and extraInfo';
     const buildLogDataDateCompactExtraInfo = () => {
-      logEntry.message = 'this is a test';
-      logEntry.level = LogLevel.Debug;
-      logEntry.extraInfo = [true, { a: '1', b: '2' }, 'data'];
-      logEntry.className = 'test';
-      logEntry.logWithDate = true;
-      logEntry.compactDisplay = true;
+      objToTest.message = 'this is a test';
+      objToTest.level = LogLevel.Debug;
+      objToTest.extraInfo = [true, { a: '1', b: '2' }, 'data'];
+      objToTest.className = 'test';
+      objToTest.logWithDate = true;
+      objToTest.compactDisplay = true;
 
-      const actual = logEntry.buildLogString();
+      const actual = objToTest.buildLogString();
       expect(actual)
         .withContext('log string should be as expected')
         .toBe(
-          logEntry.entryDate.toLocaleString() +
+          objToTest.entryDate.toLocaleString() +
             ' - Class: test - Type: Debug - Message: this is a test - Extra Info: true,{"a":"1","b":"2"},"data"'
         );
     };
@@ -200,14 +200,14 @@ describe('LogEntry', () => {
     const buildLogDataNoDateCompactExtraInfoExpectation =
       'should build log string correctly without date and compact and extraInfo';
     const buildLogDataNoDateCompactExtraInfo = () => {
-      logEntry.message = 'this is a test';
-      logEntry.level = LogLevel.Debug;
-      logEntry.extraInfo = [true, { a: '1', b: '2' }, 'data'];
-      logEntry.className = 'test';
-      logEntry.logWithDate = false;
-      logEntry.compactDisplay = true;
+      objToTest.message = 'this is a test';
+      objToTest.level = LogLevel.Debug;
+      objToTest.extraInfo = [true, { a: '1', b: '2' }, 'data'];
+      objToTest.className = 'test';
+      objToTest.logWithDate = false;
+      objToTest.compactDisplay = true;
 
-      const actual = logEntry.buildLogString();
+      const actual = objToTest.buildLogString();
       expect(actual)
         .withContext('log string should be as expected')
         .toBe(
@@ -218,18 +218,18 @@ describe('LogEntry', () => {
     const buildLogDataDateNotCompactExtraInfoExpectation =
       'should build log string correctly with date and not compact and extraInfo';
     const buildLogDataDateNotCompactExtraInfo = () => {
-      logEntry.message = 'this is a test';
-      logEntry.level = LogLevel.Debug;
-      logEntry.extraInfo = [true, { a: '1', b: '2' }, 'data'];
-      logEntry.className = 'test';
-      logEntry.logWithDate = true;
-      logEntry.compactDisplay = false;
+      objToTest.message = 'this is a test';
+      objToTest.level = LogLevel.Debug;
+      objToTest.extraInfo = [true, { a: '1', b: '2' }, 'data'];
+      objToTest.className = 'test';
+      objToTest.logWithDate = true;
+      objToTest.compactDisplay = false;
 
-      const actual = logEntry.buildLogString();
+      const actual = objToTest.buildLogString();
       expect(actual)
         .withContext('log string should be as expected')
         .toBe(
-          logEntry.entryDate.toLocaleString() +
+          objToTest.entryDate.toLocaleString() +
             '\n\tClass:\ttest\n\tType:\tDebug\n\t\tMessage:\tthis is a test' +
             '\n\t\tExtra Info:\ttrue\n' +
             '--------------------------------------------------------------------------------' +
@@ -244,14 +244,14 @@ describe('LogEntry', () => {
     const buildLogDataNoDateNotCompactExtraInfoExpectation =
       'should build log string correctly without date and not compact and extraInfo';
     const buildLogDataNoDateNotCompactExtraInfo = () => {
-      logEntry.message = 'this is a test';
-      logEntry.level = LogLevel.Debug;
-      logEntry.extraInfo = [true, { a: '1', b: '2' }, 'data'];
-      logEntry.className = 'test';
-      logEntry.logWithDate = false;
-      logEntry.compactDisplay = false;
+      objToTest.message = 'this is a test';
+      objToTest.level = LogLevel.Debug;
+      objToTest.extraInfo = [true, { a: '1', b: '2' }, 'data'];
+      objToTest.className = 'test';
+      objToTest.logWithDate = false;
+      objToTest.compactDisplay = false;
 
-      const actual = logEntry.buildLogString();
+      const actual = objToTest.buildLogString();
       expect(actual)
         .withContext('log string should be as expected')
         .toBe(
@@ -268,18 +268,18 @@ describe('LogEntry', () => {
 
     const hideSecretKeyCompactExpectation = 'should hide secret keys compact';
     const hideSecretKeyCompact = () => {
-      logEntry.message = 'this is a test';
-      logEntry.level = LogLevel.Debug;
-      logEntry.extraInfo = [
+      objToTest.message = 'this is a test';
+      objToTest.level = LogLevel.Debug;
+      objToTest.extraInfo = [
         true,
         { a: '1', b: '2', secret: "don't show this" },
         'data',
       ];
-      logEntry.className = 'test';
-      logEntry.logWithDate = false;
-      logEntry.compactDisplay = true;
+      objToTest.className = 'test';
+      objToTest.logWithDate = false;
+      objToTest.compactDisplay = true;
 
-      const actual = logEntry.buildLogString();
+      const actual = objToTest.buildLogString();
       expect(actual)
         .withContext('log string should be as expected')
         .toBe(
@@ -290,22 +290,22 @@ describe('LogEntry', () => {
     const hideSecretKeyNotCompactExpectation =
       'should hide secret keys not compact';
     const hideSecretKeyNotCompact = () => {
-      logEntry.message = 'this is a test';
-      logEntry.level = LogLevel.Debug;
-      logEntry.extraInfo = [
+      objToTest.message = 'this is a test';
+      objToTest.level = LogLevel.Debug;
+      objToTest.extraInfo = [
         true,
         { a: '1', b: '2', secret: "don't show this" },
         'data',
       ];
-      logEntry.className = 'test';
-      logEntry.logWithDate = true;
-      logEntry.compactDisplay = false;
+      objToTest.className = 'test';
+      objToTest.logWithDate = true;
+      objToTest.compactDisplay = false;
 
-      const actual = logEntry.buildLogString();
+      const actual = objToTest.buildLogString();
       expect(actual)
         .withContext('log string should be as expected')
         .toBe(
-          logEntry.entryDate.toLocaleString() +
+          objToTest.entryDate.toLocaleString() +
             '\n\tClass:\ttest\n\tType:\tDebug\n\t\tMessage:\tthis is a test' +
             '\n\t\tExtra Info:\ttrue\n' +
             '--------------------------------------------------------------------------------' +
@@ -319,7 +319,7 @@ describe('LogEntry', () => {
 
     describe('in dev environment', () => {
       beforeEach(() => {
-        logEntry = new LogEntry(devEnv);
+        objToTest = new LogEntry(devEnv);
       });
       it(
         buildLogDataDateCompactNoExtraInfoExpectation,
@@ -359,7 +359,7 @@ describe('LogEntry', () => {
 
     describe('in staging environment', () => {
       beforeEach(() => {
-        logEntry = new LogEntry(stagingEnv);
+        objToTest = new LogEntry(stagingEnv);
       });
       it(
         buildLogDataDateCompactNoExtraInfoExpectation,
@@ -399,7 +399,7 @@ describe('LogEntry', () => {
 
     describe('in prod environment', () => {
       beforeEach(() => {
-        logEntry = new LogEntry(prodEnv);
+        objToTest = new LogEntry(prodEnv);
       });
       it(
         buildLogDataDateCompactNoExtraInfoExpectation,

@@ -10,7 +10,7 @@ import { environment as productionEnvironment } from 'src/environments/environme
 import { ElementRef } from '@angular/core';
 
 describe('CvSkillsComponent - unit', () => {
-  let cvSkillsComponent: CvSkillsComponent;
+  let component: CvSkillsComponent;
   let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
 
@@ -30,39 +30,39 @@ describe('CvSkillsComponent - unit', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvSkillsComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
 
     const shouldSetDefaultValuesExpectation = 'should set default values';
     const shouldSetDefaultValues = () => {
-      expect(cvSkillsComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      cvSkillsComponent.skills.subscribe((s) =>
+      component.skills.subscribe((s) =>
         expect(s).withContext('skills should be set').toBe('')
       );
-      cvSkillsComponent.java.subscribe((s) =>
+      component.java.subscribe((s) =>
         expect(s).withContext('java should be set').toBe('')
       );
-      cvSkillsComponent.csharp.subscribe((s) =>
+      component.csharp.subscribe((s) =>
         expect(s).withContext('csharp should be set').toBe('')
       );
-      cvSkillsComponent.python.subscribe((s) =>
+      component.python.subscribe((s) =>
         expect(s).withContext('python should be set').toBe('')
       );
-      cvSkillsComponent.jsts.subscribe((s) =>
+      component.jsts.subscribe((s) =>
         expect(s).withContext('jsts should be set').toBe('')
       );
-      cvSkillsComponent.sql.subscribe((s) =>
+      component.sql.subscribe((s) =>
         expect(s).withContext('sql should be set').toBe('')
       );
-      cvSkillsComponent.html.subscribe((s) =>
+      component.html.subscribe((s) =>
         expect(s).withContext('html should be set').toBe('')
       );
-      cvSkillsComponent.latex.subscribe((s) =>
+      component.latex.subscribe((s) =>
         expect(s).withContext('latex should be set').toBe('')
       );
     };
@@ -72,7 +72,7 @@ describe('CvSkillsComponent - unit', () => {
       setTimeout(() => {
         expect(visibleToLoadTextServiceSpy.subscribe)
           .withContext('subscribe should have been called')
-          .toHaveBeenCalledOnceWith(cvSkillsComponent);
+          .toHaveBeenCalledOnceWith(component);
         done();
       });
     };
@@ -95,7 +95,7 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -123,7 +123,7 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -151,7 +151,7 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -174,7 +174,7 @@ describe('CvSkillsComponent - unit', () => {
 
     const shouldCallTextServiceExpectation = 'should call the textService';
     const shouldCallTextService = () => {
-      cvSkillsComponent.updateTexts();
+      component.updateTexts();
       expect(textServiceSpy.getMulti)
         .withContext(
           'getMulti should have been called 1 time with proper arguments'
@@ -215,16 +215,16 @@ describe('CvSkillsComponent - unit', () => {
           expectedLatex,
         ])
       );
-      cvSkillsComponent.updateTexts();
+      component.updateTexts();
 
-      const actualSkillsObs = cvSkillsComponent.skills;
-      const actualJavaObs = cvSkillsComponent.java;
-      const actualCsharpObs = cvSkillsComponent.csharp;
-      const actualPythonDevObs = cvSkillsComponent.python;
-      const actualJstsObs = cvSkillsComponent.jsts;
-      const actualSqlObs = cvSkillsComponent.sql;
-      const actualHtmlObs = cvSkillsComponent.html;
-      const actualLatexObs = cvSkillsComponent.latex;
+      const actualSkillsObs = component.skills;
+      const actualJavaObs = component.java;
+      const actualCsharpObs = component.csharp;
+      const actualPythonDevObs = component.python;
+      const actualJstsObs = component.jsts;
+      const actualSqlObs = component.sql;
+      const actualHtmlObs = component.html;
+      const actualLatexObs = component.latex;
 
       actualSkillsObs.subscribe((s) => {
         expect(s).withContext('skills should be set').toBe(expectedSkills);
@@ -252,6 +252,16 @@ describe('CvSkillsComponent - unit', () => {
       });
     };
 
+    const shouldCallVisibleToLoadTextServiceExpectation =
+      'should call the visibleToLoadTextService';
+    const shouldCallVisibleToLoadTextService = () => {
+      component.updateTexts();
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service')
+        .toHaveBeenCalledOnceWith(component);
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
@@ -276,12 +286,16 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
     describe('in staging environment', () => {
@@ -308,12 +322,16 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
     describe('in prod environment', () => {
@@ -340,12 +358,16 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
   });
@@ -354,10 +376,10 @@ describe('CvSkillsComponent - unit', () => {
     const shouldUnsubscribeExpectation =
       'should unsubscribe from the visibleToLoadTextService';
     const shouldUnsubscribe = () => {
-      cvSkillsComponent.ngOnDestroy();
+      component.ngOnDestroy();
       expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
-        .toHaveBeenCalledOnceWith(cvSkillsComponent);
+        .toHaveBeenCalledOnceWith(component);
     };
 
     describe('in dev environment', () => {
@@ -379,7 +401,7 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -402,7 +424,7 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -425,7 +447,7 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -435,8 +457,8 @@ describe('CvSkillsComponent - unit', () => {
     const shouldReturnElementExpectation = 'should return the element';
     const shouldReturnElement = () => {
       const expected = new ElementRef(document.createElement('div'));
-      cvSkillsComponent.mainDiv = expected;
-      const actual = cvSkillsComponent.getElement();
+      component.mainDiv = expected;
+      const actual = component.getElement();
       expect(actual).toEqual(jasmine.anything());
       expect(actual).toEqual(expected);
     };
@@ -459,7 +481,7 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -482,7 +504,7 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -505,7 +527,7 @@ describe('CvSkillsComponent - unit', () => {
           ],
         });
 
-        cvSkillsComponent = TestBed.inject(CvSkillsComponent);
+        component = TestBed.inject(CvSkillsComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });

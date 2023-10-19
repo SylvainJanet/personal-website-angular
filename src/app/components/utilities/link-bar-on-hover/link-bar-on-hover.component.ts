@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { DOMComputationService } from 'src/app/services/domcomputation/domcomputation.service';
 import { LogService } from 'src/app/services/log/log.service';
@@ -38,6 +38,8 @@ export class LinkBarOnHoverComponent {
   @Input() globalStyle = '';
   /** Logger. See {@link LogService} */
   logger: LogService;
+  /** The main link element of the component. */
+  @ViewChild('mainLink') mainLink!: ElementRef<HTMLElement>;
 
   /**
    * Button with bar on hover component constructor
@@ -57,9 +59,11 @@ export class LinkBarOnHoverComponent {
    * Make line appear. Is binded to the proper hover event (or mobile
    * equivalent)
    */
-  lineAppears(event: Event) {
+  lineAppears() {
     this.logger.debug('Line appears');
-    const width = this.domcomputation.getActualWidth(event.target);
+    const width = this.domcomputation.getActualWidth(
+      this.mainLink.nativeElement
+    );
     this.lineWidth = (75 * width) / 100 + 'px';
   }
 

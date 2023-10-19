@@ -1,3 +1,8 @@
+<app-language-modal
+  [isOpen]="showModal"
+  [clickedEl]="clickedEl"
+  (closed)="closeModal()"
+></app-language-modal>
 <div #mainDiv class="header sticky dark-header">
   <div class="header-container">
     <div class="left-header">
@@ -56,6 +61,7 @@
         "
       ></mat-progress-spinner>
       <app-button-bar-on-hover
+        #buttonHeaderModal
         [class.hide]="
           preloader.isLoading(loaderTexts) &&
           !visibleToLoadTextService.hasTextLoaded(this)
@@ -70,14 +76,14 @@
             ? 'var(--dark-header-color)'
             : 'var(--light-header-color)'
         "
-        [text]="otherLanguage"
+        [text]="textIcon"
         [buttonStyle]="
           'background-color:transparent; transition-property: background-color, color; transition-duration: var(--header-color-transition-length);'
         "
         [lineStyle]="
           'transition-property: background-color, color, width; transition-duration: var(--header-color-transition-length), var(--header-color-transition-length), var(--header-lines-on-hover-duration);'
         "
-        (press)="languageChange()"
+        (press)="openModalButtonHeader()"
       >
       </app-button-bar-on-hover>
     </div>
@@ -159,6 +165,7 @@
               "
             ></mat-progress-spinner>
             <app-button-bar-on-hover
+              #buttonCollapsedModal
               [class.hide]="
                 preloader.isLoading(loaderTexts) &&
                 !visibleToLoadTextService.hasTextLoaded(this)
@@ -173,7 +180,7 @@
                   ? 'var(--dark-header-color)'
                   : 'var(--light-header-color)'
               "
-              [text]="otherLanguage"
+              [text]="textIcon"
               [buttonStyle]="
                 'background-color:transparent; transition-property: background-color, color; transition-duration: var(--header-color-transition-length);'
               "
@@ -183,7 +190,7 @@
               [globalStyle]="
                 'padding: var(--collapsed-header-item-padding) 0px;'
               "
-              (press)="languageChange()"
+              (press)="openModalButtonCollapsed()"
             >
             </app-button-bar-on-hover>
           </li>

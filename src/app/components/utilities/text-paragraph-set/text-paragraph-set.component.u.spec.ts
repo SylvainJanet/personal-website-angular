@@ -2,31 +2,31 @@ import { TestBed } from '@angular/core/testing';
 import { TextParagraphSetComponent } from './text-paragraph-set.component';
 
 describe('TextParagraphSetComponent - unit', () => {
-  let textParagraphSetComponent: TextParagraphSetComponent;
+  let component: TextParagraphSetComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [TextParagraphSetComponent],
     });
-    textParagraphSetComponent = TestBed.inject(TextParagraphSetComponent);
+    component = TestBed.inject(TextParagraphSetComponent);
   });
 
   describe('constructor', () => {
     it('should create', () => {
-      expect(textParagraphSetComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     });
 
     it('should set default values', () => {
-      expect(textParagraphSetComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      expect(textParagraphSetComponent.paragraphs)
+      expect(component.paragraphs)
         .withContext('paragraphs should be defined')
         .toEqual(jasmine.anything());
-      expect(textParagraphSetComponent.paragraphs)
+      expect(component.paragraphs)
         .withContext('paragraphs should be empty')
         .toEqual([]);
     });

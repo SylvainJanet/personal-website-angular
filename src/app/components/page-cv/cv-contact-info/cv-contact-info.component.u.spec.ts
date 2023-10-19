@@ -10,7 +10,7 @@ import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { ElementRef } from '@angular/core';
 
 describe('CvContactInfoComponent - unit', () => {
-  let cvContactInfoComponent: CvContactInfoComponent;
+  let component: CvContactInfoComponent;
   let textServiceSpy: jasmine.SpyObj<TextService>;
   let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
 
@@ -28,33 +28,33 @@ describe('CvContactInfoComponent - unit', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(cvContactInfoComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
 
     const shouldSetDefaultValuesExpectation = 'should set default values';
     const shouldSetDefaultValues = () => {
-      expect(cvContactInfoComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
 
-      cvContactInfoComponent.name.subscribe((s) =>
+      component.name.subscribe((s) =>
         expect(s).withContext('name should be set').toBe('')
       );
-      cvContactInfoComponent.sj.subscribe((s) =>
+      component.sj.subscribe((s) =>
         expect(s).withContext('sj should be set').toBe('')
       );
-      cvContactInfoComponent.profile.subscribe((s) =>
+      component.profile.subscribe((s) =>
         expect(s).withContext('profile should be set').toBe('')
       );
-      cvContactInfoComponent.fsDev.subscribe((s) =>
+      component.fsDev.subscribe((s) =>
         expect(s).withContext('fsDev should be set').toBe('')
       );
-      cvContactInfoComponent.email.subscribe((s) =>
+      component.email.subscribe((s) =>
         expect(s).withContext('email should be set').toBe('')
       );
-      cvContactInfoComponent.phone.subscribe((s) =>
+      component.phone.subscribe((s) =>
         expect(s).withContext('phone should be set').toBe('')
       );
     };
@@ -65,7 +65,7 @@ describe('CvContactInfoComponent - unit', () => {
       setTimeout(() => {
         expect(visibleToLoadTextServiceSpy.subscribe)
           .withContext('subscribe should have been called')
-          .toHaveBeenCalledOnceWith(cvContactInfoComponent);
+          .toHaveBeenCalledOnceWith(component);
         done();
       });
     };
@@ -89,7 +89,7 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -117,7 +117,7 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -145,7 +145,7 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -166,7 +166,7 @@ describe('CvContactInfoComponent - unit', () => {
 
     const shouldCallTextServiceExpectation = 'should call the textService';
     const shouldCallTextService = () => {
-      cvContactInfoComponent.updateTexts();
+      component.updateTexts();
       expect(textServiceSpy.getMulti)
         .withContext(
           'getMulti should have been called 1 time with proper arguments'
@@ -200,14 +200,14 @@ describe('CvContactInfoComponent - unit', () => {
         ])
       );
 
-      cvContactInfoComponent.updateTexts();
+      component.updateTexts();
 
-      const actualNameObs = cvContactInfoComponent.name;
-      const actualSjObs = cvContactInfoComponent.sj;
-      const actualProfileObs = cvContactInfoComponent.profile;
-      const actualFsDevObs = cvContactInfoComponent.fsDev;
-      const actualEmailObs = cvContactInfoComponent.email;
-      const actualPhoneObs = cvContactInfoComponent.phone;
+      const actualNameObs = component.name;
+      const actualSjObs = component.sj;
+      const actualProfileObs = component.profile;
+      const actualFsDevObs = component.fsDev;
+      const actualEmailObs = component.email;
+      const actualPhoneObs = component.phone;
 
       actualNameObs.subscribe((s) => {
         expect(s).withContext('name should be set').toBe(expectedName);
@@ -231,6 +231,16 @@ describe('CvContactInfoComponent - unit', () => {
       });
     };
 
+    const shouldCallVisibleToLoadTextServiceExpectation =
+      'should call the visibleToLoadTextService';
+    const shouldCallVisibleToLoadTextService = () => {
+      component.updateTexts();
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service')
+        .toHaveBeenCalledOnceWith(component);
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
@@ -255,12 +265,16 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
     describe('in staging environment', () => {
@@ -287,12 +301,16 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
     describe('in prod environment', () => {
@@ -319,12 +337,16 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
         shouldSetPropertiesToTheServiceResultExpectation,
         shouldSetPropertiesToTheServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
   });
@@ -333,10 +355,10 @@ describe('CvContactInfoComponent - unit', () => {
     const shouldUnsubscribeExpectation =
       'should unsubscribe from the visibleToLoadTextService';
     const shouldUnsubscribe = () => {
-      cvContactInfoComponent.ngOnDestroy();
+      component.ngOnDestroy();
       expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
-        .toHaveBeenCalledOnceWith(cvContactInfoComponent);
+        .toHaveBeenCalledOnceWith(component);
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -357,7 +379,7 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -380,7 +402,7 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -403,7 +425,7 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldUnsubscribeExpectation, shouldUnsubscribe);
     });
@@ -413,9 +435,9 @@ describe('CvContactInfoComponent - unit', () => {
     const shouldReturnElementExpectation = 'should return the element';
     const shouldReturnElement = () => {
       const expected = new ElementRef(document.createElement('div'));
-      cvContactInfoComponent.mainDiv = expected;
+      component.mainDiv = expected;
 
-      const actual = cvContactInfoComponent.getElement();
+      const actual = component.getElement();
 
       expect(actual).toEqual(jasmine.anything());
       expect(actual).toEqual(expected);
@@ -439,7 +461,7 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -462,7 +484,7 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -485,7 +507,7 @@ describe('CvContactInfoComponent - unit', () => {
           ],
         });
 
-        cvContactInfoComponent = TestBed.inject(CvContactInfoComponent);
+        component = TestBed.inject(CvContactInfoComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });

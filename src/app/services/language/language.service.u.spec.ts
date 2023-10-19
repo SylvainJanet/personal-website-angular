@@ -6,12 +6,12 @@ import { environment as stagingEnvironment } from 'src/environments/environment.
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
 
-let languageService: LanguageService;
+let service: LanguageService;
 const devEnv = developmentEnvironment;
 const stagingEnv = stagingEnvironment;
 const prodEnv = productionEnvironment;
 
-describe('LanguageService', () => {
+describe('LanguageService - unit', () => {
   afterEach(() => {
     localStorage.removeItem('language');
   });
@@ -19,10 +19,10 @@ describe('LanguageService', () => {
   const shouldSetDefaultLanguageToEnglishByDefaultExpectation =
     'should set the language to english by default';
   const shouldSetDefaultLanguageToEnglishByDefault = () => {
-    languageService = TestBed.inject(LanguageService);
+    service = TestBed.inject(LanguageService);
 
     const expected = Languages.ENGLISH;
-    const actual = languageService.language;
+    const actual = service.language;
 
     expect(actual).withContext('language should be english').toBe(expected);
   };
@@ -33,7 +33,7 @@ describe('LanguageService', () => {
     spyOn(Storage.prototype, 'setItem');
 
     localStorage.removeItem('language');
-    languageService = TestBed.inject(LanguageService);
+    service = TestBed.inject(LanguageService);
 
     expect(window.localStorage.setItem)
       .withContext('setItem should have been called once with proper arguments')
@@ -45,10 +45,10 @@ describe('LanguageService', () => {
   const shouldSetLanguageToTheOneInLocalStorage = () => {
     localStorage.setItem('language', Languages[Languages.FRENCH]);
 
-    languageService = TestBed.inject(LanguageService);
+    service = TestBed.inject(LanguageService);
 
     const expected = Languages.FRENCH;
-    const actual = languageService.language;
+    const actual = service.language;
 
     expect(actual).withContext('language should be as expected').toBe(expected);
   };
@@ -124,15 +124,15 @@ describe('LanguageService', () => {
       'should return the current language';
     const shouldReturnTheCurrentLanguage = () => {
       const expected = Languages.ENGLISH;
-      const actual = languageService.current();
+      const actual = service.current();
 
       expect(actual)
         .withContext('language should be as expected - 1')
         .toBe(expected);
 
       const expected2 = Languages.FRENCH;
-      languageService.language = expected2;
-      const actual2 = languageService.current();
+      service.language = expected2;
+      const actual2 = service.current();
 
       expect(actual2)
         .withContext('language should be as expected - 2')
@@ -146,7 +146,7 @@ describe('LanguageService', () => {
         TestBed.configureTestingModule({
           providers: [{ provide: ENV, useValue: devEnv }],
         });
-        languageService = TestBed.inject(LanguageService);
+        service = TestBed.inject(LanguageService);
       });
       it(
         shouldReturnTheCurrentLanguageExpectation,
@@ -161,7 +161,7 @@ describe('LanguageService', () => {
         TestBed.configureTestingModule({
           providers: [{ provide: ENV, useValue: stagingEnv }],
         });
-        languageService = TestBed.inject(LanguageService);
+        service = TestBed.inject(LanguageService);
       });
       it(
         shouldReturnTheCurrentLanguageExpectation,
@@ -176,7 +176,7 @@ describe('LanguageService', () => {
         TestBed.configureTestingModule({
           providers: [{ provide: ENV, useValue: prodEnv }],
         });
-        languageService = TestBed.inject(LanguageService);
+        service = TestBed.inject(LanguageService);
       });
       it(
         shouldReturnTheCurrentLanguageExpectation,
@@ -190,15 +190,15 @@ describe('LanguageService', () => {
       'should set the current language';
     const shouldSetCurrentLanguage = () => {
       const expected = Languages.ENGLISH;
-      const actual = languageService.language;
+      const actual = service.language;
 
       expect(actual)
         .withContext('language should be as expected - 1')
         .toBe(expected);
 
       const expected2 = Languages.FRENCH;
-      languageService.set(expected2);
-      const actual2 = languageService.current();
+      service.set(expected2);
+      const actual2 = service.current();
 
       expect(actual2)
         .withContext('language should be as expected - 2')
@@ -211,7 +211,7 @@ describe('LanguageService', () => {
       spyOn(Storage.prototype, 'setItem');
 
       const newLanguage = Languages.FRENCH;
-      languageService.set(newLanguage);
+      service.set(newLanguage);
 
       expect(window.localStorage.setItem)
         .withContext(
@@ -227,7 +227,7 @@ describe('LanguageService', () => {
         TestBed.configureTestingModule({
           providers: [{ provide: ENV, useValue: devEnv }],
         });
-        languageService = TestBed.inject(LanguageService);
+        service = TestBed.inject(LanguageService);
       });
       it(shouldSetCurrentLanguageExpectation, shouldSetCurrentLanguage);
       it(
@@ -243,7 +243,7 @@ describe('LanguageService', () => {
         TestBed.configureTestingModule({
           providers: [{ provide: ENV, useValue: stagingEnv }],
         });
-        languageService = TestBed.inject(LanguageService);
+        service = TestBed.inject(LanguageService);
       });
       it(shouldSetCurrentLanguageExpectation, shouldSetCurrentLanguage);
       it(
@@ -259,7 +259,7 @@ describe('LanguageService', () => {
         TestBed.configureTestingModule({
           providers: [{ provide: ENV, useValue: prodEnv }],
         });
-        languageService = TestBed.inject(LanguageService);
+        service = TestBed.inject(LanguageService);
       });
       it(shouldSetCurrentLanguageExpectation, shouldSetCurrentLanguage);
       it(

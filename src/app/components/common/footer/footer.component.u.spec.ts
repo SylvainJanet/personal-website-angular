@@ -15,7 +15,7 @@ const stagingEnv = stagingEnvironment;
 const prodEnv = productionEnvironment;
 
 describe('FooterComponent - unit', () => {
-  let footerComponent: FooterComponent;
+  let component: FooterComponent;
   let visibleToLoadTextServiceSpy: jasmine.SpyObj<VisibleToLoadTextService>;
   let textServiceSpy: jasmine.SpyObj<TextService>;
 
@@ -31,34 +31,34 @@ describe('FooterComponent - unit', () => {
   describe('constructor', () => {
     const shouldCreateExpectation = 'should create';
     const shouldCreate = () => {
-      expect(footerComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
     };
 
     const shouldSetDefaultValuesExpectation = 'should set default values';
     const shouldSetDefaultValues = () => {
-      expect(footerComponent)
+      expect(component)
         .withContext('component should create')
         .toEqual(jasmine.anything());
-      expect(footerComponent.preloaders)
+      expect(component.preloaders)
         .withContext('preloaders should be set')
         .toEqual([Preloaders.MAIN]);
 
-      expect(footerComponent.doubleImgDisplay)
+      expect(component.doubleImgDisplay)
         .withContext('doubleImgDisplay should be set')
         .toBe('block');
-      footerComponent.footerText.subscribe((s) => {
+      component.footerText.subscribe((s) => {
         expect(s).withContext('footerText should be set').toBe('');
       });
-      footerComponent.footerLink.subscribe((s) => {
+      component.footerLink.subscribe((s) => {
         expect(s).withContext('footerLink should be set').toBe('');
       });
-      footerComponent.footerHref.subscribe((s) => {
+      component.footerHref.subscribe((s) => {
         expect(s).withContext('footerHref should be set').toBe('');
       });
 
-      expect(footerComponent.footerSrc)
+      expect(component.footerSrc)
         .withContext('footerSrc should be set')
         .toEqual(expectedBannerUrl);
     };
@@ -69,7 +69,7 @@ describe('FooterComponent - unit', () => {
       setTimeout(() => {
         expect(visibleToLoadTextServiceSpy.subscribe)
           .withContext('subscribe should have been called')
-          .toHaveBeenCalledOnceWith(footerComponent);
+          .toHaveBeenCalledOnceWith(component);
         done();
       });
     };
@@ -96,7 +96,7 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -127,7 +127,7 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -158,7 +158,7 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldCreateExpectation, shouldCreate);
       it(shouldSetDefaultValuesExpectation, shouldSetDefaultValues);
@@ -172,7 +172,7 @@ describe('FooterComponent - unit', () => {
   describe('updateTexts', () => {
     const shouldCallTextServiceExpectation = 'should call the textService';
     const shouldCallTextService = () => {
-      footerComponent.updateTexts();
+      component.updateTexts();
 
       expect(textServiceSpy.getMulti)
         .withContext(
@@ -184,11 +184,11 @@ describe('FooterComponent - unit', () => {
     const shouldSetPropertiesToTextServiceResultExpectation =
       'should set the properties to the textService result';
     const shouldSetPropertiesToTextServiceResult = () => {
-      footerComponent.updateTexts();
+      component.updateTexts();
 
-      const actualFooterText = footerComponent.footerText;
-      const actualFooterLink = footerComponent.footerLink;
-      const actualFooterHref = footerComponent.footerHref;
+      const actualFooterText = component.footerText;
+      const actualFooterLink = component.footerLink;
+      const actualFooterHref = component.footerHref;
 
       actualFooterText.subscribe((s) => {
         expect(s)
@@ -206,6 +206,17 @@ describe('FooterComponent - unit', () => {
           .toBe(expectedFooterHref);
       });
     };
+
+    const shouldCallVisibleToLoadTextServiceExpectation =
+      'should call the visibleToLoadTextService';
+    const shouldCallVisibleToLoadTextService = () => {
+      component.updateTexts();
+
+      expect(visibleToLoadTextServiceSpy.textLoaded)
+        .withContext('should call the service')
+        .toHaveBeenCalledOnceWith(component);
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         visibleToLoadTextServiceSpy = jasmine.createSpyObj(
@@ -227,12 +238,16 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
         shouldSetPropertiesToTextServiceResultExpectation,
         shouldSetPropertiesToTextServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
     describe('in staging environment', () => {
@@ -256,12 +271,16 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
         shouldSetPropertiesToTextServiceResultExpectation,
         shouldSetPropertiesToTextServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
     describe('in prod environment', () => {
@@ -285,12 +304,16 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldCallTextServiceExpectation, shouldCallTextService);
       it(
         shouldSetPropertiesToTextServiceResultExpectation,
         shouldSetPropertiesToTextServiceResult
+      );
+      it(
+        shouldCallVisibleToLoadTextServiceExpectation,
+        shouldCallVisibleToLoadTextService
       );
     });
   });
@@ -299,10 +322,10 @@ describe('FooterComponent - unit', () => {
     const shouldUnsubscribeFromLanguageServiceExpectation =
       'should unsubscribe from the languageService';
     const shouldUnsubscribeFromLanguageService = () => {
-      footerComponent.ngOnDestroy();
+      component.ngOnDestroy();
       expect(visibleToLoadTextServiceSpy.unsubscribe)
         .withContext('unsubscribe should have been called')
-        .toHaveBeenCalledOnceWith(footerComponent);
+        .toHaveBeenCalledOnceWith(component);
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -325,7 +348,7 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(
         shouldUnsubscribeFromLanguageServiceExpectation,
@@ -353,7 +376,7 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(
         shouldUnsubscribeFromLanguageServiceExpectation,
@@ -381,7 +404,7 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(
         shouldUnsubscribeFromLanguageServiceExpectation,
@@ -394,9 +417,9 @@ describe('FooterComponent - unit', () => {
     const shouldSetDoubleImgDisplayToNoneExpectation =
       "should set doubleImgDisplay to 'none'";
     const shouldSetDoubleImgDisplayToNone = () => {
-      footerComponent.onDoubleImgLoad();
+      component.onDoubleImgLoad();
 
-      expect(footerComponent.doubleImgDisplay)
+      expect(component.doubleImgDisplay)
         .withContext("doubleImgDisplay should be 'none'")
         .toBe('none');
     };
@@ -421,7 +444,7 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: devEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(
         shouldSetDoubleImgDisplayToNoneExpectation,
@@ -449,7 +472,7 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: stagingEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(
         shouldSetDoubleImgDisplayToNoneExpectation,
@@ -477,7 +500,7 @@ describe('FooterComponent - unit', () => {
             { provide: ENV, useValue: prodEnv },
           ],
         });
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(
         shouldSetDoubleImgDisplayToNoneExpectation,
@@ -490,9 +513,9 @@ describe('FooterComponent - unit', () => {
     const shouldReturnElementExpectation = 'should return the element';
     const shouldReturnElement = () => {
       const expected = new ElementRef(document.createElement('section'));
-      footerComponent.mainSection = expected;
+      component.mainSection = expected;
 
-      const actual = footerComponent.getElement();
+      const actual = component.getElement();
 
       expect(actual).toEqual(jasmine.anything());
       expect(actual).toEqual(expected);
@@ -516,7 +539,7 @@ describe('FooterComponent - unit', () => {
           ],
         });
 
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -539,7 +562,7 @@ describe('FooterComponent - unit', () => {
           ],
         });
 
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });
@@ -562,7 +585,7 @@ describe('FooterComponent - unit', () => {
           ],
         });
 
-        footerComponent = TestBed.inject(FooterComponent);
+        component = TestBed.inject(FooterComponent);
       });
       it(shouldReturnElementExpectation, shouldReturnElement);
     });

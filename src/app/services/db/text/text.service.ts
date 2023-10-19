@@ -79,16 +79,26 @@ export class TextService {
    * @returns An observable of the text
    */
   get(selector: string): Observable<string> {
+    return this.getTextInLanguage(selector, this.langageService.current());
+  }
+
+  /**
+   * Get a text for a selector in a language. Uses {@link getText}. Only useful
+   * when then language isn't the language set by the {@link LanguageService}
+   * (for that, see {@link get}) Notifies the TEXTS {@link Preloaders} that a text
+   * is loading, as well as when the text is loaded.
+   *
+   * @param selector The selector
+   * @returns An observable of the text
+   */
+  getTextInLanguage(selector: string, language: Languages): Observable<string> {
     const initLoad = of('').pipe(
       ifFirst(() => {
         this.preloaderService.toLoad(Preloaders.TEXTS, 1);
       }),
       skip(1)
     );
-    const getTextRes = this.getText(
-      selector,
-      this.langageService.current()
-    ).pipe(
+    const getTextRes = this.getText(selector, language).pipe(
       ifFirst(() => {
         this.preloaderService.loaded(Preloaders.TEXTS, 1);
       }),
@@ -129,18 +139,6 @@ export class TextService {
       })
     );
     return concat(initLoad, getTextRes);
-  }
-
-  /**
-   * Get the other language (as in, the language that the app is not currently
-   * in) name in its own language.
-   *
-   * @returns An observable of the language name
-   */
-  getOtherLanguage(): Observable<string> {
-    return this.langageService.current() == Languages.FRENCH
-      ? this.getText('english-language-name', Languages.ENGLISH)
-      : this.getText('french-language-name', Languages.FRENCH);
   }
 
   /**
