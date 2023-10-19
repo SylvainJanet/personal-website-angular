@@ -1,5 +1,5 @@
 <div
-  class="line-on-hover-container"
+  class="line-on-hover-container clickable"
   [style]="globalStyle"
   (click)="doAction($event)"
   (touchstart)="lineAppears($event)"
@@ -11,11 +11,6 @@
     class="line-on-hover"
     [style]="buttonStyle"
     [ngStyle]="{ color: textColor }"
-    (click)="doAction($event)"
-    (touchstart)="lineAppears($event)"
-    (mouseenter)="lineAppears($event)"
-    (touchend)="lineDisappears()"
-    (mouseleave)="lineDisappears()"
   >
     {{ text | async }}
   </button>
