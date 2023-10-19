@@ -60,7 +60,12 @@ export class LanguageModalComponent implements ComponentWithText, OnDestroy {
   /** Display style of the image doubles */
   doubleImgDisplay = 'block';
   /** Flag sources, used to load the sources when this component loads. */
-  flagSrcs = ['fr.svg', 'gb.svg', 'us.svg', 'xx.svg'];
+  flagSrcs = [
+    '../../../../assets/flags/fr.svg',
+    '../../../../assets/flags/gb.svg',
+    '../../../../assets/flags/us.svg',
+    '../../../../assets/flags/xx.svg',
+  ];
   /** Flag selectors, used to load the sources when this components loads. */
   flagSelectors = ['fr', 'gb', 'us', 'xx'];
   /** {@link Preloaders} used for the images. */
