@@ -873,6 +873,42 @@ describe('VisibleToLoadTextService - unit', () => {
         .withContext('loading should be false after')
         .toBeFalse();
     });
+    it('(no reload) should call the loadNewTexts method', (done: DoneFn) => {
+      const subscriber: ComponentWithText = {
+        updateTexts: function (): void {
+          //
+        },
+        getElement: function (): ElementRef<HTMLElement> {
+          return {} as ElementRef<HTMLElement>;
+        },
+        ngOnDestroy: function (): void {
+          //
+        },
+      };
+
+      spyOn(service, 'loadNewTexts');
+
+      expect(service.loadNewTexts)
+        .withContext('should not be called at first')
+        .not.toHaveBeenCalled();
+
+      service.subscribe(subscriber);
+      // assume the text loads
+      service.loading.set(subscriber, true);
+
+      expect(service.loadNewTexts)
+        .withContext('should not be called at before')
+        .not.toHaveBeenCalled();
+
+      service.textLoaded(subscriber);
+
+      setTimeout(() => {
+        expect(service.loadNewTexts)
+          .withContext('should have been called after')
+          .toHaveBeenCalledOnceWith();
+        done();
+      }, 0);
+    });
     it('(reload) should set the loaded map for the component to false', () => {
       const subscriber: ComponentWithText = {
         updateTexts: function (): void {

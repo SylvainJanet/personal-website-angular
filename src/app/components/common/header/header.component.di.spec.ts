@@ -31,12 +31,13 @@ describe('HeaderComponent - dom integration', () => {
   beforeEach(() => {
     DOMComputationServiceSpy = jasmine.createSpyObj('DOMComputationService', [
       'getActualHeight',
+      'isIntoView',
     ]);
 
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
     const expectedNameDto = of({ message: expectedName });
 
-    httpClientSpy.get.and.returnValues(expectedNameDto);
+    httpClientSpy.get.and.returnValue(expectedNameDto);
   });
 
   const shouldCreateExpectation = 'should create';

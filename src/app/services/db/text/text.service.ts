@@ -45,8 +45,8 @@ export class TextService {
       .set('selector', selector)
       .set('language', Languages[language]);
     return this.dataSource
-      .get<StringDto>('text', params)
-      .pipe(map((c) => c.message));
+      ?.get<StringDto>('text', params)
+      ?.pipe(map((c) => c.message));
   }
 
   /**
@@ -65,8 +65,8 @@ export class TextService {
       params = params.append('selectors', selector);
     }
     return this.dataSource
-      .get<ListStringDto>('multi-text', params)
-      .pipe(map((dto) => dto.messages));
+      ?.get<ListStringDto>('multi-text', params)
+      ?.pipe(map((dto) => dto.messages));
   }
 
   /**
@@ -98,7 +98,7 @@ export class TextService {
       }),
       skip(1)
     );
-    const getTextRes = this.getText(selector, language).pipe(
+    const getTextRes = this.getText(selector, language)?.pipe(
       ifFirst(() => {
         this.preloaderService.loaded(Preloaders.TEXTS, 1);
       }),
@@ -126,7 +126,7 @@ export class TextService {
     const getTextRes = this.getMultiText(
       selectors,
       this.langageService.current()
-    ).pipe(
+    )?.pipe(
       ifFirst(() => {
         this.preloaderService.loaded(Preloaders.TEXTS, 1);
       }),
@@ -170,7 +170,7 @@ export class TextService {
     const getTextRes = this.getText(
       selector,
       this.langageService.current()
-    ).pipe(
+    )?.pipe(
       ifFirst(() => {
         this.preloaderService.loaded(Preloaders.TEXTS, 1);
       }),
@@ -209,7 +209,7 @@ export class TextService {
     const getTextRes = this.getMultiText(
       selectors,
       this.langageService.current()
-    ).pipe(
+    )?.pipe(
       ifFirst(() => {
         this.preloaderService.loaded(Preloaders.TEXTS, 1);
       }),
@@ -269,7 +269,7 @@ export class TextService {
     const getTextRes = this.getMultiText(
       selectors,
       this.langageService.current()
-    ).pipe(
+    )?.pipe(
       ifFirst(() => {
         this.preloaderService.loaded(Preloaders.TEXTS, 1);
       }),

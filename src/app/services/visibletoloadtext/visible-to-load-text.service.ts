@@ -167,6 +167,9 @@ export class VisibleToLoadTextService implements OnDestroy {
     if (!this.toReload.get(comp)) {
       this.loaded.set(comp, true);
       this.loading.set(comp, false);
+      setTimeout(() => {
+        this.loadNewTexts();
+      }, 0);
     } else {
       this.toReload.set(comp, false);
       this.loaded.set(comp, false);

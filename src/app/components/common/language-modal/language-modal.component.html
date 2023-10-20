@@ -1,6 +1,7 @@
 <!-- Use flags here that are immediately hidden to load the svg resources in the page. -->
 <div
   *ngFor="let flagSrc of flagSrcs; index as i"
+  [style]="{ display: doubleImgDisplay }"
   style="height: 0px; width: 0px"
 >
   <img

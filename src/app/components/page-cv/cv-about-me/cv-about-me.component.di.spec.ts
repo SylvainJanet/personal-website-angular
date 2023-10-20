@@ -66,7 +66,7 @@ describe('CvAboutMeComponent - dom integration', () => {
           'Test[[a_asset,Test]]',
       ],
     });
-    httpClientSpy.get.and.returnValues(expectedMessagesDto);
+    httpClientSpy.get.and.returnValue(expectedMessagesDto);
   });
 
   const shouldCreateExpectation = 'should create';

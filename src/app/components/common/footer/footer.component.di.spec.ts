@@ -30,7 +30,7 @@ describe('FooterComponent - dom integration', () => {
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-    httpClientSpy.get.and.returnValues(expectedMessagesDto);
+    httpClientSpy.get.and.returnValue(expectedMessagesDto);
   });
 
   const shouldCreateExpectation = 'should create';
