@@ -24,7 +24,7 @@ describe('CvImgComponent - dom integration', () => {
   beforeEach(() => {
     const expectedAltTextDto = of({ message: expectedAltText });
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-    httpClientSpy.get.and.returnValues(expectedAltTextDto);
+    httpClientSpy.get.and.returnValue(expectedAltTextDto);
   });
 
   const shouldCreateExpectation = 'should create';

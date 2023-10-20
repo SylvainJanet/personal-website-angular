@@ -22,7 +22,7 @@ describe('BackToTopComponent - dom integration', () => {
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
     const expectedBackToTopAltDto = of({ message: expectedBackToTopAlt });
-    httpClientSpy.get.and.returnValues(expectedBackToTopAltDto);
+    httpClientSpy.get.and.returnValue(expectedBackToTopAltDto);
   });
 
   const shouldCreateExpectation = 'should create';

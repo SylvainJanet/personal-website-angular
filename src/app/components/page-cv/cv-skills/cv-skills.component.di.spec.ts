@@ -42,7 +42,7 @@ describe('CvSkillsComponent - dom integration', () => {
       ],
     });
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-    httpClientSpy.get.and.returnValues(expectedMessagesDto);
+    httpClientSpy.get.and.returnValue(expectedMessagesDto);
   });
 
   const shouldCreateExpectation = 'should create';
