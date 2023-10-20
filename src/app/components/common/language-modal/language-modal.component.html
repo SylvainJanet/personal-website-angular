@@ -1,15 +1,20 @@
 <!-- Use flags here that are immediately hidden to load the svg resources in the page. -->
 <div
   *ngFor="let flagSrc of flagSrcs; index as i"
-  [style]="{ display: doubleImgDisplay }"
+  style="height: 0px; width: 0px"
 >
   <img
     [src]="flagSrc"
     [appImgLoad]="preloaders"
     alt=""
     (load)="onDoubleImgLoad()"
+    style="height: 0px; width: 0px"
   />
-  <span class="fi" [class]="'fi-' + flagSelectors[i]"></span>
+  <span
+    class="fi"
+    [class]="'fi-' + flagSelectors[i]"
+    style="height: 0px; width: 0px"
+  ></span>
 </div>
 
 <div class="modal" [class.hide]="!isOpen" #mainDiv>
