@@ -2,7 +2,7 @@
 
 [![Deployed](https://github.com/SylvainJanet/personal-website-angular/actions/workflows/ci-cd-main.yml/badge.svg)](https://github.com/SylvainJanet/personal-website-angular/actions/workflows/ci-cd-main.yml)
 
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/SylvainJanet/personal-website-angular)![GitHub repo file count](https://img.shields.io/github/directory-file-count/SylvainJanet/personal-website-angular)![Lines of code](https://img.shields.io/tokei/lines/github/SylvainJanet/personal-website-angular?category=lines)![GitHub issues](https://img.shields.io/github/issues/SylvainJanet/personal-website-angular)![GitHub](https://img.shields.io/github/license/SylvainJanet/personal-website-angular)![GitHub last commit](https://img.shields.io/github/last-commit/SylvainJanet/personal-website-angular)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/SylvainJanet/personal-website-angular)![GitHub repo file count](https://img.shields.io/github/directory-file-count/SylvainJanet/personal-website-angular)![Lines of code](https://tokei.rs/b1/github/SylvainJanet/personal-website-angular)![GitHub issues](https://img.shields.io/github/issues/SylvainJanet/personal-website-angular)![GitHub](https://img.shields.io/github/license/SylvainJanet/personal-website-angular)![GitHub last commit](https://img.shields.io/github/last-commit/SylvainJanet/personal-website-angular)
 
 # PersonalWebsiteAngular
 
