@@ -5,12 +5,13 @@
   I haven't found a direct way to do so when the img is loaded using css (as a background-image css property, for instance).
   This workaround works, however, by defining another image. The browser will not load the same asset twice. The preloader logic
   can be done with that image, and once it's loaded, we can remove the double from the DOM.-->
-  <div [style]="{ display: doubleImgDisplay }">
+  <div [style]="{ display: doubleImgDisplay }" style="height: 0px; width: 0px">
     <img
       [src]="bannerSrc"
       [appImgLoad]="preloaders"
       alt=""
       (load)="onDoubleImgLoad()"
+      style="height: 0px; width: 0px"
     />
   </div>
   <div class="banner">
