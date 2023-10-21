@@ -140,7 +140,11 @@ describe('TextService - unit', () => {
 
       expect(service.getTextInLanguage)
         .withContext('method should have been called')
-        .toHaveBeenCalledOnceWith(selectorToTest, Languages.ENGLISH);
+        .toHaveBeenCalledOnceWith(
+          selectorToTest,
+          Languages.ENGLISH,
+          Preloaders.TEXTS
+        );
     });
     it('should notify the TEXTS preloader that a text has to load on subscription', () => {
       const selectorToTest = 'test-selector';
@@ -1590,7 +1594,11 @@ describe('TextService - unit', () => {
 
       expect(service['getMultiSomeBooleanSplit'])
         .withContext('getText should have been called')
-        .toHaveBeenCalledOnceWith(selectorsToTest, isSplitInput);
+        .toHaveBeenCalledOnceWith(
+          selectorsToTest,
+          isSplitInput,
+          Preloaders.TEXTS
+        );
     });
   });
 });

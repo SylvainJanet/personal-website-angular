@@ -71,36 +71,46 @@ export class TextService {
 
   /**
    * Get a text for a selector. Uses {@link getText} and the
-   * {@link LanguageService} to get the current language. Notifies the TEXTS
+   * {@link LanguageService} to get the current language. Notifies the
    * {@link Preloaders} that a text is loading, as well as when the text is
    * loaded.
    *
    * @param selector The selector
+   * @param preloader The preloader to notify
    * @returns An observable of the text
    */
-  get(selector: string): Observable<string> {
-    return this.getTextInLanguage(selector, this.langageService.current());
+  get(selector: string, preloader = Preloaders.TEXTS): Observable<string> {
+    return this.getTextInLanguage(
+      selector,
+      this.langageService.current(),
+      preloader
+    );
   }
 
   /**
    * Get a text for a selector in a language. Uses {@link getText}. Only useful
    * when then language isn't the language set by the {@link LanguageService}
-   * (for that, see {@link get}) Notifies the TEXTS {@link Preloaders} that a text
-   * is loading, as well as when the text is loaded.
+   * (for that, see {@link get}) Notifies the {@link Preloaders} that a text is
+   * loading, as well as when the text is loaded.
    *
    * @param selector The selector
+   * @param preloader The preloader to notify
    * @returns An observable of the text
    */
-  getTextInLanguage(selector: string, language: Languages): Observable<string> {
+  getTextInLanguage(
+    selector: string,
+    language: Languages,
+    preloader = Preloaders.TEXTS
+  ): Observable<string> {
     const initLoad = of('').pipe(
       ifFirst(() => {
-        this.preloaderService.toLoad(Preloaders.TEXTS, 1);
+        this.preloaderService.toLoad(preloader, 1);
       }),
       skip(1)
     );
     const getTextRes = this.getText(selector, language)?.pipe(
       ifFirst(() => {
-        this.preloaderService.loaded(Preloaders.TEXTS, 1);
+        this.preloaderService.loaded(preloader, 1);
       }),
       catchError(() => ['error'])
     );
@@ -109,17 +119,21 @@ export class TextService {
 
   /**
    * Get a text for multiple selectors. Uses {@link getMultiText} and the
-   * {@link LanguageService} to get the current language. Notifies the TEXTS
+   * {@link LanguageService} to get the current language. Notifies the
    * {@link Preloaders} that a text is loading, as well as when the text is
    * loaded.
    *
    * @param selectors The selectors
+   * @param preloader The preloader to notify
    * @returns An observable of the texts
    */
-  getMulti(selectors: string[]): Observable<string[]> {
+  getMulti(
+    selectors: string[],
+    preloader = Preloaders.TEXTS
+  ): Observable<string[]> {
     const initLoad = of(['']).pipe(
       ifFirst(() => {
-        this.preloaderService.toLoad(Preloaders.TEXTS, 1);
+        this.preloaderService.toLoad(preloader, 1);
       }),
       skip(1)
     );
@@ -128,7 +142,7 @@ export class TextService {
       this.langageService.current()
     )?.pipe(
       ifFirst(() => {
-        this.preloaderService.loaded(Preloaders.TEXTS, 1);
+        this.preloaderService.loaded(preloader, 1);
       }),
       catchError(() => {
         const res: string[] = [];
@@ -158,12 +172,16 @@ export class TextService {
    * the same domain but with an unexpected path).
    *
    * @param selector The selector
+   * @param preloader The preloader to notify
    * @returns An observable of the {@link Paragraph}.
    */
-  getSplit(selector: string): Observable<Paragraph[]> {
+  getSplit(
+    selector: string,
+    preloader = Preloaders.TEXTS
+  ): Observable<Paragraph[]> {
     const initLoad = of([]).pipe(
       ifFirst(() => {
-        this.preloaderService.toLoad(Preloaders.TEXTS, 1);
+        this.preloaderService.toLoad(preloader, 1);
       }),
       skip(1)
     );
@@ -172,7 +190,7 @@ export class TextService {
       this.langageService.current()
     )?.pipe(
       ifFirst(() => {
-        this.preloaderService.loaded(Preloaders.TEXTS, 1);
+        this.preloaderService.loaded(preloader, 1);
       }),
       catchError(() => ['error']),
       map((s) => this.paragraphDecoderService.decode(s))
@@ -197,12 +215,16 @@ export class TextService {
    * the same domain but with an unexpected path).
    *
    * @param selectors The selectors
+   * @param preloader The preloader to notify
    * @returns An observable of the {@link Paragraph}.
    */
-  getMultiAllSplit(selectors: string[]): Observable<Paragraph[][]> {
+  getMultiAllSplit(
+    selectors: string[],
+    preloader = Preloaders.TEXTS
+  ): Observable<Paragraph[][]> {
     const initLoad = of([[]]).pipe(
       ifFirst(() => {
-        this.preloaderService.toLoad(Preloaders.TEXTS, 1);
+        this.preloaderService.toLoad(preloader, 1);
       }),
       skip(1)
     );
@@ -211,7 +233,7 @@ export class TextService {
       this.langageService.current()
     )?.pipe(
       ifFirst(() => {
-        this.preloaderService.loaded(Preloaders.TEXTS, 1);
+        this.preloaderService.loaded(preloader, 1);
       }),
       catchError(() => {
         const res: string[] = [];
@@ -249,11 +271,13 @@ export class TextService {
    * the same domain but with an unexpected path).
    *
    * @param selectors The selectors
+   * @param preloader The preloader to notify
    * @returns An observable of the {@link Paragraph}.
    */
   private getMultiSomeBooleanSplit(
     selectors: string[],
-    isSplit: boolean[]
+    isSplit: boolean[],
+    preloader = Preloaders.TEXTS
   ): Observable<(Paragraph[] | string)[]> {
     if (selectors.length != isSplit.length) {
       throw new Error(
@@ -262,7 +286,7 @@ export class TextService {
     }
     const initLoad = of(['']).pipe(
       ifFirst(() => {
-        this.preloaderService.toLoad(Preloaders.TEXTS, 1);
+        this.preloaderService.toLoad(preloader, 1);
       }),
       skip(1)
     );
@@ -271,7 +295,7 @@ export class TextService {
       this.langageService.current()
     )?.pipe(
       ifFirst(() => {
-        this.preloaderService.loaded(Preloaders.TEXTS, 1);
+        this.preloaderService.loaded(preloader, 1);
       }),
       catchError(() => {
         const res: string[] = [];
@@ -298,7 +322,7 @@ export class TextService {
   /**
    * Get strings for multiple selectors, but splits the result for some of them
    * to get an array of {@link Paragraph} using the
-   * {@link ParagraphDecoderService}. Uses {@link}
+   * {@link ParagraphDecoderService}. Uses {@link getMultiSomeBooleanSplit}
    *
    * In the text, use `[[]]` to create new paragraph, use `[[br]]` to create a
    * `<br>` element, use `[[a_asset, link/to/asset.jpg]]` to create an `<a>`
@@ -313,10 +337,12 @@ export class TextService {
    * the same domain but with an unexpected path).
    *
    * @param selectors The selectors
+   * @param preloader The preloader to notify
    * @returns An observable of the {@link Paragraph}.
    */
   getMultiSomeSplit(
-    selectorsSplits: SelectorSplitParam[]
+    selectorsSplits: SelectorSplitParam[],
+    preloader = Preloaders.TEXTS
   ): Observable<(Paragraph[] | string)[]> {
     const selectors: string[] = [];
     const isSplit: boolean[] = [];
@@ -326,6 +352,6 @@ export class TextService {
       isSplit.push(ss.isSplit);
     });
 
-    return this.getMultiSomeBooleanSplit(selectors, isSplit);
+    return this.getMultiSomeBooleanSplit(selectors, isSplit, preloader);
   }
 }
