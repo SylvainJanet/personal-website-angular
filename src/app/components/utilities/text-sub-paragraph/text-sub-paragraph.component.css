@@ -1,13 +1,4 @@
-.lead {
-  text-align: left;
-
-  padding-top: calc(var(--default-padding));
-  padding-bottom: calc(var(--default-padding));
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.empty-paragraph {
+.empty-content {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
   -khtml-user-select: none; /* Konqueror HTML */

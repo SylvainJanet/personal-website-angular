@@ -1,4 +1,7 @@
-<p [class]="paragraph.cssClass">
+<p
+  [class]="paragraph.cssClass"
+  [class.empty-paragraph]="paragraph.els.length === 0"
+>
   <app-text-sub-paragraph
     *ngFor="let el of paragraph.els"
     [subPar]="el"
