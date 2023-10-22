@@ -23,6 +23,7 @@ export class ImageService {
   private images: Map<HTMLElement, Map<Preloaders, boolean>> = new Map();
   /** Logger. See {@link LogService} */
   logger: LogService;
+  private loadedImages: Map<HTMLElement, boolean> = new Map();
 
   /**
    * Image service constructor
@@ -107,8 +108,9 @@ export class ImageService {
         (!this.images.has(img) ||
           !this.images.get(img)?.has(loader) ||
           !this.images.get(img)?.get(loader)) &&
-        !img.getAttribute('complete')
+        (!this.loadedImages.has(img) || !this.loadedImages.get(img))
       ) {
+        this.loadedImages.set(img, false);
         if (this.images.get(img)) {
           this.images.get(img)?.set(loader, true);
         } else {
@@ -135,23 +137,20 @@ export class ImageService {
    * @param loaders The {@link Preloaders}
    */
   imageLoadedOrError(img: HTMLElement, loaders: Preloaders[]) {
-    this.logger.debug('IMAGE LOADED OR ERROR');
+    this.loadedImages.set(img, true);
     for (const loader of loaders) {
       if (
         this.images.has(img) &&
         this.images.get(img)?.has(loader) &&
         this.images.get(img)?.get(loader)
       ) {
-        this.logger.debug('IN IF');
         this.images.get(img)?.set(loader, false);
         let timeout = 0;
         if (!this.environment.production && !this.environment.isTesting)
           timeout =
             Math.random() * this.environment.artificialRandomLoadingTime +
             this.environment.artificialMinLoadingTime;
-        this.logger.debug('BEFORE TIMEOUT');
         setTimeout(() => {
-          this.logger.debug('IN TIMEOUT');
           this.preloaderService.loaded(
             loader,
             1,
