@@ -105,42 +105,45 @@ describe('CvSkillsComponent - integration', () => {
   describe('updateTexts', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
-    const shouldSetPropertiesTextServiceResult = () => {
+    const shouldSetPropertiesTextServiceResult = (done: DoneFn) => {
       component.updateTexts();
 
-      const actualSkillsObs = component.skills;
-      const actualJavaObs = component.java;
-      const actualCsharpObs = component.csharp;
-      const actualPythonDevObs = component.python;
-      const actualJstsObs = component.jsts;
-      const actualSqlObs = component.sql;
-      const actualHtmlObs = component.html;
-      const actualLatexObs = component.latex;
+      setTimeout(() => {
+        const actualSkillsObs = component.skills;
+        const actualJavaObs = component.java;
+        const actualCsharpObs = component.csharp;
+        const actualPythonDevObs = component.python;
+        const actualJstsObs = component.jsts;
+        const actualSqlObs = component.sql;
+        const actualHtmlObs = component.html;
+        const actualLatexObs = component.latex;
 
-      actualSkillsObs.subscribe((s) => {
-        expect(s).withContext('skills should be set').toBe(expectedSkills);
-      });
-      actualJavaObs.subscribe((s) => {
-        expect(s).withContext('java should be set').toBe(expectedJava);
-      });
-      actualCsharpObs.subscribe((s) => {
-        expect(s).withContext('csharp should be set').toBe(expectedCsharp);
-      });
-      actualPythonDevObs.subscribe((s) => {
-        expect(s).withContext('python should be set').toBe(expectedPython);
-      });
-      actualJstsObs.subscribe((s) => {
-        expect(s).withContext('jsts should be set').toBe(expectedJsts);
-      });
-      actualSqlObs.subscribe((s) => {
-        expect(s).withContext('sql should be set').toBe(expectedSql);
-      });
-      actualHtmlObs.subscribe((s) => {
-        expect(s).withContext('html should be set').toBe(expectedHtml);
-      });
-      actualLatexObs.subscribe((s) => {
-        expect(s).withContext('latex should be set').toBe(expectedLatex);
-      });
+        actualSkillsObs.subscribe((s) => {
+          expect(s).withContext('skills should be set').toBe(expectedSkills);
+        });
+        actualJavaObs.subscribe((s) => {
+          expect(s).withContext('java should be set').toBe(expectedJava);
+        });
+        actualCsharpObs.subscribe((s) => {
+          expect(s).withContext('csharp should be set').toBe(expectedCsharp);
+        });
+        actualPythonDevObs.subscribe((s) => {
+          expect(s).withContext('python should be set').toBe(expectedPython);
+        });
+        actualJstsObs.subscribe((s) => {
+          expect(s).withContext('jsts should be set').toBe(expectedJsts);
+        });
+        actualSqlObs.subscribe((s) => {
+          expect(s).withContext('sql should be set').toBe(expectedSql);
+        });
+        actualHtmlObs.subscribe((s) => {
+          expect(s).withContext('html should be set').toBe(expectedHtml);
+        });
+        actualLatexObs.subscribe((s) => {
+          expect(s).withContext('latex should be set').toBe(expectedLatex);
+        });
+        done();
+      }, 2);
     };
     describe('in dev environment', () => {
       beforeEach(() => {

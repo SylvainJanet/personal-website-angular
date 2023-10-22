@@ -49,77 +49,82 @@ describe('HeaderComponent - dom integration', () => {
 
   const shouldHaveContentSetByServiceExpectation =
     'should have content set by textService';
-  const shouldHaveContentSetByService = () => {
+  const shouldHaveContentSetByService = (done: DoneFn) => {
     componentInstance.updateTexts();
-    fixture.detectChanges();
 
-    // myName
+    setTimeout(() => {
+      fixture.detectChanges();
 
-    const debugEl: DebugElement = fixture.debugElement;
+      // myName
 
-    const headerEl: DebugElement = debugEl.children[1];
+      const debugEl: DebugElement = fixture.debugElement;
 
-    const headerContainerEl: DebugElement = headerEl.children[0];
+      const headerEl: DebugElement = debugEl.children[1];
 
-    // left-header
-    const leftHeaderEl: DebugElement = headerContainerEl.children[0];
-    const leftLinkEl: DebugElement = leftHeaderEl.children[0];
+      const headerContainerEl: DebugElement = headerEl.children[0];
 
-    const leftLinkComp: LinkBarOnHoverComponent = leftLinkEl.componentInstance;
-    leftLinkComp.text.subscribe((s) => {
-      expect(s)
-        .withContext('left link text should be set - name')
-        .toBe(expectedName);
-    });
+      // left-header
+      const leftHeaderEl: DebugElement = headerContainerEl.children[0];
+      const leftLinkEl: DebugElement = leftHeaderEl.children[0];
 
-    // collapsed-header
-    const collapsedHeaderEl: DebugElement = headerContainerEl.children[2];
+      const leftLinkComp: LinkBarOnHoverComponent =
+        leftLinkEl.componentInstance;
+      leftLinkComp.text.subscribe((s) => {
+        expect(s)
+          .withContext('left link text should be set - name')
+          .toBe(expectedName);
+      });
 
-    const deroulantEl: DebugElement = collapsedHeaderEl.children[0];
+      // collapsed-header
+      const collapsedHeaderEl: DebugElement = headerContainerEl.children[2];
 
-    // collapsed-header deroulant ul
+      const deroulantEl: DebugElement = collapsedHeaderEl.children[0];
 
-    const deroulantUlEl: DebugElement = deroulantEl.children[1];
+      // collapsed-header deroulant ul
 
-    // collapsed-header deroulant ul li 1
+      const deroulantUlEl: DebugElement = deroulantEl.children[1];
 
-    const deroulantUlLi1El: DebugElement = deroulantUlEl.children[0];
-    const collapsedLink1El: DebugElement = deroulantUlLi1El.children[0];
+      // collapsed-header deroulant ul li 1
 
-    const collapsedLink1Comp: LinkBarOnHoverComponent =
-      collapsedLink1El.componentInstance;
-    collapsedLink1Comp.text.subscribe((s) => {
-      expect(s)
-        .withContext('collapsed link text should be set - name')
-        .toBe(expectedName);
-    });
+      const deroulantUlLi1El: DebugElement = deroulantUlEl.children[0];
+      const collapsedLink1El: DebugElement = deroulantUlLi1El.children[0];
 
-    // setLanguage
+      const collapsedLink1Comp: LinkBarOnHoverComponent =
+        collapsedLink1El.componentInstance;
+      collapsedLink1Comp.text.subscribe((s) => {
+        expect(s)
+          .withContext('collapsed link text should be set - name')
+          .toBe(expectedName);
+      });
 
-    // right-header
-    const rightHeaderEl: DebugElement = headerContainerEl.children[1];
-    const rightLinkEl: DebugElement = rightHeaderEl.children[0];
+      // setLanguage
 
-    const rightLinkComp: LinkBarOnHoverComponent =
-      rightLinkEl.componentInstance;
-    rightLinkComp.text.subscribe((s) => {
-      expect(s)
-        .withContext('right link text should be set - set language')
-        .toBe(expectedSetLanguage);
-    });
+      // right-header
+      const rightHeaderEl: DebugElement = headerContainerEl.children[1];
+      const rightLinkEl: DebugElement = rightHeaderEl.children[0];
 
-    // collapsed-header deroulant ul li 2
+      const rightLinkComp: LinkBarOnHoverComponent =
+        rightLinkEl.componentInstance;
+      rightLinkComp.text.subscribe((s) => {
+        expect(s)
+          .withContext('right link text should be set - set language')
+          .toBe(expectedSetLanguage);
+      });
 
-    const deroulantUlLi2El: DebugElement = deroulantUlEl.children[1];
-    const collapsedLink2El: DebugElement = deroulantUlLi2El.children[0];
+      // collapsed-header deroulant ul li 2
 
-    const collapsedLink2Comp: LinkBarOnHoverComponent =
-      collapsedLink2El.componentInstance;
-    collapsedLink2Comp.text.subscribe((s) => {
-      expect(s)
-        .withContext('collapsed link text should be set - set language')
-        .toBe(expectedSetLanguage);
-    });
+      const deroulantUlLi2El: DebugElement = deroulantUlEl.children[1];
+      const collapsedLink2El: DebugElement = deroulantUlLi2El.children[0];
+
+      const collapsedLink2Comp: LinkBarOnHoverComponent =
+        collapsedLink2El.componentInstance;
+      collapsedLink2Comp.text.subscribe((s) => {
+        expect(s)
+          .withContext('collapsed link text should be set - set language')
+          .toBe(expectedSetLanguage);
+      });
+      done();
+    }, 1);
   };
 
   describe('in dev environment', () => {

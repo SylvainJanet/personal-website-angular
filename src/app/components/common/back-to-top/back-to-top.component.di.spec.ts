@@ -34,17 +34,22 @@ describe('BackToTopComponent - dom integration', () => {
 
   const shouldHaveContentSetByServiceExpectation =
     'should have content set by textService';
-  const shouldHaveContentSetByService = () => {
+  const shouldHaveContentSetByService = (done: DoneFn) => {
     componentInstance.updateTexts();
-    fixture.detectChanges();
 
     const debugEl: DebugElement = fixture.debugElement;
     const aEl: DebugElement = debugEl.children[0];
     const imgEl: DebugElement = aEl.children[0];
 
-    const actual = imgEl.attributes['alt'];
+    setTimeout(() => {
+      fixture.detectChanges();
 
-    expect(actual).withContext('alt should be set').toBe(expectedBackToTopAlt);
+      const actual = imgEl.attributes['alt'];
+      expect(actual)
+        .withContext('alt should be set')
+        .toBe(expectedBackToTopAlt);
+      done();
+    }, 1);
   };
 
   describe('in dev environment', () => {

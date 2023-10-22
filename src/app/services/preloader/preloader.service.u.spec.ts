@@ -92,6 +92,28 @@ describe('PreloaderService - unit', () => {
         .toBe(0);
     });
   };
+  const shouldHaveProperlyDefinedOldMaxQtyExpectation =
+    'should properly defined old max quantity map';
+  const shouldHaveProperlyDefinedOldMaxQty = () => {
+    const actual = service.oldMaxQty;
+
+    Object.keys(Preloaders).forEach((element) => {
+      expect(actual.get(element as Preloaders))
+        .withContext('element ' + element + ' should be defined in the map')
+        .toBe(0);
+    });
+  };
+  const shouldHaveProperlyDefinedLoadingMessageExpectation =
+    'should properly defined loadingMessage';
+  const shouldHaveProperlyDefinedLoadingMessage = () => {
+    const actual = service.loadingMessage;
+
+    actual.subscribe({
+      next: (value) => {
+        expect(value).withContext('loadingMessage should be set').toBe('');
+      },
+    });
+  };
 
   const shouldHaveProperlyDefinedIsMainLoadExpectation =
     'should properly definedisMainLoad';
@@ -128,6 +150,14 @@ describe('PreloaderService - unit', () => {
       shouldHaveProperlyDefinedMaxQty
     );
     it(
+      shouldHaveProperlyDefinedOldMaxQtyExpectation,
+      shouldHaveProperlyDefinedOldMaxQty
+    );
+    it(
+      shouldHaveProperlyDefinedLoadingMessageExpectation,
+      shouldHaveProperlyDefinedLoadingMessage
+    );
+    it(
       shouldHaveProperlyDefinedIsMainLoadExpectation,
       shouldHaveProperlyDefinedIsMainLoad
     );
@@ -160,6 +190,14 @@ describe('PreloaderService - unit', () => {
       shouldHaveProperlyDefinedMaxQty
     );
     it(
+      shouldHaveProperlyDefinedOldMaxQtyExpectation,
+      shouldHaveProperlyDefinedOldMaxQty
+    );
+    it(
+      shouldHaveProperlyDefinedLoadingMessageExpectation,
+      shouldHaveProperlyDefinedLoadingMessage
+    );
+    it(
       shouldHaveProperlyDefinedIsMainLoadExpectation,
       shouldHaveProperlyDefinedIsMainLoad
     );
@@ -190,6 +228,14 @@ describe('PreloaderService - unit', () => {
     it(
       shouldHaveProperlyDefinedMaxQtyExpectation,
       shouldHaveProperlyDefinedMaxQty
+    );
+    it(
+      shouldHaveProperlyDefinedOldMaxQtyExpectation,
+      shouldHaveProperlyDefinedOldMaxQty
+    );
+    it(
+      shouldHaveProperlyDefinedLoadingMessageExpectation,
+      shouldHaveProperlyDefinedLoadingMessage
     );
     it(
       shouldHaveProperlyDefinedIsMainLoadExpectation,
@@ -302,7 +348,50 @@ describe('PreloaderService - unit', () => {
         .withContext('maxQty should be updated')
         .toBe(oldMax + qtyToTest);
     };
+    const shouldUpdateOldMaxQtyExpectation = 'should update old max quantity';
+    const shouldUpdateOldMaxQty = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const qtyToTest = 2;
 
+      const oldMax = service.oldMaxQty.get(preloaderToTest) as number;
+
+      service.toLoad(preloaderToTest, qtyToTest);
+
+      const newMax = service.oldMaxQty.get(preloaderToTest);
+
+      expect(newMax)
+        .withContext('oldMaxQty should be updated')
+        .toBe(oldMax + qtyToTest);
+    };
+
+    const shouldReturnMessageExpectation = 'should return message';
+    const shouldReturnMessage = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const qtyToTest = 2;
+
+      const actual = service.toLoad(preloaderToTest, qtyToTest);
+
+      const expected = service.formatMessage(
+        service['defaultToLoadMessage'](preloaderToTest, qtyToTest),
+        preloaderToTest
+      );
+
+      expect(actual).withContext('message should be returned').toBe(expected);
+    };
+
+    const shouldCallDefaultToLoadMessageExpectation = 'should return message';
+    const shouldCallDefaultToLoadMessage = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const qtyToTest = 2;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      spyOn<any>(service, 'defaultToLoadMessage');
+      service.toLoad(preloaderToTest, qtyToTest);
+
+      expect(service['defaultToLoadMessage'])
+        .withContext('message should be returned')
+        .toHaveBeenCalledOnceWith(preloaderToTest, qtyToTest);
+    };
     describe('in dev environment', () => {
       beforeEach(() => {
         const logService = new LogService(
@@ -315,6 +404,12 @@ describe('PreloaderService - unit', () => {
       it(shouldEmitStatusLoadingExpectation, shouldEmitStatusLoading);
       it(shouldEmitStatusAnyLoadingExpectation, shouldEmitStatusAnyLoading);
       it(shouldUpdateMaxQtyExpectation, shouldUpdateMaxQty);
+      it(shouldUpdateOldMaxQtyExpectation, shouldUpdateOldMaxQty);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+      it(
+        shouldCallDefaultToLoadMessageExpectation,
+        shouldCallDefaultToLoadMessage
+      );
     });
 
     describe('in staging environment', () => {
@@ -329,6 +424,12 @@ describe('PreloaderService - unit', () => {
       it(shouldEmitStatusLoadingExpectation, shouldEmitStatusLoading);
       it(shouldEmitStatusAnyLoadingExpectation, shouldEmitStatusAnyLoading);
       it(shouldUpdateMaxQtyExpectation, shouldUpdateMaxQty);
+      it(shouldUpdateOldMaxQtyExpectation, shouldUpdateOldMaxQty);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+      it(
+        shouldCallDefaultToLoadMessageExpectation,
+        shouldCallDefaultToLoadMessage
+      );
     });
 
     describe('in prod environment', () => {
@@ -343,6 +444,12 @@ describe('PreloaderService - unit', () => {
       it(shouldEmitStatusLoadingExpectation, shouldEmitStatusLoading);
       it(shouldEmitStatusAnyLoadingExpectation, shouldEmitStatusAnyLoading);
       it(shouldUpdateMaxQtyExpectation, shouldUpdateMaxQty);
+      it(shouldUpdateOldMaxQtyExpectation, shouldUpdateOldMaxQty);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+      it(
+        shouldCallDefaultToLoadMessageExpectation,
+        shouldCallDefaultToLoadMessage
+      );
     });
   });
 
@@ -477,6 +584,39 @@ describe('PreloaderService - unit', () => {
       const newMaxQty = service.maxQty.get(preloaderToTest) as number;
 
       expect(newMaxQty).withContext('maxQty should be updated').toBe(0);
+    };
+    const shouldNotUpdateOldMaxQtyExpectation =
+      'should not update old max quantity when there is still more to load';
+    const shouldNotUpdateOldMaxQty = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const qtyToTest = 2;
+      const qtyLoaded = 1;
+
+      service.toLoad(preloaderToTest, qtyToTest);
+
+      const oldOldMaxQty = service.oldMaxQty.get(preloaderToTest) as number;
+
+      service.loaded(preloaderToTest, qtyLoaded);
+
+      const newOldMaxQty = service.oldMaxQty.get(preloaderToTest) as number;
+
+      expect(newOldMaxQty)
+        .withContext('oldMaxQty should not be updated')
+        .toBe(oldOldMaxQty);
+    };
+    const shouldUpdateOldMaxQtyZeroExpectation =
+      'should update old max quantity when there is no more to load';
+    const shouldUpdateOldMaxQtyZero = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const qtyToTest = 2;
+
+      service.toLoad(preloaderToTest, qtyToTest);
+
+      service.loaded(preloaderToTest, qtyToTest);
+
+      const newOldMaxQty = service.oldMaxQty.get(preloaderToTest) as number;
+
+      expect(newOldMaxQty).withContext('maxQty should be updated').toBe(0);
     };
     const shouldEmitStatusLoadingZeroExpectation =
       'should emit corresponding status loading when there is no more to load';
@@ -661,6 +801,22 @@ describe('PreloaderService - unit', () => {
         .toBeFalse();
     };
 
+    const shouldReturnMessageExpectation = 'should return message';
+    const shouldReturnMessage = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const qtyToTest = 2;
+
+      service.toLoad(preloaderToTest, qtyToTest);
+      const actual = service.loaded(preloaderToTest, qtyToTest);
+
+      const expected = service.formatMessage(
+        service['defaultLoadedMessage'](preloaderToTest, qtyToTest),
+        preloaderToTest
+      );
+
+      expect(actual).withContext('message should be returned').toBe(expected);
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         const logService = new LogService(
@@ -677,11 +833,14 @@ describe('PreloaderService - unit', () => {
       it(shouldUpdateQtyZeroExpectation, shouldUpdateQtyZero);
       it(shouldNotUpdateMaxQtyExpectation, shouldNotUpdateMaxQty);
       it(shouldUpdateMaxQtyZeroExpectation, shouldUpdateMaxQtyZero);
+      it(shouldNotUpdateOldMaxQtyExpectation, shouldNotUpdateOldMaxQty);
+      it(shouldUpdateOldMaxQtyZeroExpectation, shouldUpdateOldMaxQtyZero);
       it(shouldEmitStatusLoadingZeroExpectation, shouldEmitStatusLoadingZero);
       it(shouldNotEmitStatusLoadingExpectation, shouldNotEmitStatusLoading);
       it(shouldNotEmitAnyLoadingExpectation, shouldNotEmitAnyLoading);
       it(shouldEmitAnyLoadingZeroExpectation, shouldEmitAnyLoadingZero);
       it(shouldChangeIsMainLoadZeroExpectation, shouldChangeIsMainLoadZero);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
 
     describe('in staging environment', () => {
@@ -700,11 +859,14 @@ describe('PreloaderService - unit', () => {
       it(shouldUpdateQtyZeroExpectation, shouldUpdateQtyZero);
       it(shouldNotUpdateMaxQtyExpectation, shouldNotUpdateMaxQty);
       it(shouldUpdateMaxQtyZeroExpectation, shouldUpdateMaxQtyZero);
+      it(shouldNotUpdateOldMaxQtyExpectation, shouldNotUpdateOldMaxQty);
+      it(shouldUpdateOldMaxQtyZeroExpectation, shouldUpdateOldMaxQtyZero);
       it(shouldEmitStatusLoadingZeroExpectation, shouldEmitStatusLoadingZero);
       it(shouldNotEmitStatusLoadingExpectation, shouldNotEmitStatusLoading);
       it(shouldNotEmitAnyLoadingExpectation, shouldNotEmitAnyLoading);
       it(shouldEmitAnyLoadingZeroExpectation, shouldEmitAnyLoadingZero);
       it(shouldChangeIsMainLoadZeroExpectation, shouldChangeIsMainLoadZero);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
 
     describe('in prod environment', () => {
@@ -723,11 +885,14 @@ describe('PreloaderService - unit', () => {
       it(shouldUpdateQtyZeroExpectation, shouldUpdateQtyZero);
       it(shouldNotUpdateMaxQtyExpectation, shouldNotUpdateMaxQty);
       it(shouldUpdateMaxQtyZeroExpectation, shouldUpdateMaxQtyZero);
+      it(shouldNotUpdateOldMaxQtyExpectation, shouldNotUpdateOldMaxQty);
+      it(shouldUpdateOldMaxQtyZeroExpectation, shouldUpdateOldMaxQtyZero);
       it(shouldEmitStatusLoadingZeroExpectation, shouldEmitStatusLoadingZero);
       it(shouldNotEmitStatusLoadingExpectation, shouldNotEmitStatusLoading);
       it(shouldNotEmitAnyLoadingExpectation, shouldNotEmitAnyLoading);
       it(shouldEmitAnyLoadingZeroExpectation, shouldEmitAnyLoadingZero);
       it(shouldChangeIsMainLoadZeroExpectation, shouldChangeIsMainLoadZero);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
   });
 
@@ -769,30 +934,6 @@ describe('PreloaderService - unit', () => {
       expect(actualAfter).withContext('should return false after').toBeFalse();
     };
 
-    const shouldReturnTrueIfMainLoadExpectation =
-      'should return true if isMainLoad is true';
-    const shouldReturnTrueIfMainLoad = () => {
-      const preloaderToTest = Preloaders.MAIN;
-      const otherPreloader = Preloaders.TEXTS;
-      const qtyToTest = 2;
-
-      const actualBefore = service.isLoading(preloaderToTest);
-      expect(actualBefore).withContext('should return true before').toBeTrue();
-
-      service.toLoad(preloaderToTest, qtyToTest);
-
-      const actualDuring = service.isLoading(otherPreloader);
-      expect(actualDuring).withContext('should return true during').toBeTrue();
-
-      service.loaded(preloaderToTest, qtyToTest);
-
-      const actualAfter = service.isLoading(preloaderToTest);
-      expect(actualAfter)
-        .withContext(
-          'should return false after, since isMainLoad should have been updated'
-        )
-        .toBeFalse();
-    };
     describe('in dev environment', () => {
       beforeEach(() => {
         const logService = new LogService(
@@ -803,7 +944,6 @@ describe('PreloaderService - unit', () => {
       });
       it(shouldReturnInfoTrueExpectation, shouldReturnInfoTrue);
       it(shouldReturnInfoFalseExpectation, shouldReturnInfoFalse);
-      it(shouldReturnTrueIfMainLoadExpectation, shouldReturnTrueIfMainLoad);
     });
 
     describe('in staging environment', () => {
@@ -816,7 +956,6 @@ describe('PreloaderService - unit', () => {
       });
       it(shouldReturnInfoTrueExpectation, shouldReturnInfoTrue);
       it(shouldReturnInfoFalseExpectation, shouldReturnInfoFalse);
-      it(shouldReturnTrueIfMainLoadExpectation, shouldReturnTrueIfMainLoad);
     });
 
     describe('in prod environment', () => {
@@ -829,7 +968,6 @@ describe('PreloaderService - unit', () => {
       });
       it(shouldReturnInfoTrueExpectation, shouldReturnInfoTrue);
       it(shouldReturnInfoFalseExpectation, shouldReturnInfoFalse);
-      it(shouldReturnTrueIfMainLoadExpectation, shouldReturnTrueIfMainLoad);
     });
   });
 
@@ -1077,7 +1215,7 @@ describe('PreloaderService - unit', () => {
 
       expect(lastActual)
         .withContext('should return expected value - 4')
-        .toBe(qtyToTest);
+        .toBe(qtyToTest + qtyToTest);
     };
     const shouldReturn0NoElToLoadWithParamsExpectation =
       'should return 0 with params and nothing has to load';
@@ -1519,7 +1657,7 @@ describe('PreloaderService - unit', () => {
 
       const lastActual = service.getProgressionPercent();
 
-      expect(lastActual).withContext('should return 0 - 3').toBe(0);
+      expect(lastActual).withContext('should return 0 - 3').toBe(50);
     };
     const shouldReturn100NoElToLoadWithParamsExpectation =
       'should return 100 whith params and nothing has to load';
@@ -1602,14 +1740,14 @@ describe('PreloaderService - unit', () => {
       expect(lastActual).withContext('should return 0 - 4').toBe(0);
     };
     const shouldRetur0NoElToLoadEmptyParamsAndMainLoadExpectation =
-      'should return 0 when empty params and nothing has to load and is main load';
+      'should return 100 when empty params and nothing has to load and is main load';
     const shouldRetur0NoElToLoadEmptyParamsAndMainLoad = () => {
       const preloaderToTest = Preloaders.MAIN;
       const qtyToTest = 2;
 
       const actual = service.getProgressionPercent();
 
-      expect(actual).withContext('should return 0 before').toBe(0);
+      expect(actual).withContext('should return 0 before').toBe(100);
 
       service.toLoad(preloaderToTest, qtyToTest);
       service.loaded(preloaderToTest, qtyToTest);
@@ -1710,6 +1848,182 @@ describe('PreloaderService - unit', () => {
         shouldRetur0NoElToLoadEmptyParamsAndMainLoadExpectation,
         shouldRetur0NoElToLoadEmptyParamsAndMainLoad
       );
+    });
+  });
+
+  describe('defaultToLoadMessage method', () => {
+    const shouldReturnMessageExpectation = 'should return message';
+    const shouldReturnMessage = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const qtyToTest = 2;
+
+      const actual = service['defaultToLoadMessage'](
+        preloaderToTest,
+        qtyToTest
+      );
+      expect(actual)
+        .withContext('should return message')
+        .toBe('LOADING... MAIN - 2');
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          devEnv,
+          new LogPublishersService(devEnv)
+        );
+        service = new PreloaderService(logService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          stagingEnv,
+          new LogPublishersService(stagingEnv)
+        );
+        service = new PreloaderService(logService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          prodEnv,
+          new LogPublishersService(prodEnv)
+        );
+        service = new PreloaderService(logService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+  });
+
+  describe('defaultLoadedMessage method', () => {
+    const shouldReturnMessageExpectation = 'should return message';
+    const shouldReturnMessage = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const qtyToTest = 2;
+
+      const actual = service['defaultLoadedMessage'](
+        preloaderToTest,
+        qtyToTest
+      );
+      expect(actual)
+        .withContext('should return message')
+        .toBe('LOADED... MAIN - 2');
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          devEnv,
+          new LogPublishersService(devEnv)
+        );
+        service = new PreloaderService(logService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          stagingEnv,
+          new LogPublishersService(stagingEnv)
+        );
+        service = new PreloaderService(logService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          prodEnv,
+          new LogPublishersService(prodEnv)
+        );
+        service = new PreloaderService(logService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+  });
+
+  describe('formatMessage method', () => {
+    const shouldReturnMessageExpectation = 'should return message';
+    const shouldReturnMessage = () => {
+      const message = 'This is a test';
+      const preloaderToTest = Preloaders.MAIN;
+      const otherPreloader = Preloaders.TEXTS;
+
+      service.toLoad(preloaderToTest, 10);
+      service.toLoad(otherPreloader, 10);
+      service.loaded(preloaderToTest, 5);
+
+      const actualTT = service['formatMessage'](message, preloaderToTest);
+      expect(actualTT)
+        .withContext('should return message - true, true')
+        .toBe('This is a test - 50% (25%)');
+      const actualTF = service['formatMessage'](
+        message,
+        preloaderToTest,
+        true,
+        false
+      );
+      expect(actualTF)
+        .withContext('should return message - true, false')
+        .toBe('This is a test - 50%');
+      const actualFT = service['formatMessage'](
+        message,
+        preloaderToTest,
+        false,
+        true
+      );
+      expect(actualFT)
+        .withContext('should return message - false, true')
+        .toBe('This is a test (25%)');
+      const actualFF = service['formatMessage'](
+        message,
+        preloaderToTest,
+        false,
+        false
+      );
+      expect(actualFF)
+        .withContext('should return message - false, false')
+        .toBe('This is a test');
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          devEnv,
+          new LogPublishersService(devEnv)
+        );
+        service = new PreloaderService(logService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          stagingEnv,
+          new LogPublishersService(stagingEnv)
+        );
+        service = new PreloaderService(logService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
+    });
+
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          prodEnv,
+          new LogPublishersService(prodEnv)
+        );
+        service = new PreloaderService(logService);
+      });
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
   });
 });

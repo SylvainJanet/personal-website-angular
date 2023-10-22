@@ -87,14 +87,17 @@ describe('CvImgComponent - integration', () => {
   describe('updateTexts', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
-    const shouldSetPropertiesTextServiceResult = () => {
+    const shouldSetPropertiesTextServiceResult = (done: DoneFn) => {
       component.updateTexts();
 
-      const actualAltTextObs = component.altTxt;
+      setTimeout(() => {
+        const actualAltTextObs = component.altTxt;
 
-      actualAltTextObs.subscribe((s) => {
-        expect(s).withContext('altTxt should be set').toBe(expectedAltText);
-      });
+        actualAltTextObs.subscribe((s) => {
+          expect(s).withContext('altTxt should be set').toBe(expectedAltText);
+        });
+        done();
+      }, 2);
     };
     describe('in dev environment', () => {
       beforeEach(() => {

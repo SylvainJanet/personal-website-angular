@@ -1,7 +1,9 @@
 import { PreloaderService } from './../preloader/preloader.service';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { LogService } from '../log/log.service';
 import { Preloaders } from '../preloader/preloaders/preloaders';
+import { ENV } from 'src/environments/injectionToken/environment-provider';
+import { IEnvironment } from 'src/environments/interface/ienvironment';
 
 /**
  * Service used to notify {@link Preloaders} that some images are loading, and
@@ -21,6 +23,8 @@ export class ImageService {
   private images: Map<HTMLElement, Map<Preloaders, boolean>> = new Map();
   /** Logger. See {@link LogService} */
   logger: LogService;
+  /** Keeps track of loaded images. */
+  private loadedImages: Map<HTMLElement, boolean> = new Map();
 
   /**
    * Image service constructor
@@ -30,9 +34,66 @@ export class ImageService {
    */
   constructor(
     private preloaderService: PreloaderService,
-    logService: LogService
+    logService: LogService,
+    @Inject(ENV) private environment: IEnvironment
   ) {
     this.logger = logService.withClassName('ImageService');
+  }
+
+  /**
+   * Default to load message, if none is specified
+   *
+   * @param img The image that has to load
+   * @param loaders The {@link Preloaders}
+   * @returns The message
+   */
+  private imgToLoadMessage(img: HTMLElement, loaders: Preloaders[]): string {
+    if (!this.environment.production && this.environment.fullLoadingMessages) {
+      const src = (
+        img.getAttribute('src') ? img.getAttribute('src') : 'no file'
+      ) as string;
+      const split = src.split('/');
+      const fileName = split[split.length - 1];
+      return 'Loading img - ' + fileName + ' - ' + loaders;
+    }
+    return 'Loading image...';
+  }
+
+  /**
+   * Default loaded message, if none is specified
+   *
+   * @param img The image that has to load
+   * @param loaders The {@link Preloaders}
+   * @returns The message
+   */
+  private imgLoadedMessage(img: HTMLElement, loaders: Preloaders[]): string {
+    if (!this.environment.production && this.environment.fullLoadingMessages) {
+      const src = (
+        img.getAttribute('src') ? img.getAttribute('src') : 'no file'
+      ) as string;
+      const split = src.split('/');
+      const fileName = split[split.length - 1];
+      return 'Img loaded - ' + fileName + ' - ' + loaders;
+    }
+    return 'Loading image...';
+  }
+
+  /**
+   * Whether or not the preloader tot included in the preloader message.
+   *
+   * @returns The boolean
+   */
+  private imgMessageWithPreloaderTot(): boolean {
+    return !this.environment.production && this.environment.fullLoadingMessages;
+  }
+  /**
+   * Whether or not the preloader tot included in the message for the totality
+   * of preloaders.
+   *
+   * @returns The boolean
+   */
+  private imgMessageWithTot(): boolean {
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
 
   /**
@@ -45,10 +106,12 @@ export class ImageService {
   imageLoading(img: HTMLElement, loaders: Preloaders[]) {
     for (const loader of loaders) {
       if (
-        !this.images.has(img) ||
-        !this.images.get(img)?.has(loader) ||
-        !this.images.get(img)?.get(loader)
+        (!this.images.has(img) ||
+          !this.images.get(img)?.has(loader) ||
+          !this.images.get(img)?.get(loader)) &&
+        (!this.loadedImages.has(img) || !this.loadedImages.get(img))
       ) {
+        this.loadedImages.set(img, false);
         if (this.images.get(img)) {
           this.images.get(img)?.set(loader, true);
         } else {
@@ -56,7 +119,13 @@ export class ImageService {
           mapToSet.set(loader, true);
           this.images.set(img, mapToSet);
         }
-        this.preloaderService.toLoad(loader, 1);
+        this.preloaderService.toLoad(
+          loader,
+          1,
+          this.imgToLoadMessage(img, loaders),
+          this.imgMessageWithPreloaderTot(),
+          this.imgMessageWithTot()
+        );
       }
     }
   }
@@ -69,6 +138,7 @@ export class ImageService {
    * @param loaders The {@link Preloaders}
    */
   imageLoadedOrError(img: HTMLElement, loaders: Preloaders[]) {
+    this.loadedImages.set(img, true);
     for (const loader of loaders) {
       if (
         this.images.has(img) &&
@@ -76,7 +146,20 @@ export class ImageService {
         this.images.get(img)?.get(loader)
       ) {
         this.images.get(img)?.set(loader, false);
-        this.preloaderService.loaded(loader, 1);
+        let timeout = 0;
+        if (!this.environment.production && !this.environment.isTesting)
+          timeout =
+            Math.random() * this.environment.artificialRandomLoadingTime +
+            this.environment.artificialMinLoadingTime;
+        setTimeout(() => {
+          this.preloaderService.loaded(
+            loader,
+            1,
+            this.imgLoadedMessage(img, loaders),
+            this.imgMessageWithPreloaderTot(),
+            this.imgMessageWithTot()
+          );
+        }, timeout);
       }
     }
   }

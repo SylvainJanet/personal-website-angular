@@ -21,4 +21,24 @@ export interface IEnvironment {
   logWithDate: boolean;
   /** Property holding the application version. */
   appVersion: string;
+  /**
+   * If true, the app is currently being tested. Usefull to disable, for
+   * instance, delays on html requests artificially added in development.
+   */
+  isTesting: boolean;
+  /**
+   * If true, the loading messages will be full of information. Should be on for
+   * production.
+   */
+  fullLoadingMessages: boolean;
+  /**
+   * Artificial minimal loading time in ms. Should only be used in dev or
+   * staging.
+   */
+  artificialMinLoadingTime: number;
+  /**
+   * Random additional artificial loading time in ms. Should only be used in dev
+   * or staging.
+   */
+  artificialRandomLoadingTime: number;
 }

@@ -83,28 +83,31 @@ describe('FooterComponent - integration', () => {
   describe('updateTexts', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
-    const shouldSetPropertiesTextServiceResult = () => {
+    const shouldSetPropertiesTextServiceResult = (done: DoneFn) => {
       component.updateTexts();
 
-      const actualText = component.footerText;
-      const actualLink = component.footerLink;
-      const actualFooterHref = component.footerHref;
+      setTimeout(() => {
+        const actualText = component.footerText;
+        const actualLink = component.footerLink;
+        const actualFooterHref = component.footerHref;
 
-      actualText.subscribe((s) => {
-        expect(s)
-          .withContext('footer text should be set')
-          .toBe(expectedFooterText);
-      });
-      actualLink.subscribe((s) => {
-        expect(s)
-          .withContext('footer link should be set')
-          .toBe(expectedFooterLink);
-      });
-      actualFooterHref.subscribe((s) => {
-        expect(s)
-          .withContext('footer href should be set')
-          .toBe(expectedFooterHref);
-      });
+        actualText.subscribe((s) => {
+          expect(s)
+            .withContext('footer text should be set')
+            .toBe(expectedFooterText);
+        });
+        actualLink.subscribe((s) => {
+          expect(s)
+            .withContext('footer link should be set')
+            .toBe(expectedFooterLink);
+        });
+        actualFooterHref.subscribe((s) => {
+          expect(s)
+            .withContext('footer href should be set')
+            .toBe(expectedFooterHref);
+        });
+        done();
+      }, 1);
     };
     describe('in dev environment', () => {
       beforeEach(() => {

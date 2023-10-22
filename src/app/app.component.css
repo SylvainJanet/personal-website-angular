@@ -1,15 +1,23 @@
 mat-progress-spinner {
   position: fixed;
-  top: calc(50% - 30px);
-  left: calc(50% - 30px);
-  right: calc(50% - 30px);
+  top: calc(50% - 50px - var(--default-padding) - 0.5em);
+  left: calc(50% - 50px - var(--scroll-bar-width) / 2);
+  right: calc(50% - 50px - var(--scroll-bar-width) / 2);
   border-radius: 50%;
-  bottom: calc(50% - 30px);
+  bottom: calc(50% - 50px + var(--default-padding) + 0.5em);
   z-index: 9999;
   overflow: hidden;
   background: #fff;
-  height: 60px;
-  width: 60px;
+}
+
+.preloader-message {
+  position: fixed;
+  top: calc(50% + 50px + var(--default-padding) - 0.5em);
+  left: calc(10% - var(--scroll-bar-width) / 2);
+  right: calc(10% - var(--scroll-bar-width) / 2);
+  text-align: center;
+  z-index: 9999;
+  height: 1em;
 }
 
 .hide {

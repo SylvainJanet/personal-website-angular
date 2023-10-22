@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, delay } from 'rxjs';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
 import { IEnvironment } from 'src/environments/interface/ienvironment';
 
@@ -37,9 +37,16 @@ export class DatasourceService {
    *   T
    */
   get<T>(path: string, params: HttpParams = new HttpParams()): Observable<T> {
-    return this.http.get<T>(`${this.URL}${path}`, {
-      responseType: 'json',
-      params: params,
-    });
+    let timeout = 0;
+    if (!this.environment.production && !this.environment.isTesting)
+      timeout =
+        Math.random() * this.environment.artificialRandomLoadingTime +
+        this.environment.artificialMinLoadingTime;
+    return this.http
+      .get<T>(`${this.URL}${path}`, {
+        responseType: 'json',
+        params: params,
+      })
+      ?.pipe(delay(timeout));
   }
 }

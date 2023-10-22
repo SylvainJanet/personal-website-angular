@@ -101,34 +101,38 @@ describe('CvContactInfoComponent - integration', () => {
   describe('updateTexts', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
-    const shouldSetPropertiesTextServiceResult = () => {
+    const shouldSetPropertiesTextServiceResult = (done: DoneFn) => {
       component.updateTexts();
 
-      const actualNameObs = component.name;
-      const actualSjObs = component.sj;
-      const actualProfileObs = component.profile;
-      const actualFsDevObs = component.fsDev;
-      const actualEmailObs = component.email;
-      const actualPhoneObs = component.phone;
+      setTimeout(() => {
+        const actualNameObs = component.name;
+        const actualSjObs = component.sj;
+        const actualProfileObs = component.profile;
+        const actualFsDevObs = component.fsDev;
+        const actualEmailObs = component.email;
+        const actualPhoneObs = component.phone;
 
-      actualNameObs.subscribe((s) => {
-        expect(s).withContext('name should be set').toBe(expectedName);
-      });
-      actualSjObs.subscribe((s) => {
-        expect(s).withContext('sj should be set').toBe(expectedSj);
-      });
-      actualProfileObs.subscribe((s) => {
-        expect(s).withContext('profile should be set').toBe(expectedProfile);
-      });
-      actualFsDevObs.subscribe((s) => {
-        expect(s).withContext('fsDev should be set').toBe(expectedFsDev);
-      });
-      actualEmailObs.subscribe((s) => {
-        expect(s).withContext('email should be set').toBe(expectedEmail);
-      });
-      actualPhoneObs.subscribe((s) => {
-        expect(s).withContext('phone should be set').toBe(expectedPhone);
-      });
+        actualNameObs.subscribe((s) => {
+          expect(s).withContext('name should be set').toBe(expectedName);
+        });
+        actualSjObs.subscribe((s) => {
+          expect(s).withContext('sj should be set').toBe(expectedSj);
+        });
+        actualProfileObs.subscribe((s) => {
+          expect(s).withContext('profile should be set').toBe(expectedProfile);
+        });
+        actualFsDevObs.subscribe((s) => {
+          expect(s).withContext('fsDev should be set').toBe(expectedFsDev);
+        });
+        actualEmailObs.subscribe((s) => {
+          expect(s).withContext('email should be set').toBe(expectedEmail);
+        });
+        actualPhoneObs.subscribe((s) => {
+          expect(s).withContext('phone should be set').toBe(expectedPhone);
+        });
+
+        done();
+      }, 2);
     };
     describe('in dev environment', () => {
       beforeEach(() => {

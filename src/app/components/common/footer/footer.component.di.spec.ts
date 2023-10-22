@@ -42,35 +42,39 @@ describe('FooterComponent - dom integration', () => {
 
   const shouldHaveContentSetByServiceExpectation =
     'should have content set by textService';
-  const shouldHaveContentSetByService = () => {
+  const shouldHaveContentSetByService = (done: DoneFn) => {
     componentInstance.updateTexts();
-    fixture.detectChanges();
 
-    const debugEl: DebugElement = fixture.debugElement;
+    setTimeout(() => {
+      fixture.detectChanges();
 
-    // section
-    const sectionEl = debugEl.children[1];
-    const sectionDivEl = sectionEl.children[0];
-    const sectionFooterEl = sectionDivEl.children[0];
-    const sectionPEl = sectionFooterEl.children[0];
+      const debugEl: DebugElement = fixture.debugElement;
 
-    const spanEl = sectionPEl.children[0];
-    const aEl = sectionPEl.children[1];
+      // section
+      const sectionEl = debugEl.children[1];
+      const sectionDivEl = sectionEl.children[0];
+      const sectionFooterEl = sectionDivEl.children[0];
+      const sectionPEl = sectionFooterEl.children[0];
 
-    const actualText = spanEl.nativeElement.innerHTML;
-    expect(actualText)
-      .withContext('footer text should be set')
-      .toBe(expectedFooterText);
+      const spanEl = sectionPEl.children[0];
+      const aEl = sectionPEl.children[1];
 
-    const actualLink = aEl.nativeElement.innerHTML;
-    expect(actualLink)
-      .withContext('footer link should be set')
-      .toBe(expectedFooterLink);
+      const actualText = spanEl.nativeElement.innerHTML;
+      expect(actualText)
+        .withContext('footer text should be set')
+        .toBe(expectedFooterText);
 
-    const actualHref = aEl.attributes['href'];
-    expect(actualHref)
-      .withContext('href should be set')
-      .toBe(expectedFooterHref);
+      const actualLink = aEl.nativeElement.innerHTML;
+      expect(actualLink)
+        .withContext('footer link should be set')
+        .toBe(expectedFooterLink);
+
+      const actualHref = aEl.attributes['href'];
+      expect(actualHref)
+        .withContext('href should be set')
+        .toBe(expectedFooterHref);
+      done();
+    }, 1);
   };
 
   describe('in dev environment', () => {

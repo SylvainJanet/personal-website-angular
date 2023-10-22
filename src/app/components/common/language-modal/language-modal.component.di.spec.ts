@@ -43,28 +43,30 @@ describe('LanguageModalComponent - dom integration', () => {
 
   const shouldHaveContentSetByServiceExpectation =
     'should have content set by textService';
-  const shouldHaveContentSetByService = () => {
-    componentInstance.updateTexts();
-    fixture.detectChanges();
+  const shouldHaveContentSetByService = (done: DoneFn) => {
+    setTimeout(() => {
+      fixture.detectChanges();
 
-    const debugEl: DebugElement = fixture.debugElement;
+      const debugEl: DebugElement = fixture.debugElement;
 
-    const modalDivEl: DebugElement = debugEl.children[4];
-    const modalContent = modalDivEl.children[0];
-    const modalConainer = modalContent.children[0];
+      const modalDivEl: DebugElement = debugEl.children[4];
+      const modalContent = modalDivEl.children[0];
+      const modalConainer = modalContent.children[0];
 
-    const row1El = modalConainer.children[0];
-    const row2El = modalConainer.children[1];
+      const row1El = modalConainer.children[0];
+      const row2El = modalConainer.children[1];
 
-    const row1Comp = row1El.componentInstance as LanguageModalRowComponent;
-    const row2Comp = row2El.componentInstance as LanguageModalRowComponent;
+      const row1Comp = row1El.componentInstance as LanguageModalRowComponent;
+      const row2Comp = row2El.componentInstance as LanguageModalRowComponent;
 
-    expect(row1Comp.languageName)
-      .withContext('english should be set')
-      .toBe(expectedEnglishName);
-    expect(row2Comp.languageName)
-      .withContext('french should be set')
-      .toBe(expectedFrenchName);
+      expect(row1Comp.languageName)
+        .withContext('english should be set')
+        .toBe(expectedEnglishName);
+      expect(row2Comp.languageName)
+        .withContext('french should be set')
+        .toBe(expectedFrenchName);
+      done();
+    }, 100);
   };
 
   describe('in dev environment', () => {

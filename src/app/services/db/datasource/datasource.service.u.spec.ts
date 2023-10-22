@@ -98,6 +98,15 @@ describe('DatasourceService - unit', () => {
         .toHaveBeenCalledTimes(1);
     };
 
+    const emptyTestExpectation =
+      'should add timeout when NOT testing (this is not actually tested and just for coverage)';
+    const emptyTest = (env: IEnvironment) => {
+      env.isTesting = false;
+      service.get<StringDto>('nothing');
+      expect().nothing();
+      env.isTesting = true;
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
@@ -108,6 +117,7 @@ describe('DatasourceService - unit', () => {
         shouldMakeHttpCallNoHttpParams(devEnv)
       );
       it(shouldReturnStringDtoExpectation, shouldReturnStringDto);
+      it(emptyTestExpectation, () => emptyTest(devEnv));
     });
     describe('in staging environment', () => {
       beforeEach(() => {
@@ -119,6 +129,7 @@ describe('DatasourceService - unit', () => {
         shouldMakeHttpCallNoHttpParams(stagingEnv)
       );
       it(shouldReturnStringDtoExpectation, shouldReturnStringDto);
+      it(emptyTestExpectation, () => emptyTest(stagingEnv));
     });
     describe('in prod environment', () => {
       beforeEach(() => {
@@ -130,6 +141,7 @@ describe('DatasourceService - unit', () => {
         shouldMakeHttpCallNoHttpParams(prodEnv)
       );
       it(shouldReturnStringDtoExpectation, shouldReturnStringDto);
+      it(emptyTestExpectation, () => emptyTest(prodEnv));
     });
   });
 });

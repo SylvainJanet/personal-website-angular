@@ -78,24 +78,30 @@ describe('CvAboutMeComponent - dom integration', () => {
 
   const shouldHaveContentSetByServiceExpectation =
     'should have content set by textService';
-  const shouldHaveContentSetByService = () => {
+  const shouldHaveContentSetByService = (done: DoneFn) => {
     componentInstance.updateTexts();
-    fixture.detectChanges();
 
-    const debugEl: DebugElement = fixture.debugElement;
-    const firstDivEl: DebugElement = debugEl.children[0];
-    const secondDivEl: DebugElement = firstDivEl.children[0];
-    const thirdDivEl: DebugElement = secondDivEl.children[0];
-    const titleH2El: DebugElement = thirdDivEl.children[0];
+    setTimeout(() => {
+      fixture.detectChanges();
 
-    const actual = titleH2El.nativeElement.innerHTML;
+      const debugEl: DebugElement = fixture.debugElement;
+      const firstDivEl: DebugElement = debugEl.children[0];
+      const secondDivEl: DebugElement = firstDivEl.children[0];
+      const thirdDivEl: DebugElement = secondDivEl.children[0];
+      const titleH2El: DebugElement = thirdDivEl.children[0];
 
-    expect(actual).withContext('title should be set').toBe(expectedTitle);
+      const actual = titleH2El.nativeElement.innerHTML;
 
-    const secondEl: DebugElement = firstDivEl.children[1];
-    expect((secondEl.componentInstance as TextParagraphSetComponent).paragraphs)
-      .withContext('paragraphs should be set')
-      .toEqual(expectedParagraphs);
+      expect(actual).withContext('title should be set').toBe(expectedTitle);
+
+      const secondEl: DebugElement = firstDivEl.children[1];
+      expect(
+        (secondEl.componentInstance as TextParagraphSetComponent).paragraphs
+      )
+        .withContext('paragraphs should be set')
+        .toEqual(expectedParagraphs);
+      done();
+    }, 2);
   };
 
   describe('in dev environment', () => {

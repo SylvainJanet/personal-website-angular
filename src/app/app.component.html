@@ -6,6 +6,14 @@
     [mode]="'determinate'"
     [value]="preloader.getProgressionPercent(mainLoader, loaderTexts)"
   ></mat-progress-spinner>
+  <div
+    class="preloader-message"
+    *ngIf="
+      preloader.isAnyLoading(mainLoader, loaderTexts) && preloader.isMainLoad
+    "
+  >
+    {{ preloader.loadingMessage | async }}
+  </div>
 
   <app-header
     [ngClass]="{

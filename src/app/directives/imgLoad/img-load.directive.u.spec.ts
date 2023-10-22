@@ -51,30 +51,36 @@ describe('ImgLoadDirective - unit', () => {
   });
 
   describe('ngOnChanges method', () => {
-    it('should notify the imageService when the directive value is injected and isLoadedOrError is false', () => {
+    it('should notify the imageService when the directive value is injected and isLoadedOrError is false', (done: DoneFn) => {
       directive.isLoadedOrError = false;
       const change = new SimpleChange(undefined, directive, false);
       const changes = { appImgLoad: change };
 
       directive.ngOnChanges(changes);
 
-      expect(imageServiceSpy.imageLoading)
-        .withContext('imageLoading should have been called')
-        .toHaveBeenCalledOnceWith(
-          elementRefSpy.nativeElement,
-          directive.appImgLoad
-        );
+      setTimeout(() => {
+        expect(imageServiceSpy.imageLoading)
+          .withContext('imageLoading should have been called')
+          .toHaveBeenCalledOnceWith(
+            elementRefSpy.nativeElement,
+            directive.appImgLoad
+          );
+        done();
+      }, 2);
     });
-    it('should not notify the imageService if isLoadedOrError is true', () => {
+    it('should not notify the imageService if isLoadedOrError is true', (done: DoneFn) => {
       directive.isLoadedOrError = true;
       const change = new SimpleChange(undefined, directive, false);
       const changes = { appImgLoad: change };
 
       directive.ngOnChanges(changes);
 
-      expect(imageServiceSpy.imageLoading)
-        .withContext('imageLoading should not have been called')
-        .not.toHaveBeenCalled();
+      setTimeout(() => {
+        expect(imageServiceSpy.imageLoading)
+          .withContext('imageLoading should not have been called')
+          .not.toHaveBeenCalled();
+        done();
+      }, 2);
     });
   });
 

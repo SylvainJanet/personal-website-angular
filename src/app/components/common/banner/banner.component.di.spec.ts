@@ -49,54 +49,59 @@ describe('BannerComponent - dom integration', () => {
 
   const shouldHaveContentSetByServiceExpectation =
     'should have content set by textService';
-  const shouldHaveContentSetByService = () => {
+  const shouldHaveContentSetByService = (done: DoneFn) => {
     componentInstance.updateTexts();
-    fixture.detectChanges();
+    setTimeout(() => {
+      fixture.detectChanges();
 
-    const debugEl: DebugElement = fixture.debugElement;
-    const firstDivEl: DebugElement = debugEl.children[0];
+      const debugEl: DebugElement = fixture.debugElement;
+      const firstDivEl: DebugElement = debugEl.children[0];
 
-    // banner
-    const bannerDiv = firstDivEl.children[1];
-    const bannerContainerDiv = bannerDiv.children[0];
-    const bannerPageTitleDiv = bannerContainerDiv.children[0];
-    const bannerPageTitleDivDiv = bannerPageTitleDiv.children[0];
-    const bannerH2Div = bannerPageTitleDivDiv.children[0];
-    const bannerSpan = bannerH2Div.children[0];
+      // banner
+      const bannerDiv = firstDivEl.children[1];
+      const bannerContainerDiv = bannerDiv.children[0];
+      const bannerPageTitleDiv = bannerContainerDiv.children[0];
+      const bannerPageTitleDivDiv = bannerPageTitleDiv.children[0];
+      const bannerH2Div = bannerPageTitleDivDiv.children[0];
+      const bannerSpan = bannerH2Div.children[0];
 
-    const actualTitle = bannerSpan.nativeElement.innerHTML;
+      const actualTitle = bannerSpan.nativeElement.innerHTML;
 
-    expect(actualTitle).withContext('title should be set').toBe(expectedTitle);
+      expect(actualTitle)
+        .withContext('title should be set')
+        .toBe(expectedTitle);
 
-    const bannerTypedAnimatedText = bannerH2Div.children[1];
+      const bannerTypedAnimatedText = bannerH2Div.children[1];
 
-    const instance: TypedAnimatedTextComponent =
-      bannerTypedAnimatedText.componentInstance;
-    const actualMessages = instance.inputArray;
+      const instance: TypedAnimatedTextComponent =
+        bannerTypedAnimatedText.componentInstance;
+      const actualMessages = instance.inputArray;
 
-    expect(actualMessages.length)
-      .withContext('there should be 4 messages')
-      .toBe(4);
-    actualMessages[0].subscribe((s) => {
-      expect(s)
-        .withContext('message should be the correct one - 1')
-        .toBe(expectedFsDev);
-    });
-    actualMessages[1].subscribe((s) => {
-      expect(s)
-        .withContext('message should be the correct one - 2')
-        .toBe(expectedTrainer);
-    });
-    actualMessages[2].subscribe((s) => {
-      expect(s)
-        .withContext('message should be the correct one - 3')
-        .toBe(expectedMath);
-    });
-    actualMessages[3].subscribe((s) => {
-      expect(s)
-        .withContext('message should be the correct one - 4')
-        .toBe(expectedMusic);
-    });
+      expect(actualMessages.length)
+        .withContext('there should be 4 messages')
+        .toBe(4);
+      actualMessages[0].subscribe((s) => {
+        expect(s)
+          .withContext('message should be the correct one - 1')
+          .toBe(expectedFsDev);
+      });
+      actualMessages[1].subscribe((s) => {
+        expect(s)
+          .withContext('message should be the correct one - 2')
+          .toBe(expectedTrainer);
+      });
+      actualMessages[2].subscribe((s) => {
+        expect(s)
+          .withContext('message should be the correct one - 3')
+          .toBe(expectedMath);
+      });
+      actualMessages[3].subscribe((s) => {
+        expect(s)
+          .withContext('message should be the correct one - 4')
+          .toBe(expectedMusic);
+      });
+      done();
+    }, 1);
   };
 
   describe('in dev environment', () => {
