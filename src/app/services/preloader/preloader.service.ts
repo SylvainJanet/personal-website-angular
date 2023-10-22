@@ -204,7 +204,7 @@ export class PreloaderService {
       this.info.set(loader, { isLoading: true, qtyToLoad: newQty });
       if (!message) message = this.defaultLoadedMessage(loader, qty);
       message = this.formatMessage(message, loader, withPreloaderTot, withTot);
-      return;
+      return message;
     }
 
     this.maxQty.set(loader, 0);
@@ -222,6 +222,7 @@ export class PreloaderService {
 
     if (!message) message = this.defaultLoadedMessage(loader, qty);
     message = this.formatMessage(message, loader, withPreloaderTot, withTot);
+    return message;
   }
 
   /**

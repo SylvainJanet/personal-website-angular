@@ -91,6 +91,16 @@ export class TextService {
   }
 
   /**
+   * Formats a string for preloader messages
+   *
+   * @param s The string
+   * @returns The message
+   */
+  private formateStringToMessage(s: string) {
+    return s.length > 10 ? s.slice(0, 10) + '...' : s;
+  }
+
+  /**
    * Preloader message on load for getTextInLanguage.
    *
    * @param selector The selector
@@ -131,7 +141,7 @@ export class TextService {
     preloader = Preloaders.TEXTS
   ): string {
     if (!this.environment.production && this.environment.fullLoadingMessages) {
-      const extrait = text.length > 10 ? text.slice(0, 10) + '...' : text;
+      const extrait = this.formateStringToMessage(text);
       return (
         'Text Loaded - ' +
         selector +
@@ -148,15 +158,11 @@ export class TextService {
 
   /** Whether or not the preloader messages should display the preloader total. */
   private getTextInLanguageMessageWithPreloaderTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
   /** Whether or not the preloader messages should display the entire total. */
   private getTextInLanguageMessageWithTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
 
   /**
@@ -249,7 +255,7 @@ export class TextService {
     if (!this.environment.production && this.environment.fullLoadingMessages) {
       const extraits = [];
       for (const text of texts) {
-        extraits.push(text.length > 10 ? text.slice(0, 10) + '...' : text);
+        extraits.push(this.formateStringToMessage(text));
       }
 
       return (
@@ -268,15 +274,11 @@ export class TextService {
 
   /** Whether or not the preloader messages should display the preloader total. */
   private getMultiMessageWithPreloaderTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
   /** Whether or not the preloader messages should display the entire total. */
   private getMultiMessageWithTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
 
   /**
@@ -364,6 +366,26 @@ export class TextService {
   }
 
   /**
+   * Formats a set of paragraphs for preloader messages
+   *
+   * @param paragraphs The paragraphs
+   * @returns The message
+   */
+  private formatParagraphsToMessage(paragraphs: Paragraph[]) {
+    const extraits = [];
+    for (const paragraph of paragraphs) {
+      extraits.push(
+        paragraph.els[0].content.length > 10
+          ? paragraph.els[0].content.slice(0, 10) + '...'
+          : paragraph.els.length > 1
+          ? paragraph.els[0].content + '...'
+          : paragraph.els[0].content
+      );
+    }
+    return extraits;
+  }
+
+  /**
    * Preloader message on loaded for getTextInLanguage.
    *
    * @param paragraphs The paragraphs
@@ -379,17 +401,7 @@ export class TextService {
     preloader = Preloaders.TEXTS
   ): string {
     if (!this.environment.production && this.environment.fullLoadingMessages) {
-      const extraits = [];
-      for (const paragraph of paragraphs) {
-        extraits.push(
-          paragraph.els[0].content.length > 10
-            ? paragraph.els[0].content.slice(0, 10) + '...'
-            : paragraph.els.length > 1
-            ? paragraph.els[0].content + '...'
-            : paragraph.els[0].content
-        );
-      }
-
+      const extraits = this.formatParagraphsToMessage(paragraphs);
       return (
         'Text Loaded - ' +
         selector +
@@ -406,15 +418,11 @@ export class TextService {
 
   /** Whether or not the preloader messages should display the preloader total. */
   private getSplitMessageWithPreloaderTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
   /** Whether or not the preloader messages should display the entire total. */
   private getSplitMessageWithTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
 
   /**
@@ -526,16 +534,7 @@ export class TextService {
     if (!this.environment.production && this.environment.fullLoadingMessages) {
       const extraits = [];
       for (const paragraphs of paragraphsSet) {
-        const extraitPar = [];
-        for (const paragraph of paragraphs) {
-          extraitPar.push(
-            paragraph.els[0].content.length > 10
-              ? paragraph.els[0].content.slice(0, 10) + '...'
-              : paragraph.els.length > 1
-              ? paragraph.els[0].content + '...'
-              : paragraph.els[0].content
-          );
-        }
+        const extraitPar = this.formatParagraphsToMessage(paragraphs);
         extraits.push(extraitPar);
       }
 
@@ -555,15 +554,11 @@ export class TextService {
 
   /** Whether or not the preloader messages should display the preloader total. */
   private getMultiAllSplitMessageWithPreloaderTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
   /** Whether or not the preloader messages should display the entire total. */
   private getMultiAllSplitMessageWithTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
   /**
    * Get strings for multiple selectors, but splits the result to get an array
@@ -667,6 +662,25 @@ export class TextService {
   }
 
   /**
+   * Formats a set of paragraphs and strings for preloader messages
+   *
+   * @param resultSet The set of paragraphs and strings
+   * @returns The message
+   */
+  private formateParagraphStringToMessage(resultSet: (Paragraph[] | string)[]) {
+    const extraits = [];
+    for (const result of resultSet) {
+      if (typeof result === 'string') {
+        extraits.push(this.formateStringToMessage(result));
+      } else {
+        const extraitsPar = this.formatParagraphsToMessage(result);
+        extraits.push(extraitsPar);
+      }
+    }
+    return extraits;
+  }
+
+  /**
    * Preloader message on loaded for getTextInLanguage.
    *
    * @param resultSet The paragraphs
@@ -682,29 +696,7 @@ export class TextService {
     preloader = Preloaders.TEXTS
   ): string {
     if (!this.environment.production && this.environment.fullLoadingMessages) {
-      const extraits = [];
-      for (const result of resultSet) {
-        const extraitPar = [];
-        if (typeof result === 'string') {
-          extraits.push(
-            (result as string).length > 10
-              ? (result as string).slice(0, 10) + '...'
-              : (result as string)
-          );
-        } else {
-          for (const paragraph of result as Paragraph[]) {
-            extraitPar.push(
-              paragraph.els[0].content.length > 10
-                ? paragraph.els[0].content.slice(0, 10) + '...'
-                : paragraph.els.length > 1
-                ? paragraph.els[0].content + '...'
-                : paragraph.els[0].content
-            );
-          }
-          extraits.push(extraitPar);
-        }
-      }
-
+      const extraits = this.formateParagraphStringToMessage(resultSet);
       return (
         'Text Loaded - ' +
         selectors +
@@ -721,15 +713,11 @@ export class TextService {
 
   /** Whether or not the preloader messages should display the preloader total. */
   private getMultiSomeBooleanSplitMessageWithPreloaderTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
   /** Whether or not the preloader messages should display the entire total. */
   private getMultiSomeBooleanSplitMessageWithTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
 
   /**

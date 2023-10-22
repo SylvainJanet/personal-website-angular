@@ -82,9 +82,7 @@ export class ImageService {
    * @returns The boolean
    */
   private imgMessageWithPreloaderTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
   /**
    * Whether or not the preloader tot included in the message for the totality
@@ -93,9 +91,7 @@ export class ImageService {
    * @returns The boolean
    */
   private imgMessageWithTot(): boolean {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return true;
-    return false;
+    return !this.environment.production && this.environment.fullLoadingMessages;
   }
 
   /**

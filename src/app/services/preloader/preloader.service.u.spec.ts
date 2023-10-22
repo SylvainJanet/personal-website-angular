@@ -801,6 +801,22 @@ describe('PreloaderService - unit', () => {
         .toBeFalse();
     };
 
+    const shouldReturnMessageExpectation = 'should return message';
+    const shouldReturnMessage = () => {
+      const preloaderToTest = Preloaders.MAIN;
+      const qtyToTest = 2;
+
+      service.toLoad(preloaderToTest, qtyToTest);
+      const actual = service.loaded(preloaderToTest, qtyToTest);
+
+      const expected = service.formatMessage(
+        service['defaultLoadedMessage'](preloaderToTest, qtyToTest),
+        preloaderToTest
+      );
+
+      expect(actual).withContext('message should be returned').toBe(expected);
+    };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         const logService = new LogService(
@@ -824,6 +840,7 @@ describe('PreloaderService - unit', () => {
       it(shouldNotEmitAnyLoadingExpectation, shouldNotEmitAnyLoading);
       it(shouldEmitAnyLoadingZeroExpectation, shouldEmitAnyLoadingZero);
       it(shouldChangeIsMainLoadZeroExpectation, shouldChangeIsMainLoadZero);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
 
     describe('in staging environment', () => {
@@ -849,6 +866,7 @@ describe('PreloaderService - unit', () => {
       it(shouldNotEmitAnyLoadingExpectation, shouldNotEmitAnyLoading);
       it(shouldEmitAnyLoadingZeroExpectation, shouldEmitAnyLoadingZero);
       it(shouldChangeIsMainLoadZeroExpectation, shouldChangeIsMainLoadZero);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
 
     describe('in prod environment', () => {
@@ -874,6 +892,7 @@ describe('PreloaderService - unit', () => {
       it(shouldNotEmitAnyLoadingExpectation, shouldNotEmitAnyLoading);
       it(shouldEmitAnyLoadingZeroExpectation, shouldEmitAnyLoadingZero);
       it(shouldChangeIsMainLoadZeroExpectation, shouldChangeIsMainLoadZero);
+      it(shouldReturnMessageExpectation, shouldReturnMessage);
     });
   });
 
