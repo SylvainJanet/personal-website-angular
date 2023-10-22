@@ -39,7 +39,9 @@ export class DatasourceService {
   get<T>(path: string, params: HttpParams = new HttpParams()): Observable<T> {
     let timeout = 0;
     if (!this.environment.production && !this.environment.isTesting)
-      timeout = Math.random() * 3500 + 500;
+      timeout =
+        Math.random() * this.environment.artificialRandomLoadingTime +
+        this.environment.artificialMinLoadingTime;
     return this.http
       .get<T>(`${this.URL}${path}`, {
         responseType: 'json',
