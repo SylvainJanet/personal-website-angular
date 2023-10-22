@@ -104,9 +104,10 @@ export class ImageService {
   imageLoading(img: HTMLElement, loaders: Preloaders[]) {
     for (const loader of loaders) {
       if (
-        !this.images.has(img) ||
-        !this.images.get(img)?.has(loader) ||
-        !this.images.get(img)?.get(loader)
+        (!this.images.has(img) ||
+          !this.images.get(img)?.has(loader) ||
+          !this.images.get(img)?.get(loader)) &&
+        !img.getAttribute('complete')
       ) {
         if (this.images.get(img)) {
           this.images.get(img)?.set(loader, true);
