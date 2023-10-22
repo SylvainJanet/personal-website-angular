@@ -385,7 +385,7 @@ describe('BackToTopComponent - unit', () => {
 
   describe('onScroll method', () => {
     const shouldCallUpdateFromInvisibleToVisibleExpectation =
-      'should call updateAfterLoaded method from invisible to visible';
+      'should call updateBackToTop method from invisible to visible';
     const shouldCallUpdateFromInvisibleToVisible = () => {
       expect(component.backToTopState)
         .withContext('altTxt should be set')
@@ -402,7 +402,7 @@ describe('BackToTopComponent - unit', () => {
     };
 
     const shouldCallUpdateFromVisibleToInvisibleExpectation =
-      'should call updateAfterLoaded method from visible to invisible';
+      'should call updateBackToTop method from visible to invisible';
     const shouldCallUpdateFromVisibleToInvisible = () => {
       spyOn(component, 'updateBackToTop');
 

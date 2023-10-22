@@ -59,14 +59,14 @@ export class CvSkillBarComponent implements OnChanges {
    * has to be updated again.
    */
   ngOnChanges() {
-    this.getElPos();
-    this.updateWidth();
+    this.updateAnimation();
   }
   /**
    * Computes the position precise position of the element in the page so that
    * the animation triggers exactly as the bar enters or leaves the viewport.
    */
   getElPos() {
+    if (!this.element.nativeElement) return;
     const posViewPort =
       this.element.nativeElement.getBoundingClientRect().y +
       this.element.nativeElement.firstElementChild.firstElementChild.getBoundingClientRect()
@@ -98,13 +98,13 @@ export class CvSkillBarComponent implements OnChanges {
    * Update the trigger when the window is resized. Indeed, the bar position
    * will change since it is tied to viewport height. Uses the {@link debounce}
    * annotation to avoid firing this too much : resize events fire a lot during
-   * resizing. Calls {@link updateAfterLoaded} which does the actual update once
+   * resizing. Calls {@link updateAnimation} which does the actual update once
    * everything is loaded.
    */
   @HostListener('window:resize', ['$event'])
   @debounce()
   onResize() {
-    this.updateAfterLoaded();
+    this.updateAnimation();
   }
 
   /**
@@ -121,28 +121,22 @@ export class CvSkillBarComponent implements OnChanges {
 
   /**
    * Does the actual update of the scroll trigger amount and the possible width
-   * modification (to create the animation) once all assets are loaded.
+   * modification (to create the animation).
    */
-  updateAfterLoaded() {
-    this.preloaderService.statusAnyLoading.subscribe({
-      next: (isAnyLoading) => {
-        if (isAnyLoading != null && !isAnyLoading) {
-          this.getElPos();
-          this.updateWidth();
-        }
-      },
-    });
+  updateAnimation() {
+    this.getElPos();
+    this.updateWidth();
   }
 
   /**
    * Update the trigger when client scrolls. Uses the {@link debounce} annotation
    * to avoid firing this too much : resize events fire a lot during resizing.
-   * Calls {@link updateAfterLoaded} which does the actual update once everything
+   * Calls {@link updateAnimation} which does the actual update once everything
    * is loaded.
    */
   @HostListener('window:scroll', ['$event'])
   @debounce()
   onScroll() {
-    this.updateAfterLoaded();
+    this.updateAnimation();
   }
 }

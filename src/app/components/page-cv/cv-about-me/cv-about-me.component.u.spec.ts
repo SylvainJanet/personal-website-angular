@@ -1210,15 +1210,15 @@ describe('CvAboutMeComponent - unit', () => {
   });
 
   describe('onResize method', () => {
-    const shouldCallUpdateAfterLoadedExpectation =
-      'should call updateAfterLoaded method';
-    const shouldCallUpdateAfterLoaded = () => {
-      spyOn(component, 'updateAfterLoaded');
+    const shouldCallUpdateAnimationExpectation =
+      'should call updateAnimation method';
+    const shouldCallUpdateAnimation = () => {
+      spyOn(component, 'updateAnimation');
 
       component.onResize();
 
-      expect(component.updateAfterLoaded)
-        .withContext('updateAfterLoaded should have been called')
+      expect(component.updateAnimation)
+        .withContext('UpdateAnimation should have been called')
         .toHaveBeenCalledTimes(1);
     };
     describe('in dev environment', () => {
@@ -1274,7 +1274,7 @@ describe('CvAboutMeComponent - unit', () => {
 
         component = TestBed.inject(CvAboutMeComponent);
       });
-      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
+      it(shouldCallUpdateAnimationExpectation, shouldCallUpdateAnimation);
     });
     describe('in staging environment', () => {
       beforeEach(() => {
@@ -1329,7 +1329,7 @@ describe('CvAboutMeComponent - unit', () => {
 
         component = TestBed.inject(CvAboutMeComponent);
       });
-      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
+      it(shouldCallUpdateAnimationExpectation, shouldCallUpdateAnimation);
     });
     describe('in prod environment', () => {
       beforeEach(() => {
@@ -1384,20 +1384,20 @@ describe('CvAboutMeComponent - unit', () => {
 
         component = TestBed.inject(CvAboutMeComponent);
       });
-      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
+      it(shouldCallUpdateAnimationExpectation, shouldCallUpdateAnimation);
     });
   });
 
   describe('onScroll method', () => {
-    const shouldCallUpdateAfterLoadedExpectation =
-      'should call updateAfterLoaded method';
-    const shouldCallUpdateAfterLoaded = () => {
-      spyOn(component, 'updateAfterLoaded');
+    const shouldCallUpdateAnimationExpectation =
+      'should call updateAnimation method';
+    const shouldCallUpdateAnimation = () => {
+      spyOn(component, 'updateAnimation');
 
       component.onScroll();
 
-      expect(component.updateAfterLoaded)
-        .withContext('updateAfterLoaded should have been called')
+      expect(component.updateAnimation)
+        .withContext('updateAnimation should have been called')
         .toHaveBeenCalledTimes(1);
     };
     describe('in dev environment', () => {
@@ -1453,7 +1453,7 @@ describe('CvAboutMeComponent - unit', () => {
 
         component = TestBed.inject(CvAboutMeComponent);
       });
-      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
+      it(shouldCallUpdateAnimationExpectation, shouldCallUpdateAnimation);
     });
     describe('in staging environment', () => {
       beforeEach(() => {
@@ -1508,7 +1508,7 @@ describe('CvAboutMeComponent - unit', () => {
 
         component = TestBed.inject(CvAboutMeComponent);
       });
-      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
+      it(shouldCallUpdateAnimationExpectation, shouldCallUpdateAnimation);
     });
     describe('in prod environment', () => {
       beforeEach(() => {
@@ -1563,72 +1563,25 @@ describe('CvAboutMeComponent - unit', () => {
 
         component = TestBed.inject(CvAboutMeComponent);
       });
-      it(shouldCallUpdateAfterLoadedExpectation, shouldCallUpdateAfterLoaded);
+      it(shouldCallUpdateAnimationExpectation, shouldCallUpdateAnimation);
     });
   });
 
-  describe('updateAfterLoaded method', () => {
-    const shouldCallPreloaderServiceExpectation =
-      'should call preloaderService';
-    const shouldCallPreloaderService = () => {
-      const bs = jasmine.createSpyObj('BehaviorSubject<boolean | null>', [
-        'subscribe',
-      ]);
-      (
-        Object.getOwnPropertyDescriptor(preloaderServiceSpy, 'statusAnyLoading')
-          ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
-      ).and.returnValue(bs);
-
-      component.updateAfterLoaded();
-
-      expect(preloaderServiceSpy.statusAnyLoading.subscribe)
-        .withContext('subscribe should have been called')
-        .toHaveBeenCalledTimes(1);
-    };
+  describe('UpdateAnimation method', () => {
     const shouldCallMethodsWhenAssetsAreLoadedExpectation =
-      'should call getElPos and UpdateWidth when all assets are loaded';
+      'should call getElPos and UpdateWidth';
     const shouldCallMethodsWhenAssetsAreLoaded = () => {
       spyOn(component, 'getElPos');
       spyOn(component, 'updateWidth');
 
-      const bs = new BehaviorSubject<boolean | null>(null);
-      (
-        Object.getOwnPropertyDescriptor(preloaderServiceSpy, 'statusAnyLoading')
-          ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
-      ).and.returnValue(bs);
-
-      component.updateAfterLoaded();
+      component.updateAnimation();
 
       expect(component.getElPos)
-        .withContext('getElPos should not have been called - 1')
-        .not.toHaveBeenCalled();
+        .withContext('getElPos should have been called')
+        .toHaveBeenCalled();
       expect(component.updateWidth)
-        .withContext('updateWidth should not have been called - 1')
-        .not.toHaveBeenCalled();
-
-      bs.next(true);
-      expect(component.getElPos)
-        .withContext('getElPos should not have been called - 2')
-        .not.toHaveBeenCalled();
-      expect(component.updateWidth)
-        .withContext('updateWidth should not have been called - 2')
-        .not.toHaveBeenCalled();
-
-      bs.next(false);
-      expect(component.getElPos)
-        .withContext('getElPos should have been called once')
-        .toHaveBeenCalledTimes(1);
-      expect(component.updateWidth)
-        .withContext('updateWidth should have been called once')
-        .toHaveBeenCalledTimes(1);
-
-      bs.next(false);
-      expect(component.getElPos)
-        .withContext('getElPos should have been called twice')
-        .toHaveBeenCalledTimes(2);
-      expect(component.updateWidth)
-        .withContext('updateWidth should have been called twice')
-        .toHaveBeenCalledTimes(2);
+        .withContext('updateWidth should have been called')
+        .toHaveBeenCalled();
     };
     describe('in dev environment', () => {
       beforeEach(() => {
@@ -1683,7 +1636,6 @@ describe('CvAboutMeComponent - unit', () => {
 
         component = TestBed.inject(CvAboutMeComponent);
       });
-      it(shouldCallPreloaderServiceExpectation, shouldCallPreloaderService);
       it(
         shouldCallMethodsWhenAssetsAreLoadedExpectation,
         shouldCallMethodsWhenAssetsAreLoaded
@@ -1742,7 +1694,6 @@ describe('CvAboutMeComponent - unit', () => {
 
         component = TestBed.inject(CvAboutMeComponent);
       });
-      it(shouldCallPreloaderServiceExpectation, shouldCallPreloaderService);
       it(
         shouldCallMethodsWhenAssetsAreLoadedExpectation,
         shouldCallMethodsWhenAssetsAreLoaded
@@ -1801,7 +1752,6 @@ describe('CvAboutMeComponent - unit', () => {
 
         component = TestBed.inject(CvAboutMeComponent);
       });
-      it(shouldCallPreloaderServiceExpectation, shouldCallPreloaderService);
       it(
         shouldCallMethodsWhenAssetsAreLoadedExpectation,
         shouldCallMethodsWhenAssetsAreLoaded

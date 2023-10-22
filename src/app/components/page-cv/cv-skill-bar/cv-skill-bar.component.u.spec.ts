@@ -81,13 +81,13 @@ describe('CvSkillBarComponent - unit', () => {
   });
 
   describe('onResize method', () => {
-    it('should call updateAfterLoaded method', () => {
-      spyOn(component, 'updateAfterLoaded');
+    it('should call updateAnimation method', () => {
+      spyOn(component, 'updateAnimation');
 
       component.onResize();
 
-      expect(component.updateAfterLoaded)
-        .withContext('updateAfterLoaded should have been called')
+      expect(component.updateAnimation)
+        .withContext('updateAnimation should have been called')
         .toHaveBeenCalledTimes(1);
     });
   });
@@ -124,75 +124,30 @@ describe('CvSkillBarComponent - unit', () => {
     });
   });
 
-  describe('updateAfterLoaded method', () => {
-    it('should call preloaderService', () => {
-      const bs = jasmine.createSpyObj('BehaviorSubject<boolean | null>', [
-        'subscribe',
-      ]);
-      (
-        Object.getOwnPropertyDescriptor(preloaderServiceSpy, 'statusAnyLoading')
-          ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
-      ).and.returnValue(bs);
-
-      component.updateAfterLoaded();
-
-      expect(preloaderServiceSpy.statusAnyLoading.subscribe)
-        .withContext('subscribe should be have been called')
-        .toHaveBeenCalledTimes(1);
-    });
-    it('should call getElPos and UpdateWidth when all assets are loaded', () => {
+  describe('updateAnimation method', () => {
+    it('should call getElPos and UpdateWidth', () => {
       spyOn(component, 'getElPos');
       spyOn(component, 'updateWidth');
 
-      const bs = new BehaviorSubject<boolean | null>(null);
-      (
-        Object.getOwnPropertyDescriptor(preloaderServiceSpy, 'statusAnyLoading')
-          ?.get as jasmine.Spy<() => BehaviorSubject<boolean | null>>
-      ).and.returnValue(bs);
-
-      component.updateAfterLoaded();
+      component.updateAnimation();
 
       expect(component.getElPos)
-        .withContext('getElPos should not have been called - 1')
-        .not.toHaveBeenCalled();
+        .withContext('getElPos should have been called')
+        .toHaveBeenCalledOnceWith();
       expect(component.updateWidth)
-        .withContext('updateWidth should not have been called - 1')
-        .not.toHaveBeenCalled();
-
-      bs.next(true);
-      expect(component.getElPos)
-        .withContext('getElPos should not have been called - 2')
-        .not.toHaveBeenCalled();
-      expect(component.updateWidth)
-        .withContext('updateWidth should not have been called - 2')
-        .not.toHaveBeenCalled();
-
-      bs.next(false);
-      expect(component.getElPos)
-        .withContext('getElPos should have been called once')
-        .toHaveBeenCalledTimes(1);
-      expect(component.updateWidth)
-        .withContext('updateWidth should have been called once')
-        .toHaveBeenCalledTimes(1);
-
-      bs.next(false);
-      expect(component.getElPos)
-        .withContext('getElPos should have been called twice')
-        .toHaveBeenCalledTimes(2);
-      expect(component.updateWidth)
-        .withContext('updateWidth should have been called twice')
-        .toHaveBeenCalledTimes(2);
+        .withContext('updateWidth should have been called')
+        .toHaveBeenCalledOnceWith();
     });
   });
 
   describe('onScroll method', () => {
-    it('should call updateAfterLoaded method', () => {
-      spyOn(component, 'updateAfterLoaded');
+    it('should call updateAnimation method', () => {
+      spyOn(component, 'updateAnimation');
 
       component.onScroll();
 
-      expect(component.updateAfterLoaded)
-        .withContext('updateAfterLoaded should have been called')
+      expect(component.updateAnimation)
+        .withContext('updateAnimation should have been called')
         .toHaveBeenCalledTimes(1);
     });
   });
