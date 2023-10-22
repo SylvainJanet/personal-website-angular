@@ -57,27 +57,39 @@ describe('ImgLoadDirective - dom unit', () => {
   });
 
   describe('ngOnChanges method', () => {
-    it('should notify the imageService when the directive value is injected', () => {
-      expect(imageServiceSpy.imageLoading)
-        .withContext('imageLoading should have been called')
-        .toHaveBeenCalledOnceWith(
-          fixture.debugElement.children[0].nativeElement,
-          directive.appImgLoad
-        );
+    it('should notify the imageService when the directive value is injected', (done: DoneFn) => {
+      setTimeout(() => {
+        expect(imageServiceSpy.imageLoading)
+          .withContext('imageLoading should have been called')
+          .toHaveBeenCalledOnceWith(
+            fixture.debugElement.children[0].nativeElement,
+            directive.appImgLoad
+          );
+        done();
+      }, 2);
     });
-    it('should not notify the imageService if isLoadedOrError is true', () => {
-      expect(imageServiceSpy.imageLoading)
-        .withContext('imageLoading should have been called - 1')
-        .toHaveBeenCalledTimes(1);
-      directive.isLoadedOrError = true;
-      const change = new SimpleChange(undefined, directive, false);
-      const changes = { appImgLoad: change };
+    it('should not notify the imageService if isLoadedOrError is true', (done: DoneFn) => {
+      setTimeout(() => {
+        expect(imageServiceSpy.imageLoading)
+          .withContext('imageLoading should have been called')
+          .toHaveBeenCalledOnceWith(
+            fixture.debugElement.children[0].nativeElement,
+            directive.appImgLoad
+          );
+        expect(imageServiceSpy.imageLoading)
+          .withContext('imageLoading should have been called - 1')
+          .toHaveBeenCalledTimes(1);
+        directive.isLoadedOrError = true;
+        const change = new SimpleChange(undefined, directive, false);
+        const changes = { appImgLoad: change };
 
-      directive.ngOnChanges(changes);
+        directive.ngOnChanges(changes);
 
-      expect(imageServiceSpy.imageLoading)
-        .withContext('imageLoading should have been called - 2')
-        .toHaveBeenCalledTimes(1);
+        expect(imageServiceSpy.imageLoading)
+          .withContext('imageLoading should have been called - 2')
+          .toHaveBeenCalledTimes(1);
+        done();
+      }, 2);
     });
   });
 

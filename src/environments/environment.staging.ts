@@ -12,4 +12,8 @@ export const environment: IEnvironment = {
   baseHref: '',
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   appVersion: require('../../package.json').version + '-staging',
+  isTesting: false,
+  fullLoadingMessages: false,
+  artificialMinLoadingTime: 0,
+  artificialRandomLoadingTime: 0,
 };

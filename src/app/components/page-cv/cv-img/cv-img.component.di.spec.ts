@@ -36,18 +36,21 @@ describe('CvImgComponent - dom integration', () => {
 
   const shouldHaveContentSetByServiceExpectation =
     'should have altText set by textService';
-  const shouldHaveContentSetByService = () => {
+  const shouldHaveContentSetByService = (done: DoneFn) => {
     componentInstance.updateTexts();
-    fixture.detectChanges();
 
-    const debugEl: DebugElement = fixture.debugElement;
+    setTimeout(() => {
+      fixture.detectChanges();
+      const debugEl: DebugElement = fixture.debugElement;
 
-    const firstDivEl: DebugElement = debugEl.children[0];
+      const firstDivEl: DebugElement = debugEl.children[0];
 
-    const imgEl: DebugElement = firstDivEl.children[0];
-    expect(imgEl.properties['alt'])
-      .withContext('alt should be set')
-      .toBe(expectedAltText);
+      const imgEl: DebugElement = firstDivEl.children[0];
+      expect(imgEl.properties['alt'])
+        .withContext('alt should be set')
+        .toBe(expectedAltText);
+      done();
+    }, 2);
   };
 
   describe('in dev environment', () => {

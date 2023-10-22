@@ -57,36 +57,42 @@ describe('AppComponent - dom unit', () => {
 
     const mainDivEl = debugEl.children[0];
     expect(mainDivEl.children.length)
-      .withContext('(while loading) main div should have 6 children')
-      .toBe(6);
+      .withContext('(while loading) main div should have 7 children')
+      .toBe(7);
     expect(mainDivEl.children[0].nativeElement.tagName)
       .withContext(
         '(while loading) child 1 of main div should be MAT-PROGRESS-SPINNER'
       )
       .toBe('MAT-PROGRESS-SPINNER');
     expect(mainDivEl.children[1].nativeElement.tagName)
-      .withContext('(while loading) child 2 of main div should be APP-HEADER')
-      .toBe('APP-HEADER');
+      .withContext('(while loading) child 2 of main div should be DIV')
+      .toBe('DIV');
     expect(mainDivEl.children[2].nativeElement.tagName)
-      .withContext('(while loading) child 3 of main div should be APP-BANNER')
-      .toBe('APP-BANNER');
+      .withContext('(while loading) child 3 of main div should be APP-HEADER')
+      .toBe('APP-HEADER');
     expect(mainDivEl.children[3].nativeElement.tagName)
+      .withContext('(while loading) child 4 of main div should be APP-BANNER')
+      .toBe('APP-BANNER');
+    expect(mainDivEl.children[4].nativeElement.tagName)
       .withContext(
-        '(while loading) child 4 of main div should be APP-PAGE-CONTENT'
+        '(while loading) child 5 of main div should be APP-PAGE-CONTENT'
       )
       .toBe('APP-PAGE-CONTENT');
-    expect(mainDivEl.children[4].nativeElement.tagName)
-      .withContext('(while loading) child 5 of main div should be APP-FOOTER')
-      .toBe('APP-FOOTER');
     expect(mainDivEl.children[5].nativeElement.tagName)
+      .withContext('(while loading) child 6 of main div should be APP-FOOTER')
+      .toBe('APP-FOOTER');
+    expect(mainDivEl.children[6].nativeElement.tagName)
       .withContext(
-        '(while loading) child 6 of main div should be APP-BACK-TO-TOP'
+        '(while loading) child 7 of main div should be APP-BACK-TO-TOP'
       )
       .toBe('APP-BACK-TO-TOP');
 
-    expect(mainDivEl.children[1].classes['hide'])
-      .withContext('(while loading) child 2 of main div should have class hide')
-      .toBeTrue();
+    expect(mainDivEl.children[1].children.length)
+      .withContext(
+        '(while loading) child 2 of main div should have no children'
+      )
+      .toBe(0);
+
     expect(mainDivEl.children[2].classes['hide'])
       .withContext('(while loading) child 3 of main div should have class hide')
       .toBeTrue();
@@ -98,6 +104,9 @@ describe('AppComponent - dom unit', () => {
       .toBeTrue();
     expect(mainDivEl.children[5].classes['hide'])
       .withContext('(while loading) child 6 of main div should have class hide')
+      .toBeTrue();
+    expect(mainDivEl.children[6].classes['hide'])
+      .withContext('(while loading) child 7 of main div should have class hide')
       .toBeTrue();
 
     // not loading

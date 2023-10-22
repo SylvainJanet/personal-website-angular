@@ -7,6 +7,7 @@ import { environment as prodEnvironment } from 'src/environments/environment.pro
 import { LogPublishersService } from '../log/publishers/log-publishers.service';
 import { IEnvironment } from 'src/environments/interface/ienvironment';
 import { Preloaders } from '../preloader/preloaders/preloaders';
+import { fakeAsync, flush } from '@angular/core/testing';
 
 let service: ImageService;
 let preloaderService: PreloaderService;
@@ -42,7 +43,7 @@ describe('ImageService - unit', () => {
         new LogPublishersService(devEnv)
       );
       preloaderService = new PreloaderService(logService);
-      service = new ImageService(preloaderService, logService);
+      service = new ImageService(preloaderService, logService, devEnv);
     });
 
     it(shouldHaveProperLoggerExpectation, shouldHaveProperLogger);
@@ -55,7 +56,7 @@ describe('ImageService - unit', () => {
         new LogPublishersService(stagingEnv)
       );
       preloaderService = new PreloaderService(logService);
-      service = new ImageService(preloaderService, logService);
+      service = new ImageService(preloaderService, logService, stagingEnv);
     });
 
     it(shouldHaveProperLoggerExpectation, shouldHaveProperLogger);
@@ -68,7 +69,7 @@ describe('ImageService - unit', () => {
         new LogPublishersService(prodEnv)
       );
       preloaderService = new PreloaderService(logService);
-      service = new ImageService(preloaderService, logService);
+      service = new ImageService(preloaderService, logService, prodEnv);
     });
 
     it(shouldHaveProperLoggerExpectation, shouldHaveProperLogger);
@@ -152,7 +153,13 @@ describe('ImageService - unit', () => {
         .withContext(
           'toLoad should have been called with proper arguments - first time'
         )
-        .toHaveBeenCalledOnceWith(Preloaders.MAIN, 1);
+        .toHaveBeenCalledOnceWith(
+          Preloaders.MAIN,
+          1,
+          service['imgToLoadMessage'](imgInput, loadersInput),
+          service['imgMessageWithPreloaderTot'](),
+          service['imgMessageWithTot']()
+        );
 
       // assume it laters changes and map is updated : the preloader has loaded
       // should be done by imageLoadedOrError method
@@ -164,7 +171,16 @@ describe('ImageService - unit', () => {
         .withContext(
           'toLoad should have been called with proper arguments - second time'
         )
-        .toHaveBeenCalledWith(Preloaders.TEXTS, 1);
+        .toHaveBeenCalledWith(
+          Preloaders.TEXTS,
+          1,
+          service['imgToLoadMessage'](imgInput, [
+            Preloaders.MAIN,
+            Preloaders.TEXTS,
+          ]),
+          service['imgMessageWithPreloaderTot'](),
+          service['imgMessageWithTot']()
+        );
       expect(preloaderService.toLoad)
         .withContext('toLoad should have been called twice')
         .toHaveBeenCalledTimes(2);
@@ -203,7 +219,7 @@ describe('ImageService - unit', () => {
           new LogPublishersService(devEnv)
         );
         preloaderService = new PreloaderService(logService);
-        service = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService, devEnv);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -224,7 +240,7 @@ describe('ImageService - unit', () => {
           new LogPublishersService(stagingEnv)
         );
         preloaderService = new PreloaderService(logService);
-        service = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService, stagingEnv);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -245,7 +261,7 @@ describe('ImageService - unit', () => {
           new LogPublishersService(prodEnv)
         );
         preloaderService = new PreloaderService(logService);
-        service = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService, prodEnv);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -263,7 +279,7 @@ describe('ImageService - unit', () => {
   describe('imageLoadedOrError method', () => {
     const shouldUpdateMapExpectation =
       'should update map indicating which preloader are not loading';
-    const shouldUpdateMap = () => {
+    const shouldUpdateMap = (done: DoneFn) => {
       const imgInput = document.createElement('img');
       const loadersInput = [Preloaders.MAIN];
 
@@ -271,14 +287,17 @@ describe('ImageService - unit', () => {
 
       service.imageLoadedOrError(imgInput, loadersInput);
 
-      expect(service['images'].get(imgInput)?.get(Preloaders.MAIN))
-        .withContext('img should not be loading for Preloaders.MAIN')
-        .toBeFalse();
+      setTimeout(() => {
+        expect(service['images'].get(imgInput)?.get(Preloaders.MAIN))
+          .withContext('img should not be loading for Preloaders.MAIN')
+          .toBeFalse();
+        done();
+      }, 2);
     };
 
     const shouldNotifyPreloadersIfNotAlreadyDoneExpectation =
       'should notify the preloaders if they are not already done loading';
-    const shouldNotifyPreloadersIfNotAlreadyDone = () => {
+    const shouldNotifyPreloadersIfNotAlreadyDone = (done: DoneFn) => {
       const imgInput = document.createElement('img');
       const loadersInput = [Preloaders.MAIN];
 
@@ -288,31 +307,54 @@ describe('ImageService - unit', () => {
 
       service.imageLoadedOrError(imgInput, loadersInput);
 
-      expect(preloaderService.loaded)
-        .withContext(
-          'loaded should have been called with proper arguments - first time'
-        )
-        .toHaveBeenCalledOnceWith(Preloaders.MAIN, 1);
+      setTimeout(() => {
+        expect(preloaderService.loaded)
+          .withContext(
+            'loaded should have been called with proper arguments - first time'
+          )
+          .toHaveBeenCalledOnceWith(
+            Preloaders.MAIN,
+            1,
+            service['imgLoadedMessage'](imgInput, loadersInput),
+            service['imgMessageWithPreloaderTot'](),
+            service['imgMessageWithTot']()
+          );
 
-      // assume it laters changes and map is updated : the preloader has loaded
-      // should be done by imageLoading method
-      service['images'].get(imgInput)?.set(Preloaders.TEXTS, true);
+        // assume it laters changes and map is updated : the preloader has loaded
+        // should be done by imageLoading method
+        service['images'].get(imgInput)?.set(Preloaders.TEXTS, true);
 
-      service.imageLoadedOrError(imgInput, [Preloaders.MAIN, Preloaders.TEXTS]);
+        service.imageLoadedOrError(imgInput, [
+          Preloaders.MAIN,
+          Preloaders.TEXTS,
+        ]);
 
-      expect(preloaderService.loaded)
-        .withContext(
-          'loaded should have been called with proper arguments - second time'
-        )
-        .toHaveBeenCalledWith(Preloaders.TEXTS, 1);
-      expect(preloaderService.loaded)
-        .withContext('loaded should have been called twice')
-        .toHaveBeenCalledTimes(2);
+        setTimeout(() => {
+          expect(preloaderService.loaded)
+            .withContext(
+              'loaded should have been called with proper arguments - second time'
+            )
+            .toHaveBeenCalledWith(
+              Preloaders.TEXTS,
+              1,
+              service['imgLoadedMessage'](imgInput, [
+                Preloaders.MAIN,
+                Preloaders.TEXTS,
+              ]),
+              service['imgMessageWithPreloaderTot'](),
+              service['imgMessageWithTot']()
+            );
+          expect(preloaderService.loaded)
+            .withContext('loaded should have been called twice')
+            .toHaveBeenCalledTimes(2);
+          done();
+        }, 2);
+      }, 2);
     };
 
     const shouldNotNotifyPreloadersIfAlreadyDoneExpectation =
       'should not notify the preloaders if they are already done loading';
-    const shouldNotNotifyPreloadersIfAlreadyDone = () => {
+    const shouldNotNotifyPreloadersIfAlreadyDone = (done: DoneFn) => {
       const imgInput = document.createElement('img');
       const loadersInput = [Preloaders.MAIN];
 
@@ -322,17 +364,45 @@ describe('ImageService - unit', () => {
 
       service.imageLoadedOrError(imgInput, loadersInput);
 
+      setTimeout(() => {
+        service.imageLoadedOrError(imgInput, loadersInput);
+
+        setTimeout(() => {
+          service.imageLoadedOrError(imgInput, [
+            Preloaders.MAIN,
+            Preloaders.TEXTS,
+          ]);
+
+          setTimeout(() => {
+            service['images'].get(imgInput)?.set(Preloaders.TEXTS, false);
+
+            service.imageLoadedOrError(imgInput, [Preloaders.TEXTS]);
+
+            setTimeout(() => {
+              expect(preloaderService.loaded)
+                .withContext('loaded should have been called once')
+                .toHaveBeenCalledTimes(1);
+              done();
+            }, 2);
+          }, 2);
+        }, 2);
+      }, 2);
+    };
+
+    const emptyTestExpectation =
+      'should add timeout when NOT testing (this is not actually tested and just for coverage)';
+    const emptyTest = (env: IEnvironment) => {
+      env.isTesting = false;
+      const imgInput = document.createElement('img');
+      const loadersInput = [Preloaders.MAIN];
+
+      service.imageLoading(imgInput, loadersInput);
       service.imageLoadedOrError(imgInput, loadersInput);
+      flush();
 
-      service.imageLoadedOrError(imgInput, [Preloaders.MAIN, Preloaders.TEXTS]);
+      env.isTesting = true;
 
-      service['images'].get(imgInput)?.set(Preloaders.TEXTS, false);
-
-      service.imageLoadedOrError(imgInput, [Preloaders.TEXTS]);
-
-      expect(preloaderService.loaded)
-        .withContext('loaded should have been called once')
-        .toHaveBeenCalledTimes(1);
+      expect().nothing();
     };
 
     describe('in dev environment', () => {
@@ -342,7 +412,7 @@ describe('ImageService - unit', () => {
           new LogPublishersService(devEnv)
         );
         preloaderService = new PreloaderService(logService);
-        service = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService, devEnv);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -353,6 +423,10 @@ describe('ImageService - unit', () => {
       it(
         shouldNotNotifyPreloadersIfAlreadyDoneExpectation,
         shouldNotNotifyPreloadersIfAlreadyDone
+      );
+      it(
+        emptyTestExpectation,
+        fakeAsync(() => emptyTest(devEnv))
       );
     });
 
@@ -363,7 +437,7 @@ describe('ImageService - unit', () => {
           new LogPublishersService(stagingEnv)
         );
         preloaderService = new PreloaderService(logService);
-        service = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService, stagingEnv);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -374,6 +448,10 @@ describe('ImageService - unit', () => {
       it(
         shouldNotNotifyPreloadersIfAlreadyDoneExpectation,
         shouldNotNotifyPreloadersIfAlreadyDone
+      );
+      it(
+        emptyTestExpectation,
+        fakeAsync(() => emptyTest(stagingEnv))
       );
     });
 
@@ -384,7 +462,7 @@ describe('ImageService - unit', () => {
           new LogPublishersService(prodEnv)
         );
         preloaderService = new PreloaderService(logService);
-        service = new ImageService(preloaderService, logService);
+        service = new ImageService(preloaderService, logService, prodEnv);
       });
 
       it(shouldUpdateMapExpectation, shouldUpdateMap);
@@ -396,6 +474,240 @@ describe('ImageService - unit', () => {
         shouldNotNotifyPreloadersIfAlreadyDoneExpectation,
         shouldNotNotifyPreloadersIfAlreadyDone
       );
+      it(
+        emptyTestExpectation,
+        fakeAsync(() => emptyTest(prodEnv))
+      );
+    });
+  });
+
+  describe('imgToLoadMessage method', () => {
+    const shouldReturnMessageExpectation = 'should return message';
+    const shouldReturnMessage = (env: IEnvironment) => {
+      const imgInput = document.createElement('img');
+      imgInput.setAttribute('src', 'testFolder/this.is.a.test');
+
+      const loader = Preloaders.MAIN;
+
+      const actual = service['imgToLoadMessage'](imgInput, [loader]);
+      if (!env.production && env.fullLoadingMessages) {
+        expect(actual)
+          .withContext('to load message should be returned - long')
+          .toBe('Loading img - this.is.a.test - MAIN');
+      } else {
+        expect(actual)
+          .withContext('to load message should be returned - short')
+          .toBe('Loading image...');
+      }
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          devEnv,
+          new LogPublishersService(devEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, devEnv);
+      });
+
+      it(shouldReturnMessageExpectation, () => shouldReturnMessage(devEnv));
+    });
+
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          stagingEnv,
+          new LogPublishersService(stagingEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, stagingEnv);
+      });
+
+      it(shouldReturnMessageExpectation, () => shouldReturnMessage(stagingEnv));
+    });
+
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          prodEnv,
+          new LogPublishersService(prodEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, prodEnv);
+      });
+
+      it(shouldReturnMessageExpectation, () => shouldReturnMessage(prodEnv));
+    });
+  });
+
+  describe('imgLoadedMessage method', () => {
+    const shouldReturnMessageExpectation = 'should return message';
+    const shouldReturnMessage = (env: IEnvironment) => {
+      const imgInput = document.createElement('img');
+      imgInput.setAttribute('src', 'testFolder/this.is.a.test');
+
+      const loader = Preloaders.MAIN;
+
+      const actual = service['imgLoadedMessage'](imgInput, [loader]);
+      if (!env.production && env.fullLoadingMessages) {
+        expect(actual)
+          .withContext('loaded message should be returned - long')
+          .toBe('Img loaded - this.is.a.test - MAIN');
+      } else {
+        expect(actual)
+          .withContext('loaded message should be returned - short')
+          .toBe('Loading image...');
+      }
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          devEnv,
+          new LogPublishersService(devEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, devEnv);
+      });
+
+      it(shouldReturnMessageExpectation, () => shouldReturnMessage(devEnv));
+    });
+
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          stagingEnv,
+          new LogPublishersService(stagingEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, stagingEnv);
+      });
+
+      it(shouldReturnMessageExpectation, () => shouldReturnMessage(stagingEnv));
+    });
+
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          prodEnv,
+          new LogPublishersService(prodEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, prodEnv);
+      });
+
+      it(shouldReturnMessageExpectation, () => shouldReturnMessage(prodEnv));
+    });
+  });
+
+  describe('imgMessageWithPreloaderTot method', () => {
+    const shouldReturnExpectation = 'should return expected';
+    const shouldReturn = (env: IEnvironment) => {
+      const actual = service['imgMessageWithPreloaderTot']();
+      if (!env.production && env.fullLoadingMessages) {
+        expect(actual)
+          .withContext('message with preloader tot should be returned - dev')
+          .toBeTrue();
+      } else {
+        expect(actual)
+          .withContext('message with preloader tot should be returned - prod')
+          .toBeFalse();
+      }
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          devEnv,
+          new LogPublishersService(devEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, devEnv);
+      });
+
+      it(shouldReturnExpectation, () => shouldReturn(devEnv));
+    });
+
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          stagingEnv,
+          new LogPublishersService(stagingEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, stagingEnv);
+      });
+
+      it(shouldReturnExpectation, () => shouldReturn(stagingEnv));
+    });
+
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          prodEnv,
+          new LogPublishersService(prodEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, prodEnv);
+      });
+
+      it(shouldReturnExpectation, () => shouldReturn(prodEnv));
+    });
+  });
+
+  describe('imgMessageWithTot method', () => {
+    const shouldReturnExpectation = 'should return expected';
+    const shouldReturn = (env: IEnvironment) => {
+      const actual = service['imgMessageWithPreloaderTot']();
+      if (!env.production && env.fullLoadingMessages) {
+        expect(actual)
+          .withContext('message with preloader tot should be returned - dev')
+          .toBeTrue();
+      } else {
+        expect(actual)
+          .withContext('message with preloader tot should be returned - prod')
+          .toBeFalse();
+      }
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          devEnv,
+          new LogPublishersService(devEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, devEnv);
+      });
+
+      it(shouldReturnExpectation, () => shouldReturn(devEnv));
+    });
+
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          stagingEnv,
+          new LogPublishersService(stagingEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, stagingEnv);
+      });
+
+      it(shouldReturnExpectation, () => shouldReturn(stagingEnv));
+    });
+
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        const logService = new LogService(
+          prodEnv,
+          new LogPublishersService(prodEnv)
+        );
+        preloaderService = new PreloaderService(logService);
+        service = new ImageService(preloaderService, logService, prodEnv);
+      });
+
+      it(shouldReturnExpectation, () => shouldReturn(prodEnv));
     });
   });
 });

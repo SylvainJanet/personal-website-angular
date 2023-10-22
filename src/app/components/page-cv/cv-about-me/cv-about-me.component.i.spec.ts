@@ -130,22 +130,25 @@ describe('CvAboutMeComponent - integration', () => {
   describe('updateTexts', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
-    const shouldSetPropertiesTextServiceResult = () => {
+    const shouldSetPropertiesTextServiceResult = (done: DoneFn) => {
       component.updateTexts();
 
-      const actualTitleObs = component.aboutMe;
-      const actualPdfLink = component.linkToCv;
-      const actualParagraphs = component.paragraphs;
+      setTimeout(() => {
+        const actualTitleObs = component.aboutMe;
+        const actualPdfLink = component.linkToCv;
+        const actualParagraphs = component.paragraphs;
 
-      actualTitleObs.subscribe((s) => {
-        expect(s).withContext('title should be set').toBe(expectedTitle);
-      });
-      expect(actualPdfLink)
-        .withContext('pdf link should be set')
-        .toBe('pdf/' + expectedPdfName);
-      expect(actualParagraphs)
-        .withContext('paragraphs should be set')
-        .toEqual(expectedParagraphs);
+        actualTitleObs.subscribe((s) => {
+          expect(s).withContext('title should be set').toBe(expectedTitle);
+        });
+        expect(actualPdfLink)
+          .withContext('pdf link should be set')
+          .toBe('pdf/' + expectedPdfName);
+        expect(actualParagraphs)
+          .withContext('paragraphs should be set')
+          .toEqual(expectedParagraphs);
+        done();
+      }, 2);
     };
     describe('in dev environment', () => {
       beforeEach(() => {

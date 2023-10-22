@@ -98,18 +98,21 @@ describe('LanguageModalComponent - integration', () => {
   describe('updateTexts', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
-    const shouldSetPropertiesTextServiceResult = () => {
+    const shouldSetPropertiesTextServiceResult = (done: DoneFn) => {
       component.updateTexts();
 
-      const actualEnglishName = component.englishName;
-      const actualFrenchName = component.frenchName;
+      setTimeout(() => {
+        const actualEnglishName = component.englishName;
+        const actualFrenchName = component.frenchName;
 
-      expect(actualEnglishName)
-        .withContext('english name should be set')
-        .toBe(expectedEnglishName);
-      expect(actualFrenchName)
-        .withContext('french name should be set')
-        .toBe(expectedFrenchName);
+        expect(actualEnglishName)
+          .withContext('english name should be set')
+          .toBe(expectedEnglishName);
+        expect(actualFrenchName)
+          .withContext('french name should be set')
+          .toBe(expectedFrenchName);
+        done();
+      }, 2);
     };
     describe('in dev environment', () => {
       beforeEach(() => {

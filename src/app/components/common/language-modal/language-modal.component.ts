@@ -100,13 +100,13 @@ export class LanguageModalComponent implements ComponentWithText, OnDestroy {
   updateTexts() {
     this.textService
       .getTextInLanguage('english-language-name', Languages.ENGLISH)
-      .subscribe((t) => {
+      ?.subscribe((t) => {
         this.englishName = t;
         this.visibleToLoadTextService.textLoaded(this);
       });
     this.textService
       .getTextInLanguage('french-language-name', Languages.FRENCH)
-      .subscribe((t) => {
+      ?.subscribe((t) => {
         this.frenchName = t;
         this.visibleToLoadTextService.textLoaded(this);
       });

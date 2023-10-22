@@ -19,15 +19,15 @@ export const ifFirst = (predicateNext: any, predicateError?: any) => {
   return <T>(source: Observable<T>) => {
     return source.pipe(
       tap({
-        next: () => {
+        next: (v) => {
           if (first) {
-            predicateNext();
+            predicateNext(v);
             first = false;
           }
         },
-        error: () => {
+        error: (e) => {
           if (first) {
-            predicateError();
+            predicateError(e);
             first = false;
           }
         },

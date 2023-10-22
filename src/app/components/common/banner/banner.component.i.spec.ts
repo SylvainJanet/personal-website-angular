@@ -89,39 +89,42 @@ describe('BannerComponent - integration', () => {
   describe('updateTexts', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
-    const shouldSetPropertiesTextServiceResult = () => {
+    const shouldSetPropertiesTextServiceResult = (done: DoneFn) => {
       component.updateTexts();
 
-      const actualMessages = component.messages;
-      const actualIAmMe = component.iAmMe;
+      setTimeout(() => {
+        const actualMessages = component.messages;
+        const actualIAmMe = component.iAmMe;
 
-      expect(actualMessages.length)
-        .withContext('there should be 4 messages')
-        .toBe(4);
+        expect(actualMessages.length)
+          .withContext('there should be 4 messages')
+          .toBe(4);
 
-      actualMessages[0].subscribe((s) => {
-        expect(s)
-          .withContext('message should be the correct one - 1')
-          .toBe(expectedFsDev);
-      });
-      actualMessages[1].subscribe((s) => {
-        expect(s)
-          .withContext('message should be the correct one - 2')
-          .toBe(expectedTrainer);
-      });
-      actualMessages[2].subscribe((s) => {
-        expect(s)
-          .withContext('message should be the correct one - 3')
-          .toBe(expectedMath);
-      });
-      actualMessages[3].subscribe((s) => {
-        expect(s)
-          .withContext('message should be the correct one - 4')
-          .toBe(expectedMusic);
-      });
-      actualIAmMe.subscribe((s) => {
-        expect(s).withContext('iAmMe should be set').toBe(expectedTitle);
-      });
+        actualMessages[0].subscribe((s) => {
+          expect(s)
+            .withContext('message should be the correct one - 1')
+            .toBe(expectedFsDev);
+        });
+        actualMessages[1].subscribe((s) => {
+          expect(s)
+            .withContext('message should be the correct one - 2')
+            .toBe(expectedTrainer);
+        });
+        actualMessages[2].subscribe((s) => {
+          expect(s)
+            .withContext('message should be the correct one - 3')
+            .toBe(expectedMath);
+        });
+        actualMessages[3].subscribe((s) => {
+          expect(s)
+            .withContext('message should be the correct one - 4')
+            .toBe(expectedMusic);
+        });
+        actualIAmMe.subscribe((s) => {
+          expect(s).withContext('iAmMe should be set').toBe(expectedTitle);
+        });
+        done();
+      }, 1);
     };
     describe('in dev environment', () => {
       beforeEach(() => {

@@ -58,10 +58,12 @@ export class ImgLoadDirective implements OnChanges {
    */
   ngOnChanges(changes: SimpleChanges) {
     if (changes['appImgLoad'] && !this.isLoadedOrError) {
-      this.imageService.imageLoading(
-        this.elementRef.nativeElement,
-        this.appImgLoad
-      );
+      setTimeout(() => {
+        this.imageService.imageLoading(
+          this.elementRef.nativeElement,
+          this.appImgLoad
+        );
+      }, 0);
     }
   }
 

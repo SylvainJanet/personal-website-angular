@@ -76,17 +76,21 @@ describe('BackToTopComponent - integration', () => {
   describe('updateTexts', () => {
     const shouldSetPropertiesTextServiceResultExpectation =
       'should set the properties to the textService result';
-    const shouldSetPropertiesTextServiceResult = () => {
+    const shouldSetPropertiesTextServiceResult = (done: DoneFn) => {
       component.updateTexts();
 
-      const actualAltTxtObs = component.altTxt;
+      setTimeout(() => {
+        const actualAltTxtObs = component.altTxt;
 
-      actualAltTxtObs.subscribe((s) => {
-        expect(s)
-          .withContext('altTxt should be set')
-          .toBe(expectedBackToTopAlt);
-      });
+        actualAltTxtObs.subscribe((s) => {
+          expect(s)
+            .withContext('altTxt should be set')
+            .toBe(expectedBackToTopAlt);
+        });
+        done();
+      }, 1);
     };
+
     describe('in dev environment', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
