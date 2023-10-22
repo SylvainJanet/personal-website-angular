@@ -23,6 +23,7 @@ export class ImageService {
   private images: Map<HTMLElement, Map<Preloaders, boolean>> = new Map();
   /** Logger. See {@link LogService} */
   logger: LogService;
+  /** Keeps track of loaded images. */
   private loadedImages: Map<HTMLElement, boolean> = new Map();
 
   /**
