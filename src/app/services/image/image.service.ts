@@ -134,20 +134,23 @@ export class ImageService {
    * @param loaders The {@link Preloaders}
    */
   imageLoadedOrError(img: HTMLElement, loaders: Preloaders[]) {
+    this.logger.debug('IMAGE LOADED OR ERROR');
     for (const loader of loaders) {
       if (
         this.images.has(img) &&
         this.images.get(img)?.has(loader) &&
         this.images.get(img)?.get(loader)
       ) {
+        this.logger.debug('IN IF');
         this.images.get(img)?.set(loader, false);
-        let timeout = 1;
+        let timeout = 0;
         if (!this.environment.production && !this.environment.isTesting)
           timeout =
             Math.random() * this.environment.artificialRandomLoadingTime +
-            this.environment.artificialMinLoadingTime +
-            1;
+            this.environment.artificialMinLoadingTime;
+        this.logger.debug('BEFORE TIMEOUT');
         setTimeout(() => {
+          this.logger.debug('IN TIMEOUT');
           this.preloaderService.loaded(
             loader,
             1,
