@@ -84,8 +84,7 @@ export class CvAboutMeComponent
    * has to be updated again.
    */
   ngOnChanges() {
-    this.getElPos();
-    this.updateWidth();
+    this.updateAnimation();
   }
 
   /**
@@ -130,8 +129,9 @@ export class CvAboutMeComponent
    */
   getElPos() {
     if (
+      !this.elementRef.nativeElement ||
       this.elementRef.nativeElement.firstElementChild.tagName ==
-      'MAT-PROGRESS-SPINNER'
+        'MAT-PROGRESS-SPINNER'
     ) {
       return;
     }
@@ -169,40 +169,34 @@ export class CvAboutMeComponent
    * Update the trigger when the window is resized. Indeed, the bar position
    * will change since it is tied to viewport height. Uses the {@link debounce}
    * annotation to avoid firing this too much : resize events fire a lot during
-   * resizing. Calls {@link updateAfterLoaded} which does the actual update once
+   * resizing. Calls {@link updateAnimation} which does the actual update once
    * everything is loaded.
    */
   @HostListener('window:resize', ['$event'])
   @debounce()
   onResize() {
-    this.updateAfterLoaded();
+    this.updateAnimation();
   }
 
   /**
    * Update the trigger when client scrolls. Uses the {@link debounce} annotation
    * to avoid firing this too much : resize events fire a lot during resizing.
-   * Calls {@link updateAfterLoaded} which does the actual update once everything
+   * Calls {@link updateAnimation} which does the actual update once everything
    * is loaded.
    */
   @HostListener('window:scroll', ['$event'])
   @debounce()
   onScroll() {
-    this.updateAfterLoaded();
+    this.updateAnimation();
   }
 
   /**
    * Does the actual update of the scroll trigger amount and the possible width
-   * modification (to create the animation) once all assets are loaded.
+   * modification (to create the animation).
    */
-  updateAfterLoaded() {
-    this.preloader.statusAnyLoading.subscribe({
-      next: (isAnyLoading) => {
-        if (isAnyLoading != null && !isAnyLoading) {
-          this.getElPos();
-          this.updateWidth();
-        }
-      },
-    });
+  updateAnimation() {
+    this.getElPos();
+    this.updateWidth();
   }
 
   /**
