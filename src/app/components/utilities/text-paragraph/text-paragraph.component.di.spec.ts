@@ -130,13 +130,19 @@ describe('TextParagraphComponent - dom integration', () => {
 
       // 4th el
       childDebugEl = debugEl.children[0].children[3];
-      const expectedStrongEmText = '<em>' + expectedStrongEmTextParam + '</em>';
-      const actualStrongEmText =
-        childDebugEl.children[0].nativeElement.innerHTML;
+      expect(childDebugEl.children[0].nativeElement.tagName)
+        .withContext('first element of strongem subpar should be STRONG')
+        .toBe('STRONG');
 
-      expect(actualStrongEmText)
+      expect(childDebugEl.children[0].children[0].nativeElement.tagName)
+        .withContext(
+          'first element of strong child strongem subpar should be EM'
+        )
+        .toBe('EM');
+
+      expect(childDebugEl.children[0].children[0].nativeElement.innerHTML)
         .withContext('strong em text should be set')
-        .toBe(expectedStrongEmText);
+        .toBe(expectedStrongEmTextParam);
     });
   });
 });

@@ -123,10 +123,14 @@ describe('TextSubParagraphComponent - dom unit', () => {
 
     const debugEl: DebugElement = fixture.debugElement;
 
-    const expected = '<em>' + expectedText + '</em>';
-    const actual = debugEl.children[0].nativeElement.innerHTML;
+    const actualTag = debugEl.children[0].children[0].nativeElement.tagName;
+    const actualContent =
+      debugEl.children[0].children[0].nativeElement.innerHTML;
 
-    expect(actual).withContext('content should be set').toBe(expected);
+    expect(actualTag).withContext('tag should be em').toBe('EM');
+    expect(actualContent)
+      .withContext('content should be set')
+      .toBe(expectedText);
   });
   it('should have proper A_ASSET subParagraph', () => {
     const expectedText = 'this is a test';
