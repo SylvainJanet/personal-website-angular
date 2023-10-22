@@ -141,11 +141,12 @@ export class ImageService {
         this.images.get(img)?.get(loader)
       ) {
         this.images.get(img)?.set(loader, false);
-        let timeout = 0;
+        let timeout = 1;
         if (!this.environment.production && !this.environment.isTesting)
           timeout =
             Math.random() * this.environment.artificialRandomLoadingTime +
-            this.environment.artificialMinLoadingTime;
+            this.environment.artificialMinLoadingTime +
+            1;
         setTimeout(() => {
           this.preloaderService.loaded(
             loader,
