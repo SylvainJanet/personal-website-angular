@@ -353,16 +353,7 @@ export class TextService {
     language: Languages,
     preloader = Preloaders.TEXTS
   ): string {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return (
-        'Loading text - ' +
-        selector +
-        ' - in ' +
-        Languages[language] +
-        ' - ' +
-        preloader
-      );
-    return 'Loading text...';
+    return this.getTextInLanguageToLoadMessage(selector, language, preloader);
   }
 
   /**
@@ -374,12 +365,14 @@ export class TextService {
   private formatParagraphsToMessage(paragraphs: Paragraph[]) {
     const extraits = [];
     for (const paragraph of paragraphs) {
+      const shortFirstSubPar =
+        paragraph.els.length > 1
+          ? paragraph.els[0].content + '...'
+          : paragraph.els[0].content;
       extraits.push(
         paragraph.els[0].content.length > 10
           ? paragraph.els[0].content.slice(0, 10) + '...'
-          : paragraph.els.length > 1
-          ? paragraph.els[0].content + '...'
-          : paragraph.els[0].content
+          : shortFirstSubPar
       );
     }
     return extraits;
@@ -465,14 +458,12 @@ export class TextService {
       }),
       skip(1)
     );
-    // let decoded: Paragraph[];
     const getTextRes = this.getText(
       selector,
       this.langageService.current()
     )?.pipe(
       catchError(() => ['error']),
       ifFirst((s: string) => {
-        // decoded =
         this.preloaderService.loaded(
           preloader,
           1,
@@ -504,16 +495,7 @@ export class TextService {
     language: Languages,
     preloader = Preloaders.TEXTS
   ): string {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return (
-        'Loading text - ' +
-        selectors +
-        ' - in ' +
-        Languages[language] +
-        ' - ' +
-        preloader
-      );
-    return 'Loading text...';
+    return this.getMultiToLoadMessage(selectors, language, preloader);
   }
 
   /**
@@ -649,16 +631,7 @@ export class TextService {
     language: Languages,
     preloader = Preloaders.TEXTS
   ): string {
-    if (!this.environment.production && this.environment.fullLoadingMessages)
-      return (
-        'Loading text - ' +
-        selectors +
-        ' - in ' +
-        Languages[language] +
-        ' - ' +
-        preloader
-      );
-    return 'Loading text...';
+    return this.getMultiToLoadMessage(selectors, language, preloader);
   }
 
   /**
