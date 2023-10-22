@@ -1,8 +1,14 @@
-<span *ngIf="subPar.root === SubParagraphRoot.SPAN">{{ subPar.content }}</span>
+<span
+  *ngIf="subPar.root === SubParagraphRoot.SPAN"
+  [class.empty-content]="!subPar.content"
+  >{{ subPar.content }}</span
+>
 
 <br *ngIf="subPar.root === SubParagraphRoot.BR" />
 
-<strong *ngIf="subPar.root === SubParagraphRoot.STRONG_EM"
+<strong
+  *ngIf="subPar.root === SubParagraphRoot.STRONG_EM"
+  [class.empty-content]="!subPar.content"
   ><em>{{ subPar.content }}</em></strong
 >
 

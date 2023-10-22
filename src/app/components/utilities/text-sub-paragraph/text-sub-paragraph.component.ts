@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-text-sub-paragraph',
   templateUrl: './text-sub-paragraph.component.html',
-  styleUrls: [],
+  styleUrls: ['./text-sub-paragraph.component.css'],
   standalone: true,
   imports: [CommonModule],
 })
