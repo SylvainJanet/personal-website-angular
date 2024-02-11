@@ -5,6 +5,7 @@ import { environment as developmentEnvironment } from 'src/environments/environm
 import { environment as stagingEnvironment } from 'src/environments/environment.staging';
 import { environment as productionEnvironment } from 'src/environments/environment.prod';
 import { ENV } from 'src/environments/injectionToken/environment-provider';
+import { locales } from 'src/app/enums/locales';
 
 let service: LanguageService;
 const devEnv = developmentEnvironment;
@@ -265,6 +266,88 @@ describe('LanguageService - unit', () => {
       it(
         shouldSetCurrentLanguageInLocalStorageExpectation,
         shouldSetCurrentLanguageInLocalStorage
+      );
+    });
+  });
+
+  describe('currentLocale method', () => {
+    const shouldReturnTheCurrentLocaleEnglishExpectation =
+      'should return the current locale';
+    const shouldReturnTheCurrentLocaleEnglish = () => {
+      service.set(Languages.ENGLISH);
+
+      const expected = locales[Languages.ENGLISH];
+
+      const actual = service.currentLocale();
+
+      expect(actual).withContext('locale should be as expected').toBe(expected);
+    };
+    const shouldReturnTheCurrentLocaleFrenchExpectation =
+      'should return the current locale';
+    const shouldReturnTheCurrentLocaleFrench = () => {
+      service.set(Languages.FRENCH);
+
+      const expected = locales[Languages.FRENCH];
+
+      const actual = service.currentLocale();
+
+      expect(actual).withContext('locale should be as expected').toBe(expected);
+    };
+
+    describe('in dev environment', () => {
+      beforeEach(() => {
+        localStorage.removeItem('language');
+
+        TestBed.configureTestingModule({
+          providers: [{ provide: ENV, useValue: devEnv }],
+        });
+        service = TestBed.inject(LanguageService);
+      });
+      it(
+        shouldReturnTheCurrentLocaleEnglishExpectation,
+        shouldReturnTheCurrentLocaleEnglish
+      );
+      it(
+        shouldReturnTheCurrentLocaleFrenchExpectation,
+        shouldReturnTheCurrentLocaleFrench
+      );
+    });
+
+    describe('in staging environment', () => {
+      beforeEach(() => {
+        localStorage.removeItem('language');
+
+        TestBed.configureTestingModule({
+          providers: [{ provide: ENV, useValue: stagingEnv }],
+        });
+        service = TestBed.inject(LanguageService);
+      });
+      it(
+        shouldReturnTheCurrentLocaleEnglishExpectation,
+        shouldReturnTheCurrentLocaleEnglish
+      );
+      it(
+        shouldReturnTheCurrentLocaleFrenchExpectation,
+        shouldReturnTheCurrentLocaleFrench
+      );
+    });
+
+    describe('in prod environment', () => {
+      beforeEach(() => {
+        localStorage.removeItem('language');
+
+        TestBed.configureTestingModule({
+          providers: [{ provide: ENV, useValue: prodEnv }],
+        });
+        service = TestBed.inject(LanguageService);
+      });
+      it(
+        shouldReturnTheCurrentLocaleEnglishExpectation,
+        shouldReturnTheCurrentLocaleEnglish
+      );
+      it(
+        shouldReturnTheCurrentLocaleFrenchExpectation,
+        shouldReturnTheCurrentLocaleFrench
       );
     });
   });

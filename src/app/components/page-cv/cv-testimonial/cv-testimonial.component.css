@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  height: 100%;
+  color: white;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-flow: column;
+}
+
+.center-align {
+  text-align: center;
+}
+
+@font-face {
+  font-family: "Ionicons";
+  src: url("/assets/fonts/ionicons.eot?v=2.0.0");
+  src: url("/assets/fonts/ionicons.eot?v=2.0.0#iefix")
+      format("embedded-opentype"),
+    url("/assets/fonts/ionicons.ttf?v=2.0.0") format("truetype"),
+    url("/assets/fonts/ionicons.woff?v=2.0.0") format("woff"),
+    url("/assets/fonts/ionicons.svg?v=2.0.0#Ionicons") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.ion-calendar:before,
+.ion-ios-book:before {
+  display: inline-block;
+  font-family: "Ionicons";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ion-calendar:before {
+  content: "\f117";
+}
+
+.ion-ios-book:before {
+  content: "\f3e8";
+}
+
+.transition-opacity {
+  transition: opacity 0.2s;
+}

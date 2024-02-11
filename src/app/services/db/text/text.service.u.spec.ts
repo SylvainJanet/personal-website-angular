@@ -28,8 +28,8 @@ const devEnv = developmentEnvironment;
 const stagingEnv = stagingEnvironment;
 const prodEnv = productionEnvironment;
 
-const API_TEXT_PATH = 'text';
-const API_MULTI_TEXT_PATH = 'multi-text';
+const API_TEXT_PATH = 'text-management/text';
+const API_MULTI_TEXT_PATH = 'text-management/multi-text';
 const API_SELECTOR_PARAM = 'selector';
 const API_MULTI_SELECTOR_PARAM = 'selectors';
 const API_LANGUAGE_PARAM = 'language';

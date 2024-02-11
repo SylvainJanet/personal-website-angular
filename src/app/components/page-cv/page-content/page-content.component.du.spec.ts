@@ -67,8 +67,8 @@ describe('PageContentComponent - dom unit', () => {
 
     const secondDivEl = firstDivEl.children[0];
     expect(secondDivEl.children.length)
-      .withContext('section - div - div should have 1 child')
-      .toBe(1);
+      .withContext('section - div - div should have 2 children')
+      .toBe(2);
     expect(secondDivEl.children[0].nativeElement.tagName)
       .withContext('child 1 of section - div - div should be DIV')
       .toBe('DIV');
@@ -170,6 +170,14 @@ describe('PageContentComponent - dom unit', () => {
     expect(aboutMeEl.componentInstance as CvAboutMeComponent)
       .withContext('CvAboutMeComponent should create')
       .toEqual(jasmine.anything());
+
+    // testimonials
+
+    expect(secondDivEl.children[1].nativeElement.tagName)
+      .withContext(
+        'child 2 of section - div - div should be APP-CV-TESTIMONIALS'
+      )
+      .toBe('APP-CV-TESTIMONIALS');
   };
 
   describe('in dev environment', () => {
