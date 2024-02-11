@@ -48,7 +48,7 @@ export class TextService {
       .set('selector', selector)
       .set('language', Languages[language]);
     return this.dataSource
-      ?.get<StringDto>('text-management/text', params)
+      ?.get<StringDto>('text', params)
       ?.pipe(map((c) => c.message));
   }
 
@@ -68,7 +68,7 @@ export class TextService {
       params = params.append('selectors', selector);
     }
     return this.dataSource
-      ?.get<ListStringDto>('text-management/multi-text', params)
+      ?.get<ListStringDto>('multi-text', params)
       ?.pipe(map((dto) => dto.messages));
   }
 
