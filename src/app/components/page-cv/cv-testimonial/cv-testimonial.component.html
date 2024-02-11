@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <p [style.opacity]="opacity" class="transition-opacity">{{ name }}</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p [style.opacity]="opacity" class="transition-opacity">{{ comment }}</p>
+      <app-cv-testimonial-rating
+        [rating]="grade"
+        [style.opacity]="opacity"
+        class="transition-opacity"
+      ></app-cv-testimonial-rating>
+    </div>
+  </div>
+
+  <div class="row date-and-training">
+    <div class="col-sm-1"></div>
+    <div
+      class="col-sm-5 center-align transition-opacity"
+      [style.opacity]="opacity"
+    >
+      <i class="ion-calendar"></i> &nbsp; &nbsp;
+      {{ date | localizedDate : "shortDate" }}
+    </div>
+    <div
+      class="col-sm-5 center-align transition-opacity"
+      [style.opacity]="opacity"
+    >
+      <i class="ion-ios-book"></i> &nbsp; &nbsp; {{ course }}
+    </div>
+    <div class="col-sm-1"></div>
+  </div>
+</div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Languages } from 'src/app/enums/languages';
 import { VisibleToLoadTextService } from '../visibletoloadtext/visible-to-load-text.service';
 import { PreloaderService } from '../preloader/preloader.service';
+import { locales } from 'src/app/enums/locales';
 
 /**
  * Language service. The current language is stored in the client's local
@@ -47,5 +48,14 @@ export class LanguageService {
     localStorage.setItem('language', Languages[language]);
     this.preloaderService.isMainLoad = true;
     this.visibleToLoadTextService.languageChange();
+  }
+
+  /**
+   * Get the current {@link locales}
+   *
+   * @returns The current locale
+   */
+  currentLocale(): string {
+    return locales[this.current()];
   }
 }

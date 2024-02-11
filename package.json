@@ -1,6 +1,6 @@
 {
   "name": "personal-website-angular",
-  "version": "0.0.15",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration=development",
