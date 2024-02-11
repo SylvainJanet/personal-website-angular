@@ -563,7 +563,7 @@ describe('CvAboutMeComponent - unit', () => {
       component.updateTexts();
 
       const actualAboutMeContent = component.paragraphs;
-      expect(actualAboutMeContent[6].els[1].assetHref)
+      expect(actualAboutMeContent[7].els[1].assetHref)
         .withContext('assetHref should be set')
         .toBe('pdf/' + expectedPdfName);
     };
