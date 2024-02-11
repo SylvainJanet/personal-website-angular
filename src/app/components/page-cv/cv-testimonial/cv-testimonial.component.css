@@ -16,7 +16,7 @@
 }
 
 @font-face {
-  font-family: "Ionicons";
+  font-family: Ionicons;
   src: url("/assets/fonts/ionicons.eot?v=2.0.0");
   src: url("/assets/fonts/ionicons.eot?v=2.0.0#iefix")
       format("embedded-opentype"),
@@ -30,7 +30,7 @@
 .ion-calendar:before,
 .ion-ios-book:before {
   display: inline-block;
-  font-family: "Ionicons";
+  font-family: Ionicons sans-serif;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
