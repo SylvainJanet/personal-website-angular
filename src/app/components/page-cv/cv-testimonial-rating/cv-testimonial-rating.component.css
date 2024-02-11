@@ -12,14 +12,11 @@ div.stars div {
   height: 32px;
   background-size: 32px;
   overflow: hidden;
+  background-position: 0 0;
 }
 
 :host {
   display: flex;
   flex-direction: row;
   justify-content: center;
-}
-
-div.stars div {
-  background-position: 0 0;
 }

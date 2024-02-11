@@ -174,7 +174,6 @@ export class CvTestimonialsComponent implements ComponentWithText, OnDestroy {
       }
       if (!this.interacted && this.isWaitingForNoInteraction) {
         this.isWaitingForNoInteraction = false;
-        return;
       }
     }, 7500);
   }
