@@ -33,6 +33,7 @@ describe('CvAboutMeComponent - integration', () => {
       new Paragraph([new SubParagraph(SubParagraphRoot.SPAN, 'Test')], 'lead'),
       new Paragraph([new SubParagraph(SubParagraphRoot.SPAN, 'Test')], 'lead'),
       new Paragraph([new SubParagraph(SubParagraphRoot.SPAN, 'Test')], 'lead'),
+      new Paragraph([new SubParagraph(SubParagraphRoot.SPAN, 'Test')], 'lead'),
       new Paragraph(
         [
           new SubParagraph(SubParagraphRoot.SPAN, 'Test'),
@@ -52,6 +53,8 @@ describe('CvAboutMeComponent - integration', () => {
         expectedTitle,
         expectedPdfName,
         'Test' +
+          '[[]]' +
+          'Test' +
           '[[]]' +
           'Test' +
           '[[]]' +

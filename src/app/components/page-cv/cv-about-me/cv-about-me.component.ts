@@ -108,7 +108,7 @@ export class CvAboutMeComponent
         this.paragraphs = r[2] as Paragraph[];
         this.paragraphs?.splice(1, 0, new Paragraph([]));
         this.paragraphs?.forEach((p) => (p.cssClass = 'lead'));
-        this.paragraphs[6].els[1].assetHref = this.linkToCv;
+        this.paragraphs[7].els[1].assetHref = this.linkToCv;
 
         this.visibleToLoadTextService.textLoaded(this);
       });
