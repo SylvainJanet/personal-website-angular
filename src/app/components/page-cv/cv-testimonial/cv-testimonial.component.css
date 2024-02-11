@@ -30,7 +30,7 @@
 .ion-calendar:before,
 .ion-ios-book:before {
   display: inline-block;
-  font-family: Ionicons sans-serif;
+  font-family: Ionicons, sans-serif;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
